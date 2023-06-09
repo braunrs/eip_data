@@ -5,8 +5,20 @@ description: |
 output_dir: "docs"
 navbar:
   right:
-    - text: "Home"
-      href: index.html
+    - text: "Sites"
+      menu:
+        - text: "UCMC"
+          href: ucmc.html
+        - text: "WCH"
+          href: wch.html
+        - text: "Exchange"
+          href: exchange.html
+    - text: "EIP Service Center"
+      href: crc.html
+    - text: "Research"
+      menu:
+        - text: "PGx"
+          href: pgx.html
     - text: "About"
       href: about.html
 output: distill::distill_article

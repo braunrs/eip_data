@@ -1,0 +1,16 @@
+---
+title: "Pharmacogenomics (PGx) Study"
+description: |
+  A new article created using the Distill format.
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+
+
+
