@@ -733,12 +733,33 @@ class(eip_pt$age)
 eip_pt$age <- as.numeric(eip_pt$age)
 summary(eip_pt$age)
 
+table(eip_pt$unique_pt)
+unique_patients <- sum(eip_pt$unique_pt)
+unique_patients
+
 ```
 
-Age Distribution
+The information on this page only includes data since the start of 2023.
+
+The total number of unique individuals that EIP has encountered is **`XX`r unique_patients`**. The demographic information for this EIP population is shown on this page. For further information regarding the population demographics of individuals at particular sites, please refer to those pages listed under the **Site** tab in the navigation bar.
+
+## Age Distribution
+
+This first histogram shows the ages of individuals seen by EIP grouped by age categories. The age categories in this histogram were chosen because they are the categories used in both the CTR and EHE reports to ODH.
 
 ```{r}
-# Age Distribution
+pt_age_cat <- ggplot(eip_pt, aes(x = age_category))  
+pt_age_cat <-  pt_age_cat + geom_bar(fill = "lightblue") + theme_classic() +
+  xlab("Age Category") + ylab("Count")
+
+ggplotly(pt_age_cat)
+
+```
+
+
+The following histogram shows the complete age distribution of all individuals that EIP has encountered, with the density curve overlying the histogram.
+
+```{r}
 
 pt_age_dens <- density(eip_pt$age, na.rm = TRUE)
 
@@ -759,7 +780,7 @@ pt_age
 
 ```
 
-Age Distribution by Gender
+This histogram shows the same data as the one above, however allows for the ability to display the age based on the self-reported gender of the individual. You can filter the information by selecting/deselecting the gender from the legend on the right side of the graph. If multiple gender categories are selected, the histogram shows the cumulative total for each age among the gender categories selected.
 
 ```{r}
 eip_pt_male <- eip_pt %>% filter(gender == "Male", na.rm = TRUE)
@@ -795,27 +816,3 @@ pt_age_gender <- plot_ly(alpha = 0.5) %>%
 pt_age_gender
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
