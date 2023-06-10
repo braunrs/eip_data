@@ -9,6 +9,15 @@
       "last_modified": "2023-06-10T00:36:43-04:00"
     },
     {
+      "path": "assessment.html",
+      "title": "Assessment Data",
+      "description": "This page is currently under construction. The purpose of this page will be to highlight the numbers of assessments performed by EIP staff, and breakdown some information gathered such as risk, substance use, mental health, and other data.\n",
+      "author": [],
+      "date": "`r Sys.Date()`",
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2023-06-10T11:22:46-04:00"
+    },
+    {
       "path": "crc.html",
       "title": "EIP Service Center",
       "description": "This page shows data regarding the CRC screening efforts for EIP.\n",
@@ -30,8 +39,8 @@
       "description": "This will pull together all of the different HIV testing methods (CTR, EHE, NACHO, Lab) showing independent testing programs as well as total testing through EIP.\n",
       "author": [],
       "date": "`r Sys.Date()`",
-      "contents": "\r\n\r\nContents\r\nCTR Testing\r\nEHE Testing\r\nNACHO Testing\r\n\r\nCTR Testing\r\nSpot holder for CTR definition and data.\r\nEHE Testing\r\nSpot holder for EHE definition and data\r\nNACHO Testing\r\nSpot holder for NACHO definition and data.\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-10T00:18:45-04:00"
+      "contents": "\r\n\r\nContents\r\nCTR Testing\r\nEHE Testing\r\nNACHO Testing\r\n\r\nCTR Testing\r\nThe Counseling, Testing, and Referral to treatment (CTR) testing program…\r\nEHE Testing\r\nThe Ending the HIV Epidemic (EHE) testing program…\r\nNACHO Testing\r\nSpot holder for NACHO definition and data.\r\n\r\n\r\n\r\n",
+      "last_modified": "2023-06-10T11:25:16-04:00"
     },
     {
       "path": "index.html",

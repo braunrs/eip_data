@@ -1,0 +1,17 @@
+---
+title: "Assessment Data"
+description: |
+  This page is currently under construction. The purpose of this page will be to highlight the numbers of assessments performed by EIP staff, and breakdown some information gathered such as risk, substance use, mental health, and other data.
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+
+
+
