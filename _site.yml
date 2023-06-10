@@ -5,6 +5,10 @@ description: |
 output_dir: "docs"
 navbar:
   right:
+    - text: "Population Data"
+      menu:
+        - text: "EIP Population"
+          href: eip_pop.html
     - text: "Clinical"
       menu:
       - text: "Assessments"

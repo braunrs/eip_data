@@ -6,7 +6,7 @@
       "description": "Some additional details about the website",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-10T11:38:27-04:00"
+      "last_modified": "2023-06-10T16:16:35-04:00"
     },
     {
       "path": "assessment.html",
@@ -15,7 +15,7 @@
       "author": [],
       "date": "`r Sys.Date()`",
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-10T11:38:56-04:00"
+      "last_modified": "2023-06-10T16:17:04-04:00"
     },
     {
       "path": "crc.html",
@@ -23,7 +23,16 @@
       "description": "This page shows data regarding the CRC screening efforts for EIP.\n",
       "author": [],
       "contents": "\r\nThe EIP Service Center started on May 3rd, 2023. This graph and subsequent table shows the daily count of the number of screening encounters done by the CRCs, and the number of screening encounters where the patient was marked as eligible for the EIP Service Center.\r\nAdd side by side graph of this and the daily percentage of EIP screens\r\n\r\n\r\n\r\nDate\r\n      CRC Screens\r\n      EIP Service Center\r\n      Percent (%)\r\n    2023-05-03\r\n113\r\n0\r\n0.02023-05-04\r\n131\r\n0\r\n0.02023-05-05\r\n118\r\n79\r\n70.02023-05-06\r\n109\r\n70\r\n60.02023-05-07\r\n144\r\n75\r\n50.02023-05-08\r\n109\r\n47\r\n40.02023-05-09\r\n166\r\n79\r\n50.02023-05-10\r\n140\r\n27\r\n20.02023-05-11\r\n123\r\n30\r\n20.02023-05-12\r\n140\r\n0\r\n0.02023-05-13\r\n89\r\n4\r\n4.02023-05-14\r\n99\r\n2\r\n2.02023-05-15\r\n135\r\n0\r\n0.02023-05-16\r\n170\r\n82\r\n50.02023-05-17\r\n107\r\n4\r\n4.02023-05-18\r\n155\r\n93\r\n60.02023-05-19\r\n140\r\n86\r\n60.02023-05-20\r\n114\r\n55\r\n50.02023-05-21\r\n138\r\n1\r\n0.72023-05-22\r\n118\r\n0\r\n0.02023-05-23\r\n121\r\n72\r\n60.02023-05-24\r\n94\r\n2\r\n2.02023-05-25\r\n137\r\n47\r\n30.02023-05-26\r\n70\r\n0\r\n0.02023-05-27\r\n131\r\n2\r\n2.02023-05-28\r\n122\r\n1\r\n0.82023-05-29\r\n106\r\n0\r\n0.02023-05-30\r\n127\r\n69\r\n50.02023-05-31\r\n66\r\n36\r\n50.02023-06-01\r\n103\r\n56\r\n50.02023-06-02\r\n89\r\n3\r\n3.02023-06-03\r\n97\r\n1\r\n1.02023-06-04\r\n65\r\n16\r\n20.02023-06-05\r\n98\r\n44\r\n40.02023-06-06\r\n82\r\n41\r\n50.02023-06-07\r\n85\r\n12\r\n10.02023-06-08\r\n135\r\n38\r\n30.02023-06-09\r\n121\r\n13\r\n10.02023-06-10\r\n7\r\n0\r\n0.0\r\n\r\nThe table below shows the total number of screens that the CRCs have had since May 3rd, 2023, the total that were eligible to continue screening for the EIP Service Center based on their age (15 years or older), and the percentage of the total.\r\n\r\n\r\nTotal Screened\r\n      Total Eligible by Age\r\n      Percent (%)\r\n    4414\r\n1190\r\n27\r\n\r\nNote For those marked as “Eligible by Age”, this only includes when the CRC selects the EIP Service Center screener on the ED General Screen page in REDCap. Therefore, this number eligible may be under-represented if the CRC does not select the EIP Service Center screener for all those above the age of 15 years old.\r\nThe CRCs continue with the EIP-specific EPIC pre-screen, looking for various criteria that would indicate that the CRC could approach the patient to gather more information regarding risk and need for EIP action. The graph and table below shows the number of screens that met the various criteria, and the percentage of the total eligible based on age.\r\n\r\n\r\n\r\nThe risk groups that the CRCs are looking for during their Epic pre-screen include: African-American males between the ages of 15-29, Women of Color (WOC), and individuals who identify within the transgender or non-binary community.\r\nThe percentages shown below are the percent of the total eligible for EIP screening based on age. The only exceptions are the percentage of those HIV+ not in care (which is a percentage of the total identified as HIV+), and the percentage of those positive for Syphilis in the past year (which is a percentage of the total with a STI in the past year).\r\n\r\n\r\nSexual Assault\r\n      Overdose\r\n      Illicit Opiate Use\r\n      Risk group w/o test\r\n      HIV+\r\n      HIV+ not in care\r\n      PWID\r\n      STI+ past yr\r\n      Syphilis+ past yr\r\n      Homeless\r\n      Pregnant\r\n    0\r\n1.4\r\n3.4\r\n69\r\n1.1\r\n15\r\n2.6\r\n1.3\r\n0.34\r\n1.9\r\n1.7\r\n\r\nThis table shows the total number of screening encounters where the patient met at least one criteria for approach by the CRC, and the percent of the total eligible for the EIP Service Center screening based on age. Also shown are the total number of encounters where the patient was approached and consented to discussing additional risk questions, as well as the percentage of the total eligible for approach.\r\n\r\n\r\nTotal Eligible for Approach\r\n      % Eligible\r\n      Total Consented\r\n      % Consented\r\n    336\r\n28\r\n263\r\n78\r\n\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-10T11:39:50-04:00"
+      "last_modified": "2023-06-10T16:17:56-04:00"
+    },
+    {
+      "path": "eip_pop.html",
+      "title": "EIP Population",
+      "description": "The purpose of this page is to show the demographic population data for those individuals that EIP has worked with for various clinical purposes. This page shows the entire EIP popluation data, and the population data for individuals seen at specific sites is shown on those pages listed under the Sites tab.\n",
+      "author": [],
+      "date": "`r Sys.Date()`",
+      "contents": "\r\nAge Distribution\r\n\r\n\r\n\r\nAge Distribution by Gender\r\n\r\n[1] 1008    2\r\n\r\n\r\n\r\n\r\n\r\n",
+      "last_modified": "2023-06-10T16:19:28-04:00"
     },
     {
       "path": "exchange.html",
@@ -31,7 +40,7 @@
       "description": "A new article created using the Distill format.\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-10T11:40:19-04:00"
+      "last_modified": "2023-06-10T16:19:55-04:00"
     },
     {
       "path": "hiv.html",
@@ -40,7 +49,7 @@
       "author": [],
       "date": "`r Sys.Date()`",
       "contents": "\r\n\r\nContents\r\nCTR Testing\r\nEHE Testing\r\nNACHO Testing\r\n\r\nCTR Testing\r\nThe Counseling, Testing, and Referral to treatment (CTR) testing program…\r\nEHE Testing\r\nThe Ending the HIV Epidemic (EHE) testing program…\r\nNACHO Testing\r\nSpot holder for NACHO definition and data.\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-10T11:41:22-04:00"
+      "last_modified": "2023-06-10T16:20:59-04:00"
     },
     {
       "path": "index.html",
@@ -49,7 +58,7 @@
       "author": [],
       "date": "`r Sys.Date()`",
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-10T11:41:50-04:00"
+      "last_modified": "2023-06-10T16:21:27-04:00"
     },
     {
       "path": "pgx.html",
@@ -57,7 +66,7 @@
       "description": "A new article created using the Distill format.\n",
       "author": [],
       "contents": "\r\nStart of Study: 6/17/2020\r\nEnrollment Completed: 11/8/2021\r\nStudy Personnel - UCMC\r\nAhmed, S\r\nAlsheyyab, R.\r\nAppelmann, H.\r\nBaute, N.\r\nBlack, R.\r\nCanteria, R.\r\nFreiermuth, C.\r\nHayes, D.\r\nHenderson-Carr, N.\r\nHerbst, G.\r\nJones, M.\r\nKondragunta, A.\r\nLuba, M.\r\nQualkenbush-Frye, N.\r\nReddy, A.\r\nRehman, S.\r\nRyan, H.\r\nSall, H.\r\nShugar, S.\r\nSmith, E.\r\nStuller, K.\r\nThomas, S.\r\nVarga, S.\r\nWalton, L.\r\nWells, A.\r\nStudy Personnel - OSU\r\nBoldoser, C.\r\nJolley, D.\r\nKazimi, M.\r\nRawlins, K.\r\nReider, C.\r\nSmith, T.\r\nInclude Publications?\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-10T11:42:19-04:00"
+      "last_modified": "2023-06-10T16:21:55-04:00"
     },
     {
       "path": "ucmc.html",
@@ -65,7 +74,7 @@
       "description": "A new article created using the Distill format.\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-10T11:42:49-04:00"
+      "last_modified": "2023-06-10T16:22:21-04:00"
     },
     {
       "path": "wch.html",
@@ -73,7 +82,7 @@
       "description": "A new article created using the Distill format.\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-10T11:43:18-04:00"
+      "last_modified": "2023-06-10T16:22:51-04:00"
     }
   ],
   "collections": []
