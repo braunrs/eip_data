@@ -1,0 +1,18 @@
+---
+title: "Human Trafficking"
+description: |
+  The purpose of this form will be to document more detailed information regarding EIP efforts around screening and linkage for human trafficking.
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+
+
+
+

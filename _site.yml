@@ -5,16 +5,22 @@ description: |
 output_dir: "docs"
 navbar:
   right:
-    - text: "Population Data"
-      menu:
-        - text: "EIP Population"
-          href: eip_pop.html
+    - text: "EIP Population"
+      href: eip_pop.html
     - text: "Clinical"
       menu:
       - text: "Assessments"
         href: assessment.html
       - text: "HIV Testing"
         href: hiv.html
+      - text: "SUD"
+        href: sud.html
+      - text: "Mental Health"
+        href: mh.html
+      - text: "Human Trafficking"
+        href: human_trafficking.html
+      - text: "Linkage to Care"
+        href: linkage.html
     - text: "Sites"
       menu:
         - text: "UCMC"

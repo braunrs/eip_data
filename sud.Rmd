@@ -1,0 +1,18 @@
+---
+title: "Substance Use Disorder (SUD)"
+description: |
+  The purpose of this form will be to provide more detail around substance abuse screening and linkage to care efforts.
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+
+
+
+
