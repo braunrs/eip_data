@@ -1,0 +1,31 @@
+---
+title: "HIV Testing"
+description: |
+  This will pull together all of the different HIV testing methods (CTR, EHE, NACHO, Lab) showing independent testing programs as well as total testing through EIP.
+date: "`r Sys.Date()`"
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# CTR Testing 
+
+Spot holder for CTR definition and data.
+
+# EHE Testing
+
+Spot holder for EHE definition and data
+
+# NACHO Testing
+
+Spot holder for NACHO definition and data.
+
+
+
+

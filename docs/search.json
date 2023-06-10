@@ -6,15 +6,15 @@
       "description": "Some additional details about the website",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-09T16:41:50-04:00"
+      "last_modified": "2023-06-09T23:48:57-04:00"
     },
     {
       "path": "crc.html",
       "title": "EIP Service Center",
-      "description": "A new article created using the Distill format.\n",
+      "description": "This page shows data regarding the CRC screening efforts for EIP.\n",
       "author": [],
-      "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-09T16:29:20-04:00"
+      "contents": "\r\nThe EIP Service Center started on May 3rd, 2023. This graph and subsequent table shows the daily count of the number of screening encounters done by the CRCs, and the number of screening encounters where the patient was marked as eligible for the EIP Service Center.\r\n\r\n\r\n\r\nDate\r\n      CRC Screens\r\n      EIP Service Center\r\n      Percent (%)\r\n    2023-05-03\r\n113\r\n0\r\n0.02023-05-04\r\n131\r\n0\r\n0.02023-05-05\r\n118\r\n79\r\n70.02023-05-06\r\n109\r\n70\r\n60.02023-05-07\r\n144\r\n75\r\n50.02023-05-08\r\n109\r\n47\r\n40.02023-05-09\r\n166\r\n79\r\n50.02023-05-10\r\n140\r\n27\r\n20.02023-05-11\r\n123\r\n30\r\n20.02023-05-12\r\n140\r\n0\r\n0.02023-05-13\r\n89\r\n4\r\n4.02023-05-14\r\n99\r\n2\r\n2.02023-05-15\r\n135\r\n0\r\n0.02023-05-16\r\n170\r\n82\r\n50.02023-05-17\r\n107\r\n4\r\n4.02023-05-18\r\n155\r\n93\r\n60.02023-05-19\r\n140\r\n86\r\n60.02023-05-20\r\n114\r\n55\r\n50.02023-05-21\r\n138\r\n1\r\n0.72023-05-22\r\n118\r\n0\r\n0.02023-05-23\r\n121\r\n72\r\n60.02023-05-24\r\n94\r\n2\r\n2.02023-05-25\r\n137\r\n47\r\n30.02023-05-26\r\n70\r\n0\r\n0.02023-05-27\r\n131\r\n2\r\n2.02023-05-28\r\n122\r\n1\r\n0.82023-05-29\r\n106\r\n0\r\n0.02023-05-30\r\n127\r\n69\r\n50.02023-05-31\r\n66\r\n36\r\n50.02023-06-01\r\n103\r\n56\r\n50.02023-06-02\r\n89\r\n3\r\n3.02023-06-03\r\n97\r\n1\r\n1.02023-06-04\r\n65\r\n16\r\n20.02023-06-05\r\n98\r\n44\r\n40.02023-06-06\r\n20\r\n9\r\n40.0\r\n\r\nThe table below shows the total number of screens that the CRCs have had since May 3rd, 2023, the total that were eligible to continue screening for the EIP Service Center based on their age (15 years or older), and the percentage of the total.\r\n\r\n\r\nTotal Screened\r\n      Total Eligible by Age\r\n      Percent (%)\r\n    4004\r\n1095\r\n27\r\n\r\nNote For those marked as “Eligible by Age”, this only includes when the CRC selects the EIP Service Center screener on the ED General Screen page in REDCap. Therefore, this number eligible may be under-represented if the CRC does not select the EIP Service Center screener for all those above the age of 15 years old.\r\nThe CRCs continue with the EIP-specific EPIC pre-screen, looking for various criteria that would indicate that the CRC could approach the patient to gather more information regarding risk and need for EIP action. The graph and table below shows the number of screens that met the various criteria, and the percentage of the total eligible based on age.\r\n\r\n\r\n\r\nThe risk groups that the CRCs are looking for during their Epic pre-screen include: African-American males between the ages of 15-29, Women of Color (WOC), and individuals who identify within the transgender or non-binary community.\r\nThe percentages shown below are the percent of the total eligible for EIP screening based on age. The only exceptions are the percentage of those HIV+ not in care (which is a percentage of the total identified as HIV+), and the percentage of those positive for Syphilis in the past year (which is a percentage of the total with a STI in the past year).\r\n\r\n\r\nSexual Assault\r\n      Overdose\r\n      Illicit Opiate Use\r\n      Risk group w/o test\r\n      HIV+\r\n      HIV+ not in care\r\n      PWID\r\n      STI+ past yr\r\n      Syphilis+ past yr\r\n      Homeless\r\n      Pregnant\r\n    0\r\n1.4\r\n3.2\r\n69\r\n1.1\r\n17\r\n2.3\r\n1.2\r\n0.27\r\n1.6\r\n1.6\r\n\r\nThis table shows the total number of screening encounters where the patient met at least one criteria for approach by the CRC, and the percent of the total eligible for the EIP Service Center screening based on age. Also shown are the total number of encounters where the patient was approached and consented to discussing additional risk questions, as well as the percentage of the total eligible for approach.\r\n\r\n\r\nTotal Eligible for Approach\r\n      % Eligible\r\n      Total Consented\r\n      % Consented\r\n    307\r\n28\r\n250\r\n81\r\n\r\n\r\n\r\n\r\n",
+      "last_modified": "2023-06-09T23:49:46-04:00"
     },
     {
       "path": "exchange.html",
@@ -22,15 +22,25 @@
       "description": "A new article created using the Distill format.\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-09T16:39:04-04:00"
+      "last_modified": "2023-06-09T23:50:13-04:00"
+    },
+    {
+      "path": "hiv.html",
+      "title": "HIV Testing",
+      "description": "This will pull together all of the different HIV testing methods (CTR, EHE, NACHO, Lab) showing independent testing programs as well as total testing through EIP.\n",
+      "author": [],
+      "date": "`r Sys.Date()`",
+      "contents": "\r\n\r\nContents\r\nCTR Testing\r\nEHE Testing\r\nNACHO Testing\r\n\r\nCTR Testing\r\nSpot holder for CTR definition and data.\r\nEHE Testing\r\nSpot holder for EHE definition and data\r\nNACHO Testing\r\nSpot holder for NACHO definition and data.\r\n\r\n\r\n\r\n",
+      "last_modified": "2023-06-09T23:50:40-04:00"
     },
     {
       "path": "index.html",
       "title": "EIP Data Website",
-      "description": "Welcome to the website. I hope you enjoy it!\n",
+      "description": "This site is currently under construction. The plan for this page is a general introduction to EIP and the data/data sources, the EIP mission statement, and other general info.\n",
       "author": [],
+      "date": "`r Sys.Date()`",
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-09T16:26:26-04:00"
+      "last_modified": "2023-06-09T23:51:05-04:00"
     },
     {
       "path": "pgx.html",
@@ -38,7 +48,7 @@
       "description": "A new article created using the Distill format.\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-09T16:36:44-04:00"
+      "last_modified": "2023-06-09T23:51:32-04:00"
     },
     {
       "path": "ucmc.html",
@@ -46,7 +56,7 @@
       "description": "A new article created using the Distill format.\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-09T16:34:35-04:00"
+      "last_modified": "2023-06-09T23:52:00-04:00"
     },
     {
       "path": "wch.html",
@@ -54,7 +64,7 @@
       "description": "A new article created using the Distill format.\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-09T16:32:28-04:00"
+      "last_modified": "2023-06-09T23:52:26-04:00"
     }
   ],
   "collections": []

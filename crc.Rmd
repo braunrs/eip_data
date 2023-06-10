@@ -1,10 +1,609 @@
 ---
 title: "EIP Service Center"
 description: |
-  A new article created using the Distill format.
+  This page shows data regarding the CRC screening efforts for EIP.
 output: distill::distill_article
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, include=FALSE}
+
+rm(list=ls(all=T))
+
+library(tidyverse)
+library(ggplot2)
+library(gt)
+library(plotly)
+
+
+# EIP-CRC Screening Data
+
+crc <- read.csv('M:/EIP Data/EIP-CRC Screening/Original Data/EIP CRC Screening Data 20230606_1419.csv')
+dim(crc)
+head(crc)
+
+# EIP-CRC Screening started 5/3/2023
+summary(crc$datetime)
+crc$datetime <- as.Date(crc$datetime, format = '%m/%d/%Y')
+summary(crc$datetime)
+crc <- crc[which(crc$datetime >= '2023-05-03'), ]
+dim(crc)
+summary(crc$datetime)
+
+total_screened <- nrow(crc)
+total_screened
+
+daily_crc_screen <- select(crc, datetime, record_id, eip)
+head(daily_crc_screen)
+daily_crc_screen$crc_screen <- 1
+daily_crc_screen <- select(daily_crc_screen, -record_id)
+head(daily_crc_screen)
+
+daily_screening <- aggregate(x = daily_crc_screen[c("eip","crc_screen")],
+                             FUN = sum,
+                             by = list(Date = daily_crc_screen$datetime))
+daily_screening$eip[is.na(daily_screening$eip)] <- 0
+daily_screening$crc_screen[is.na(daily_screening$crc_screen)] <- 0
+head(daily_screening)
+daily_screening
+
+
+crc <- select(crc, -pt_location, -pt_willing, -abbott_istat, -astral, -boost, -brain_pulse2,
+              -cgwell, -endolow, -fastest, -headsmartii_v2, -icecap, -istat, -most, -platinum,
+              -portola, -rnaseq, -sensecan, -sense5, -siemenspoc, -reset, -restore1,
+              -ed_general_screen_complete, -eip_provider_name,
+              -eip_service_center_screening_complete)
+head(crc)
+table(crc$eip)
+crc <- crc[which(crc$eip == 1), ]
+dim(crc)
+
+
+
+
+# Defining sex/gender
+
+table(crc$sex)
+crc$sex[crc$sex == 0] <- 'Male'
+crc$sex[crc$sex == 1] <- 'Female'
+table(crc$sex)
+
+table(crc$sex, crc$gender)
+crc$gender[crc$gender == 0 & crc$sex == 'Male'] <- 'Male'
+crc$gender[crc$gender == 1 & crc$sex == 'Male'] <- 'Transgender/Nonbinary'
+crc$gender[crc$gender == 0 & crc$sex == 'Female'] <- 'Transgender/Nonbinary'
+crc$gender[crc$gender == 1 & crc$sex == 'Female'] <- 'Female'
+crc$gender[crc$gender == 2] <- 'Transgender/Nonbinary'
+table(crc$sex, crc$gender)
+
+
+
+
+# Defining Race
+
+table(crc$race___1)
+White <- crc[which(crc$race___1 == 1), ]
+dim(White)
+White <- select(White, record_id)
+White$White <- 1
+table(White$White)
+White <- distinct(White)
+dim(White)
+head(White)
+
+table(crc$race___2)
+Black <- crc[which(crc$race___2 == 1), ]
+dim(Black)
+Black <- select(Black, record_id)
+Black$Black <- 1
+table(Black$Black)
+Black <- distinct(Black)
+dim(Black)
+head(Black)
+
+table(crc$race___3)
+AmIn <- crc[which(crc$race___3 == 1), ]
+dim(AmIn)
+AmIn <- select(AmIn, record_id)
+AmIn$AmIn <- 1
+table(AmIn$AmIn)
+AmIn <- distinct(AmIn)
+dim(AmIn)
+head(AmIn)
+
+table(crc$race___4)
+Asian <- crc[which(crc$race___4 == 1), ]
+dim(Asian)
+Asian <- select(Asian, record_id)
+Asian$Asian <- 1
+table(Asian$Asian)
+Asian <- distinct(Asian)
+dim(Asian)
+head(Asian)
+
+table(crc$race___5)
+NHPI <- crc[which(crc$race___5 == 1), ]
+dim(NHPI)
+NHPI <- select(NHPI, record_id)
+NHPI$NHPI <- 1
+table(NHPI$NHPI)
+NHPI <- distinct(NHPI)
+dim(NHPI)
+head(NHPI)
+
+table(crc$race___6)
+RaceOther <- crc[which(crc$race___6 == 1), ]
+dim(RaceOther)
+RaceOther <- select(RaceOther, record_id)
+RaceOther$RaceOther <- 1
+table(RaceOther$RaceOther)
+RaceOther <- distinct(RaceOther)
+dim(RaceOther)
+head(RaceOther)
+
+table(crc$race___9)
+Multi <- crc[which(crc$race___9 == 1), ]
+dim(Multi)
+Multi <- select(Multi, record_id)
+Multi$Multi <- 1
+table(Multi$Multi)
+Multi <- distinct(Multi)
+dim(Multi)
+head(Multi)
+
+table(crc$race___10)
+Hisp <- crc[which(crc$race___10 == 1), ]
+dim(Hisp)
+Hisp <- select(Hisp, record_id)
+Hisp$Hisp <- 1
+table(Hisp$Hisp)
+Hisp <- distinct(Hisp)
+dim(Hisp)
+head(Hisp)
+
+table(crc$race___7)
+table(crc$race___8)
+RaceUnk <- crc[which(crc$race___7 == 1 | crc$race___8 == 1), ]
+dim(RaceUnk)
+RaceUnk <- select(RaceUnk, record_id)
+RaceUnk$RaceUnk <- 1
+table(RaceUnk$RaceUnk)
+RaceUnk <- distinct(RaceUnk)
+dim(RaceUnk)
+head(RaceUnk)
+
+
+
+
+race <- select(crc, record_id)
+race <- distinct(race)
+dim(race)
+
+
+dim(race)
+race <- merge(race, White, by = 'record_id', all.x = T)
+race <- merge(race, Black, by = 'record_id', all.x = T)
+race <- merge(race, AmIn, by = 'record_id', all.x = T)
+race <- merge(race, Asian, by = 'record_id', all.x = T)
+race <- merge(race, NHPI, by = 'record_id', all.x = T)
+race <- merge(race, RaceOther, by = 'record_id', all.x = T)
+race <- merge(race, Multi, by = 'record_id', all.x = T)
+race <- merge(race, Hisp, by = 'record_id', all.x = T)
+race <- merge(race, RaceUnk, by = 'record_id', all.x = T)
+dim(race)
+head(race)
+table(race$White)
+
+race$White[is.na(race$White)] <- 0
+race$Black[is.na(race$Black)] <- 0
+race$AmIn[is.na(race$AmIn)] <- 0
+race$Asian[is.na(race$Asian)] <- 0
+race$NHPI[is.na(race$NHPI)] <- 0
+race$RaceOther[is.na(race$RaceOther)] <- 0
+race$Multi[is.na(race$Multi)] <- 0
+race$Hisp[is.na(race$Hisp)] <- 0
+race$RaceUnk[is.na(race$RaceUnk)] <- 0
+
+race$RaceNumber <- race$White + race$Black + race$AmIn + race$Asian + race$NHPI + race$RaceOther + race$Multi + race$Hisp + race$RaceUnk
+table(race$RaceNumber)
+head(race)
+
+race$race[race$RaceNumber == 1 & race$White == 1] <- 'White or Caucasian'
+race$race[race$RaceNumber == 1 & race$Black == 1] <- 'Black or African American'
+race$race[race$RaceNumber == 1 & race$AmIn == 1] <- 'American Indian or Alaska Native'
+race$race[race$RaceNumber == 1 & race$Asian == 1] <- 'Asian'
+race$race[race$RaceNumber == 1 & race$NHPI == 1] <- 'Native Hawaiian or Other Pacific Islander'
+race$race[race$RaceNumber == 1 & race$RaceOther == 1] <- 'Other'
+race$race[race$RaceNumber == 1 & race$Hisp == 1] <- 'Hispanic'
+race$race[race$Multi == 1 | (race$RaceNumber > 1)] <- 'Biracial/Multiracial'
+race$race[race$RaceNumber == 0 | is.na(race$RaceNumber) | race$RaceUnk == 1] <- 'Unknown'
+table(race$race)
+
+dim(crc)
+dim(race)
+crc <- merge(crc, race, by = 'record_id', all.x = T)
+dim(crc)
+table(crc$race)
+
+
+table(crc$race, crc$ethnicity)
+crc$race[crc$race == 'White or Caucasian' & crc$ethnicity == 1] <- 'Biracial/Multiracial'
+crc$race[crc$race == 'Black or African American' & crc$ethnicity == 1] <- 'Biracial/Multiracial'
+crc$race[crc$race == 'American Indian or Alaska Native' & crc$ethnicity == 1] <- 'Biracial/Multiracial'
+crc$race[crc$race == 'Asian' & crc$ethnicity == 1] <- 'Biracial/Multiracial'
+crc$race[crc$race == 'Native Hawaiian or Other Pacific Islander' & crc$ethnicity == 1] <- 'Biracial/Multiracial'
+crc$race[crc$race == 'Other' & crc$ethnicity == 1] <- 'Biracial/Multiracial'
+crc$race[crc$race == 'Biracial/Multiracial' & crc$ethnicity == 1] <- 'Biracial/Multiracial'
+crc$race[crc$race == 'Unknown' & crc$ethnicity == 1] <- 'Hispanic'
+
+table(crc$race, crc$ethnicity)
+
+head(crc)
+crc <- select(crc, -race___3, -race___4, -race___2, -race___10, -race___9, -race___5, -race___6,
+              -race___7, -race___8, -race___1, -ethnicity, -RaceUnk, -RaceNumber, -White, -Black,
+              -AmIn, -Asian, -NHPI, -RaceOther, -Multi, -Hisp)
+head(crc)
+dim(crc)
+
+
+
+# Creating a patient list
+
+patients <- select(crc, mrn)
+dim(patients)
+patients <- distinct(patients)
+dim(patients)
+head(patients)
+
+
+
+age <- select(crc, mrn, age)
+dim(age)
+age <- distinct(age)
+dim(age)
+age <- age[order(age$mrn),]
+age$dup <- duplicated(age$mrn)
+age <- age[which(age$dup == F), ]
+dim(age)
+age <- select(age, -dup)
+dim(age)
+
+dim(patients)
+dim(age)
+patients <- merge(patients, age, by = 'mrn', all.x = T)
+dim(patients)
+head(patients)
+
+
+
+sex <- select(crc, mrn, sex)
+dim(sex)
+sex <- distinct(sex)
+dim(sex)
+sex <- sex[order(sex$mrn),]
+sex$dup <- duplicated(sex$mrn)
+sex <- sex[which(sex$dup == F), ]
+dim(sex)
+sex <- select(sex, -dup)
+dim(sex)
+
+dim(patients)
+dim(sex)
+patients <- merge(patients, sex, by = 'mrn', all.x = T)
+dim(patients)
+head(patients)
+
+
+
+gender <- select(crc, mrn, gender)
+dim(gender)
+gender <- distinct(gender)
+dim(gender)
+gender <- gender[order(gender$mrn),]
+gender$dup <- duplicated(gender$mrn)
+gender <- gender[which(gender$dup == F), ]
+dim(gender)
+gender <- select(gender, -dup)
+dim(gender)
+
+dim(patients)
+dim(gender)
+patients <- merge(patients, gender, by = 'mrn', all.x = T)
+dim(patients)
+head(patients)
+
+
+
+race <- select(crc, mrn, race)
+dim(race)
+race <- distinct(race)
+dim(race)
+race <- race[order(race$mrn),]
+race$dup <- duplicated(race$mrn)
+race <- race[which(race$dup == F), ]
+dim(race)
+race <- select(race, -dup)
+dim(race)
+
+dim(patients)
+dim(race)
+patients <- merge(patients, race, by = 'mrn', all.x = T)
+dim(patients)
+head(patients)
+
+
+
+
+# Creating Encounter/Screening Data
+
+head(crc)
+enc <- select(crc, -chief_comp, -eip, -eip_start, -eip_calc, -eip_eligible, -eip_complete_step3,
+              -eip_complete_time1, -epi_sign1, -eip_id1, -csn)
+head(enc)
+dim(enc)
+
+dim(enc)
+total_eip_eligible_age <- nrow(enc)
+total_eip_eligible_age
+total_screened
+eligible_screened_percent <- ((nrow(enc))/total_screened)*100
+eligible_screened_percent <- signif(eligible_screened_percent, digits = 2)
+eligible_screened_percent
+
+summary(enc$datetime)
+enc$enc_date <- as.Date(enc$datetime, format = '%m/%d/%Y')
+summary(enc$enc_date)
+enc <- select(enc, -datetime)
+
+
+table(enc$sex_assault)
+enc$sex_assault <- as.numeric(enc$sex_assault)
+total_sex_assault <- sum(enc$sex_assault, na.rm = TRUE)
+total_sex_assault
+total_sex_assault[is.na(total_sex_assault)] <- 0
+total_sex_assault
+total_sex_assault_percent <- (total_sex_assault/total_eip_eligible_age)*100
+total_sex_assault_percent <- signif(total_sex_assault_percent, digits = 2)
+total_sex_assault_percent
+
+
+table(enc$overdose)
+enc$overdose <- as.numeric(enc$overdose)
+total_overdose <- sum(enc$overdose, na.rm = TRUE)
+total_overdose
+total_overdose[is.na(total_overdose)] <- 0
+total_overdose
+total_overdose_percent <- (total_overdose/total_eip_eligible_age)*100
+total_overdose_percent <- signif(total_overdose_percent, digits = 2)
+total_overdose_percent
+
+
+table(enc$opiates)
+enc$opiates <- as.numeric(enc$opiates)
+total_opiates <- sum(enc$opiates, na.rm = TRUE)
+total_opiates
+total_opiates[is.na(total_opiates)] <- 0
+total_opiates
+total_opiates_percent <- (total_opiates/total_eip_eligible_age)*100
+total_opiates_percent <- signif(total_opiates_percent, digits = 2)
+total_opiates_percent
+
+
+table(enc$preg)
+enc$preg <- as.numeric(enc$preg)
+total_preg <- sum(enc$preg, na.rm = TRUE)
+total_preg
+total_preg[is.na(total_preg)] <- 0
+total_preg
+total_preg_percent <- (total_preg/total_eip_eligible_age)*100
+total_preg_percent <- signif(total_preg_percent, digits = 2)
+total_preg_percent
+
+
+table(enc$hiv)
+enc$hiv <- as.numeric(enc$hiv)
+total_hiv <- sum(enc$hiv, na.rm = TRUE)
+total_hiv
+total_hiv[is.na(total_hiv)] <- 0
+total_hiv
+total_hiv_percent <- (total_hiv/total_eip_eligible_age)*100
+total_hiv_percent <- signif(total_hiv_percent, digits = 2)
+total_hiv_percent
+
+
+table(enc$idc)
+enc$idc <- as.numeric(enc$idc)
+total_idc <- sum(enc$idc, na.rm = TRUE)
+total_idc
+total_idc[is.na(total_idc)] <- 0
+total_idc
+total_idc_percent <- (total_idc/total_hiv)*100
+total_idc_percent <- signif(total_idc_percent, digits = 2)
+total_idc_percent
+
+
+table(enc$pwid)
+enc$pwid <- as.numeric(enc$pwid)
+total_pwid <- sum(enc$pwid, na.rm = TRUE)
+total_pwid
+total_pwid[is.na(total_pwid)] <- 0
+total_pwid
+total_pwid_percent <- (total_pwid/total_eip_eligible_age)*100
+total_pwid_percent <- signif(total_pwid_percent, digits = 2)
+total_pwid_percent
+
+
+table(enc$sti)
+enc$sti <- as.numeric(enc$sti)
+total_sti <- sum(enc$sti, na.rm = TRUE)
+total_sti
+total_sti[is.na(total_sti)] <- 0
+total_sti
+total_sti_percent <- (total_sti/total_eip_eligible_age)*100
+total_sti_percent <- signif(total_sti_percent, digits = 2)
+total_sti_percent
+
+
+table(enc$sti_syph)
+enc$sti_syph <- as.numeric(enc$sti_syph)
+total_sti_syph <- sum(enc$sti_syph, na.rm = TRUE)
+total_sti_syph
+total_sti_syph[is.na(total_sti_syph)] <- 0
+total_sti_syph
+total_sti_syph_percent <- (total_sti_syph/total_eip_eligible_age)*100
+total_sti_syph_percent <- signif(total_sti_syph_percent, digits = 2)
+total_sti_syph_percent
+
+
+table(enc$homeless)
+enc$homeless <- as.numeric(enc$homeless)
+total_homeless <- sum(enc$homeless, na.rm = TRUE)
+total_homeless
+total_homeless[is.na(total_homeless)] <- 0
+total_homeless
+total_homeless_percent <- (total_homeless/total_eip_eligible_age)*100
+total_homeless_percent <- signif(total_homeless_percent, digits = 2)
+total_homeless_percent
+
+
+table(enc$hiv_test)
+enc$hiv_test <- as.numeric(enc$hiv_test)
+enc$risk_group[enc$aa_male_calc == 1 | enc$woc_calc == 1 | enc$trans_calc == 1] <- 1
+total_risk_group <- sum(enc$risk_group, na.rm = TRUE)
+total_risk_group
+total_risk_group_percent <- (total_risk_group/total_eip_eligible_age)*100
+total_risk_group_percent <- signif(total_risk_group_percent, digits = 2)
+total_risk_group_percent
+
+table(enc$risk_group, enc$hiv_test)
+enc$risk_group_not_tested[enc$risk_group == 1 & enc$hiv_test == 1] <- 1
+total_risk_group_not_tested <- sum(enc$risk_group_not_tested, na.rm = TRUE)
+total_risk_group_not_tested
+total_risk_group_not_tested[is.na(total_risk_group_not_tested)] <- 0
+total_risk_group_not_tested
+total_risk_group_not_tested_percent <- (total_risk_group_not_tested/total_risk_group)*100
+total_risk_group_not_tested_percent <- signif(total_risk_group_not_tested_percent, digits = 2)
+total_risk_group_not_tested_percent
+
+
+table(crc$approach_calc)
+eip_approach_eligible <- sum(crc$approach_calc, na.rm = TRUE)
+eip_approach_eligible
+eip_approach_eligible_percent <- (eip_approach_eligible/total_eip_eligible_age)*100
+eip_approach_eligible_percent <- signif(eip_approach_eligible_percent, digits = 2)
+eip_approach_eligible_percent
+
+
+table(crc$eip_crc_offer_outcome)
+crc$consented[crc$eip_crc_offer_outcome == 1] <- 1
+table(crc$consented)
+consented <- sum(crc$consented, na.rm = TRUE)
+consented
+consented_percent <- (consented/eip_approach_eligible)*100
+consented_percent <- signif(consented_percent, digits = 2)
+consented_percent
+
+```
+
+The EIP Service Center started on **May 3rd, 2023**. This graph and subsequent table shows the daily count of the number of screening encounters done by the CRCs, and the number of screening encounters where the patient was marked as eligible for the EIP Service Center.
+
+**Add side by side graph of this and the daily percentage of EIP screens**
+
+```{r}
+
+daily_screening_plot <- ggplot(daily_screening, aes(x = Date)) +
+  geom_line(aes(y = crc_screen), color = "darkblue") +
+  geom_line(aes(y = eip), color = "lightblue") +
+  ylab("Count") +
+  ggtitle("Daily Screening")
+
+ggplotly(daily_screening_plot)
+
+
+daily_screening_table <- select(daily_screening, Date, crc_screen, eip)
+daily_screening_table$percent <- (daily_screening_table$eip/daily_screening_table$crc_screen)*100
+daily_screening_table$percent <- signif(daily_screening_table$percent, digits = 0)
+colnames(daily_screening_table)[2] <- 'CRC Screens'
+colnames(daily_screening_table)[3] <- 'EIP Service Center'
+colnames(daily_screening_table)[4] <- 'Percent (%)'
+daily_screening_table %>%
+  gt() %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()
+  )
+
+```
+
+The table below shows the total number of screens that the CRCs have had since May 3rd, 2023, the total that were eligible to continue screening for the EIP Service Center based on their age (*15 years or older*), and the percentage of the total.
+
+```{r}
+
+table1 <- data.frame(matrix(ncol = 3, nrow = 0))
+colnames(table1) <- c('Total Screened', 'Total Eligible by Age', 'Percent (%)')
+table1[nrow(table1) + 1,] <- list(total_screened, total_eip_eligible_age, eligible_screened_percent)
+table1 %>%
+  gt() %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()
+  )
+
+```
+
+**Note** *For those marked as "Eligible by Age", this only includes when the CRC selects the EIP Service Center screener on the ED General Screen page in REDCap. Therefore, this number eligible may be under-represented if the CRC does not select the EIP Service Center screener for all those above the age of 15 years old.*
+
+
+
+The CRCs continue with the EIP-specific EPIC pre-screen, looking for various criteria that would indicate that the CRC could approach the patient to gather more information regarding risk and need for EIP action. The graph and table below shows the number of screens that met the various criteria, and the percentage of the total eligible based on age.
+
+```{r}
+
+graph1 <- data.frame(Criteria = c('Sexual Assault', 'Overdose', 'Illicit Opiate Use', 'Risk group w/o test', 'HIV+', 'HIV+ not in care', 'PWID', 'STI+ past yr', 'Syphilis+ past yr', 'Homeless', 'Pregnant'),
+                     Count = c(total_sex_assault, total_overdose, total_opiates, total_risk_group_not_tested, total_hiv, total_idc, total_pwid, total_sti, total_sti_syph, total_homeless, total_preg))
+
+p <- ggplot(data = graph1, aes(x = Criteria, y = Count)) +
+  geom_bar(stat="identity", fill="steelblue")+
+  geom_text(aes(label = Count), vjust = -0.3, size = 3.5) +
+  theme_minimal()
+p + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+*The risk groups that the CRCs are looking for during their Epic pre-screen include: African-American males between the ages of 15-29, Women of Color (WOC), and individuals who identify within the transgender or non-binary community.*
+
+
+The percentages shown below are the percent of the total eligible for EIP screening based on age. The only exceptions are the percentage of those HIV+ not in care (*which is a percentage of the total identified as HIV+*), and the percentage of those positive for Syphilis in the past year (*which is a percentage of the total with a STI in the past year*).
+
+```{r}
+
+table2 <- data.frame(matrix(ncol = 11, nrow = 0))
+colnames(table2) <- c('Sexual Assault', 'Overdose', 'Illicit Opiate Use', 'Risk group w/o test', 'HIV+', 'HIV+ not in care', 'PWID', 'STI+ past yr', 'Syphilis+ past yr', 'Homeless', 'Pregnant')
+table2[nrow(table2) + 1,] <- list(total_sex_assault_percent, total_overdose_percent, total_opiates_percent, total_risk_group_not_tested_percent, total_hiv_percent, total_idc_percent, total_pwid_percent, total_sti_percent, total_sti_syph_percent, total_homeless_percent, total_preg_percent)
+table2 %>%
+  gt() %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()
+  )
+
+```
+
+This table shows the total number of screening encounters where the patient met at least one criteria for approach by the CRC, and the percent of the total eligible for the EIP Service Center screening based on age. Also shown are the total number of encounters where the patient was approached and consented to discussing additional risk questions, as well as the percentage of the total eligible for approach.
+
+```{r}
+
+table3 <- data.frame(matrix(ncol = 4, nrow = 0))
+colnames(table3) <- c('Total Eligible for Approach', '% Eligible', 'Total Consented', '% Consented')
+table3[nrow(table3) + 1,] <- list(eip_approach_eligible, eip_approach_eligible_percent, consented, consented_percent)
+table3 %>%
+  gt() %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()
+  )
+
 ```

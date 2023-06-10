@@ -5,6 +5,8 @@ description: |
 output_dir: "docs"
 navbar:
   right:
+    - text: "HIV Testing"
+      href: hiv.html
     - text: "Sites"
       menu:
         - text: "UCMC"

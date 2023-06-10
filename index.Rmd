@@ -1,7 +1,8 @@
 ---
 title: "EIP Data Website"
 description: |
-  Welcome to the website. I hope you enjoy it!
+  This site is currently under construction. The plan for this page is a general introduction to EIP and the data/data sources, the EIP mission statement, and other general info.
+date: "`r Sys.Date()`"
 site: distill::distill_website
 ---
 
@@ -15,4 +16,6 @@ knitr::opts_chunk$set(echo = FALSE)
 # https://rstudio.github.io/distill/publish_website.html#github-pages
 
 ```
+
+
 
