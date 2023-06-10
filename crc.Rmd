@@ -21,7 +21,7 @@ library(plotly)
 
 # EIP-CRC Screening Data
 
-crc <- read.csv('M:/EIP Data/EIP-CRC Screening/Original Data/EIP CRC Screening Data 20230606_1419.csv')
+crc <- read.csv('M:/EIP Data/EIP-CRC Screening/Original Data/EIP CRC Screening Data 20230610_0106.csv')
 dim(crc)
 head(crc)
 
