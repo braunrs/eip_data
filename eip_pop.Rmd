@@ -3,7 +3,11 @@ title: "EIP Population"
 description: |
   The purpose of this page is to show the demographic population data for those individuals that EIP has worked with for various clinical purposes. This page shows the entire EIP popluation data, and the population data for individuals seen at specific sites is shown on those pages listed under the Sites tab.
 date: "`r Sys.Date()`"
-output: distill::distill_article
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
@@ -741,7 +745,7 @@ unique_patients
 
 The information on this page only includes data since the start of 2023.
 
-The total number of unique individuals that EIP has encountered is **`XX`r unique_patients`**. The demographic information for this EIP population is shown on this page. For further information regarding the population demographics of individuals at particular sites, please refer to those pages listed under the **Site** tab in the navigation bar.
+The total number of unique individuals that EIP has encountered is **`r unique_patients`**. The demographic information for this EIP population is shown on this page. For further information regarding the population demographics of individuals at particular sites, please refer to those pages listed under the **Site** tab in the navigation bar.
 
 ## Age Distribution
 
@@ -816,3 +820,84 @@ pt_age_gender <- plot_ly(alpha = 0.5) %>%
 pt_age_gender
 
 ```
+
+This histogram allows for the ability to display the age based on the self-reported race of the individual, excluding those who identified as 'Other' race or had an unknown race. You can filter the information as above.
+
+```{r}
+eip_pt_amin <- eip_pt %>% filter(race == "American Indian/Alaska native", na.rm = TRUE)
+eip_pt_amin <- select(eip_pt_amin, age, race)
+eip_pt_asian <- eip_pt %>% filter(race == "Asian/Pacific Islander", na.rm = TRUE)
+eip_pt_asian <- select(eip_pt_asian, age, race)
+eip_pt_biracial <- eip_pt %>% filter(race == "Biracial/Multiracial", na.rm = TRUE)
+eip_pt_biracial <- select(eip_pt_biracial, age, race)
+eip_pt_black <- eip_pt %>% filter(race == "Black/African American", na.rm = TRUE)
+eip_pt_black <- select(eip_pt_black, age, race)
+eip_pt_hisp <- eip_pt %>% filter(race == "Hispanic/Latinx", na.rm = TRUE)
+eip_pt_hisp <- select(eip_pt_hisp, age, race)
+eip_pt_otherrace <- eip_pt %>% filter(race == "Other", na.rm = TRUE)
+eip_pt_otherrace <- select(eip_pt_otherrace, age, race)
+eip_pt_unkrace <- eip_pt %>% filter(race == "Unknown", na.rm = TRUE)
+eip_pt_unkrace <- select(eip_pt_unkrace, age, race)
+eip_pt_white <- eip_pt %>% filter(race == "White", na.rm = TRUE)
+eip_pt_white <- select(eip_pt_white, age, race)
+
+
+pt_age_race <- plot_ly(alpha = 0.5) %>%
+  add_histogram(x = ~eip_pt_amin$age,
+                name = "American Indian/Alaska native",
+                xbins = list(size = 1)) %>% 
+  add_histogram(x = ~eip_pt_asian$age,
+                name = "Asian/Pacific Islander",
+                xbins = list(size = 1)) %>% 
+  add_histogram(x = ~eip_pt_biracial$age,
+                name = "Biracial/Multiracial",
+                xbins = list(size = 1)) %>% 
+  add_histogram(x = ~eip_pt_black$age,
+                name = "Black/African American",
+                xbins = list(size = 1)) %>%  
+  add_histogram(x = ~eip_pt_hisp$age,
+                name = "Hispanic/Latinx",
+                xbins = list(size = 1)) %>% 
+  add_histogram(x = ~eip_pt_white$age,
+                name = "White",
+                xbins = list(size = 1)) %>%
+  layout(barmode = "stack",
+         title = "Age distribution based on Race",
+         xaxis = list(title = "Age",
+                      zeroline = FALSE),
+         yaxis = list(title = "Count",
+                      zeroline = FALSE))
+pt_age_race
+
+```
+
+
+## Sex and Gender Identity
+
+Placeholder for data on sex at birth and gender identity.
+
+## Race and Ethnicity
+
+Placeholder for data on race and ethnicity data
+
+## Insurance Coverage
+
+Placeholder for data on insurance coverage.
+
+## Populations of Interest
+
+Placeholder for data on populations of interest.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
