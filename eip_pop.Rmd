@@ -15,16 +15,25 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r, include=F}
+rm(list=ls(all=T))
+
 library(dplyr)
 library(tidyverse)
 library(lubridate)
 library(plotly)
 library(ggplot2)
+library(reactable)
+library(htmltools)
+library(lubridate)
+library(hrbrthemes)
+library(gt)
+library(janitor)
+library(scales)
 
 
-#######################################################################################################
-#########################################  EIP Database Data  #########################################
-#######################################################################################################
+##############################################################################################
+#####################################  EIP Database Data  ####################################
+##############################################################################################
 
 eip <- read.csv('M:/EIP Data/EIP Database/REDCap Ver 5.0/EIP Database Data 20230610_1303.csv')
 dim(eip)
@@ -573,7 +582,8 @@ pt_age$age_category[pt_age$age >= 25 & pt_age$age <= 34] <- '25-34'
 pt_age$age_category[pt_age$age >= 35 & pt_age$age <= 44] <- '35-44'
 pt_age$age_category[pt_age$age >= 45 & pt_age$age <= 54] <- '45-54'
 pt_age$age_category[pt_age$age >= 55 & pt_age$age <= 64] <- '55-64'
-pt_age$age_category[pt_age$age >= 65 & pt_age$age <= 88] <- '65+'
+pt_age$age_category[pt_age$age >= 65 & pt_age$age <= 110] <- '65+'
+pt_age$age_category[is.na(pt_age$age) | pt_age$age > 110] <- 'Unknown'
 table(pt_age$age_category)
 pt_age <- select(pt_age, record_id, age, age_category)
 dim(pt_age)
@@ -737,19 +747,22 @@ class(eip_pt$age)
 eip_pt$age <- as.numeric(eip_pt$age)
 summary(eip_pt$age)
 
+
 table(eip_pt$unique_pt)
 unique_patients <- sum(eip_pt$unique_pt)
 unique_patients
 
 ```
 
-The information on this page only includes data since the start of 2023.
+The information on this page only includes data since the start of 2023. EIP has encountered:
 
-The total number of unique individuals that EIP has encountered is **`r unique_patients`**. The demographic information for this EIP population is shown on this page. For further information regarding the population demographics of individuals at particular sites, please refer to those pages listed under the **Site** tab in the navigation bar.
+<div align="center"><span style="color: red;"> **`r unique_patients`**</span> unique individuals.</div>
+
+The demographic information for this EIP population is shown on this page. For further information regarding the population demographics of individuals at particular sites, please refer to those pages listed under the **Site** tab in the navigation bar.
 
 ## Age Distribution
 
-This first histogram shows the ages of individuals seen by EIP grouped by age categories. The age categories in this histogram were chosen because they are the categories used in both the CTR and EHE reports to ODH.
+This first histogram shows the ages of individuals seen by EIP grouped by age categories. The age categories in this histogram were chosen because they are the categories used in both the CTR and EHE reports to ODH. The total numbers of individuals within each category as well as the percent of the total individuals encountered by EIP are shown in the table.
 
 ```{r}
 pt_age_cat <- ggplot(eip_pt, aes(x = age_category))  
@@ -760,6 +773,26 @@ ggplotly(pt_age_cat)
 
 ```
 
+```{r}
+dim(eip_pt)
+table(eip_pt$age_category)
+pt_age_cat_tbl <- table(eip_pt$age_category)
+
+pt_age_cat_tbl_perc <- eip_pt %>%
+  group_by(age_category) %>%
+  summarise(Percent = n()/nrow(.)*100)
+pt_age_cat_tbl_perc <- as.data.frame(pt_age_cat_tbl_perc)
+pt_age_cat_tbl_perc <- na.omit(pt_age_cat_tbl_perc)
+pt_age_cat_tbl_perc$Percent <- round(pt_age_cat_tbl_perc$Percent, digits = 0)
+pt_age_cat_tbl_perc <- spread(pt_age_cat_tbl_perc, age_category, Percent)
+pt_age_cat_tbl <- rbind(pt_age_cat_tbl, pt_age_cat_tbl_perc)
+pt_age_cat_tbl$Data <- c("Total", "Percent (%)")
+pt_age_cat_tbl <- pt_age_cat_tbl[, c(9, 1, 2, 3, 4, 5, 6, 7, 8)]
+
+pt_age_cat_tbl %>%
+  reactable()
+
+```
 
 The following histogram shows the complete age distribution of all individuals that EIP has encountered, with the density curve overlying the histogram.
 
@@ -784,7 +817,7 @@ pt_age
 
 ```
 
-This histogram shows the same data as the one above, however allows for the ability to display the age based on the self-reported gender of the individual. You can filter the information by selecting/deselecting the gender from the legend on the right side of the graph. If multiple gender categories are selected, the histogram shows the cumulative total for each age among the gender categories selected.
+The following two histograms also show the overall age distribution of the EIP population. They also allow the ability to filter and select based on self-reported gender (first histogram) and the self-reported race (second histogram). You can filter the information by selecting/deselecting the gender/race from the legend on the right side of the graph. If multiple categories are selected, the histogram shows the cumulative total for each age among the categories selected. If you just want to see the particular age distribution for a single gender/race, you can deselect all other options.
 
 ```{r}
 eip_pt_male <- eip_pt %>% filter(gender == "Male", na.rm = TRUE)
@@ -820,8 +853,6 @@ pt_age_gender <- plot_ly(alpha = 0.5) %>%
 pt_age_gender
 
 ```
-
-This histogram allows for the ability to display the age based on the self-reported race of the individual, excluding those who identified as 'Other' race or had an unknown race. You can filter the information as above.
 
 ```{r}
 eip_pt_amin <- eip_pt %>% filter(race == "American Indian/Alaska native", na.rm = TRUE)
@@ -871,10 +902,9 @@ pt_age_race
 
 ```
 
-
 ## Sex and Gender Identity
 
-Placeholder for data on sex at birth and gender identity.
+EIP collects an individual's sex assigned at birth as well as their self-defined gender identity.
 
 ## Race and Ethnicity
 
@@ -887,17 +917,3 @@ Placeholder for data on insurance coverage.
 ## Populations of Interest
 
 Placeholder for data on populations of interest.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
