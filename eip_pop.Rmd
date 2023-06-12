@@ -754,13 +754,16 @@ unique_patients
 
 ```
 
-The information on this page only includes data since the start of 2023. EIP has encountered:
+The information on this page only includes data since the start of 2023.
 
-<div align="center"><span style="color: red;"> **`r unique_patients`**</span> unique individuals.</div>
+EIP has encountered a total of <span style="color: red;"> **`r unique_patients`**</span> unique individuals at all sites.
+
 
 The demographic information for this EIP population is shown on this page. For further information regarding the population demographics of individuals at particular sites, please refer to those pages listed under the **Site** tab in the navigation bar.
 
 ## Age Distribution
+
+> Since age is based on the individual's date of birth (DOB) and the date of their encounter, this can change the individual's age over time with various EIP encounters. The data here is shown only for 2023, so age distribution can be presented. When this information is combined with historical EIP data, age distribution will be based on encounter-level data, rather than patient-level data.
 
 This first histogram shows the ages of individuals seen by EIP grouped by age categories. The age categories in this histogram were chosen because they are the categories used in both the CTR and EHE reports to ODH. The total numbers of individuals within each category as well as the percent of the total individuals encountered by EIP are shown in the table.
 
@@ -774,8 +777,6 @@ ggplotly(pt_age_cat)
 ```
 
 ```{r}
-dim(eip_pt)
-table(eip_pt$age_category)
 pt_age_cat_tbl <- table(eip_pt$age_category)
 
 pt_age_cat_tbl_perc <- eip_pt %>%
@@ -853,6 +854,8 @@ pt_age_gender <- plot_ly(alpha = 0.5) %>%
 pt_age_gender
 
 ```
+
+
 
 ```{r}
 eip_pt_amin <- eip_pt %>% filter(race == "American Indian/Alaska native", na.rm = TRUE)
