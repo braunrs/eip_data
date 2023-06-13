@@ -35,7 +35,7 @@ library(scales)
 #####################################  EIP Database Data  ####################################
 ##############################################################################################
 
-eip <- read.csv('M:/EIP Data/EIP Database/REDCap Ver 5.0/EIP Database Data 20230610_1303.csv')
+eip <- read.csv('M:/EIP Data/EIP Database/REDCap Ver 5.0/EIP Database Data 20230613_1207.csv')
 dim(eip)
 
 # Person-level data is only visit_001_arm_1, use to match to encounters
@@ -755,7 +755,6 @@ unique_patients
 ```
 
 The information on this page only includes data since the start of 2023.
-
 EIP has encountered a total of <span style="color: red;"> **`r unique_patients`**</span> unique individuals at all sites.
 
 
