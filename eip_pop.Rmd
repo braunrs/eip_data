@@ -31,9 +31,9 @@ library(janitor)
 library(scales)
 
 
-##############################################################################################
-#####################################  EIP Database Data  ####################################
-##############################################################################################
+#######################################################################################################
+#########################################  EIP Database Data  #########################################
+#######################################################################################################
 
 eip <- read.csv('M:/EIP Data/EIP Database/REDCap Ver 5.0/EIP Database Data 20230613_1207.csv')
 dim(eip)
@@ -607,6 +607,19 @@ eip_pt$race[(is.na(eip_pt$race))] <- ''
 rm(pt_race)
 eip_pt <- distinct(eip_pt)
 
+pt_sex <- select(eip, record_id, sex)
+dim(pt_sex)
+head(pt_sex)
+pt_sex <- distinct(pt_sex)
+dim(pt_sex)
+dim(eip_pt)
+eip_pt <- merge(eip_pt, pt_sex, by = 'record_id', all.x = T)
+dim(eip_pt)
+head(eip_pt)
+eip_pt$sex[(is.na(eip_pt$sex_at_birth))] <- ''
+rm(pt_sex)
+eip_pt <- distinct(eip_pt)
+
 pt_gender <- select(eip, record_id, gender)
 dim(pt_gender)
 head(pt_gender)
@@ -754,9 +767,7 @@ unique_patients
 
 ```
 
-The information on this page only includes data since the start of 2023.
-EIP has encountered a total of <span style="color: red;"> **`r unique_patients`**</span> unique individuals at all sites.
-
+The information on this page only includes data since the start of 2023. EIP has encountered a total of [ **`r unique_patients`**]{style="color: red;"} unique individuals at all sites.
 
 The demographic information for this EIP population is shown on this page. For further information regarding the population demographics of individuals at particular sites, please refer to those pages listed under the **Site** tab in the navigation bar.
 
@@ -854,8 +865,6 @@ pt_age_gender
 
 ```
 
-
-
 ```{r}
 eip_pt_amin <- eip_pt %>% filter(race == "American Indian/Alaska native", na.rm = TRUE)
 eip_pt_amin <- select(eip_pt_amin, age, race)
@@ -906,7 +915,126 @@ pt_age_race
 
 ## Sex and Gender Identity
 
-EIP collects an individual's sex assigned at birth as well as their self-defined gender identity.
+EIP collects an individual's sex assigned at birth as well as their self-defined gender identity. The chart below shows the data regarding the individual's sex assigned at birth, with the table and percentages also provided below the chart.
+
+```{r}
+pt_sex <- ggplot(eip_pt, aes(x = sex))  
+pt_sex <-  pt_sex + geom_bar(fill = "lightblue") + theme_classic()
+
+ggplotly(pt_sex)
+
+
+pt_sex_tbl <- table(eip_pt$sex)
+pt_sex_tbl_perc <- eip_pt %>%
+  group_by(sex) %>%
+  summarise(Percent = n()/nrow(.)*100)
+pt_sex_tbl_perc <- as.data.frame(pt_sex_tbl_perc)
+pt_sex_tbl_perc <- na.omit(pt_sex_tbl_perc)
+pt_sex_tbl_perc$Percent <- round(pt_sex_tbl_perc$Percent, digits = 0)
+pt_sex_tbl_perc <- spread(pt_sex_tbl_perc, sex, Percent)
+pt_sex_tbl <- rbind(pt_sex_tbl, pt_sex_tbl_perc)
+pt_sex_tbl$Data <- c("Total", "Percent (%)")
+pt_sex_tbl <- pt_sex_tbl[, c(4, 1, 2, 3)]
+
+pt_sex_tbl %>%
+  reactable()
+
+```
+
+The following interactive graph allows for the ability to filter the age category of EIP individuals based on their sex assigned at birth.
+
+```{r}
+eip_pt_male_sex <- eip_pt %>% filter(sex == "Male", na.rm = TRUE)
+eip_pt_male_sex <- select(eip_pt_male_sex, age_category, sex)
+eip_pt_female_sex <- eip_pt %>% filter(sex == "Female", na.rm = TRUE)
+eip_pt_female_sex <- select(eip_pt_female_sex, age_category, sex)
+eip_pt_unk_sex <- eip_pt %>% filter(sex == "Unknown", na.rm = TRUE)
+eip_pt_unk_sex <- select(eip_pt_unk_sex, age_category, sex)
+
+pt_age_cat_sex <- plot_ly(alpha = 0.5) %>%
+  add_histogram(x = ~eip_pt_male_sex$age_category,
+                name = "Male",
+                xbins = list(size = 1)) %>% 
+  add_histogram(x = ~eip_pt_female_sex$age_category,
+                name = "Female",
+                xbins = list(size = 1)) %>%
+  add_histogram(x = ~eip_pt_unk_sex$age_category,
+                name = "Unknown",
+                xbins = list(size = 1)) %>% 
+  layout(title = "Age Category based on Sex",
+         xaxis = list(title = "Age Category",
+                      zeroline = FALSE,
+                      categoryorder = "array",
+                      categoryarray = c("13-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+", "Unknown")),
+         yaxis = list(title = "Count",
+                      zeroline = FALSE))
+pt_age_cat_sex
+
+```
+
+For an individual's gender identity, EIP staff allow the individual to self-report their current gender. This information is shown below in the chart and the subsequent table expressing the percentage of all EIP patients/clients.
+
+```{r}
+pt_gender <- ggplot(eip_pt, aes(x = gender))  
+pt_gender <-  pt_gender + geom_bar(fill = "lightblue") + theme_classic()
+
+ggplotly(pt_gender)
+
+
+pt_gender_tbl <- table(eip_pt$gender)
+pt_sex_tbl_perc <- eip_pt %>%
+  group_by(gender) %>%
+  summarise(Percent = n()/nrow(.)*100)
+pt_sex_tbl_perc <- as.data.frame(pt_sex_tbl_perc)
+pt_sex_tbl_perc <- na.omit(pt_sex_tbl_perc)
+pt_sex_tbl_perc$Percent <- round(pt_sex_tbl_perc$Percent, digits = 0)
+pt_sex_tbl_perc <- spread(pt_sex_tbl_perc, gender, Percent)
+pt_gender_tbl <- rbind(pt_gender_tbl, pt_sex_tbl_perc)
+pt_gender_tbl$Data <- c("Total", "Percent (%)")
+pt_gender_tbl <- pt_gender_tbl[, c(5, 1, 2, 3, 4)]
+
+pt_gender_tbl %>%
+  reactable()
+
+```
+
+The following chart allows for the ability to filter the individual's age category based on their self-reported gender identity.
+
+```{r}
+eip_pt_male_gender <- eip_pt %>% filter(gender == "Male", na.rm = TRUE)
+eip_pt_male_gender <- select(eip_pt_male_gender, age_category, gender)
+eip_pt_female_gender <- eip_pt %>% filter(gender == "Female", na.rm = TRUE)
+eip_pt_female_gender <- select(eip_pt_female_gender, age_category, gender)
+eip_pt_trans_gender <- eip_pt %>% filter(gender == "Unknown", na.rm = TRUE)
+eip_pt_trans_gender <- select(eip_pt_trans_gender, age_category, gender)
+eip_pt_unk_gender <- eip_pt %>% filter(gender == "Unknown", na.rm = TRUE)
+eip_pt_unk_gender <- select(eip_pt_unk_gender, age_category, gender)
+
+pt_age_cat_gender <- plot_ly(alpha = 0.5) %>%
+  add_histogram(x = ~eip_pt_male_gender$age_category,
+                name = "Male",
+                xbins = list(size = 1)) %>% 
+  add_histogram(x = ~eip_pt_female_gender$age_category,
+                name = "Female",
+                xbins = list(size = 1)) %>%
+  add_histogram(x = ~eip_pt_trans_gender$age_category,
+                name = "Transgender/Nonbinary",
+                xbins = list(size = 1)) %>%
+  add_histogram(x = ~eip_pt_unk_gender$age_category,
+                name = "Unknown",
+                xbins = list(size = 1)) %>% 
+  layout(title = "Age Category based on Gender",
+         xaxis = list(title = "Age Category",
+                      zeroline = FALSE,
+                      categoryorder = "array",
+                      categoryarray = c("13-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+", "Unknown")),
+         yaxis = list(title = "Count",
+                      zeroline = FALSE))
+pt_age_cat_gender
+
+```
+
+
 
 ## Race and Ethnicity
 
