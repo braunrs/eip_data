@@ -9,11 +9,28 @@ site: distill::distill_website
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 
-# Learn more about creating websites with Distill at:
-# https://rstudio.github.io/distill/website.html
+```
 
-# Learn more about publishing to GitHub Pages at:
-# https://rstudio.github.io/distill/publish_website.html#github-pages
+
+## Timeline of EIP
+
+This is an example of the potential timeline that can be included to document the history of EIP, when things were introduced, when research projects were conducted, etc.
+
+```{r}
+library(timevis)
+
+data <- data.frame(
+  id = 1:3,
+  content = c("Start of EIP",
+              "PGx Study",
+              "Peer Volunteers"),
+  start = c("1998-01-01",
+            "2020-06-17",
+            "2018-10-01"),
+  end = c(NA,
+          "2022-11-01",
+          NA))
+timevis(data)
 
 ```
 

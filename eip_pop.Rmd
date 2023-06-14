@@ -2,7 +2,6 @@
 title: "EIP Population"
 description: |
   The purpose of this page is to show the demographic population data for those individuals that EIP has worked with for various clinical purposes. This page shows the entire EIP popluation data, and the population data for individuals seen at specific sites is shown on those pages listed under the Sites tab.
-date: "`r Sys.Date()`"
 output:
   distill::distill_article:
     toc: true
@@ -786,7 +785,7 @@ ggplotly(pt_age_cat)
 
 ```
 
-```{r}
+```{r, layout="l-body-outset"}
 pt_age_cat_tbl <- table(eip_pt$age_category)
 
 pt_age_cat_tbl_perc <- eip_pt %>%
@@ -917,7 +916,7 @@ pt_age_race
 
 EIP collects an individual's sex assigned at birth as well as their self-defined gender identity. The chart below shows the data regarding the individual's sex assigned at birth, with the table and percentages also provided below the chart.
 
-```{r}
+```{r, layout="l-body-outset"}
 pt_sex <- ggplot(eip_pt, aes(x = sex))  
 pt_sex <-  pt_sex + geom_bar(fill = "lightblue") + theme_classic()
 
@@ -974,7 +973,7 @@ pt_age_cat_sex
 
 For an individual's gender identity, EIP staff allow the individual to self-report their current gender. This information is shown below in the chart and the subsequent table expressing the percentage of all EIP patients/clients.
 
-```{r}
+```{r, layout="l-body-outset"}
 pt_gender <- ggplot(eip_pt, aes(x = gender))  
 pt_gender <-  pt_gender + geom_bar(fill = "lightblue") + theme_classic()
 
