@@ -34,7 +34,7 @@ library(scales)
 #########################################  EIP Database Data  #########################################
 #######################################################################################################
 
-eip <- read.csv('M:/EIP Data/EIP Database/REDCap Ver 5.0/EIP Database Data 20230613_1207.csv')
+eip <- read.csv('M:/EIP Data/EIP Database/REDCap Ver 5.0/EIP Database Data 20230620_1336.csv')
 dim(eip)
 
 # Person-level data is only visit_001_arm_1, use to match to encounters
