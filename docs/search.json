@@ -14,8 +14,8 @@
       "description": "This page is currently under construction. The purpose of this page will be to highlight the numbers of assessments performed by EIP staff, and breakdown some information gathered such as risk, substance use, mental health, and other data.\n",
       "author": [],
       "date": "`r Sys.Date()`",
-      "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-06-13T23:04:30-04:00"
+      "contents": "\r\nThe diagram below is an example of the flow within the Risk/Needs Assessment. This is still under evaluation for the best way to present this information. For example, it could be combined into a full flow diagram of the EIP Database, which would be presented in a different way and in a different section of this website.\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+      "last_modified": "2023-06-20T15:12:39-04:00"
     },
     {
       "path": "crc.html",
