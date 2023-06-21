@@ -834,7 +834,7 @@ pt_age_cat_tbl %>%
 
 This shows the EIP patient population's age distribution by sex, excluding those with an unknown or unassigned sex at birth.
 
-```{r}
+```{r, out.width="100%"}
 age_dist <- select(eip_pt, age, sex)
 age_dist <- age_dist[which(age_dist$sex != 'Unknown/Unassigned'), ]
 age_dist$age <- as.factor(age_dist$age)
