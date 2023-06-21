@@ -11,11 +11,13 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```
 
+## **EIP Mission:**
+
+*The UC Early Intervention Program is committed to identifying and intervening with populations most at risk for threats to health and well-being at the earliest opportunity, and helping these individuals connect with community resources to improve health outcomes.*
 
 ## Timeline of EIP
 
 This is an example of the potential timeline that can be included to document the history of EIP, when things were introduced, when research projects were conducted, etc. You can scroll to zoom in and out of the timeline, as well as drag to focus on particular time points or projects. Hovering over the specific text will give you exact dates and/or date ranges of each item.
-
 
 ```{r}
 library(timevis)
@@ -73,22 +75,3 @@ eip_timespan <- data.frame(
 timevis(eip_timespan, showZoom = FALSE)
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

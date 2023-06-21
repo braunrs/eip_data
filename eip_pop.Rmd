@@ -28,6 +28,7 @@ library(hrbrthemes)
 library(gt)
 library(janitor)
 library(scales)
+library(apyramid)
 
 
 #######################################################################################################
@@ -774,7 +775,64 @@ The demographic information for this EIP population is shown on this page. For f
 
 > Since age is based on the individual's date of birth (DOB) and the date of their encounter, this can change the individual's age over time with various EIP encounters. The data here is shown only for 2023, so age distribution can be presented. When this information is combined with historical EIP data, age distribution will be based on encounter-level data, rather than patient-level data.
 
-This first histogram shows the ages of individuals seen by EIP grouped by age categories. The age categories in this histogram were chosen because they are the categories used in both the CTR and EHE reports to ODH. The total numbers of individuals within each category as well as the percent of the total individuals encountered by EIP are shown in the table.
+
+This shows the EIP patient population's age distribution by sex, exluding those with an unknown or unassigned sex at birth.
+
+```{r}
+age_dist <- select(eip_pt, age, sex)
+age_dist <- age_dist[which(age_dist$sex != 'Unknown/Unassigned'), ]
+age_dist$age <- as.factor(age_dist$age)
+
+age_dist <- age_pyramid(
+  age_dist,
+  age_group = "age",
+  split_by = "sex",
+  stack_by = NULL,
+  count = NULL,
+  proportional = FALSE,
+  na.rm = TRUE,
+  show_midpoint = TRUE,
+  vertical_lines = FALSE,
+  horizontal_lines = TRUE,
+  pyramid = TRUE,
+  pal = NULL
+)
+
+age_dist + labs(title = "EIP Patient Age Distribution by Sex", x = "Age", y = "Counts") + theme_bw()
+
+
+```
+
+
+This shows the EIP patient population's age category stratified by sex, excluding those with an unknown or undetermined sex at birth.
+
+```{r}
+age_cat_dist <- select(eip_pt, age_category, sex)
+age_cat_dist <- age_cat_dist[which(age_cat_dist$sex != 'Unknown/Unassigned'), ]
+age_cat_dist$age_category <- as.factor(age_cat_dist$age_category)
+
+age_cat_dist <- age_pyramid(
+  age_cat_dist,
+  age_group = "age_category",
+  split_by = "sex",
+  stack_by = NULL,
+  count = NULL,
+  proportional = FALSE,
+  na.rm = TRUE,
+  show_midpoint = TRUE,
+  vertical_lines = FALSE,
+  horizontal_lines = TRUE,
+  pyramid = TRUE,
+  pal = NULL
+)
+
+age_cat_dist + labs(title = "EIP Patient Age Category by Sex", x = "Age Category", y = "Counts") + theme_bw()
+
+
+```
+
+
+This histogram shows the ages of individuals seen by EIP grouped by age categories. The age categories in this histogram were chosen because they are the categories used in both the CTR and EHE reports to ODH. The total numbers of individuals within each category as well as the percent of the total individuals encountered by EIP are shown in the table.
 
 ```{r}
 pt_age_cat <- ggplot(eip_pt, aes(x = age_category))  
