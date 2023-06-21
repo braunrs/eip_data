@@ -31,11 +31,12 @@ library(scales)
 library(apyramid)
 
 
-#######################################################################################################
-#########################################  EIP Database Data  #########################################
-#######################################################################################################
-
 eip <- read.csv('M:/EIP Data/EIP Database/REDCap Ver 5.0/EIP Database Data 20230620_1336.csv')
+
+```
+
+
+```{r, include=F}
 dim(eip)
 
 # Person-level data is only visit_001_arm_1, use to match to encounters
@@ -776,7 +777,62 @@ The demographic information for this EIP population is shown on this page. For f
 > Since age is based on the individual's date of birth (DOB) and the date of their encounter, this can change the individual's age over time with various EIP encounters. The data here is shown only for 2023, so age distribution can be presented. When this information is combined with historical EIP data, age distribution will be based on encounter-level data, rather than patient-level data.
 
 
-This shows the EIP patient population's age distribution by sex, exluding those with an unknown or unassigned sex at birth.
+The following histogram shows the complete age distribution of all individuals that EIP has encountered, with the density curve overlying the histogram.
+
+```{r}
+
+pt_age_dens <- density(eip_pt$age, na.rm = TRUE)
+
+pt_age <- plot_ly(x = ~eip_pt$age,
+              type = "histogram",
+              name = "Histogram",
+              xbins = list(size = 1)) %>% 
+  layout(title = "Histogram of EIP Patient Age",
+         xaxis = list(title = "Age",
+                      zeroline = FALSE),
+         yaxis = list(title = "Count",
+                      zeroline = FALSE)) %>% 
+  add_lines(x = pt_age_dens$x, y = pt_age_dens$y, yaxis = "y2", name = "Density") %>% 
+  layout(yaxis2 = list(overlaying = "y",
+                       side = "right",
+                       rangemode = "tozero"))
+pt_age
+
+```
+
+
+This histogram shows the ages of individuals seen by EIP grouped by age categories. The age categories in this histogram were chosen because they are the categories used in both the CTR and EHE reports to ODH. The total numbers of individuals within each category as well as the percent of the total individuals encountered by EIP are shown in the table.
+
+```{r}
+pt_age_cat <- ggplot(eip_pt, aes(x = age_category))  
+pt_age_cat <-  pt_age_cat + geom_bar(fill = "lightblue") + theme_classic() +
+  xlab("Age Category") + ylab("Count")
+
+ggplotly(pt_age_cat)
+
+```
+
+```{r, layout="l-body-outset"}
+pt_age_cat_tbl <- table(eip_pt$age_category)
+
+pt_age_cat_tbl_perc <- eip_pt %>%
+  group_by(age_category) %>%
+  summarise(Percent = n()/nrow(.)*100)
+pt_age_cat_tbl_perc <- as.data.frame(pt_age_cat_tbl_perc)
+pt_age_cat_tbl_perc <- na.omit(pt_age_cat_tbl_perc)
+pt_age_cat_tbl_perc$Percent <- round(pt_age_cat_tbl_perc$Percent, digits = 0)
+pt_age_cat_tbl_perc <- spread(pt_age_cat_tbl_perc, age_category, Percent)
+pt_age_cat_tbl <- rbind(pt_age_cat_tbl, pt_age_cat_tbl_perc)
+pt_age_cat_tbl$Data <- c("Total", "Percent (%)")
+pt_age_cat_tbl <- pt_age_cat_tbl[, c(9, 1, 2, 3, 4, 5, 6, 7, 8)]
+
+pt_age_cat_tbl %>%
+  reactable()
+
+```
+
+
+This shows the EIP patient population's age distribution by sex, excluding those with an unknown or unassigned sex at birth.
 
 ```{r}
 age_dist <- select(eip_pt, age, sex)
@@ -831,59 +887,6 @@ age_cat_dist + labs(title = "EIP Patient Age Category by Sex", x = "Age Category
 
 ```
 
-
-This histogram shows the ages of individuals seen by EIP grouped by age categories. The age categories in this histogram were chosen because they are the categories used in both the CTR and EHE reports to ODH. The total numbers of individuals within each category as well as the percent of the total individuals encountered by EIP are shown in the table.
-
-```{r}
-pt_age_cat <- ggplot(eip_pt, aes(x = age_category))  
-pt_age_cat <-  pt_age_cat + geom_bar(fill = "lightblue") + theme_classic() +
-  xlab("Age Category") + ylab("Count")
-
-ggplotly(pt_age_cat)
-
-```
-
-```{r, layout="l-body-outset"}
-pt_age_cat_tbl <- table(eip_pt$age_category)
-
-pt_age_cat_tbl_perc <- eip_pt %>%
-  group_by(age_category) %>%
-  summarise(Percent = n()/nrow(.)*100)
-pt_age_cat_tbl_perc <- as.data.frame(pt_age_cat_tbl_perc)
-pt_age_cat_tbl_perc <- na.omit(pt_age_cat_tbl_perc)
-pt_age_cat_tbl_perc$Percent <- round(pt_age_cat_tbl_perc$Percent, digits = 0)
-pt_age_cat_tbl_perc <- spread(pt_age_cat_tbl_perc, age_category, Percent)
-pt_age_cat_tbl <- rbind(pt_age_cat_tbl, pt_age_cat_tbl_perc)
-pt_age_cat_tbl$Data <- c("Total", "Percent (%)")
-pt_age_cat_tbl <- pt_age_cat_tbl[, c(9, 1, 2, 3, 4, 5, 6, 7, 8)]
-
-pt_age_cat_tbl %>%
-  reactable()
-
-```
-
-The following histogram shows the complete age distribution of all individuals that EIP has encountered, with the density curve overlying the histogram.
-
-```{r}
-
-pt_age_dens <- density(eip_pt$age, na.rm = TRUE)
-
-pt_age <- plot_ly(x = ~eip_pt$age,
-              type = "histogram",
-              name = "Histogram",
-              xbins = list(size = 1)) %>% 
-  layout(title = "Histogram of EIP Patient Age",
-         xaxis = list(title = "Age",
-                      zeroline = FALSE),
-         yaxis = list(title = "Count",
-                      zeroline = FALSE)) %>% 
-  add_lines(x = pt_age_dens$x, y = pt_age_dens$y, yaxis = "y2", name = "Density") %>% 
-  layout(yaxis2 = list(overlaying = "y",
-                       side = "right",
-                       rangemode = "tozero"))
-pt_age
-
-```
 
 The following two histograms also show the overall age distribution of the EIP population. They also allow the ability to filter and select based on self-reported gender (first histogram) and the self-reported race (second histogram). You can filter the information by selecting/deselecting the gender/race from the legend on the right side of the graph. If multiple categories are selected, the histogram shows the cumulative total for each age among the categories selected. If you just want to see the particular age distribution for a single gender/race, you can deselect all other options.
 
