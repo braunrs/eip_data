@@ -636,8 +636,8 @@ The percentages shown in the table below are the percent of the total marked for
 ```{r, layout="l-page"}
 
 table2 <- data.frame(matrix(ncol = 11, nrow = 0))
-colnames(table2) <- c('Sexual Assault', 'Overdose', 'Illicit Opiate Use', 'Risk group w/o test', 'HIV+', 'HIV+ not in care', 'PWID', 'STI+ past yr', 'Syphilis+ past yr', 'Homeless', 'Pregnant')
-table2[nrow(table2) + 1,] <- list(total_sex_assault_percent, total_overdose_percent, total_opiates_percent, total_risk_group_not_tested_percent, total_hiv_percent, total_idc_percent, total_pwid_percent, total_sti_percent, total_sti_syph_percent, total_homeless_percent, total_preg_percent)
+colnames(table2) <- c('HIV+', 'HIV+ not in care', 'Homeless', 'Opiate Use', 'OD', 'Pregnant', 'PWID', 'Risk w/o test', 'Sexual Assault', 'STI+ past yr', 'Syph+ past yr')
+table2[nrow(table2) + 1,] <- list(total_hiv_percent, total_idc_percent, total_homeless_percent, total_opiates_percent, total_overdose_percent, total_preg_percent, total_pwid_percent, total_risk_group_not_tested_percent, total_sex_assault_percent, total_sti_percent, total_sti_syph_percent)
 reactable(table2)
 
 ```
@@ -649,11 +649,7 @@ This table shows the total number of screening encounters where the patient met 
 table3 <- data.frame(matrix(ncol = 4, nrow = 0))
 colnames(table3) <- c('Total Eligible for Approach', '% Eligible', 'Total Consented', '% Consented')
 table3[nrow(table3) + 1,] <- list(eip_approach_eligible, eip_approach_eligible_percent, consented, consented_percent)
-table3 %>%
-  gt() %>%
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels()
-  )
+reactable(table3)
+
 
 ```
