@@ -17,6 +17,7 @@ library(tidyverse)
 library(ggplot2)
 library(gt)
 library(plotly)
+library(reactable)
 
 
 # EIP-CRC Screening Data
@@ -24,6 +25,11 @@ library(plotly)
 crc <- read.csv('M:/EIP Data/EIP-CRC Screening/Original Data/EIP CRC Screening Data 20230620_1330.csv')
 dim(crc)
 head(crc)
+
+```
+
+
+```{r, include=FALSE}
 
 # EIP-CRC Screening started 5/3/2023
 summary(crc$datetime)
@@ -35,6 +41,44 @@ summary(crc$datetime)
 
 total_screened <- nrow(crc)
 total_screened
+
+
+table(crc$pt_willing)
+crc_excluded_screen <- select(crc, record_id, pt_willing)
+crc_excluded_screen <- crc_excluded_screen[which(crc_excluded_screen$pt_willing == 0), ]
+crc_excluded_screen <- nrow(crc_excluded_screen)
+crc_excluded_screen
+
+dim(crc)
+crc <- crc[which(crc$pt_willing != 0), ]
+dim(crc)
+
+
+total_eip_eligible <- select(crc, record_id, age)
+total_eip_eligible <- total_eip_eligible[which(total_eip_eligible$age >= 15), ]
+table(total_eip_eligible$age)
+dim(total_eip_eligible)
+total_eip_eligible <- nrow(total_eip_eligible)
+total_eip_eligible
+
+
+total_eip_eligible_percent <- (total_eip_eligible/total_screened)*100
+total_eip_eligible_percent <- signif(total_eip_eligible_percent, digits = 3)
+total_eip_eligible_percent
+
+
+table(crc$eip)
+total_eip_screened <- select(crc, record_id, eip)
+total_eip_screened <- total_eip_screened[which(total_eip_screened$eip == 1), ]
+dim(total_eip_screened)
+total_eip_screened <- nrow(total_eip_screened)
+total_eip_screened
+
+
+total_eip_eligible_screened <- (total_eip_screened/total_eip_eligible)*100
+total_eip_eligible_screened <- signif(total_eip_eligible_screened, digits = 3)
+total_eip_eligible_screened
+
 
 daily_crc_screen <- select(crc, datetime, record_id, eip)
 head(daily_crc_screen)
@@ -508,9 +552,24 @@ consented_percent
 
 ```
 
-The EIP Service Center started on **May 3rd, 2023**. This graph and subsequent table shows the daily count of the number of screening encounters done by the CRCs, and the number of screening encounters where the patient was marked as eligible for the EIP Service Center.
+The EIP Service Center started on **May 3rd, 2023**.
 
-**Add side by side graph of this and the daily percentage of EIP screens**
+In order to fit with their ED General Screening process, the CRCs select the EIP Service Center screening protocol when the patient is at least 15 years or older. The table below shows the total number of screens that have occurred since the start of the EIP Service Center (*based on number of entries into the ED General Screen*), as well as the total number of patients that were eligible for the EIP Service Center screening protocol based on their age (*15 years or older*). The percentage of the total screened who are eligible for the EIP Service Center is presented in the table. Finally, the table shows the total number that were marked for the EIP Service Center, and the percentage of the total eligible based on their age.
+
+```{r}
+
+crc_screening_tbl <- data.frame(matrix(ncol = 5, nrow = 0))
+colnames(crc_screening_tbl) <- c('Total Screened', 'Total EIP Eligible', '% EIP Eligible', 'Total EIP Screened', '% EIP Eligible Screened')
+crc_screening_tbl[nrow(crc_screening_tbl) + 1,] <- list(total_screened, total_eip_eligible, total_eip_eligible_percent, total_eip_screened, total_eip_eligible_screened)
+reactable(crc_screening_tbl)
+
+```
+
+
+*Screening encounters are excluded from the total eligible for the EIP Service Center if they were unwilling to answer questions during the ED General Screen. The total number of encounters where the patient was unwilling to answer questions at this stage was **`r crc_excluded_screen`**, and thus excluded from the total number eligible for the EIP Service Center.*
+
+Total numbers are tracked daily for all ED General Screening done by the CRCs, as well as the daily numbers for those that are marked for the EIP Service Center Screen. The following two graphs show these daily numbers. The first graph and subsequent table shows the daily count of the number of screening encounters done by the CRCs, and the number of screening encounters where the patient was marked as eligible for the EIP Service Center.
+
 
 ```{r}
 
@@ -529,36 +588,32 @@ daily_screening_table$percent <- signif(daily_screening_table$percent, digits = 
 colnames(daily_screening_table)[2] <- 'CRC Screens'
 colnames(daily_screening_table)[3] <- 'EIP Service Center'
 colnames(daily_screening_table)[4] <- 'Percent (%)'
-daily_screening_table %>%
-  gt() %>%
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels()
-  )
+reactable(daily_screening_table,
+          showPageSizeOptions = TRUE,
+          pageSizeOptions = c(10, 15, 31),
+          defaultPageSize = 10)
+
 
 ```
 
-The table below shows the total number of screens that the CRCs have had since May 3rd, 2023, the total that were eligible to continue screening for the EIP Service Center based on their age (*15 years or older*), and the percentage of the total.
+
+The following graph shows the daily percentage of the total eligible for the EIP Service Center based on age that are marked for the EIP Service Center on the ED General Screen.
+
 
 ```{r}
 
-table1 <- data.frame(matrix(ncol = 3, nrow = 0))
-colnames(table1) <- c('Total Screened', 'Total Eligible by Age', 'Percent (%)')
-table1[nrow(table1) + 1,] <- list(total_screened, total_eip_eligible_age, eligible_screened_percent)
-table1 %>%
-  gt() %>%
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels()
-  )
+colnames(daily_screening_table)[4] <- 'eip_screened_percent'
+daily_screening_percent_plot <- ggplot(daily_screening_table, aes(x = Date)) +
+  geom_line(aes(y = eip_screened_percent), color = "orange") +
+  ylab("% EIP Screened") +
+  ggtitle("Daily % EIP Screened")
+
+ggplotly(daily_screening_percent_plot)
 
 ```
 
-**Note** *For those marked as "Eligible by Age", this only includes when the CRC selects the EIP Service Center screener on the ED General Screen page in REDCap. Therefore, this number eligible may be under-represented if the CRC does not select the EIP Service Center screener for all those above the age of 15 years old.*
 
-
-
-The CRCs continue with the EIP-specific EPIC pre-screen, looking for various criteria that would indicate that the CRC could approach the patient to gather more information regarding risk and need for EIP action. The graph and table below shows the number of screens that met the various criteria, and the percentage of the total eligible based on age.
+The CRCs continue with the EIP-specific EPIC pre-screen, looking for various criteria that would indicate that the CRC could approach the patient to gather more information regarding risk and need for EIP action. The graph below shows the number of screens that met the various criteria, and the percentage of the total eligible based on age.
 
 ```{r}
 
@@ -576,19 +631,14 @@ p + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 *The risk groups that the CRCs are looking for during their Epic pre-screen include: African-American males between the ages of 15-29, Women of Color (WOC), and individuals who identify within the transgender or non-binary community.*
 
 
-The percentages shown below are the percent of the total eligible for EIP screening based on age. The only exceptions are the percentage of those HIV+ not in care (*which is a percentage of the total identified as HIV+*), and the percentage of those positive for Syphilis in the past year (*which is a percentage of the total with a STI in the past year*).
+The percentages shown in the table below are the percent of the total marked for EIP screening based on age (*not all eligible to be screened*). The only exceptions are the percentage of those HIV+ not in care (*which is a percentage of the total identified as HIV+*), and the percentage of those positive for Syphilis in the past year (*which is a percentage of the total with a STI in the past year*).
 
-```{r}
+```{r, layout="l-page"}
 
 table2 <- data.frame(matrix(ncol = 11, nrow = 0))
 colnames(table2) <- c('Sexual Assault', 'Overdose', 'Illicit Opiate Use', 'Risk group w/o test', 'HIV+', 'HIV+ not in care', 'PWID', 'STI+ past yr', 'Syphilis+ past yr', 'Homeless', 'Pregnant')
 table2[nrow(table2) + 1,] <- list(total_sex_assault_percent, total_overdose_percent, total_opiates_percent, total_risk_group_not_tested_percent, total_hiv_percent, total_idc_percent, total_pwid_percent, total_sti_percent, total_sti_syph_percent, total_homeless_percent, total_preg_percent)
-table2 %>%
-  gt() %>%
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels()
-  )
+reactable(table2)
 
 ```
 
