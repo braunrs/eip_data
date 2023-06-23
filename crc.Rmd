@@ -22,7 +22,7 @@ library(reactable)
 
 # EIP-CRC Screening Data
 
-crc <- read.csv('M:/EIP Data/EIP-CRC Screening/Original Data/EIP CRC Screening Data 20230620_1330.csv')
+crc <- read.csv('M:/EIP Data/EIP-CRC Screening/Original Data/EIP CRC Screening Data 20230623_0853.csv')
 dim(crc)
 head(crc)
 
@@ -536,7 +536,7 @@ total_risk_group_not_tested_percent
 table(crc$approach_calc)
 eip_approach_eligible <- sum(crc$approach_calc, na.rm = TRUE)
 eip_approach_eligible
-eip_approach_eligible_percent <- (eip_approach_eligible/total_eip_eligible_age)*100
+eip_approach_eligible_percent <- (eip_approach_eligible/total_eip_screened)*100
 eip_approach_eligible_percent <- signif(eip_approach_eligible_percent, digits = 2)
 eip_approach_eligible_percent
 
@@ -597,7 +597,7 @@ reactable(daily_screening_table,
 ```
 
 
-The following graph shows the daily percentage of the total eligible for the EIP Service Center based on age that are marked for the EIP Service Center on the ED General Screen.
+The following graph shows the daily percentage of the total selected for the EIP Service Center by the CRC on the ED General Screen based on all those screened. The blue line shows the total percentage overall for the time of the EIP Service Center screening.
 
 
 ```{r}
@@ -606,7 +606,8 @@ colnames(daily_screening_table)[4] <- 'eip_screened_percent'
 daily_screening_percent_plot <- ggplot(daily_screening_table, aes(x = Date)) +
   geom_line(aes(y = eip_screened_percent), color = "orange") +
   ylab("% EIP Screened") +
-  ggtitle("Daily % EIP Screened")
+  ggtitle("Daily % EIP Screened") +
+  geom_hline(yintercept = total_eip_eligible_screened, color="blue")
 
 ggplotly(daily_screening_percent_plot)
 
@@ -631,25 +632,64 @@ p + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 *The risk groups that the CRCs are looking for during their Epic pre-screen include: African-American males between the ages of 15-29, Women of Color (WOC), and individuals who identify within the transgender or non-binary community.*
 
 
-The percentages shown in the table below are the percent of the total marked for EIP screening based on age (*not all eligible to be screened*). The only exceptions are the percentage of those HIV+ not in care (*which is a percentage of the total identified as HIV+*), and the percentage of those positive for Syphilis in the past year (*which is a percentage of the total with a STI in the past year*).
-
-```{r, layout="l-page"}
-
-table2 <- data.frame(matrix(ncol = 11, nrow = 0))
-colnames(table2) <- c('HIV+', 'HIV+ not in care', 'Homeless', 'Opiate Use', 'OD', 'Pregnant', 'PWID', 'Risk w/o test', 'Sexual Assault', 'STI+ past yr', 'Syph+ past yr')
-table2[nrow(table2) + 1,] <- list(total_hiv_percent, total_idc_percent, total_homeless_percent, total_opiates_percent, total_overdose_percent, total_preg_percent, total_pwid_percent, total_risk_group_not_tested_percent, total_sex_assault_percent, total_sti_percent, total_sti_syph_percent)
-reactable(table2)
-
-```
-
-This table shows the total number of screening encounters where the patient met at least one criteria for approach by the CRC, and the percent of the total eligible for the EIP Service Center screening based on age. Also shown are the total number of encounters where the patient was approached and consented to discussing additional risk questions, as well as the percentage of the total eligible for approach.
+The lollipop chart below shows the percentages for each risk group determined by the CRC Epic pre-screen. The percentages displayed are the percent of the total screened for the EIP Service Center. 
 
 ```{r}
 
-table3 <- data.frame(matrix(ncol = 4, nrow = 0))
-colnames(table3) <- c('Total Eligible for Approach', '% Eligible', 'Total Consented', '% Consented')
-table3[nrow(table3) + 1,] <- list(eip_approach_eligible, eip_approach_eligible_percent, consented, consented_percent)
+crc_risk_table <- data.frame(matrix(ncol = 2, nrow = 0))
+colnames(crc_risk_table) <- c('risk', 'percent')
+crc_risk_table[nrow(crc_risk_table) + 1,] <- list('HIV+', total_hiv_percent)
+#crc_risk_table[nrow(crc_risk_table) + 1,] <- list('HIV+ not in care', total_idc_percent)
+crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Homeless', total_homeless_percent)
+crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Illicit Opiate Use', total_opiates_percent)
+crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Overdose', total_overdose_percent)
+crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Pregnant', total_preg_percent)
+crc_risk_table[nrow(crc_risk_table) + 1,] <- list('PWID', total_pwid_percent)
+crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Risk group w/o test', total_risk_group_not_tested_percent)
+crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Sexual Assault', total_sex_assault_percent)
+crc_risk_table[nrow(crc_risk_table) + 1,] <- list('STI+ past yr', total_sti_percent)
+#crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Syph+ past yr', total_sti_syph_percent)
+
+
+crc_risk_table$risk = with(crc_risk_table, reorder(risk, percent))
+ggplot(crc_risk_table, aes(x=risk, y=percent, label=percent)) +
+  geom_segment(aes(x=risk, xend=risk, y=0, yend=percent), color="steelblue") +
+  geom_point(color="skyblue", size=4, alpha=0.6) +
+  theme_light() +
+  coord_flip() +
+  theme(panel.grid.major.y = element_blank(),
+        panel.border = element_blank(),
+        axis.ticks.y = element_blank()) +
+  geom_text(nudge_y = 3, size = 3) +
+  xlab('Risk Group') +
+  ylab('Percent')
+
+```
+
+The only exceptions are the percent of those who are HIV+ but not currently in care (*or at least no evidence of care*) and those that had syphilis in the past year, and are thus _excluded_ from this graph. The percentage of those who are HIV+ and not in care is based on the total that were identified as living with HIV. The percentage of those who were positive for HIV, but did not appear to be in care was **`r total_idc_percent`%**. The percentage of those who had syphilis in the past year are based on the total that were identified as having any STI in the past year. The percentage of those who were positive for syphilis in the past year was **`r total_sti_syph_percent`%**.
+
+
+Once the CRC completes the Epic pre-screen and identifies individuals to approach based on those populations of interest, they determine whether the patient is willing to continue the discussion about their associated risks. This table shows the total number of those screened for the EIP Service Center, and the total encounters where the patient met at least one criteria for approach, and the percent of the total marked for the EIP Service Center screening. Also shown are the total number of encounters where the patient was approached and consented to discussing additional risk questions, as well as the percentage of the total eligible for approach.
+
+```{r}
+
+table3 <- data.frame(matrix(ncol = 5, nrow = 0))
+colnames(table3) <- c('Total EIP Screened', 'Total Eligible for Approach', '% Eligible', 'Total Consented', '% Consented')
+table3[nrow(table3) + 1,] <- list(total_eip_screened, eip_approach_eligible, eip_approach_eligible_percent, consented, consented_percent)
 reactable(table3)
 
 
 ```
+
+There are several assessment questions that the CRCs discuss with the individual to evaluate their situation beyond what is evident in Epic.
+
+**Add assessment question data**
+
+
+
+
+
+
+
+
+

@@ -3,7 +3,11 @@ title: "EIP Data Website"
 description: |
   This site is currently under construction. The plan for this page is a general introduction to EIP and the data/data sources, the EIP mission statement, and other general info.
 date: "`r Sys.Date()`"
-site: distill::distill_website
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
@@ -11,19 +15,44 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```
 
-## **EIP Mission:**
+
+```{r, include=FALSE}
+
+library(leaflet)
+library(timevis)
+
+```
+
+**EIP Mission:**
 
 *The UC Early Intervention Program is committed to identifying and intervening with populations most at risk for threats to health and well-being at the earliest opportunity, and helping these individuals connect with community resources to improve health outcomes.*
+
+
+## EIP Sites on the map
+
+The map shown below is currently a placeholder. The plan is to have a map showing the UCMC and WCH ED, and some of our common community sites, such as the Exchange sites, ASD, Talbert, etc. Additionally, on the separate pages listed under the **Site** tab above, the plan will be to have a map showing that specific site and the catchment area of those individuals seen by EIP at those sites, based on the patients' zip codes.
+
+
+```{r, layout="l-screen-inset"}
+eip_sites_map <- leaflet() %>% 
+  addTiles() %>% 
+  setView(lng = -84.512016, lat = 39.103119, zoom = 9) %>%
+  addMarkers(lng = -84.503853, lat = 39.137058, popup = "UCMC ED") %>%
+  addMarkers(lng = -84.367767, lat = 39.357922, popup = "WCH ED") %>% 
+  addProviderTiles("Esri.WorldTopoMap")
+eip_sites_map
+
+```
+
 
 ## Timeline of EIP
 
 This is an example of the potential timeline that can be included to document the history of EIP, when things were introduced, when research projects were conducted, etc. You can scroll to zoom in and out of the timeline, as well as drag to focus on particular time points or projects. Hovering over the specific text will give you exact dates and/or date ranges of each item.
 
 ```{r}
-library(timevis)
 
 eip_timespan <- data.frame(
-  id = 1:8,
+  id = 1:21,
   content = c("Start of EIP",
               "PGx Study",
               "Peer Volunteers",
@@ -31,23 +60,62 @@ eip_timespan <- data.frame(
               "Test & Protect",
               "NIDA-CTN0069",
               "Brown Study",
-              "ASPIRE"),
+              "ASPIRE",
+              "UC Health CCIP",
+              "NIDA-Heal",
+              "Gilead FOCUS",
+              "Brightview NDC",
+              "NIDA DETECT",
+              "ENA Patient Perceptions",
+              "COMPASS",
+              "DTUO",
+              "EHE",
+              "IN23",
+              "EDCC",
+              "OMHAS",
+              "EMF PrEPARED"),
   start = c("1/1/1998",
             "6/17/2020",
             "10/1/2018",
             "7/1/2023",
-            "10/1/2020",
+            "7/1/2020",
             "7/1/2017",
             "4/1/2014",
-            "9/30/2018"),
+            "9/30/2018",
+            "6/1/2019",
+            "10/1/2019",
+            "10/1/2016",
+            "1/1/2018",
+            "3/1/2018",
+            "11/1/2018",
+            "11/1/2021",
+            "4/1/2021",
+            "1/1/2022",
+            "9/30/2021",
+            "3/1/2021",
+            "10/1/2020",
+            "1/1/2021"),
   end = c(NA,
           "11/1/2022",
           NA,
           NA,
-          "12/1/2022",
-          "7/1/2018",
+          "12/31/2021",
+          "7/1/2020",
           "12/30/2019",
-          "9/29/2023"),
+          "9/30/2023",
+          NA,
+          NA,
+          "9/30/2022",
+          "1/1/2020",
+          "12/23/2023",
+          "12/1/2019",
+          "1/31/2022",
+          "11/30/2021",
+          NA,
+          "9/29/2023",
+          NA,
+          "9/29/2022",
+          "12/31/2021"),
   type = c("box",
            "range",
            "point",
@@ -55,15 +123,41 @@ eip_timespan <- data.frame(
            "range",
            "range",
            "range",
+           "range",
+           "point",
+           "point",
+           "range",
+           "range",
+           "range",
+           "range",
+           "range",
+           "range",
+           "point",
+           "range",
+           "point",
+           "range",
            "range"),
   title = c("1/1/1998",
             "PGx 6/17/2020 - 11/1/2022",
             "Peers 10/1/2018",
             "NACCHO 7/1/2023 - Present",
-            "TaP 10/1/2020 - 12/1/2022",
-            "NIDA-CTN 7/1/2017 - Unknown",
+            "TaP 7/1/2020 - 12/31/2021",
+            "NIDA-CTN 7/1/2017 - 7/1/2020",
             "NINR-Brown 4/1/2014 - 12/30/2019",
-            "SAMHSA ASPIRE 9/30/2018 - 9/29/2023"),
+            "SAMHSA ASPIRE 9/30/2018 - 9/29/2023",
+            "CCIP 6/1/2019",
+            "Heal 10/1/2019",
+            "FOCUS 10/1/2016 - 9/30/2022",
+            "NDC 1/1/2018 - 1/1/2020",
+            "DETECT 3/1/2018 - 12/23/2023",
+            "ENA 11/1/2018 - 12/1/2019",
+            "COMPASS 11/1/2021 - 1/31/2022",
+            "DTUO 4/1/2021 - 11/30/2021",
+            "EHE 1/1/2022",
+            "IN23 9/30/2021 - 9/29/2023",
+            "EDCC 3/1/2021",
+            "OMHAS 10/1/2020 - 9/29/2022",
+            "PrEPARED"),
   style = c(NA,
             "color: steelblue;",
             NA,
@@ -71,7 +165,41 @@ eip_timespan <- data.frame(
             "color: steelblue;",
             "color: steelblue;",
             "color: steelblue;",
+            "color: steelblue;",
+            NA,
+            NA,
+            "color: steelblue;",
+            "color: steelblue;",
+            "color: steelblue;",
+            "color: steelblue;",
+            "color: steelblue;",
+            "color: steelblue;",
+            NA,
+            "color: steelblue;",
+            NA,
+            "color: steelblue;",
             "color: steelblue;"))
 timevis(eip_timespan, showZoom = FALSE)
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
