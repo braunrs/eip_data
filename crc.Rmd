@@ -426,13 +426,6 @@ enc <- enc[which(enc$eip == 1), ]
 dim(enc)
 head(enc)
 
-dim(enc)
-total_eip_eligible_age <- nrow(enc)
-total_eip_eligible_age
-total_screened
-eligible_screened_percent <- ((nrow(enc))/total_screened)*100
-eligible_screened_percent <- signif(eligible_screened_percent, digits = 2)
-eligible_screened_percent
 
 summary(enc$datetime)
 enc$enc_date <- as.Date(enc$datetime, format = '%m/%d/%Y')
@@ -446,7 +439,7 @@ total_sex_assault <- sum(enc$sex_assault, na.rm = TRUE)
 total_sex_assault
 total_sex_assault[is.na(total_sex_assault)] <- 0
 total_sex_assault
-total_sex_assault_percent <- (total_sex_assault/total_eip_eligible_age)*100
+total_sex_assault_percent <- (total_sex_assault/total_eip_screened)*100
 total_sex_assault_percent <- signif(total_sex_assault_percent, digits = 2)
 total_sex_assault_percent
 
@@ -457,7 +450,7 @@ total_overdose <- sum(enc$overdose, na.rm = TRUE)
 total_overdose
 total_overdose[is.na(total_overdose)] <- 0
 total_overdose
-total_overdose_percent <- (total_overdose/total_eip_eligible_age)*100
+total_overdose_percent <- (total_overdose/total_eip_screened)*100
 total_overdose_percent <- signif(total_overdose_percent, digits = 2)
 total_overdose_percent
 
@@ -468,7 +461,7 @@ total_opiates <- sum(enc$opiates, na.rm = TRUE)
 total_opiates
 total_opiates[is.na(total_opiates)] <- 0
 total_opiates
-total_opiates_percent <- (total_opiates/total_eip_eligible_age)*100
+total_opiates_percent <- (total_opiates/total_eip_screened)*100
 total_opiates_percent <- signif(total_opiates_percent, digits = 2)
 total_opiates_percent
 
@@ -479,7 +472,7 @@ total_preg <- sum(enc$preg, na.rm = TRUE)
 total_preg
 total_preg[is.na(total_preg)] <- 0
 total_preg
-total_preg_percent <- (total_preg/total_eip_eligible_age)*100
+total_preg_percent <- (total_preg/total_eip_screened)*100
 total_preg_percent <- signif(total_preg_percent, digits = 2)
 total_preg_percent
 
@@ -490,7 +483,7 @@ total_hiv <- sum(enc$hiv, na.rm = TRUE)
 total_hiv
 total_hiv[is.na(total_hiv)] <- 0
 total_hiv
-total_hiv_percent <- (total_hiv/total_eip_eligible_age)*100
+total_hiv_percent <- (total_hiv/total_eip_screened)*100
 total_hiv_percent <- signif(total_hiv_percent, digits = 2)
 total_hiv_percent
 
@@ -512,7 +505,7 @@ total_pwid <- sum(enc$pwid, na.rm = TRUE)
 total_pwid
 total_pwid[is.na(total_pwid)] <- 0
 total_pwid
-total_pwid_percent <- (total_pwid/total_eip_eligible_age)*100
+total_pwid_percent <- (total_pwid/total_eip_screened)*100
 total_pwid_percent <- signif(total_pwid_percent, digits = 2)
 total_pwid_percent
 
@@ -523,7 +516,7 @@ total_sti <- sum(enc$sti, na.rm = TRUE)
 total_sti
 total_sti[is.na(total_sti)] <- 0
 total_sti
-total_sti_percent <- (total_sti/total_eip_eligible_age)*100
+total_sti_percent <- (total_sti/total_eip_screened)*100
 total_sti_percent <- signif(total_sti_percent, digits = 2)
 total_sti_percent
 
@@ -534,7 +527,7 @@ total_sti_syph <- sum(enc$sti_syph, na.rm = TRUE)
 total_sti_syph
 total_sti_syph[is.na(total_sti_syph)] <- 0
 total_sti_syph
-total_sti_syph_percent <- (total_sti_syph/total_eip_eligible_age)*100
+total_sti_syph_percent <- (total_sti_syph/total_eip_screened)*100
 total_sti_syph_percent <- signif(total_sti_syph_percent, digits = 2)
 total_sti_syph_percent
 
@@ -545,7 +538,7 @@ total_homeless <- sum(enc$homeless, na.rm = TRUE)
 total_homeless
 total_homeless[is.na(total_homeless)] <- 0
 total_homeless
-total_homeless_percent <- (total_homeless/total_eip_eligible_age)*100
+total_homeless_percent <- (total_homeless/total_eip_screened)*100
 total_homeless_percent <- signif(total_homeless_percent, digits = 2)
 total_homeless_percent
 
@@ -555,9 +548,10 @@ enc$hiv_test <- as.numeric(enc$hiv_test)
 enc$risk_group[enc$aa_male_calc == 1 | enc$woc_calc == 1 | enc$trans_calc == 1] <- 1
 total_risk_group <- sum(enc$risk_group, na.rm = TRUE)
 total_risk_group
-total_risk_group_percent <- (total_risk_group/total_eip_eligible_age)*100
+total_risk_group_percent <- (total_risk_group/total_eip_screened)*100
 total_risk_group_percent <- signif(total_risk_group_percent, digits = 2)
 total_risk_group_percent
+
 
 table(enc$risk_group, enc$hiv_test)
 enc$risk_group_not_tested[enc$risk_group == 1 & enc$hiv_test == 1] <- 1
@@ -568,6 +562,9 @@ total_risk_group_not_tested
 total_risk_group_not_tested_percent <- (total_risk_group_not_tested/total_risk_group)*100
 total_risk_group_not_tested_percent <- signif(total_risk_group_not_tested_percent, digits = 2)
 total_risk_group_not_tested_percent
+total_risk_group_no_test_percent <- (total_risk_group_not_tested/total_eip_screened)*100
+total_risk_group_no_test_percent <- signif(total_risk_group_no_test_percent, digits = 2)
+total_risk_group_no_test_percent
 
 
 table(crc$approach_calc)
@@ -588,6 +585,7 @@ consented_percent <- signif(consented_percent, digits = 2)
 consented_percent
 
 ```
+
 
 The EIP Service Center started on **May 3rd, 2023**.
 
@@ -669,9 +667,9 @@ p + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 
-*The population groups at risk that the CRCs are looking for during their EPIC pre-screen include: African-American males between the ages of 15-29, Women of Color (WOC), and individuals who identify within the transgender or non-binary community. If someone belonging to any of these populations groups are ave no evidence of a HIV test within the past year, they are of eligible for CRC approach (i.e. Risk group w/o test).*
+The population groups at risk that the CRCs are looking for during their EPIC pre-screen include: African-American males between the ages of 15-29, Women of Color (WOC), and individuals who identify within the transgender or non-binary community. If someone belonging to any of these populations groups have no evidence of a HIV test within the past year, they are of eligible for CRC approach (i.e. Risk group w/o test). There were a total number of `r total_risk_group` encounters where the EIP Service Center was selected where the individual fit within one of these population groups (`r total_risk_group`/`r total_eip_screened`, `r total_risk_group_percent`%). Out of those, there were `r total_risk_group_not_tested` encounters where the individual had no evidence of a HIV test within the past year (`r total_risk_group_not_tested`/`r total_risk_group`, `r total_risk_group_not_tested_percent`%).
 
-The bar chart below shows the total number of encounters where the individual falls within these population groups at risk. The blue labels on the end of each bar in the chart shows the percentage of the total that were screened and eligible for the EIP Service Center during the ED General Screen (n = `r total_eip_eligible`).
+The bar chart below shows the total number of encounters where the individual falls within these population groups. This counts all individuals within these population groups, not solely those without HIV testing in the past year. Their demographics are determined during the ED General Screen, and thus are based on the total screens done by the CRCs. The blue labels on the end of each bar in the chart shows the percentage of the total that were screened and eligible for the EIP Service Center (based on age) during the ED General Screen (n = `r total_eip_eligible`).
 
 
 ```{r}
@@ -697,7 +695,7 @@ ggplotly(crc_risk_group_table)
 ```
 
 
-The lollipop chart below shows the percentages for each risk group determined by the CRC during the EIP EPIC pre-screen. The denominator for these percentages are the total number of encounters selected for the EIP Service Center protocol (n = `r total_eip_eligible`).
+The lollipop chart below shows the percentage for each risk group determined by the CRC during the EIP EPIC pre-screen. The denominator for these percentages are the total number of encounters selected for the EIP Service Center protocol (n = `r total_eip_screened`).
 
 
 ```{r}
@@ -711,7 +709,7 @@ crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Illicit Opiate Use', total_op
 crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Overdose', total_overdose_percent)
 crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Pregnant', total_preg_percent)
 crc_risk_table[nrow(crc_risk_table) + 1,] <- list('PWID', total_pwid_percent)
-crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Risk group w/o test', total_risk_group_not_tested_percent)
+crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Risk group w/o test', total_risk_group_no_test_percent)
 crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Sexual Assault', total_sex_assault_percent)
 crc_risk_table[nrow(crc_risk_table) + 1,] <- list('STI+ past yr', total_sti_percent)
 #crc_risk_table[nrow(crc_risk_table) + 1,] <- list('Syph+ past yr', total_sti_syph_percent)
@@ -726,7 +724,7 @@ ggplot(crc_risk_table, aes(x=risk, y=percent, label=percent)) +
   theme(panel.grid.major.y = element_blank(),
         panel.border = element_blank(),
         axis.ticks.y = element_blank()) +
-  geom_text(nudge_y = 3, size = 3) +
+  geom_text(nudge_y = 1, size = 3) +
   xlab('Risk Group') +
   ylab('Percent')
 
