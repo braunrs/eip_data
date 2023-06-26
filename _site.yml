@@ -4,6 +4,7 @@ description: |
   EIP Data Website
 output_dir: "docs"
 navbar:
+  search: TRUE
   right:
     - text: "EIP Population"
       href: eip_pop.html
