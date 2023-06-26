@@ -1,8 +1,12 @@
 ---
 title: "EIP Service Center"
 description: |
-  This page shows data regarding the CRC screening efforts for EIP.
-output: distill::distill_article
+  The EIP Service Center screening protocol started on **May 3rd, 2023**.
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
@@ -587,7 +591,8 @@ consented_percent
 ```
 
 
-The EIP Service Center started on **May 3rd, 2023**.
+## ED General Screen
+
 
 In order to fit with the ED General Screening process, the CRCs select the EIP Service Center screening protocol when the patient is *at least 15 years or older*. The table below shows the total number of screens that have occurred since the start of the EIP Service Center (*based on the number of entries into the ED General Screen database*), as well as the total number of patients that were eligible for the EIP Service Center screening protocol based on their age (*15 years or older*). The percentage of the total screened who are eligible for the EIP Service Center based on age is presented in the table. The table also shows the total number that were selected for the EIP Service Center (*by selecting the EIP Service Center protocol on the ED General Screen*), and the percentage selected for the EIP Service Center from the total number eligible during screening.
 
@@ -603,6 +608,7 @@ reactable(crc_screening_tbl)
 
 
 *Screening encounters are excluded from the total eligible for the EIP Service Center if they were unwilling to answer questions during the ED General Screen. The total number of encounters where the patient was unwilling to answer questions at this stage was **`r crc_excluded_screen`**, and thus excluded from the total number eligible for the EIP Service Center.*
+
 
 Total numbers are tracked daily for all ED General Screening encounters done by the CRCs, as well as the daily numbers for those that are selected for the EIP Service Center protocol. The following two graphs show these daily numbers. The first graph (and subsequent table) shows the daily count of the number of screening encounters done by the CRCs, and the number of screening encounters where the patient was selected for the EIP Service Center.
 
@@ -650,24 +656,8 @@ ggplotly(daily_screening_percent_plot)
 ```
 
 
-Once the individual is selected for the EIP Service Center on the ED General Screen, the CRCs continue with the EIP-specific EPIC pre-screen. This EPIC pre-screen has the CRC looking for various criteria within the electronic health record (EHR) that would indicate that they could approach the patient to gather more information regarding risk and need for EIP action. The bar graph below shows the number of screens where the individual met each of the various criteria.
+EIP has asked the CRCs to identify potential at-risk populations, and if they have no evidence of HIV testing in their electronic health record (EHR) within the past year, they can approach to gather more information on risk and testing history if able. The population groups at risk that the CRCs are looking for during their EPIC pre-screen include: African-American males between the ages of 15-29, Women of Color (WOC), and individuals who identify within the transgender or non-binary community. If someone belonging to any of these populations groups have no evidence of an HIV test within the past year, they are of eligible for CRC approach (i.e. Risk group w/o test). There were a total number of `r total_risk_group` encounters where the EIP Service Center was selected where the individual fit within one of these population groups (`r total_risk_group`/`r total_eip_screened`, `r total_risk_group_percent`%). Out of those, there were `r total_risk_group_not_tested` encounters where the individual had no evidence of an HIV test within the past year (`r total_risk_group_not_tested`/`r total_risk_group`, `r total_risk_group_not_tested_percent`%).
 
-
-```{r}
-
-graph1 <- data.frame(Criteria = c('Sexual Assault', 'Overdose', 'Illicit Opiate Use', 'Risk group w/o test', 'HIV+', 'HIV+ not in care', 'PWID', 'STI+ past yr', 'Syphilis+ past yr', 'Homeless', 'Pregnant'),
-                     Count = c(total_sex_assault, total_overdose, total_opiates, total_risk_group_not_tested, total_hiv, total_idc, total_pwid, total_sti, total_sti_syph, total_homeless, total_preg))
-
-p <- ggplot(data = graph1, aes(x = Criteria, y = Count)) +
-  geom_bar(stat="identity", fill="steelblue")+
-  geom_text(aes(label = Count), vjust = -0.3, size = 3.5) +
-  theme_minimal()
-p + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-```
-
-
-The population groups at risk that the CRCs are looking for during their EPIC pre-screen include: African-American males between the ages of 15-29, Women of Color (WOC), and individuals who identify within the transgender or non-binary community. If someone belonging to any of these populations groups have no evidence of a HIV test within the past year, they are of eligible for CRC approach (i.e. Risk group w/o test). There were a total number of `r total_risk_group` encounters where the EIP Service Center was selected where the individual fit within one of these population groups (`r total_risk_group`/`r total_eip_screened`, `r total_risk_group_percent`%). Out of those, there were `r total_risk_group_not_tested` encounters where the individual had no evidence of a HIV test within the past year (`r total_risk_group_not_tested`/`r total_risk_group`, `r total_risk_group_not_tested_percent`%).
 
 The bar chart below shows the total number of encounters where the individual falls within these population groups. This counts all individuals within these population groups, not solely those without HIV testing in the past year. Their demographics are determined during the ED General Screen, and thus are based on the total screens done by the CRCs. The blue labels on the end of each bar in the chart shows the percentage of the total that were screened and eligible for the EIP Service Center (based on age) during the ED General Screen (n = `r total_eip_eligible`).
 
@@ -691,6 +681,29 @@ crc_risk_group_table <- crc_risk_group_table %>%
   theme_bw() +
   geom_text(aes(label = percent), nudge_y = 50, size = 3, color = 'blue')
 ggplotly(crc_risk_group_table)
+
+```
+
+
+## EIP EPIC Pre-Screen
+
+
+Once the individual is selected for the EIP Service Center on the ED General Screen, the CRCs continue with the EIP-specific EPIC pre-screen. This EPIC pre-screen has the CRC looking for various criteria within the EHR that would indicate that they could approach the patient to gather more information regarding risk and need for EIP action. Population and demographic factors are collected on the ED General Screen (see above), and combined with the review of their HIV testing history based on the EHR review to determine whether they should be approached for more information. The number of encounters where the individual fits witin each risk group is shown above, and the total number of encounters where the individual has no evidence of an HIV test in the past year is shown in the table below.
+
+
+Additional behavioral risks can be evident within the EHR, and the CRCs are asked to search the health record to see if any of these behaviors are noted. If there is documentation of any of these risk behaviors, they are asked to approach and collect more information to determine whether they could benefit from EIP services. The bar graph below shows the number of screening encounters where the individual met each of the various criteria of interest.
+
+
+```{r}
+
+graph1 <- data.frame(Criteria = c('Sexual Assault', 'Overdose', 'Illicit Opiate Use', 'Risk group w/o test', 'HIV+', 'HIV+ not in care', 'PWID', 'STI+ past yr', 'Syphilis+ past yr', 'Homeless', 'Pregnant'),
+                     Count = c(total_sex_assault, total_overdose, total_opiates, total_risk_group_not_tested, total_hiv, total_idc, total_pwid, total_sti, total_sti_syph, total_homeless, total_preg))
+
+p <- ggplot(data = graph1, aes(x = Criteria, y = Count)) +
+  geom_bar(stat="identity", fill="steelblue")+
+  geom_text(aes(label = Count), vjust = -0.3, size = 3.5) +
+  theme_minimal()
+p + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
 
@@ -732,6 +745,9 @@ ggplot(crc_risk_table, aes(x=risk, y=percent, label=percent)) +
 
 
 The only exceptions are the percent of those who are HIV+ but not currently in care (*or at least no evidence of care*) and those that had syphilis in the past year, and are thus *excluded* from this graph. The percentage of those who are HIV+ and not in care is based on the total that were identified as living with HIV. The percentage of those who were positive for HIV, but did not appear to be in care was **`r total_idc_percent`%**. The percentage of those who had syphilis in the past year are based on the total that were identified as having any STI in the past year. The percentage of those who were positive for syphilis in the past year was **`r total_sti_syph_percent`%**.
+
+
+## Assessments by the CRCs
 
 
 Once the CRC completes the EIP EPIC pre-screen and identifies individuals to approach based on those risk groups or populations of interest, they determine whether the patient is willing to continue the discussion about their associated risks. This table shows the total number of those screened for the EIP Service Center (*selected on the ED General Screen*), and the total number of encounters where the patient met *at least* one criteria for approach, and the percent of the total selected for the EIP Service Center screening. Also shown are the total number of encounters where the patient was approached and consented to discussing additional EIP risk questions, as well as the percentage of the total eligible for approach that consented to continuing the conversation.
