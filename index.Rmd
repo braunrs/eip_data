@@ -1,7 +1,7 @@
 ---
 title: "EIP Data Website"
 description: |
-  This site is currently under construction. The plan for this page is a general introduction to EIP and the data/data sources, the EIP mission statement, and other general info.
+  This site is currently under construction. The plan for this page is a general introduction to EIP and the data/data sources, the EIP mission statement, and other general info. The data contained on this website only focuses on the 2023 EIP Data.
 date: "`r Sys.Date()`"
 output:
   distill::distill_article:
