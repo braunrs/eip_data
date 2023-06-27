@@ -26,7 +26,7 @@ library(reactable)
 
 # EIP-CRC Screening Data
 
-crc <- read.csv('M:/EIP Data/EIP-CRC Screening/Original Data/EIP CRC Screening Data 20230626_1307.csv')
+crc <- read.csv('M:/EIP Data/EIP-CRC Screening/Original Data/EIP CRC Screening Data 20230627_0805.csv')
 dim(crc)
 head(crc)
 
