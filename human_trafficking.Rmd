@@ -10,6 +10,675 @@ output: distill::distill_article
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{r, include=FALSE}
+
+rm(list=ls(all=T))
+
+library(dplyr)
+library(tidyverse)
+library(lubridate)
+library(plotly)
+library(ggplot2)
+library(reactable)
+library(htmltools)
+library(lubridate)
+library(hrbrthemes)
+library(gt)
+library(janitor)
+library(scales)
+library(apyramid)
+
+
+eip <- read.csv('M:/EIP Data/EIP Database/REDCap Ver 5.0/EIP Database Data 20230627_0807.csv')
+dim(eip)
+
+```
+
+```{r, include=FALSE}
+
+# Person-level data is only visit_001_arm_1, use to match to encounters
+
+table(eip$redcap_event_name)
+person <- eip[which(eip$redcap_event_name == 'visit_001_arm_1'), ]
+dim(person)
+
+person <- select(person, record_id, mrn, dob, 
+                 race___1, race___2, race___3, race___4, race___5, race___6, ethnicity,
+                 sex_raised, sex_selfdefined, insurance, address_county,
+                 address_zip_code)
+dim(person)
+
+eip <- select(eip, -mrn, -dob, 
+              -race___1, -race___2, -race___3, -race___4, -race___5, 
+              -race___6, -ethnicity,
+              -sex_raised, -sex_selfdefined, -insurance, -address_county,
+              -address_zip_code)
+
+# Merge person dataset with full eip dataset
+
+dim(eip)
+dim(person)
+eip <- merge(eip, person, by='record_id', all.x=T)
+dim(eip)
+eip <- distinct(eip)
+dim(eip)
+
+
+# Formatting variables
+
+summary(eip$enc_date)
+eip$enc_date <- as.Date(eip$enc_date, format='%m/%d/%Y')
+summary(eip$enc_date)
+
+summary(eip$dob)
+eip$dob <- as.Date(eip$dob, format='%m/%d/%Y')
+summary(eip$dob)
+
+
+table(eip$race___1)
+White <- eip[which(eip$race___1 == '1'), ]
+dim(White)
+White <- select(White, record_id)
+White$White <- 1
+table(White$White)
+White <- distinct(White)
+dim(White)
+head(White)
+
+table(eip$race___2)
+Black <- eip[which(eip$race___2 == '1'), ]
+dim(Black)
+Black <- select(Black, record_id)
+Black$Black <- 1
+table(Black$Black)
+Black <- distinct(Black)
+dim(Black)
+head(Black)
+
+table(eip$race___3)
+Asian <- eip[which(eip$race___3 == '1'), ]
+dim(Asian)
+Asian <- select(Asian, record_id)
+Asian$Asian <- 1
+table(Asian$Asian)
+Asian <- distinct(Asian)
+dim(Asian)
+head(Asian)
+
+table(eip$race___4)
+AmIn <- eip[which(eip$race___4 == '1'), ]
+dim(AmIn)
+AmIn <- select(AmIn, record_id)
+AmIn$AmIn <- 1
+table(AmIn$AmIn)
+AmIn <- distinct(AmIn)
+dim(AmIn)
+head(AmIn)
+
+table(eip$race___5)
+RaceOther <- eip[which(eip$race___5 == '1'), ]
+dim(RaceOther)
+RaceOther <- select(RaceOther, record_id)
+RaceOther$RaceOther <- 1
+table(RaceOther$RaceOther)
+RaceOther <- distinct(RaceOther)
+dim(RaceOther)
+head(RaceOther)
+
+table(eip$race___6)
+RaceUnk <- eip[which(eip$race___6 == '1'), ]
+dim(RaceUnk)
+RaceUnk <- select(RaceUnk, record_id)
+RaceUnk$RaceUnk <- 1
+table(RaceUnk$RaceUnk)
+RaceUnk <- distinct(RaceUnk)
+dim(RaceUnk)
+head(RaceUnk)
+
+table(eip$ethnicity)
+RaceHisp <- eip[which(eip$ethnicity == 1), ]
+dim(RaceHisp)
+RaceHisp <- select(RaceHisp, record_id)
+RaceHisp$RaceHisp <- 1
+table(RaceHisp$RaceHisp)
+RaceHisp <- distinct(RaceHisp)
+dim(RaceHisp)
+head(RaceHisp)
+
+
+race <- select(eip, record_id)
+race <- distinct(race)
+dim(race)
+
+
+dim(race)
+race <- merge(race, White, by = 'record_id', all.x = T)
+race <- merge(race, Black, by = 'record_id', all.x = T)
+race <- merge(race, Asian, by = 'record_id', all.x = T)
+race <- merge(race, AmIn, by = 'record_id', all.x = T)
+race <- merge(race, RaceOther, by = 'record_id', all.x = T)
+race <- merge(race, RaceUnk, by = 'record_id', all.x = T)
+race <- merge(race, RaceHisp, by = 'record_id', all.x = T)
+dim(race)
+head(race)
+
+race$White[is.na(race$White)] <- 0
+race$Black[is.na(race$Black)] <- 0
+race$Asian[is.na(race$Asian)] <- 0
+race$AmIn[is.na(race$AmIn)] <- 0
+race$RaceOther[is.na(race$RaceOther)] <- 0
+race$RaceUnk[is.na(race$RaceUnk)] <- 0
+race$RaceHisp[is.na(race$RaceHisp)] <- 0
+
+race$RaceNumber <- race$White + race$Black + race$Asian + race$AmIn + race$RaceOther + race$RaceUnk + race$RaceHisp
+table(race$RaceNumber)
+head(race)
+
+race$race[race$RaceNumber == 1 & race$Black == 1] <- 'Black/African American'
+race$race[race$RaceNumber == 1 & race$White == 1] <- 'White'
+race$race[race$RaceNumber == 1 & race$Asian == 1] <- 'Asian/Pacific Islander'
+race$race[race$RaceNumber == 1 & race$AmIn == 1] <- 'American Indian/Alaska native'
+race$race[race$RaceNumber == 1 & race$RaceOther == 1] <- 'Other'
+race$race[(race$RaceNumber == 1 & race$RaceHisp == 1) |
+            (race$RaceNumber > 1 & race$RaceHisp == 1)] <- 'Hispanic/Latinx'
+race$race[race$RaceNumber > 1 & race$RaceHisp != 1] <- 'Biracial/Multiracial'
+race$race[race$RaceNumber == 0 | is.na(race$RaceNumber) | race$RaceUnk == 1] <- 'Unknown'
+table(race$race)
+
+dim(eip)
+dim(race)
+eip <- merge(eip, race, by = 'record_id', all.x = T)
+dim(eip)
+table(eip$race)
+
+
+
+
+table(eip$sex_raised)
+eip$sex[eip$sex_raised == 1] <- 'Male'
+eip$sex[eip$sex_raised == 2] <- 'Female'
+eip$sex[eip$sex_raised == 3 | is.na(eip$sex_raised) | eip$sex_raised == ''] <- 'Unknown/Unassigned'
+table(eip$sex)
+
+
+
+table(eip$sex_raised, eip$sex_selfdefined)
+eip$gender[eip$sex_raised == 1 & eip$sex_selfdefined == 1] <- 'Male'
+eip$gender[eip$sex_raised == 2 & eip$sex_selfdefined == 2] <- 'Female'
+eip$gender[(eip$sex_raised == 1 & eip$sex_selfdefined == 2) |
+             (eip$sex_raised == 2 & eip$sex_selfdefined == 1) |
+             (eip$sex_raised == 1 & eip$sex_selfdefined == 3) |
+             (eip$sex_raised == 2 & eip$sex_selfdefined == 3)] <- 'Transgender/Nonbinary'
+eip$gender[(eip$sex_raised == 3 & eip$sex_selfdefined == 3) |
+             is.na(eip$sex_raised) | is.na(eip$sex_selfdefined)] <- 'Unknown'
+table(eip$gender)
+
+
+table(eip$insurance)
+eip$insurance[eip$insurance == 1] <- 'None'
+eip$insurance[eip$insurance == 2] <- 'UC Health (Levy)'
+eip$insurance[eip$insurance == 3] <- 'Medicaid'
+eip$insurance[eip$insurance == 4] <- 'Medicare'
+eip$insurance[eip$insurance == 5] <- 'Military/VA'
+eip$insurance[eip$insurance == 6] <- 'Private'
+eip$insurance[eip$insurance == 7] <- 'Dual Medicaid/Medicare'
+eip$insurance[is.na(eip$insurance)] <- 'Unknown'
+table(eip$insurance)
+
+
+
+# Populations of Interest
+### WOC, Youth (18-24), MSM, IDU, HRHS, PLWHA
+
+table(eip$race, eip$gender)
+eip$WOC[(eip$race != 'White' & eip$race != 'Unknown') & eip$gender == 'Female'] <- 1
+table(eip$WOC)
+
+
+table(eip$age)
+eip$Youth[eip$age >= 13 & eip$age <= 29] <- 1
+table(eip$Youth)
+
+
+eip$MSM[eip$gender == 'Male' & ((eip$sex_orientation == '2' | eip$sex_orientation == '4') |
+                                  (eip$sex_w_man___1 == '1' | eip$sex_w_man___2 == '1' |
+                                     eip$sex_w_man___3 == '1') |
+                                  (eip$sex_w_ftm___1 == '1' | eip$sex_w_ftm___2 == '1' |
+                                     eip$sex_w_ftm___3 == '1') |
+                                  (eip$sex_msm___1 == '1' | eip$sex_msm___2 == '1' |
+                                     eip$sex_msm___3 == '1') |
+                                  (eip$hiv_dx_risks___2 == '1'))] <- 1
+table(eip$MSM)
+
+
+eip$IDU[eip$idu_calc == 1 | eip$hiv_dx_risks___3 == '1'] <- 1
+table(eip$IDU)
+
+
+# For HRHS, all sexual behavior is within the previous 12 months
+### Heterosexual males that have unprotected sex with women
+### Heterosexual women that have unprotected sex with men
+### Heterosexual women that have sex with MSM
+### Heterosexual men/women that have sex with IDU
+### Heterosexual men/women that have sex with HIV+ partner
+### Heterosexual men/women that exchange money/drugs for sex
+### Heterosexual men/women that have sex with STD+ partner
+### Heterosexual men/women that have more than 3 partners
+
+eip$Hetero[(eip$gender == 'Male' & (eip$sex_w_woman___1 == '1' |
+                                      eip$sex_w_woman___2 == '1' | eip$sex_w_woman___3 == '1')) |
+             (eip$gender == 'Female' & (eip$sex_w_man___1 == '1' | eip$sex_w_man___2 == '1' |
+                                          eip$sex_w_man___3 == '1'))] <- 1
+table(eip$Hetero)
+
+
+eip$HRHS[(eip$Hetero == 1) & ((((eip$sex_w_woman___6 == '1' | eip$sex_w_woman___7 == '1') |
+                                  (is.na(eip$sex_w_woman___6) & is.na(eip$sex_w_woman___7) &
+                                     is.na(eip$sex_w_woman___8)))) | (((eip$sex_w_man___6 == '1' |
+                                                                          eip$sex_w_man___7 == '1') |
+                                                                         (is.na(eip$sex_w_man___6) &
+                                                                            is.na(eip$sex_w_man___7) &
+                                                                            is.na(eip$sex_w_man___8)))) |
+                                (eip$sex_msm___1 == '1' | eip$sex_msm___2 == '1' | eip$sex_msm___3 == '1') |
+                                (eip$sex_idu___1 == '1' | eip$sex_idu___2 == '1' | eip$sex_idu___3 == '1') |
+                                (eip$sex_hiv_pos___1 == '1' | eip$sex_hiv_pos___2 == '1' |
+                                   eip$sex_hiv_pos___3 == '1') | (eip$sex_receivemoney___1 == '1' |
+                                                                    eip$sex_receivemoney___2 == '1' |
+                                                                    eip$sex_receivemoney___3 == '1' |
+                                                                    eip$sex_receivedrugs___1 == '1' |
+                                                                    eip$sex_receivedrugs___2 == '1' |
+                                                                    eip$sex_receivedrugs___3 == '1' |
+                                                                    eip$sex_paymoney___1 == '1' |
+                                                                    eip$sex_paymoney___2 == '1' |
+                                                                    eip$sex_paymoney___3 == '1' |
+                                                                    eip$sex_paydrugs___1 == '1' |
+                                                                    eip$sex_paydrugs___2 == '1' |
+                                                                    eip$sex_paydrugs___3 == '1')  |
+                                (eip$sex_sti_pos___1 == '1' | eip$sex_sti_pos___2 == '1' |
+                                   eip$sex_sti_pos___3 == '1') | (eip$sex_partners_past_year >= 3))] <- 1
+table(eip$HRHS)
+
+
+
+
+# Appalachian
+
+eip$appalachian_pt[eip$address_zip_code == 43006 | eip$address_zip_code == 43056 |
+                     eip$address_zip_code == 43076 | eip$address_zip_code == 43101 |
+                     eip$address_zip_code == 43102 | eip$address_zip_code == 43107 |
+                     eip$address_zip_code == 43111 | eip$address_zip_code == 43115 |
+                     eip$address_zip_code == 43127 | eip$address_zip_code == 43135 |
+                     eip$address_zip_code == 43138 | eip$address_zip_code == 43144 |
+                     eip$address_zip_code == 43148 | eip$address_zip_code == 43149 |
+                     eip$address_zip_code == 43150 | eip$address_zip_code == 43152 |
+                     eip$address_zip_code == 43155 | eip$address_zip_code == 43158 |
+                     eip$address_zip_code == 43160 | eip$address_zip_code == 43164 |
+                     eip$address_zip_code == 43701 | eip$address_zip_code == 43702 |
+                     eip$address_zip_code == 43711 | eip$address_zip_code == 43713 |
+                     eip$address_zip_code == 43716 | eip$address_zip_code == 43717 |
+                     eip$address_zip_code == 43718 | eip$address_zip_code == 43719 |
+                     eip$address_zip_code == 43720 | eip$address_zip_code == 43722 |
+                     eip$address_zip_code == 43723 | eip$address_zip_code == 43724 |
+                     eip$address_zip_code == 43725 | eip$address_zip_code == 43727 |
+                     eip$address_zip_code == 43728 | eip$address_zip_code == 43730 |
+                     eip$address_zip_code == 43731 | eip$address_zip_code == 43732 |
+                     eip$address_zip_code == 43733 | eip$address_zip_code == 43734 |
+                     eip$address_zip_code == 43735 | eip$address_zip_code == 43736 |
+                     eip$address_zip_code == 43738 | eip$address_zip_code == 43739 |
+                     eip$address_zip_code == 43746 | eip$address_zip_code == 43747 |
+                     eip$address_zip_code == 43748 | eip$address_zip_code == 43749 |
+                     eip$address_zip_code == 43750 | eip$address_zip_code == 43752 |
+                     eip$address_zip_code == 43754 | eip$address_zip_code == 43755 |
+                     eip$address_zip_code == 43756 | eip$address_zip_code == 43757 |
+                     eip$address_zip_code == 43758 | eip$address_zip_code == 43759 |
+                     eip$address_zip_code == 43760 | eip$address_zip_code == 43761 |
+                     eip$address_zip_code == 43762 | eip$address_zip_code == 43764 |
+                     eip$address_zip_code == 43766 | eip$address_zip_code == 43767 |
+                     eip$address_zip_code == 43768 | eip$address_zip_code == 43771 |
+                     eip$address_zip_code == 43772 | eip$address_zip_code == 43773 |
+                     eip$address_zip_code == 43777 | eip$address_zip_code == 43778 |
+                     eip$address_zip_code == 43779 | eip$address_zip_code == 43780 |
+                     eip$address_zip_code == 43782 | eip$address_zip_code == 43783 |
+                     eip$address_zip_code == 43786 | eip$address_zip_code == 43787 |
+                     eip$address_zip_code == 43788 | eip$address_zip_code == 43791 |
+                     eip$address_zip_code == 43793 | eip$address_zip_code == 43802 |
+                     eip$address_zip_code == 43803 | eip$address_zip_code == 43804 |
+                     eip$address_zip_code == 43805 | eip$address_zip_code == 43811 |
+                     eip$address_zip_code == 43812 | eip$address_zip_code == 43821 |
+                     eip$address_zip_code == 43822 | eip$address_zip_code == 43824 |
+                     eip$address_zip_code == 43828 | eip$address_zip_code == 43830 |
+                     eip$address_zip_code == 43832 | eip$address_zip_code == 43836 |
+                     eip$address_zip_code == 43837 | eip$address_zip_code == 43840 |
+                     eip$address_zip_code == 43842 | eip$address_zip_code == 43843 |
+                     eip$address_zip_code == 43844 | eip$address_zip_code == 43845 |
+                     eip$address_zip_code == 43901 | eip$address_zip_code == 43902 |
+                     eip$address_zip_code == 43903 | eip$address_zip_code == 43905 |
+                     eip$address_zip_code == 43906 | eip$address_zip_code == 43907 |
+                     eip$address_zip_code == 43908 | eip$address_zip_code == 43909 |
+                     eip$address_zip_code == 43910 | eip$address_zip_code == 43912 |
+                     eip$address_zip_code == 43913 | eip$address_zip_code == 43914 |
+                     eip$address_zip_code == 43915 | eip$address_zip_code == 43916 |
+                     eip$address_zip_code == 43917 | eip$address_zip_code == 43920 |
+                     eip$address_zip_code == 43925 | eip$address_zip_code == 43926 |
+                     eip$address_zip_code == 43927 | eip$address_zip_code == 43928 |
+                     eip$address_zip_code == 43930 | eip$address_zip_code == 43931 |
+                     eip$address_zip_code == 43932 | eip$address_zip_code == 43933 |
+                     eip$address_zip_code == 43934 | eip$address_zip_code == 43935 |
+                     eip$address_zip_code == 43937 | eip$address_zip_code == 43938 |
+                     eip$address_zip_code == 43939 | eip$address_zip_code == 43940 |
+                     eip$address_zip_code == 43941 | eip$address_zip_code == 43942 |
+                     eip$address_zip_code == 43943 | eip$address_zip_code == 43944 |
+                     eip$address_zip_code == 43945 | eip$address_zip_code == 43946 |
+                     eip$address_zip_code == 43947 | eip$address_zip_code == 43948 |
+                     eip$address_zip_code == 43950 | eip$address_zip_code == 43951 |
+                     eip$address_zip_code == 43952 | eip$address_zip_code == 43953 |
+                     eip$address_zip_code == 43961 | eip$address_zip_code == 43962 |
+                     eip$address_zip_code == 43963 | eip$address_zip_code == 43964 |
+                     eip$address_zip_code == 43967 | eip$address_zip_code == 43968 |
+                     eip$address_zip_code == 43970 | eip$address_zip_code == 43971 |
+                     eip$address_zip_code == 43972 | eip$address_zip_code == 43973 |
+                     eip$address_zip_code == 43974 | eip$address_zip_code == 43976 |
+                     eip$address_zip_code == 43977 | eip$address_zip_code == 43981 |
+                     eip$address_zip_code == 43983 | eip$address_zip_code == 43984 |
+                     eip$address_zip_code == 43985 | eip$address_zip_code == 43986 |
+                     eip$address_zip_code == 43988 | eip$address_zip_code == 44003 |
+                     eip$address_zip_code == 44004 | eip$address_zip_code == 44005 |
+                     eip$address_zip_code == 44010 | eip$address_zip_code == 44030 |
+                     eip$address_zip_code == 44032 | eip$address_zip_code == 44041 |
+                     eip$address_zip_code == 44046 | eip$address_zip_code == 44047 |
+                     eip$address_zip_code == 44048 | eip$address_zip_code == 44057 |
+                     eip$address_zip_code == 44062 | eip$address_zip_code == 44064 |
+                     eip$address_zip_code == 44068 | eip$address_zip_code == 44076 |
+                     eip$address_zip_code == 44082 | eip$address_zip_code == 44084 |
+                     eip$address_zip_code == 44085 | eip$address_zip_code == 44086 |
+                     eip$address_zip_code == 44088 | eip$address_zip_code == 44093 |
+                     eip$address_zip_code == 44099 | eip$address_zip_code == 44231 |
+                     eip$address_zip_code == 44288 | eip$address_zip_code == 44401 |
+                     eip$address_zip_code == 44402 | eip$address_zip_code == 44403 |
+                     eip$address_zip_code == 44404 | eip$address_zip_code == 44405 |
+                     eip$address_zip_code == 44406 | eip$address_zip_code == 44408 |
+                     eip$address_zip_code == 44410 | eip$address_zip_code == 44411 |
+                     eip$address_zip_code == 44412 | eip$address_zip_code == 44413 |
+                     eip$address_zip_code == 44415 | eip$address_zip_code == 44416 |
+                     eip$address_zip_code == 44417 | eip$address_zip_code == 44418 |
+                     eip$address_zip_code == 44420 | eip$address_zip_code == 44422 |
+                     eip$address_zip_code == 44423 | eip$address_zip_code == 44424 |
+                     eip$address_zip_code == 44425 | eip$address_zip_code == 44427 |
+                     eip$address_zip_code == 44428 | eip$address_zip_code == 44429 |
+                     eip$address_zip_code == 44430 | eip$address_zip_code == 44431 |
+                     eip$address_zip_code == 44432 | eip$address_zip_code == 44436 |
+                     eip$address_zip_code == 44437 | eip$address_zip_code == 44438 |
+                     eip$address_zip_code == 44439 | eip$address_zip_code == 44440 |
+                     eip$address_zip_code == 44441 | eip$address_zip_code == 44442 |
+                     eip$address_zip_code == 44443 | eip$address_zip_code == 44444 |
+                     eip$address_zip_code == 44445 | eip$address_zip_code == 44446 |
+                     eip$address_zip_code == 44449 | eip$address_zip_code == 44450 |
+                     eip$address_zip_code == 44451 | eip$address_zip_code == 44452 |
+                     eip$address_zip_code == 44453 | eip$address_zip_code == 44454 |
+                     eip$address_zip_code == 44455 | eip$address_zip_code == 44460 |
+                     eip$address_zip_code == 44470 | eip$address_zip_code == 44471 |
+                     eip$address_zip_code == 44473 | eip$address_zip_code == 44481 |
+                     eip$address_zip_code == 44482 | eip$address_zip_code == 44483 |
+                     eip$address_zip_code == 44484 | eip$address_zip_code == 44485 |
+                     eip$address_zip_code == 44486 | eip$address_zip_code == 44490 |
+                     eip$address_zip_code == 44491 | eip$address_zip_code == 44492 |
+                     eip$address_zip_code == 44493 | eip$address_zip_code == 44501 |
+                     eip$address_zip_code == 44502 | eip$address_zip_code == 44503 |
+                     eip$address_zip_code == 44504 | eip$address_zip_code == 44505 |
+                     eip$address_zip_code == 44506 | eip$address_zip_code == 44507 |
+                     eip$address_zip_code == 44509 | eip$address_zip_code == 44510 |
+                     eip$address_zip_code == 44511 | eip$address_zip_code == 44512 |
+                     eip$address_zip_code == 44513 | eip$address_zip_code == 44514 |
+                     eip$address_zip_code == 44515 | eip$address_zip_code == 44555 |
+                     eip$address_zip_code == 44601 | eip$address_zip_code == 44607 |
+                     eip$address_zip_code == 44608 | eip$address_zip_code == 44609 |
+                     eip$address_zip_code == 44610 | eip$address_zip_code == 44611 |
+                     eip$address_zip_code == 44612 | eip$address_zip_code == 44615 |
+                     eip$address_zip_code == 44617 | eip$address_zip_code == 44619 |
+                     eip$address_zip_code == 44620 | eip$address_zip_code == 44621 |
+                     eip$address_zip_code == 44622 | eip$address_zip_code == 44624 |
+                     eip$address_zip_code == 44625 | eip$address_zip_code == 44626 |
+                     eip$address_zip_code == 44627 | eip$address_zip_code == 44628 |
+                     eip$address_zip_code == 44629 | eip$address_zip_code == 44633 |
+                     eip$address_zip_code == 44634 | eip$address_zip_code == 44637 |
+                     eip$address_zip_code == 44638 | eip$address_zip_code == 44639 |
+                     eip$address_zip_code == 44643 | eip$address_zip_code == 44644 |
+                     eip$address_zip_code == 44651 | eip$address_zip_code == 44653 |
+                     eip$address_zip_code == 44654 | eip$address_zip_code == 44656 |
+                     eip$address_zip_code == 44657 | eip$address_zip_code == 44660 |
+                     eip$address_zip_code == 44661 | eip$address_zip_code == 44663 |
+                     eip$address_zip_code == 44665 | eip$address_zip_code == 44671 |
+                     eip$address_zip_code == 44672 | eip$address_zip_code == 44675 |
+                     eip$address_zip_code == 44676 | eip$address_zip_code == 44678 |
+                     eip$address_zip_code == 44679 | eip$address_zip_code == 44680 |
+                     eip$address_zip_code == 44681 | eip$address_zip_code == 44682 |
+                     eip$address_zip_code == 44683 | eip$address_zip_code == 44687 |
+                     eip$address_zip_code == 44688 | eip$address_zip_code == 44689 |
+                     eip$address_zip_code == 44690 | eip$address_zip_code == 44693 |
+                     eip$address_zip_code == 44695 | eip$address_zip_code == 44697 |
+                     eip$address_zip_code == 44699 | eip$address_zip_code == 44730 |
+                     eip$address_zip_code == 44842 | eip$address_zip_code == 45101 |
+                     eip$address_zip_code == 45102 | eip$address_zip_code == 45103 |
+                     eip$address_zip_code == 45105 | eip$address_zip_code == 45106 |
+                     eip$address_zip_code == 45107 | eip$address_zip_code == 45112 |
+                     eip$address_zip_code == 45115 | eip$address_zip_code == 45118 |
+                     eip$address_zip_code == 45119 | eip$address_zip_code == 45120 |
+                     eip$address_zip_code == 45121 | eip$address_zip_code == 45122 |
+                     eip$address_zip_code == 45123 | eip$address_zip_code == 45130 |
+                     eip$address_zip_code == 45131 | eip$address_zip_code == 45132 |
+                     eip$address_zip_code == 45133 | eip$address_zip_code == 45135 |
+                     eip$address_zip_code == 45140 | eip$address_zip_code == 45142 |
+                     eip$address_zip_code == 45144 | eip$address_zip_code == 45147 |
+                     eip$address_zip_code == 45148 | eip$address_zip_code == 45150 |
+                     eip$address_zip_code == 45153 | eip$address_zip_code == 45154 |
+                     eip$address_zip_code == 45155 | eip$address_zip_code == 45156 |
+                     eip$address_zip_code == 45157 | eip$address_zip_code == 45158 |
+                     eip$address_zip_code == 45159 | eip$address_zip_code == 45160 |
+                     eip$address_zip_code == 45162 | eip$address_zip_code == 45167 |
+                     eip$address_zip_code == 45168 | eip$address_zip_code == 45171 |
+                     eip$address_zip_code == 45172 | eip$address_zip_code == 45176 |
+                     eip$address_zip_code == 45244 | eip$address_zip_code == 45245 |
+                     eip$address_zip_code == 45255 | eip$address_zip_code == 45601 |
+                     eip$address_zip_code == 45612 | eip$address_zip_code == 45613 |
+                     eip$address_zip_code == 45614 | eip$address_zip_code == 45616 |
+                     eip$address_zip_code == 45617 | eip$address_zip_code == 45618 |
+                     eip$address_zip_code == 45619 | eip$address_zip_code == 45620 |
+                     eip$address_zip_code == 45621 | eip$address_zip_code == 45622 |
+                     eip$address_zip_code == 45623 | eip$address_zip_code == 45624 |
+                     eip$address_zip_code == 45628 | eip$address_zip_code == 45629 |
+                     eip$address_zip_code == 45630 | eip$address_zip_code == 45631 |
+                     eip$address_zip_code == 45633 | eip$address_zip_code == 45634 |
+                     eip$address_zip_code == 45636 | eip$address_zip_code == 45638 |
+                     eip$address_zip_code == 45640 | eip$address_zip_code == 45642 |
+                     eip$address_zip_code == 45643 | eip$address_zip_code == 45644 |
+                     eip$address_zip_code == 45645 | eip$address_zip_code == 45646 |
+                     eip$address_zip_code == 45647 | eip$address_zip_code == 45648 |
+                     eip$address_zip_code == 45650 | eip$address_zip_code == 45651 |
+                     eip$address_zip_code == 45652 | eip$address_zip_code == 45653 |
+                     eip$address_zip_code == 45654 | eip$address_zip_code == 45656 |
+                     eip$address_zip_code == 45657 | eip$address_zip_code == 45658 |
+                     eip$address_zip_code == 45659 | eip$address_zip_code == 45660 |
+                     eip$address_zip_code == 45661 | eip$address_zip_code == 45662 |
+                     eip$address_zip_code == 45663 | eip$address_zip_code == 45669 |
+                     eip$address_zip_code == 45671 | eip$address_zip_code == 45672 |
+                     eip$address_zip_code == 45673 | eip$address_zip_code == 45674 |
+                     eip$address_zip_code == 45675 | eip$address_zip_code == 45677 |
+                     eip$address_zip_code == 45678 | eip$address_zip_code == 45679 |
+                     eip$address_zip_code == 45680 | eip$address_zip_code == 45681 |
+                     eip$address_zip_code == 45682 | eip$address_zip_code == 45683 |
+                     eip$address_zip_code == 45684 | eip$address_zip_code == 45685 |
+                     eip$address_zip_code == 45686 | eip$address_zip_code == 45687 |
+                     eip$address_zip_code == 45688 | eip$address_zip_code == 45690 |
+                     eip$address_zip_code == 45692 | eip$address_zip_code == 45693 |
+                     eip$address_zip_code == 45694 | eip$address_zip_code == 45695 |
+                     eip$address_zip_code == 45696 | eip$address_zip_code == 45697 |
+                     eip$address_zip_code == 45698 | eip$address_zip_code == 45699 |
+                     eip$address_zip_code == 45701 | eip$address_zip_code == 45710 |
+                     eip$address_zip_code == 45711 | eip$address_zip_code == 45712 |
+                     eip$address_zip_code == 45713 | eip$address_zip_code == 45714 |
+                     eip$address_zip_code == 45715 | eip$address_zip_code == 45716 |
+                     eip$address_zip_code == 45717 | eip$address_zip_code == 45719 |
+                     eip$address_zip_code == 45720 | eip$address_zip_code == 45721 |
+                     eip$address_zip_code == 45723 | eip$address_zip_code == 45724 |
+                     eip$address_zip_code == 45727 | eip$address_zip_code == 45729 |
+                     eip$address_zip_code == 45732 | eip$address_zip_code == 45734 |
+                     eip$address_zip_code == 45735 | eip$address_zip_code == 45739 |
+                     eip$address_zip_code == 45740 | eip$address_zip_code == 45741 |
+                     eip$address_zip_code == 45742 | eip$address_zip_code == 45743 |
+                     eip$address_zip_code == 45744 | eip$address_zip_code == 45745 |
+                     eip$address_zip_code == 45746 | eip$address_zip_code == 45750 |
+                     eip$address_zip_code == 45760 | eip$address_zip_code == 45761 |
+                     eip$address_zip_code == 45764 | eip$address_zip_code == 45766 |
+                     eip$address_zip_code == 45767 | eip$address_zip_code == 45768 |
+                     eip$address_zip_code == 45769 | eip$address_zip_code == 45770 |
+                     eip$address_zip_code == 45771 | eip$address_zip_code == 45772 |
+                     eip$address_zip_code == 45773 | eip$address_zip_code == 45775 |
+                     eip$address_zip_code == 45776 | eip$address_zip_code == 45777 |
+                     eip$address_zip_code == 45778 | eip$address_zip_code == 45779 |
+                     eip$address_zip_code == 45780 | eip$address_zip_code == 45782 |
+                     eip$address_zip_code == 45783 | eip$address_zip_code == 45784 |
+                     eip$address_zip_code == 45786 | eip$address_zip_code == 45787 |
+                     eip$address_zip_code == 45788 | eip$address_zip_code == 45789 |
+                     (eip$appalachian == 1 | eip$appalachian_family == 1)] <- 1
+table(eip$appalachian_pt)
+
+
+
+
+###############################################################################################################
+#########################################  Creating Encounter Dataset  ########################################
+###############################################################################################################
+
+summary(eip$enc_date)
+enc <- eip[which(eip$enc_date >= '2023-01-01' & eip$enc_date <= '2023-12-31'), ]
+summary(enc$enc_date)
+
+
+eip_encounters <- nrow(enc)
+eip_encounters
+
+
+table(enc$offer_outcome_risks)
+assessments <- enc[which(enc$offer_outcome_risks == 1), ]
+dim(assessments)
+eip_assessments <- nrow(assessments)
+eip_assessments
+
+
+eip_assessments_percent <- percent(eip_assessments/eip_encounters, accuracy = 0.1)
+eip_assessments_percent
+
+
+enc$ht_assessed[(enc$unsafe_work == 0 | enc$unsafe_work == 1 | enc$unsafe_work == 3) |
+                  (enc$forced_work == 0 | enc$forced_work == 1 | enc$forced_work == 3) |
+                  (enc$fear_leave_work == 0 | enc$fear_leave_work == 1 | enc$fear_leave_work == 3) |
+                  (enc$exchange_for_sex == 0 | enc$exchange_for_sex == 1 | enc$exchange_for_sex == 3) |
+                  (enc$sex_receivemoney___0 == 1 |
+                     enc$sex_receivemoney___1 == 1 |
+                     enc$sex_receivemoney___2 == 1 |
+                     enc$sex_receivemoney___3 == 1 |
+                     enc$sex_receivemoney___4 == 1 |
+                     enc$sex_receivemoney___5 == 1 |
+                     enc$sex_receivedrugs___0 == 1 |
+                     enc$sex_receivedrugs___1 == 1 |
+                     enc$sex_receivedrugs___2 == 1 |
+                     enc$sex_receivedrugs___3 == 1 |
+                     enc$sex_receivedrugs___4 == 1 |
+                     enc$sex_receivedrugs___5 == 1) |
+                  (enc$safe_in_relationship == 0 | enc$safe_in_relationship == 1) |
+                  (enc$pressure_sex == 0 | enc$pressure_sex == 1)] <- 1
+table(enc$ht_assessed)
+ht_assessed <- enc[which(enc$ht_assessed == 1), ]
+dim(ht_assessed)
+ht_assessed <- nrow(ht_assessed)
+ht_assessed
+
+
+ht_assessed_percent <- percent(ht_assessed/eip_assessments, accuracy = 0.1)
+ht_assessed_percent
+
+
+enc$ht_assessed_pulvino[(enc$unsafe_work == 0 | enc$unsafe_work == 1) |
+                          (enc$forced_work == 0 | enc$forced_work == 1) |
+                          (enc$fear_leave_work == 0 | enc$fear_leave_work == 1) |
+                          (enc$exchange_for_sex == 0 | enc$exchange_for_sex == 1)] <- 1
+table(enc$ht_assessed_pulvino)
+ht_assessed_pulvino <- enc[which(enc$ht_assessed_pulvino == 1), ]
+dim(ht_assessed_pulvino)
+ht_assessed_pulvino <- nrow(ht_assessed_pulvino)
+ht_assessed_pulvino
+
+
+ht_assessed_pulvino_percent <- percent(ht_assessed_pulvino/eip_assessments, accuracy = 0.1)
+ht_assessed_pulvino_percent
+
+
+enc$ht_pos_pulvino[enc$unsafe_work == 1 |
+                     enc$forced_work == 1 |
+                     enc$fear_leave_work == 1 |
+                     enc$exchange_for_sex == 1] <- 1
+table(enc$ht_pos_pulvino)
+ht_pos_pulvino <- enc[which(enc$ht_pos_pulvino == 1), ]
+dim(ht_pos_pulvino)
+ht_pos_pulvino <- nrow(ht_pos_pulvino)
+ht_pos_pulvino
+
+
+ht_pos_pulvino_percent <- percent(ht_pos_pulvino/ht_assessed_pulvino, accuracy = 0.1)
+ht_pos_pulvino_percent
+
+
+```
+
+
+EIP officially began screening for human trafficking (HT) within the EIP Database as of **December 1st, 2022** with the introduction of Dr. Christa Pulvino's pilot grant. The EIP assessment has had some general questions that may indicate the risk of an individual being in a HT situation, but new assessment questions were added to indicate a risk for trafficking, as well as the HPA's general impression of whether the individual was at risk based on additional information. Additional resources for HT were included within the EIP list, and a new, electronic version of the EIP resource list was created that allowed the ability for patients to access the list of EIP resources using a QR code. The data captured for this project is provided on this page, along with additional data that pertains to the HT efforts within EIP.
+
+
+There are a total of `r eip_encounters` encounters with EIP, with a total of `r eip_assessments` assessments completed (*`r eip_assessments_percent` of the total number of encounters*). As mentioned above, there are several questions within the EIP assessment that may indicate whether someone is in an at-risk situation for HT. The total number of assessments where *at least one* of these questions was asked and answered is `r ht_assessed` (*`r ht_assessed_percent` of the total number of assessments, `r ht_assessed`/`r eip_assessments`*). The questions that are included in the total assessed for HT (*in addition to the questions provided by Dr. Pulvino*) are noted below:
+
+- *When did you last receive money and/or drugs for sex?*
+- *Do you feel safe in your relationship?*
+- *Does your partner pressure you into having sex?*
+
+
+However, when we only consider those questions that were included with Dr. Pulvino's HT assessment, the number of assessments where this specific screening was done was `r ht_assessed_pulvino` (*`r ht_assessed_pulvino_percent` of the total number of assessments, `r ht_assessed_pulvino`/`r eip_assessments`*). Individuals are considered at risk for HT if they respond 'Yes' to any of the questions in this HT assessment. The total number of assessments where an individual screened positive for HT risk is `r ht_pos_pulvino` (*`r ht_pos_pulvino_percent` of the total assessed using Dr. Pulvino's assessment, `r ht_pos_pulvino`/`r ht_assessed_pulvino`*). The breakdown of the responses for each question on Dr. Pulvino's HT assessment are provided in the table below.
+
+
+
+
+
+
+
+
+# Things to include:
+
+- Summary table of screening numbers
+  
+- Table of those that screened positive
+
+- Number referred for HT
+
+- Number of encounters where the HPA suspects HT
+
+- Number where they were suspected and referred for HT
+
+- Number where they screened positive and were referred
+
+- Number where they were suspected and screened positive
+
+- Breakdown of questions and responses to each of CP assessment questions
+
+- Linkage flow data
+
+- Number/percentage in an unsafe relationship
+
+- Number/percentage that were pressured into sex
+
+
+
+
+
+
 
 
 

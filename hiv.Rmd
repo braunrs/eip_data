@@ -1,7 +1,7 @@
 ---
 title: "HIV Testing"
 description: |
-  This will pull together all of the different HIV testing methods (CTR, EHE, NACHO, Lab) showing independent testing programs as well as total testing through EIP.
+  This will pull together all of the different HIV testing methods (CTR, EHE, NACCHO, Lab) showing independent testing programs as well as total testing through EIP.
 date: "`r Sys.Date()`"
 output:
   distill::distill_article:
@@ -680,7 +680,7 @@ monthly_hiv_tests
 Testing for Human Immunodeficiency Virus (HIV) is a major focus for EIP, and there are several methods for testing and funding streams that are a part of the program. The various programs that involve HIV testing are covered on this page. In parallel with lab-based testing conducted within the hospital and/or clinical settings, rapid-based testing conducted by EIP has been around since the start of the program in 1998 in some form or another.
 
 
-The following table shows an overview of the total number of tests within each testing program, the total number of positives as well as the number of newly identified positive cases, and the positivity rate for each program. The overall positivity rate for the combined rapid-based testing methods within EIP is **`r eip_positivity_rate`** (`r eip_total_pos_hiv_tests` total new positives out of `r eip_total_hiv_tests` total HIV tests).
+The following table shows an overview of the total number of tests within each testing program, the total number of positives as well as the number of newly identified positive cases, and the positivity rate for each program. The overall positivity rate for the combined rapid-based testing methods within EIP is [**`r eip_positivity_rate`**]{style="color: red;"} (`r eip_total_pos_hiv_tests` total new positives out of `r eip_total_hiv_tests` total rapid-HIV tests).
 
 
 ```{r}
@@ -739,12 +739,12 @@ monthly_hiv_testing_plot
 
 
 monthly_hiv_testing_table <- select(monthly_hiv_tests, Date, ctr_tests, ehe_tests)
-colnames(daily_hiv_testing_table)[2] <- 'CTR Tests'
-colnames(daily_hiv_testing_table)[3] <- 'EHE Tests'
+colnames(monthly_hiv_testing_table)[2] <- 'CTR Tests'
+colnames(monthly_hiv_testing_table)[3] <- 'EHE Tests'
 reactable(monthly_hiv_testing_table,
           showPageSizeOptions = TRUE,
-          pageSizeOptions = c(10, 15, 31),
-          defaultPageSize = 10)
+          pageSizeOptions = c(12, 24),
+          defaultPageSize = 12)
 
 ```
 
@@ -764,7 +764,7 @@ The Ending the HIV Epidemic (EHE) testing program...
 # NACCHO Testing
 
 
-Spot holder for NACHO definition and data.
+Spot holder for NACCHO definition and data.
 
 
 

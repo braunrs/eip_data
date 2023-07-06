@@ -768,7 +768,7 @@ unique_patients
 
 ```
 
-The information on this page only includes data since the start of 2023. EIP has encountered a total of [ **`r unique_patients`**]{style="color: red;"} unique individuals at all sites.
+The information on this page only includes data since the start of 2023. EIP has encountered a total of [**`r unique_patients`**]{style="color: red;"} unique individuals at all sites.
 
 The demographic information for this EIP population is shown on this page. For further information regarding the population demographics of individuals at particular sites, please refer to those pages listed under the **Site** tab in the navigation bar.
 
