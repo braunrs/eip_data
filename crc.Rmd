@@ -684,6 +684,9 @@ ggplotly(crc_risk_group_table)
 ```
 
 
+[**It is important to note:** *At this time, CRCs are only screening for the EIP Service Center while there are no EIP staff on shift. Therefore, the data presented above is not particularly helpful or providing the full picture unless it is compared with EIP shift schedules, which are not considered here. The data above is only to provide the necessary flow to the data presented below regarding the numbers identified through screening and approach.*]{style="color: green;"}
+
+
 ## EIP EPIC Pre-Screen
 
 

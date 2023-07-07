@@ -628,6 +628,106 @@ ht_pos_pulvino_percent <- percent(ht_pos_pulvino/ht_assessed_pulvino, accuracy =
 ht_pos_pulvino_percent
 
 
+
+table(enc$unsafe_work)
+ht_unsafe_work_assessed <- enc[which(!is.na(enc$unsafe_work)), ]
+ht_unsafe_work_assessed <- nrow(ht_unsafe_work_assessed)
+ht_unsafe_work_assessed
+
+ht_unsafe_work_yes <- enc[which(enc$unsafe_work == 1), ]
+ht_unsafe_work_yes <- nrow(ht_unsafe_work_yes)
+ht_unsafe_work_yes
+ht_unsafe_work_ypercent <- percent(ht_unsafe_work_yes/ht_unsafe_work_assessed, accurracy = 0.1)
+ht_unsafe_work_ypercent
+
+ht_unsafe_work_no <- enc[which(enc$unsafe_work == 0), ]
+ht_unsafe_work_no <- nrow(ht_unsafe_work_no)
+ht_unsafe_work_no
+
+ht_unsafe_work_na <- enc[which(enc$unsafe_work == 2), ]
+ht_unsafe_work_na <- nrow(ht_unsafe_work_na)
+ht_unsafe_work_na
+
+ht_unsafe_work_declined <- enc[which(enc$unsafe_work == 3), ]
+ht_unsafe_work_declined <- nrow(ht_unsafe_work_declined)
+ht_unsafe_work_declined
+
+
+
+table(enc$forced_work)
+ht_forced_work_assessed <- enc[which(!is.na(enc$forced_work)), ]
+ht_forced_work_assessed <- nrow(ht_forced_work_assessed)
+ht_forced_work_assessed
+
+ht_forced_work_yes <- enc[which(enc$forced_work == 1), ]
+ht_forced_work_yes <- nrow(ht_forced_work_yes)
+ht_forced_work_yes
+ht_forced_work_ypercent <- percent(ht_forced_work_yes/ht_forced_work_assessed, accurracy = 0.1)
+ht_forced_work_ypercent
+
+ht_forced_work_no <- enc[which(enc$forced_work == 0), ]
+ht_forced_work_no <- nrow(ht_forced_work_no)
+ht_forced_work_no
+
+ht_forced_work_na <- enc[which(enc$forced_work == 2), ]
+ht_forced_work_na <- nrow(ht_forced_work_na)
+ht_forced_work_na
+
+ht_forced_work_declined <- enc[which(enc$forced_work == 3), ]
+ht_forced_work_declined <- nrow(ht_forced_work_declined)
+ht_forced_work_declined
+
+
+
+table(enc$fear_leave_work)
+ht_fear_work_assessed <- enc[which(!is.na(enc$fear_leave_work)), ]
+ht_fear_work_assessed <- nrow(ht_fear_work_assessed)
+ht_fear_work_assessed
+
+ht_fear_work_yes <- enc[which(enc$fear_leave_work == 1), ]
+ht_fear_work_yes <- nrow(ht_fear_work_yes)
+ht_fear_work_yes
+ht_fear_work_ypercent <- percent(ht_fear_work_yes/ht_fear_work_assessed, accurracy = 0.1)
+ht_fear_work_ypercent
+
+ht_fear_work_no <- enc[which(enc$fear_leave_work == 0), ]
+ht_fear_work_no <- nrow(ht_fear_work_no)
+ht_fear_work_no
+
+ht_fear_work_na <- enc[which(enc$fear_leave_work == 2), ]
+ht_fear_work_na <- nrow(ht_fear_work_na)
+ht_fear_work_na
+
+ht_fear_work_declined <- enc[which(enc$fear_leave_work == 3), ]
+ht_fear_work_declined <- nrow(ht_fear_work_declined)
+ht_fear_work_declined
+
+
+
+table(enc$exchange_for_sex)
+ht_exchange_sex_assessed <- enc[which(!is.na(enc$exchange_for_sex)), ]
+ht_exchange_sex_assessed <- nrow(ht_exchange_sex_assessed)
+ht_exchange_sex_assessed
+
+ht_exchange_sex_yes <- enc[which(enc$exchange_for_sex == 1), ]
+ht_exchange_sex_yes <- nrow(ht_exchange_sex_yes)
+ht_exchange_sex_yes
+ht_exchange_sex_ypercent <- percent(ht_exchange_sex_yes/ht_exchange_sex_assessed, accurracy = 0.1)
+ht_exchange_sex_ypercent
+
+ht_exchange_sex_no <- enc[which(enc$exchange_for_sex == 0), ]
+ht_exchange_sex_no <- nrow(ht_exchange_sex_no)
+ht_exchange_sex_no
+
+ht_exchange_sex_na <- enc[which(enc$exchange_for_sex == 2), ]
+ht_exchange_sex_na <- nrow(ht_exchange_sex_na)
+ht_exchange_sex_na
+
+ht_exchange_sex_declined <- enc[which(enc$exchange_for_sex == 3), ]
+ht_exchange_sex_declined <- nrow(ht_exchange_sex_declined)
+ht_exchange_sex_declined
+
+
 ```
 
 
@@ -641,20 +741,42 @@ There are a total of `r eip_encounters` encounters with EIP, with a total of `r 
 - *Does your partner pressure you into having sex?*
 
 
-However, when we only consider those questions that were included with Dr. Pulvino's HT assessment, the number of assessments where this specific screening was done was `r ht_assessed_pulvino` (*`r ht_assessed_pulvino_percent` of the total number of assessments, `r ht_assessed_pulvino`/`r eip_assessments`*). Individuals are considered at risk for HT if they respond 'Yes' to any of the questions in this HT assessment. The total number of assessments where an individual screened positive for HT risk is `r ht_pos_pulvino` (*`r ht_pos_pulvino_percent` of the total assessed using Dr. Pulvino's assessment, `r ht_pos_pulvino`/`r ht_assessed_pulvino`*). The breakdown of the responses for each question on Dr. Pulvino's HT assessment are provided in the table below.
+However, when we only consider those questions that were included with Dr. Pulvino's HT assessment, the number of assessments where this specific screening was done was `r ht_assessed_pulvino` (*`r ht_assessed_pulvino_percent` of the total number of assessments, `r ht_assessed_pulvino`/`r eip_assessments`*). Individuals are considered at risk for HT if they respond 'Yes' to any of the questions in this HT assessment. The total number of assessments where an individual screened positive for HT risk is `r ht_pos_pulvino` (*`r ht_pos_pulvino_percent` of the total assessed using Dr. Pulvino's assessment, `r ht_pos_pulvino`/`r ht_assessed_pulvino`*). The summary table for HT screening is provided below.
 
 
+```{r, layout="l-page"}
 
+ht_summary_tbl <- data.frame(matrix(ncol = 6, nrow = 0))
+colnames(ht_summary_tbl) <- c('HT Assessed', '% Assessed', 'HT Assessed (Pulvino)', '% Assessed (Pulvino)', 'Screened HT+', '% HT+')
+ht_summary_tbl[nrow(ht_summary_tbl) + 1,] <- list(ht_assessed, ht_assessed_percent, ht_assessed_pulvino, ht_assessed_pulvino_percent, ht_pos_pulvino, ht_pos_pulvino_percent)
+reactable(ht_summary_tbl)
+
+```
+
+
+The breakdown of the responses for each question on Dr. Pulvino's HT assessment are provided in the table below.
+
+
+```{r, layout="l-page"}
+
+ht_pulvino_tbl <- data.frame(matrix(ncol = 7, nrow = 0))
+colnames(ht_pulvino_tbl) <- c('Question', '# Assessed', 'Yes', '% Yes', 'No', 'Not Asked', 'Declined')
+ht_pulvino_tbl[nrow(ht_pulvino_tbl) + 1,] <- list('Have you ever worked, or done other things, in a place that made you feel scared or unsafe?', ht_unsafe_work_assessed, ht_unsafe_work_yes, ht_unsafe_work_ypercent, ht_unsafe_work_no, ht_unsafe_work_na, ht_unsafe_work_declined)
+ht_pulvino_tbl[nrow(ht_pulvino_tbl) + 1,] <- list('In thinking back over your past experience, have you ever been tricked or forced into doing any kind of work that you did not want to do?', ht_forced_work_assessed, ht_forced_work_yes, ht_forced_work_ypercent, ht_forced_work_no, ht_forced_work_na, ht_forced_work_declined)
+ht_pulvino_tbl[nrow(ht_pulvino_tbl) + 1,] <- list('Have you ever been afraid to leave or quit a work situation due to fears of violence or threats of harm to yourself or your family?', ht_fear_work_assessed, ht_fear_work_yes, ht_fear_work_ypercent, ht_fear_work_no, ht_fear_work_na, ht_fear_work_declined)
+ht_pulvino_tbl[nrow(ht_pulvino_tbl) + 1,] <- list('Have you ever received anything in exchange for sex (for example, a place to stay, gifts, or food)?', ht_exchange_sex_assessed, ht_exchange_sex_yes, ht_exchange_sex_ypercent, ht_exchange_sex_no, ht_exchange_sex_na, ht_exchange_sex_declined)
+reactable(ht_pulvino_tbl,
+          columns = list(
+            Question = colDef(name = "",
+                              minWidth = 300)))
+
+```
 
 
 
 
 
 # Things to include:
-
-- Summary table of screening numbers
-  
-- Table of those that screened positive
 
 - Number referred for HT
 
@@ -665,8 +787,6 @@ However, when we only consider those questions that were included with Dr. Pulvi
 - Number where they screened positive and were referred
 
 - Number where they were suspected and screened positive
-
-- Breakdown of questions and responses to each of CP assessment questions
 
 - Linkage flow data
 
