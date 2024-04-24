@@ -1,0 +1,10 @@
+---
+title: "Welcome to the EIP Data Website"
+image: eip_logo.png
+about:
+    template: jolla
+    image-shape: round
+    image-width: 15em
+---
+
+

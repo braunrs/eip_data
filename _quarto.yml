@@ -1,0 +1,27 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "eip_data"
+  navbar:
+    right:
+      - href: index.qmd
+        text: Home
+      - text: Deliverables
+        menu:
+          - href: ctr_deliverables.qmd
+            text: CTR Deliverables
+          - href: ehe_deliverables.qmd
+            text: EHE Deliverables
+          - href: naccho2.qmd
+            text: NACCHO-2 Deliverables
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+
+
