@@ -1,0 +1,1195 @@
+---
+title: "Hepatitis C Virus (HCV)"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r Data, include=FALSE}
+
+rm(list=ls(all=T))
+
+library(dplyr)
+library(tidyverse)
+library(stringr)
+library(plotly)
+library(kableExtra)
+library(reactable)
+library(scales)
+library(shinydashboard)
+library(ggplot2)
+library(lubridate)
+library(forcats)
+
+
+# EIP Database Data
+eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240415_1058.csv')
+dim(eip)
+
+# HCV Epic Dashboard Data
+hcv1 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240207_1213.csv')
+dim(hcv1)
+
+hcv2 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240220_1128.csv')
+dim(hcv2)
+
+hcv3 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240304_1119.csv')
+dim(hcv3)
+
+hcv4 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240312_0946.csv')
+dim(hcv4)
+
+hcv5 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240318_1125.csv')
+dim(hcv5)
+
+hcv6 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240325_1414.csv')
+dim(hcv6)
+
+hcv7 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240329_1737.csv')
+dim(hcv7)
+
+hcv8 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240401_0944.csv')
+dim(hcv8)
+
+hcv9 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240402_1943.csv')
+dim(hcv9)
+
+hcv10 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240407_2119.csv')
+dim(hcv10)
+
+hcv11 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240415_0935.csv')
+dim(hcv11)
+
+
+hcv <- rbind(hcv1, hcv2, hcv3, hcv4, hcv5, hcv6, hcv7, hcv8, hcv9, hcv10, hcv11)
+dim(hcv)
+hcv <- distinct(hcv)
+dim(hcv)
+head(hcv)
+
+```
+
+```{r HCV Dashboard, include=FALSE}
+
+# Separating the MRN into a separate column
+
+hcv$Patient.Name..MRN. <- iconv(hcv$Patient.Name..MRN., to = "UTF-8", sub = "byte")
+hcv$Patient.Name..MRN. <- enc2utf8(hcv$Patient.Name..MRN.)
+mrn_loc <- nchar(hcv$Patient.Name..MRN., type = "bytes") - 7
+hcv$mrn <- substr(hcv$Patient.Name..MRN., mrn_loc, mrn_loc + 6)
+head(hcv)
+
+
+# Removing variables that are not needed
+hcv <- select(hcv, mrn, Order.ID, Order.Date, Order.Time, Order.Status, Lab.Status, Last.Lab.Results)
+head(hcv)
+
+
+# Filtering to only include Completed tests and those from UCMC ED
+table(hcv$Order.Status)
+hcv <- hcv[which(hcv$Order.Status == 'Completed'), ]
+dim(hcv)
+table(hcv$Lab.Status)
+hcv <- hcv[which(hcv$Lab.Status == 'Final result' |
+                   hcv$Lab.Status == 'Edited Result - FINAL'), ]
+dim(hcv)
+head(hcv)
+hcv <- select(hcv, -Order.Status, -Lab.Status)
+head(hcv)
+
+
+# Renaming variables
+colnames(hcv)[2] <- 'order_id'
+colnames(hcv)[3] <- 'order_date'
+colnames(hcv)[4] <- 'order_time'
+colnames(hcv)[5] <- 'lab_result'
+head(hcv)
+
+
+# Creating Ab and RNA variables
+table(hcv$lab_result)
+
+hcv$hcv_ab_result[str_detect(hcv$lab_result, "HCV Ab: Nonreactive")] <- 0
+hcv$hcv_ab_result[str_detect(hcv$lab_result, "HCV Ab: NONREACTIVE")] <- 0
+hcv$hcv_ab_result[str_detect(hcv$lab_result, "HCV Ab: Reactive")] <- 1
+hcv$hcv_ab_result[str_detect(hcv$lab_result, "HCV Ab: REACTIVE")] <- 1
+hcv$hcv_ab_result[is.na(hcv$hcv_ab_result) |
+                    str_detect(hcv$lab_result, "HCV Ab: CANCELED")] <- ''
+table(hcv$hcv_ab_result)
+head(hcv)
+
+
+hcv$hcv_rna_result[str_detect(hcv$lab_result, "International Units: Not Detected")] <- 0
+hcv$hcv_rna_result[str_detect(hcv$lab_result, "International Units: <15")] <- 0
+hcv$hcv_rna_result[str_detect(hcv$lab_result, "International Units:") &
+                     is.na(hcv$hcv_rna_result)] <- 1
+hcv$hcv_rna_result[is.na(hcv$hcv_rna_result)] <- ''
+table(hcv$hcv_rna_result)
+head(hcv)
+
+
+hcv <- select(hcv, -lab_result)
+head(hcv)
+dim(hcv)
+hcv <- distinct(hcv)
+dim(hcv)
+
+
+# Creating variables for total number of daily tests
+
+hcv$hcv_ab_tested[hcv$hcv_ab_result == 0 | hcv$hcv_ab_result == 1] <- 1
+hcv$hcv_ab_tested[is.na(hcv$hcv_ab_tested)] <- 0
+table(hcv$hcv_ab_tested)
+hcv_ab_tested <- hcv[which(hcv$hcv_ab_tested == 1), ]
+hcv_ab_tested <- nrow(hcv_ab_tested)
+hcv_ab_tested
+
+hcv$hcv_rna_tested[hcv$hcv_rna_result == 0 | hcv$hcv_rna_result == 1] <- 1
+hcv$hcv_rna_tested[is.na(hcv$hcv_rna_tested)] <- 0
+table(hcv$hcv_rna_tested)
+hcv_rna_tested <- hcv[which(hcv$hcv_rna_tested == 1), ]
+hcv_rna_tested <- nrow(hcv_rna_tested)
+hcv_rna_tested
+
+hcv$hcv_ab_positive[hcv$hcv_ab_result == 1] <- 1
+hcv$hcv_ab_positive[is.na(hcv$hcv_ab_positive)] <- 0
+table(hcv$hcv_ab_positive)
+hcv_ab_positive <- hcv[which(hcv$hcv_ab_positive == 1), ]
+hcv_ab_positive <- nrow(hcv_ab_positive)
+hcv_ab_positive
+
+hcv_ab_positivity_rate <- percent(hcv_ab_positive/hcv_ab_tested, accuracy = 0.01)
+hcv_ab_positivity_rate
+
+hcv$hcv_rna_positive[hcv$hcv_rna_result == 1] <- 1
+hcv$hcv_rna_positive[is.na(hcv$hcv_rna_positive)] <- 0
+table(hcv$hcv_rna_positive)
+hcv_rna_positive <- hcv[which(hcv$hcv_rna_positive == 1), ]
+hcv_rna_positive <- nrow(hcv_rna_positive)
+hcv_rna_positive
+
+head(hcv)
+
+
+# Sorting HCV dataset
+
+hcv$order_date <- as.Date(hcv$order_date, format = '%m/%d/%Y')
+head(hcv)
+
+# Calculate number of negative tests
+hcv <- mutate(hcv, hcv_ab_negative = hcv_ab_tested - hcv_ab_positive)
+hcv <- hcv[order(hcv$order_date), ]
+head(hcv)
+
+# Aggregate data by order_date
+daily_hcv_tests <- hcv %>%
+  group_by(order_date) %>%
+  summarise(total_tests = sum(hcv_ab_tested),
+            total_positive = sum(hcv_ab_positive),
+            total_negative = sum(hcv_ab_negative))
+
+
+
+# Unique patients
+
+hcv_pts <- select(hcv, mrn)
+dim(hcv_pts)
+hcv_pts <- distinct(hcv_pts)
+dim(hcv_pts)
+
+
+
+table(hcv$hcv_ab_tested)
+hcv_pts_ab_tested <- hcv[which(hcv$hcv_ab_tested == 1), ]
+dim(hcv_pts_ab_tested)
+head(hcv_pts_ab_tested)
+hcv_pts_ab_tested <- select(hcv_pts_ab_tested, mrn, hcv_ab_tested)
+head(hcv_pts_ab_tested)
+dim(hcv_pts_ab_tested)
+hcv_pts_ab_tested <- distinct(hcv_pts_ab_tested)
+dim(hcv_pts_ab_tested)
+
+dim(hcv_pts)
+dim(hcv_pts_ab_tested)
+hcv_pts <- merge(hcv_pts, hcv_pts_ab_tested, by = 'mrn', all.x = T)
+dim(hcv_pts)
+head(hcv_pts)
+
+
+
+table(hcv$hcv_ab_positive)
+hcv_pts_ab_positive <- hcv[which(hcv$hcv_ab_positive == 1), ]
+dim(hcv_pts_ab_positive)
+head(hcv_pts_ab_positive)
+hcv_pts_ab_positive <- select(hcv_pts_ab_positive, mrn, hcv_ab_positive)
+head(hcv_pts_ab_positive)
+dim(hcv_pts_ab_positive)
+hcv_pts_ab_positive <- distinct(hcv_pts_ab_positive)
+dim(hcv_pts_ab_positive)
+
+dim(hcv_pts)
+dim(hcv_pts_ab_positive)
+hcv_pts <- merge(hcv_pts, hcv_pts_ab_positive, by = 'mrn', all.x = T)
+dim(hcv_pts)
+head(hcv_pts)
+
+
+
+#####################################################################################################
+############################################  EIP Data  #############################################
+#####################################################################################################
+
+
+### Person-level data is only visit_001_arm_1, use to match to encounters
+
+table(eip$redcap_event_name)
+person <- eip[which(eip$redcap_event_name == 'visit_001_arm_1'), ]
+dim(person)
+
+person <- select(person, record_id, mrn, dob, 
+                 race___1, race___2, race___3, race___4, race___5, race___6, ethnicity,
+                 sex_raised, sex_selfdefined)
+dim(person)
+
+eip <- select(eip, -mrn, -dob, 
+              -race___1, -race___2, -race___3, -race___4, -race___5, 
+              -race___6, -ethnicity,
+              -sex_raised, -sex_selfdefined)
+
+# Merge person dataset with full eip dataset
+
+dim(eip)
+dim(person)
+eip <- merge(eip, person, by = 'record_id', all.x=T)
+dim(eip)
+eip <- distinct(eip)
+dim(eip)
+
+
+
+
+# EIP HCV Dashboard Follow-up
+
+eip_hcv <- select(eip, mrn, ltc_hcv_dashboard, ltc_hcv_initial_contact, hcv_rna_result,
+                  ltc_hcv_referral_uc_idc___2, ltc_hcv_referral_uc_idc___3,
+                  ltc_hcv_referral_uc_pharmacy_telehealth, ltc_hcv_final_ltc_status,
+                  ltc_hcv_declined_rsn___23, ltc_hcv_declined_rsn___27, ltc_hcv_declined_rsn___3,
+                  ltc_hcv_declined_rsn___5, ltc_hcv_declined_rsn___6, ltc_hcv_declined_rsn___7,
+                  ltc_hcv_declined_rsn___8, ltc_hcv_declined_rsn___9, ltc_hcv_declined_rsn___10,
+                  ltc_hcv_declined_rsn___28, ltc_hcv_declined_rsn___29, ltc_hcv_declined_rsn___30,
+                  ltc_hcv_declined_rsn___33, ltc_hcv_declined_rsn___25, ltc_hcv_declined_rsn___34,
+                  ltc_hcv_declined_rsn___35, ltc_hcv_declined_rsn___0, ltc_hcv_prevented_rsn___1,
+                  ltc_hcv_prevented_rsn___2, ltc_hcv_prevented_rsn___11, ltc_hcv_prevented_rsn___3,
+                  ltc_hcv_prevented_rsn___4, ltc_hcv_prevented_rsn___5, ltc_hcv_prevented_rsn___6,
+                  ltc_hcv_prevented_rsn___8, ltc_hcv_prevented_rsn___9, ltc_hcv_prevented_rsn___12,
+                  ltc_hcv_prevented_rsn___19, ltc_hcv_prevented_rsn___20, ltc_hcv_prevented_rsn___15,
+                  ltc_hcv_prevented_rsn___16, ltc_hcv_prevented_rsn___17, ltc_hcv_prevented_rsn___18,
+                  ltc_hcv_prevented_rsn___0, ltc_hcv_open_case_calc, ltc_services___2)
+dim(eip_hcv)
+head(eip_hcv)
+
+
+# Creating main dataset to match everything back to
+
+eip_hcv_main <- select(eip_hcv, mrn)
+dim(eip_hcv_main)
+eip_hcv_main$exclude[is.na(eip_hcv_main$mrn)] <- 1
+table(eip_hcv_main$exclude)
+eip_hcv_main <- eip_hcv_main[which(is.na(eip_hcv_main$exclude)), ]
+dim(eip_hcv_main)
+eip_hcv_main <- select(eip_hcv_main, mrn)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+
+# Creating EIP variable to know if there are EIP records for each dashboard patient
+eip_hcv_main$eip_record <- 1
+head(eip_hcv_main)
+
+
+
+
+# HCV RNA Results
+
+table(eip_hcv$hcv_rna_result)
+hcv_rna_known <- eip_hcv[which(eip_hcv$hcv_rna_result == 1 |
+                                 eip_hcv$hcv_rna_result == 2), ]
+hcv_rna_known <- select(hcv_rna_known, mrn)
+head(hcv_rna_known)
+dim(hcv_rna_known)
+hcv_rna_known <- distinct(hcv_rna_known)
+dim(hcv_rna_known)
+hcv_rna_known$hcv_rna_known <- 1
+
+dim(hcv_rna_known)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_rna_known, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_rna_known)
+
+
+
+table(eip_hcv$hcv_rna_result)
+hcv_rna_pos <- eip_hcv[which(eip_hcv$hcv_rna_result == 1), ]
+hcv_rna_pos <- select(hcv_rna_pos, mrn)
+head(hcv_rna_pos)
+dim(hcv_rna_pos)
+hcv_rna_pos <- distinct(hcv_rna_pos)
+dim(hcv_rna_pos)
+hcv_rna_pos$hcv_rna_pos <- 1
+
+dim(hcv_rna_pos)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_rna_pos, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_rna_pos)
+
+
+
+table(eip_hcv$hcv_rna_result)
+hcv_rna_neg <- eip_hcv[which(eip_hcv$hcv_rna_result == 2), ]
+hcv_rna_neg <- select(hcv_rna_neg, mrn)
+head(hcv_rna_neg)
+dim(hcv_rna_neg)
+hcv_rna_neg <- distinct(hcv_rna_neg)
+dim(hcv_rna_neg)
+hcv_rna_neg$hcv_rna_neg <- 1
+
+dim(hcv_rna_neg)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_rna_neg, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_rna_neg)
+
+
+
+
+# Followed-up (ED or In Hospital)
+## For those HCV RNA Negative - only follow-up in ED
+## For all other HCV Ab+ - follow-up in ED or Phone
+
+
+# HCV RNA Negative Follow-up
+
+table(eip_hcv$hcv_rna_result, eip_hcv$ltc_hcv_dashboard)
+hcv_rna_neg_fu <- eip_hcv[which(eip_hcv$hcv_rna_result == 2 & eip_hcv$ltc_hcv_dashboard == 1), ]
+hcv_rna_neg_fu <- select(hcv_rna_neg_fu, mrn)
+head(hcv_rna_neg_fu)
+dim(hcv_rna_neg_fu)
+hcv_rna_neg_fu <- distinct(hcv_rna_neg_fu)
+dim(hcv_rna_neg_fu)
+hcv_rna_neg_fu$hcv_rna_neg_fu <- 1
+
+dim(hcv_rna_neg_fu)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_rna_neg_fu, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_rna_neg_fu)
+
+
+table(eip_hcv$hcv_rna_result, eip_hcv$ltc_hcv_initial_contact)
+hcv_rna_neg_fu_ed <- eip_hcv[which(eip_hcv$hcv_rna_result == 2 &
+                                     eip_hcv$ltc_hcv_dashboard == 1 &
+                                     eip_hcv$ltc_hcv_initial_contact == 1), ]
+hcv_rna_neg_fu_ed <- select(hcv_rna_neg_fu_ed, mrn)
+head(hcv_rna_neg_fu_ed)
+dim(hcv_rna_neg_fu_ed)
+hcv_rna_neg_fu_ed <- distinct(hcv_rna_neg_fu_ed)
+dim(hcv_rna_neg_fu_ed)
+hcv_rna_neg_fu_ed$hcv_rna_neg_fu_ed <- 1
+
+dim(hcv_rna_neg_fu_ed)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_rna_neg_fu_ed, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_rna_neg_fu_ed)
+
+
+
+# HCV Ab+ but not RNA Negative needing Follow-up
+
+table(eip_hcv$hcv_rna_result, eip_hcv$ltc_hcv_dashboard)
+eip_hcv$hcv_fu_needed[eip_hcv$hcv_rna_result != 2] <- 1
+table(eip_hcv$hcv_fu_needed)
+hcv_fu_needed <- eip_hcv[which(eip_hcv$hcv_fu_needed == 1), ]
+hcv_fu_needed <- select(hcv_fu_needed, mrn)
+head(hcv_fu_needed)
+dim(hcv_fu_needed)
+hcv_fu_needed <- distinct(hcv_fu_needed)
+dim(hcv_fu_needed)
+hcv_fu_needed$hcv_fu_needed <- 1
+
+dim(hcv_fu_needed)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_fu_needed, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_fu_needed)
+
+
+
+table(eip_hcv$hcv_fu_needed, eip_hcv$ltc_hcv_dashboard)
+hcv_no_edu <- eip_hcv[which(eip_hcv$hcv_fu_needed == 1 & eip_hcv$ltc_hcv_dashboard == 0), ]
+hcv_no_edu <- select(hcv_no_edu, mrn)
+head(hcv_no_edu)
+dim(hcv_no_edu)
+hcv_no_edu <- distinct(hcv_no_edu)
+dim(hcv_no_edu)
+hcv_no_edu$hcv_no_education <- 1
+
+dim(hcv_no_edu)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_no_edu, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_no_education)
+
+
+
+table(eip_hcv$hcv_fu_needed, eip_hcv$ltc_hcv_dashboard)
+hcv_edu <- eip_hcv[which(eip_hcv$hcv_fu_needed == 1 & eip_hcv$ltc_hcv_dashboard == 1), ]
+hcv_edu <- select(hcv_edu, mrn)
+head(hcv_edu)
+dim(hcv_edu)
+hcv_edu <- distinct(hcv_edu)
+dim(hcv_edu)
+hcv_edu$hcv_education <- 1
+
+dim(hcv_edu)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_edu, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_education)
+
+
+
+table(eip_hcv$hcv_fu_needed, eip_hcv$ltc_hcv_initial_contact)
+hcv_edu_ed <- eip_hcv[which(eip_hcv$hcv_fu_needed == 1 &
+                              eip_hcv$ltc_hcv_dashboard == 1 &
+                              eip_hcv$ltc_hcv_initial_contact == 1), ]
+hcv_edu_ed <- select(hcv_edu_ed, mrn)
+head(hcv_edu_ed)
+dim(hcv_edu_ed)
+hcv_edu_ed <- distinct(hcv_edu_ed)
+dim(hcv_edu_ed)
+hcv_edu_ed$hcv_education_ed <- 1
+
+dim(hcv_edu_ed)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_edu_ed, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_education_ed)
+
+
+
+table(eip_hcv$hcv_fu_needed, eip_hcv$ltc_hcv_initial_contact)
+hcv_edu_phone <- eip_hcv[which(eip_hcv$hcv_fu_needed == 1 &
+                                 eip_hcv$ltc_hcv_dashboard == 1 &
+                                 eip_hcv$ltc_hcv_initial_contact == 2), ]
+hcv_edu_phone <- select(hcv_edu_phone, mrn)
+head(hcv_edu_phone)
+dim(hcv_edu_phone)
+hcv_edu_phone <- distinct(hcv_edu_phone)
+dim(hcv_edu_phone)
+hcv_edu_phone$hcv_education_phone <- 1
+
+dim(hcv_edu_phone)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_edu_phone, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_education_phone)
+
+
+
+# HCV Linkage
+
+hcv_linked <- eip_hcv[which(eip_hcv$ltc_hcv_referral_uc_idc___2 == 1 |
+                              eip_hcv$ltc_hcv_referral_uc_idc___3 == 1), ]
+hcv_linked <- select(hcv_linked, mrn)
+head(hcv_linked)
+dim(hcv_linked)
+
+if (nrow(hcv_linked) > 0) {
+  hcv_linked <- select(hcv_linked, mrn)
+  hcv_linked <- distinct(hcv_linked)
+  hcv_linked$hcv_linked <- 1
+} else {
+  hcv_linked <- data.frame()
+  empty_row <- data.frame(mrn = NA, hcv_linked = NA)
+  hcv_linked <- rbind(hcv_linked, empty_row)
+}
+dim(hcv_linked)
+head(hcv_linked)
+
+dim(hcv_linked)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_linked, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_linked)
+
+
+
+#hcv_linked_telehealth <- eip_hcv[which(eip_hcv$ltc_hcv_referral_uc_pharmacy_telehealth == 1), ]
+#hcv_linked_telehealth <- select(hcv_linked_telehealth, mrn)
+#head(hcv_linked_telehealth)
+#dim(hcv_linked_telehealth)
+#hcv_linked_telehealth <- distinct(hcv_linked_telehealth)
+#dim(hcv_linked_telehealth)
+#hcv_linked_telehealth$hcv_linked_telehealth <- 1
+
+#dim(hcv_linked_telehealth)
+#dim(eip_hcv_main)
+#eip_hcv_main <- merge(eip_hcv_main, hcv_linked_telehealth, by = 'mrn', all.x=T)
+#dim(eip_hcv_main)
+#eip_hcv_main <- distinct(eip_hcv_main)
+#dim(eip_hcv_main)
+#table(eip_hcv_main$hcv_linked_telehealth)
+
+
+
+######################################################################################################
+######################################################################################################
+# Merging EIP REDCap Data with HCV Dashboard Data
+
+head(hcv_pts)
+head(eip_hcv_main)
+
+dim(hcv_pts)
+dim(eip_hcv_main)
+hcv_pts <- merge(hcv_pts, eip_hcv_main, by = 'mrn', all.x = T)
+dim(hcv_pts)
+head(hcv_pts)
+
+
+
+table(hcv_pts$hcv_ab_tested)
+hcv_pts_ab_tested <- hcv_pts[which(hcv_pts$hcv_ab_tested == 1), ]
+dim(hcv_pts_ab_tested)
+head(hcv_pts_ab_tested)
+hcv_pts_ab_tested <- select(hcv_pts_ab_tested, mrn)
+head(hcv_pts_ab_tested)
+dim(hcv_pts_ab_tested)
+hcv_pts_ab_tested <- distinct(hcv_pts_ab_tested)
+dim(hcv_pts_ab_tested)
+
+hcv_pts_ab_tested <- nrow(hcv_pts_ab_tested)
+hcv_pts_ab_tested
+
+
+
+table(hcv_pts$hcv_ab_positive)
+hcv_pts_ab_positive <- hcv_pts[which(hcv_pts$hcv_ab_positive == 1), ]
+dim(hcv_pts_ab_positive)
+head(hcv_pts_ab_positive)
+hcv_pts_ab_positive <- select(hcv_pts_ab_positive, mrn)
+head(hcv_pts_ab_positive)
+dim(hcv_pts_ab_positive)
+hcv_pts_ab_positive <- distinct(hcv_pts_ab_positive)
+dim(hcv_pts_ab_positive)
+
+hcv_pts_ab_positive <- nrow(hcv_pts_ab_positive)
+hcv_pts_ab_positive
+hcv_pts_ab_positive_percent <- percent(hcv_pts_ab_positive/hcv_pts_ab_tested, accuracy = 0.01)
+hcv_pts_ab_positive_percent
+
+
+
+table(hcv_pts$eip_record, hcv_pts$hcv_ab_positive)
+no_eip_record_hcv_ab_pos <- hcv_pts[which(is.na(hcv_pts$eip_record) & hcv_pts$hcv_ab_positive == 1), ]
+dim(no_eip_record_hcv_ab_pos)
+head(no_eip_record_hcv_ab_pos)
+no_eip_record_hcv_ab_pos <- select(no_eip_record_hcv_ab_pos, mrn)
+head(no_eip_record_hcv_ab_pos)
+dim(no_eip_record_hcv_ab_pos)
+no_eip_record_hcv_ab_pos <- distinct(no_eip_record_hcv_ab_pos)
+dim(no_eip_record_hcv_ab_pos)
+
+no_eip_record_hcv_ab_pos <- nrow(no_eip_record_hcv_ab_pos)
+no_eip_record_hcv_ab_pos
+no_eip_record_hcv_ab_pos_percent <- percent(no_eip_record_hcv_ab_pos/hcv_pts_ab_positive, accuracy = 0.1)
+no_eip_record_hcv_ab_pos_percent
+
+
+
+table(hcv_pts$hcv_ab_positive, hcv_pts$hcv_rna_neg)
+hcv_pts$hcv_pts_rna_neg[hcv_pts$hcv_ab_positive == 1 & hcv_pts$hcv_rna_neg == 1] <- 1
+hcv_pts_rna_neg <- hcv_pts[which(hcv_pts$hcv_ab_positive == 1 & hcv_pts$hcv_rna_neg == 1), ]
+dim(hcv_pts_rna_neg)
+head(hcv_pts_rna_neg)
+hcv_pts_rna_neg <- select(hcv_pts_rna_neg, mrn)
+head(hcv_pts_rna_neg)
+dim(hcv_pts_rna_neg)
+hcv_pts_rna_neg <- distinct(hcv_pts_rna_neg)
+dim(hcv_pts_rna_neg)
+
+hcv_pts_rna_neg <- nrow(hcv_pts_rna_neg)
+hcv_pts_rna_neg
+hcv_pts_rna_neg_percent <- percent(hcv_pts_rna_neg/hcv_pts_ab_positive, accuracy = 0.1)
+hcv_pts_rna_neg_percent
+
+
+
+table(hcv_pts$hcv_pts_rna_neg, hcv_pts$hcv_rna_neg_fu)
+hcv_pts_rna_neg_fu <- hcv_pts[which(hcv_pts$hcv_pts_rna_neg == 1 & hcv_pts$hcv_rna_neg_fu == 1), ]
+dim(hcv_pts_rna_neg_fu)
+head(hcv_pts_rna_neg_fu)
+hcv_pts_rna_neg_fu <- select(hcv_pts_rna_neg_fu, mrn)
+head(hcv_pts_rna_neg_fu)
+dim(hcv_pts_rna_neg_fu)
+hcv_pts_rna_neg_fu <- distinct(hcv_pts_rna_neg_fu)
+dim(hcv_pts_rna_neg_fu)
+
+hcv_pts_rna_neg_fu <- nrow(hcv_pts_rna_neg_fu)
+hcv_pts_rna_neg_fu
+hcv_pts_rna_neg_fu_percent <- percent(hcv_pts_rna_neg_fu/hcv_pts_rna_neg, accuracy = 0.1)
+hcv_pts_rna_neg_fu_percent
+
+
+
+table(hcv_pts$hcv_rna_known)
+hcv_pts_rna_known <- hcv_pts[which(hcv_pts$hcv_rna_known == 1), ]
+dim(hcv_pts_rna_known)
+head(hcv_pts_rna_known)
+hcv_pts_rna_known <- select(hcv_pts_rna_known, mrn)
+head(hcv_pts_rna_known)
+dim(hcv_pts_rna_known)
+hcv_pts_rna_known <- distinct(hcv_pts_rna_known)
+dim(hcv_pts_rna_known)
+
+hcv_pts_rna_known <- nrow(hcv_pts_rna_known)
+hcv_pts_rna_known
+hcv_pts_rna_known_percent <- percent(hcv_pts_rna_known/hcv_ab_positive, accuracy = 0.1)
+hcv_pts_rna_known_percent
+
+
+
+table(hcv_pts$hcv_rna_pos)
+hcv_pts_rna_pos <- hcv_pts[which(hcv_pts$hcv_rna_pos == 1), ]
+dim(hcv_pts_rna_pos)
+head(hcv_pts_rna_pos)
+hcv_pts_rna_pos <- select(hcv_pts_rna_pos, mrn)
+head(hcv_pts_rna_pos)
+dim(hcv_pts_rna_pos)
+hcv_pts_rna_pos <- distinct(hcv_pts_rna_pos)
+dim(hcv_pts_rna_pos)
+
+hcv_pts_rna_pos <- nrow(hcv_pts_rna_pos)
+hcv_pts_rna_pos
+hcv_pts_rna_pos_percent <- percent(hcv_pts_rna_pos/hcv_pts_rna_known, accuracy = 0.1)
+hcv_pts_rna_pos_percent
+
+
+
+hcv_pts$hcv_pts_fu_needed[(hcv_pts$hcv_ab_positive == 1 & hcv_pts$eip_record == 1 &
+                             (hcv_pts$hcv_fu_needed == 1 | is.na(hcv_pts$hcv_rna_neg)))] <- 1
+hcv_pts_fu_needed <- hcv_pts[which(hcv_pts$hcv_pts_fu_needed == 1), ]
+dim(hcv_pts_fu_needed)
+head(hcv_pts_fu_needed)
+hcv_pts_fu_needed <- select(hcv_pts_fu_needed, mrn)
+head(hcv_pts_fu_needed)
+dim(hcv_pts_fu_needed)
+hcv_pts_fu_needed <- distinct(hcv_pts_fu_needed)
+dim(hcv_pts_fu_needed)
+
+hcv_pts_fu_needed <- nrow(hcv_pts_fu_needed)
+hcv_pts_fu_needed
+hcv_pts_fu_needed_percent <- percent(hcv_pts_fu_needed/hcv_pts_ab_positive, accuracy = 0.1)
+hcv_pts_fu_needed_percent
+
+
+
+table(hcv_pts$hcv_pts_fu_needed, hcv_pts$hcv_education)
+hcv_pts$hcv_pts_educated[hcv_pts$hcv_pts_fu_needed == 1 & hcv_pts$hcv_education == 1] <- 1
+hcv_pts_educated <- hcv_pts[which(hcv_pts$hcv_pts_educated == 1), ]
+dim(hcv_pts_educated)
+head(hcv_pts_educated)
+hcv_pts_educated <- select(hcv_pts_educated, mrn)
+head(hcv_pts_educated)
+dim(hcv_pts_educated)
+hcv_pts_educated <- distinct(hcv_pts_educated)
+dim(hcv_pts_educated)
+
+hcv_pts_educated <- nrow(hcv_pts_educated)
+hcv_pts_educated
+hcv_pts_educated_percent <- percent(hcv_pts_educated/hcv_pts_fu_needed, accuracy = 0.1)
+hcv_pts_educated_percent
+
+
+
+hcv_pts$hcv_pts_no_education[hcv_pts$hcv_pts_fu_needed & is.na(hcv_pts$hcv_pts_educated)] <- 1
+table(hcv_pts$hcv_pts_no_education)
+hcv_pts_no_education <- hcv_pts[which(hcv_pts$hcv_pts_no_education == 1), ]
+dim(hcv_pts_no_education)
+head(hcv_pts_no_education)
+hcv_pts_no_education <- select(hcv_pts_no_education, mrn)
+head(hcv_pts_no_education)
+dim(hcv_pts_no_education)
+hcv_pts_no_education <- distinct(hcv_pts_no_education)
+dim(hcv_pts_no_education)
+
+hcv_pts_no_education <- nrow(hcv_pts_no_education)
+hcv_pts_no_education
+hcv_pts_no_education_percent <- percent(hcv_pts_no_education/hcv_pts_fu_needed, accuracy = 0.1)
+hcv_pts_no_education_percent
+
+
+
+hcv_pts$hcv_pts_educated_ed[hcv_pts$hcv_pts_educated == 1 & hcv_pts$hcv_education_ed == 1] <- 1
+hcv_pts_educated_ed <- hcv_pts[which(hcv_pts$hcv_pts_educated_ed == 1), ]
+dim(hcv_pts_educated_ed)
+head(hcv_pts_educated_ed)
+hcv_pts_educated_ed <- select(hcv_pts_educated_ed, mrn)
+head(hcv_pts_educated_ed)
+dim(hcv_pts_educated_ed)
+hcv_pts_educated_ed <- distinct(hcv_pts_educated_ed)
+dim(hcv_pts_educated_ed)
+
+hcv_pts_educated_ed <- nrow(hcv_pts_educated_ed)
+hcv_pts_educated_ed
+hcv_pts_educated_ed_percent <- percent(hcv_pts_educated_ed/hcv_pts_educated, accuracy = 0.1)
+hcv_pts_educated_ed_percent
+
+
+
+hcv_pts$hcv_pts_educated_phone[hcv_pts$hcv_pts_educated == 1 & hcv_pts$hcv_education_phone == 1] <- 1
+hcv_pts_educated_phone <- hcv_pts[which(hcv_pts$hcv_pts_educated_phone == 1), ]
+dim(hcv_pts_educated_phone)
+head(hcv_pts_educated_phone)
+hcv_pts_educated_phone <- select(hcv_pts_educated_phone, mrn)
+head(hcv_pts_educated_phone)
+dim(hcv_pts_educated_phone)
+hcv_pts_educated_phone <- distinct(hcv_pts_educated_phone)
+dim(hcv_pts_educated_phone)
+
+hcv_pts_educated_phone <- nrow(hcv_pts_educated_phone)
+hcv_pts_educated_phone
+hcv_pts_educated_phone_percent <- percent(hcv_pts_educated_phone/hcv_pts_educated, accuracy = 0.1)
+hcv_pts_educated_phone_percent
+
+
+
+
+# Figuring out time of day the labs were ordered for HCV Ab Positives
+
+dim(hcv)
+head(hcv)
+table(hcv$hcv_ab_positive)
+hcv_ab_pos <- hcv[which(hcv$hcv_ab_positive == 1), ]
+dim(hcv_ab_pos)
+
+
+hcv_ab_pos$order_datetime <- as.POSIXct(paste(hcv_ab_pos$order_date, hcv_ab_pos$order_time), format = "%Y-%m-%d %I:%M:%S %p")
+head(hcv_ab_pos)
+hcv_ab_pos$order_datetime <- as.POSIXct(hcv_ab_pos$order_datetime)
+hcv_ab_pos <- hcv_ab_pos %>%
+  mutate(estimated_result_time = order_datetime + lubridate::minutes(233))
+hcv_ab_pos$result_day <- weekdays(hcv_ab_pos$estimated_result_time)
+hcv_ab_pos$result_hour <- as.numeric(format(hcv_ab_pos$estimated_result_time, "%H"))
+
+time_category <- function(hour) {
+  ifelse(hour >= 6 & hour < 12, "morning",
+         ifelse(hour >= 12 & hour < 18, "afternoon",
+                ifelse(hour >= 18 & hour < 24, "evening", "overnight")))
+}
+
+hcv_ab_pos$result_time_category <- sapply(hcv_ab_pos$result_hour, time_category)
+hcv_ab_pos$result_day_time <- paste(hcv_ab_pos$result_day, hcv_ab_pos$result_time_category)
+hcv_ab_pos$result_day <- factor(hcv_ab_pos$result_day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
+
+
+result_time_order <- c(
+  "Sunday overnight", "Sunday morning", "Sunday afternoon", "Sunday evening",
+  "Monday overnight", "Monday morning", "Monday afternoon", "Monday evening",
+  "Tuesday overnight", "Tuesday morning", "Tuesday afternoon", "Tuesday evening",
+  "Wednesday overnight", "Wednesday morning", "Wednesday afternoon", "Wednesday evening",
+  "Thursday overnight", "Thursday morning", "Thursday afternoon", "Thursday evening",
+  "Friday overnight", "Friday morning", "Friday afternoon", "Friday evening",
+  "Saturday overnight", "Saturday morning", "Saturday afternoon", "Saturday evening"
+)
+hcv_ab_pos$result_day_time <- factor(hcv_ab_pos$result_day_time, levels = result_time_order)
+hcv_ab_pos_summary <- hcv_ab_pos %>%
+  group_by(result_day_time) %>%
+  mutate(result_time_category = time_category(result_hour)) %>%
+  group_by(result_day_time, result_time_category) %>%
+  summarise(frequency = n())
+
+
+# Adding in staff times
+## JF: M/F 10a-10p and T 9a-9p
+## RK: M-Th 7a-5p or T-F 7a-7p (alternating weeks)
+# Estimating 7a-10p coverage M-F, which is M monring through F evening, except overnights
+has_staff_coverage <- function(time_period) {
+  staff_coverage_periods <- c("Monday morning", "Monday afternoon", "Monday evening",
+                              "Tuesday morning", "Tuesday afternoon", "Tuesday evening",
+                              "Wednesday morning", "Wednesday afternoon",
+                              "Thursday morning", "Thursday afternoon",
+                              "Friday morning", "Friday afternoon", "Friday evening")
+  return(time_period %in% staff_coverage_periods)
+}
+hcv_ab_pos_summary <- hcv_ab_pos_summary %>%
+  mutate(has_coverage = has_staff_coverage(result_day_time))
+
+
+hcv_ab_pos_total <- sum(hcv_ab_pos_summary$frequency)
+
+hcv_ab_pos_with_coverage <- sum(hcv_ab_pos_summary$frequency[hcv_ab_pos_summary$has_coverage])
+hcv_ab_pos_with_coverage
+hcv_ab_pos_with_coverage_percent <- percent(hcv_ab_pos_with_coverage/hcv_ab_pos_total, accuracy = 0.1)
+hcv_ab_pos_with_coverage_percent
+
+hcv_ab_pos_without_coverage <- sum(hcv_ab_pos_summary$frequency[!hcv_ab_pos_summary$has_coverage])
+hcv_ab_pos_without_coverage
+hcv_ab_pos_without_coverage_percent <- percent(hcv_ab_pos_without_coverage/hcv_ab_pos_total, accuracy = 0.1)
+hcv_ab_pos_without_coverage_percent
+
+
+```
+
+
+## HCV Epic Dashboard
+
+The Epic dashboard for HCV testing went live on **January 2nd, 2024**. This Epic dashboard lists all University of Cincinnati Medical Center Emergency Department (UCMC ED) based HCV testing ordered, showing the results in real time. EIP staff monitors the HCV dashboard for positive results and approaches patients directly while they are still in the ED, or the hospital, to provide results, education and information for additional testing (if required), as well as linkage to care through UC's Clinical Pharmacy when appropriate.
+
+The total daily testing numbers for HCV Antibody tests (HCV Ab) are shown in the table below, as well as a plot showing the daily trend in testing numbers. The overall HCV Ab positivity rate for the tests included in the HCV Epic Dashboard is described below the plot. The unique number of tests is determined by the *Order ID* for the test. The test is only included if the *Order Status* is "Completed" and the *Lab Status* indicates that it is the "Final Result" and the lab result is provided. The data is manually exported from the Epic HCV Dashboard each week with the data from the prior week by the EIP Data Team, and merged into a single data file used in this analysis, excluding duplicate records.
+
+<div align="center">
+```{r, echo = FALSE}
+
+# Table of daily HCV testing
+daily_hcv_tbl <- hcv %>%
+  group_by(order_date) %>%
+  summarise(total_tests = sum(hcv_ab_tested),
+            total_positive = sum(hcv_ab_positive),
+            percent_positive = round((total_positive / total_tests) * 100, 1)) %>%
+  arrange(desc(order_date))
+
+reactable(daily_hcv_tbl,
+          columns = list(
+            order_date = colDef(name = "Order Date", align = "center", width = 125),
+            total_tests = colDef(name = "HCV Ab Tests", align = "center", width = 130),
+            total_positive = colDef(name = "HCV Ab +", align = "center", width = 125),
+            percent_positive = colDef(name = "Percent +", align = "center", width = 125)),
+          bordered = TRUE,
+          highlight = TRUE,
+          searchable = TRUE,
+          paginationType = "simple",
+          defaultColDef = colDef(style = list(fontSize = "12px", maxWidth = 505)),
+          style = list(width = "63.5%"))
+
+```
+</div>
+
+It is important to note that since the HCV Epic dashboard data is manually extracted from Epic at various times, the total number of tests for the most recent day may not all be counted. For example, if data is pulled in the afternoon, then the tests conducted in the morning are counted, but not tests conducted later in the evening for that day. The day that the data was pulled is noted by the date at the top of this report. Also, depending on when the data was pulled, not all test results are finalized, so the positivity rate and number of positive tests/patients may also be slightly different. However, this should only pertain to the day the data is pulled, and not prior days included in the analysis.
+
+<br>
+<div align="center">
+``` {r, echo = FALSE, fig.frame="black"}
+
+# Line graph of daily HCV testing
+daily_hcv_test_plot <- daily_hcv_tests %>%
+  plot_ly(x = ~order_date, y = ~total_tests, name = "HCV Ab Tests", type = 'scatter', mode = 'lines', line = list(color = '#DC9540')) %>%
+  add_trace(y = ~total_positive, name = "HCV Ab+", line = list(color = 'royalblue')) %>%
+  layout(
+    xaxis = list(title = "Order Date"),
+    yaxis = list(title = "Total HCV Tests", range = c(0, max(daily_hcv_tests$total_tests) + 10)),
+    title = list(text = "HCV Dashboard Daily Ab Tests", font = list(size = 20)),
+    margin = list(l = 50, r = 50, b = 50, t = 50),
+    template = "plotly_dark"
+  ) %>%
+  config(displayModeBar = FALSE)
+daily_hcv_test_plot
+
+```
+</div>
+<br>
+
+
+The total number of HCV Ab tests since the initiation of the HCV Dashboard is **`r hcv_ab_tested` tests**. The total number of positive HCV Ab results is **`r hcv_ab_positive` Ab positive tests**, which is [**`r hcv_ab_positivity_rate`**]{style="color: red;"} of all HCV Ab tests conducted (*`r hcv_ab_positive`/`r hcv_ab_tested`*).
+
+Since EIP is meant to approach each individual that has a reactive HCV Ab test to provide education, the data provided in the remainder of this report will focus on the unique number of patients rather than number of tests, and those patients that were followed up with by our staff and referred to UC's Clinical Pharmacy. Since the start of the HCV Dashboard, there have been a total of **`r hcv_pts_ab_tested` unique patients** that have been tested for HCV Ab, with a total of **`r hcv_pts_ab_positive` unique patients** that were positive for HCV Ab (*`r hcv_pts_ab_positive_percent` of all patients tested, `r hcv_pts_ab_positive`/`r hcv_pts_ab_tested`*). The unique number of patients tested is determined by the medical record number (MRN) attached to the lab test. The MRN is the identifier used to match back with the EIP REDCap Database to link with the patient's record to determine follow-up efforts described in the next section.
+
+<br>
+
+
+### EIP Follow-up
+
+A summary flow diagram for EIP's follow-up efforts regarding those that are identified HCV Ab+ through the HCV Dashboard is provided below. You can zoom into this flow diagram by clicking on the image.
+
+```{r, echo = FALSE, warning = FALSE}
+
+grid_data <- tibble(x= 1:100, y= 1:100)
+
+grid_data %>% 
+  ggplot(aes(x, y)) +
+  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
+  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
+  theme_linedraw() ->
+  grid
+
+
+grid +
+  # Total HCV Ab Positive
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
+            fill = 'lightyellow', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 97, label = 'Total HCV Ab+ Patients', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 93, label = hcv_pts_ab_positive, size = 2, color = 'black') +
+  annotate('text', x = 19, y = 93, label = hcv_pts_ab_positive_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # No EIP Record
+  geom_rect(xmin = 11, xmax = 33, ymin = 80, ymax = 88, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 15, y = 83, label = 'No EIP Record', size = 2) +
+  geom_rect(xmin = 11, xmax = 33, ymin = 80, ymax = 88, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 21, y = 83, label = no_eip_record_hcv_ab_pos, size = 2, color = 'black') +
+  annotate('text', x = 25, y = 83, label = no_eip_record_hcv_ab_pos_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # Known HCV RNA Negative Patients
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 52, y = 82, label = 'Known HCV RNA Negative Patients', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 78, label = hcv_pts_rna_neg, size = 2, color = 'black') +
+  annotate('text', x = 60, y = 78, label = hcv_pts_rna_neg_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # HCV RNA Follow-up in ED
+  geom_rect(xmin = 83, xmax = 100, ymin = 75, ymax = 85, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 86, y = 80.25, label = 'Follow-up in ED', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 92, y = 80.25, label = hcv_pts_rna_neg_fu, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 80.25, label = hcv_pts_rna_neg_fu_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # EIP Follow-up Needed
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
+            fill = 'lightyellow', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 67, label = 'EIP Follow-Up Needed', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 63, label = hcv_pts_fu_needed, size = 2, color = 'black') +
+  annotate('text', x = 19, y = 63, label = hcv_pts_fu_needed_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # Unable to Follow-up
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 52, y = 52, label = 'Unable to Follow-up', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 48, label = hcv_pts_no_education, size = 2, color = 'black') +
+  annotate('text', x = 60, y = 48, label = hcv_pts_no_education_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # Reasons for No Follow-up
+  geom_rect(xmin = 83, xmax = 100, ymin = 45, ymax = 55, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 86, y = 50.25, label = 'Reason(s)', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 92, y = 50.25, label = 'xx', size = 2, color = 'black') +
+  annotate('text', x = 96, y = 50.25, label = 'xx%', size = 2, color = 'goldenrod4') +
+  
+  
+  # Follow-up achieved
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
+            fill = 'lightyellow', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 37, label = 'EIP Follow-up Success', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 33, label = hcv_pts_educated, size = 2, color = 'black') +
+  annotate('text', x = 19, y = 33, label = hcv_pts_educated_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # Follow-up while in ED
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
+            fill = 'lightyellow', size = 0.25, size = 0.25) +
+  annotate('text', x = 11, y = 7, label = 'While in the ED/Hospital', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 3, label = hcv_pts_educated_ed, size = 2, color = 'black') +
+  annotate('text', x = 19, y = 3, label = hcv_pts_educated_ed_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # Follow-up via Phone Call
+  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 10, color = 'gray',
+            fill = 'lightyellow', size = 0.25) +
+  annotate('text', x = 52, y = 7, label = 'Phone Call after Discharge', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 3, label = hcv_pts_educated_phone, size = 2, color = 'black') +
+  annotate('text', x = 60, y = 3, label = hcv_pts_educated_phone_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # Down Arrow 1
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 90, yend = 70, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 2
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 60, yend = 40, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 3
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 30, yend = 10, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 4
+  geom_segment(
+    x = 51.5, xend = 51.5, y = 20, yend = 10, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Right Arrow 1
+  geom_segment(
+    x = 10.5, xend = 41, y = 80, yend = 80, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 2
+  geom_segment(
+    x = 10.5, xend = 41, y = 50, yend = 50, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Line 1
+  geom_segment(
+    x = 63, xend = 81, y = 80, yend = 80, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
+  
+  # Right Line 2
+  geom_segment(
+    x = 63, xend = 81, y = 50, yend = 50, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
+  
+  # Right Line 3
+  geom_segment(
+    x = 10.5, xend = 51.5, y = 20, yend = 20, 
+    size = 0.15, linejoin = "mitre", lineend = "butt")->
+  grid
+
+grid + theme_void()
+
+```
+<br>
+
+As already mentioned, there were a total of `r hcv_pts_ab_positive` HCV Ab+ patients from the Epic HCV Dashboard. There were a total of `r no_eip_record_hcv_ab_pos` patients (*`r no_eip_record_hcv_ab_pos_percent` of all HCV Ab+ patients, `r no_eip_record_hcv_ab_pos`/`r hcv_pts_ab_positive`*) that currently do not have an EIP record created for follow-up regarding their HCV Ab+ result, which are in the process of being added. Based on further HCH RNA testing or recent medical record review, it is known that **`r hcv_pts_rna_neg` patients** are currently HCV RNA negative (*`r hcv_pts_rna_neg_percent` of all those identified as HCV Ab+ through the HCV Dashboard, `r hcv_pts_rna_neg`/`r hcv_pts_ab_positive`*). While EIP is not calling all those identified as HCV RNA negative to discuss those results due to the additional effort that would be, we do try to notify these patients and provide additional education and interpretation of these results if we catch them while they are still in the ED/hospital. The total number of patients EIP has provided follow-up education after their HCV RNA results negative is **`r hcv_pts_rna_neg_fu` patients** (*`r hcv_pts_rna_neg_fu_percent` of all those identified as HCV RNA negative, `r hcv_pts_rna_neg_fu`/`r hcv_pts_rna_neg`*).
+
+Therefore, the number of patients who were identified as HCV Ab+ but either are HCV RNA positive or do not have a RNA lab resulted was **`r hcv_pts_fu_needed` patients** needing follow-up education and referral (*`r hcv_pts_fu_needed_percent` of all those HCV Ab+ from the Epic HCV Dashboard, `r hcv_pts_fu_needed`/`r hcv_pts_ab_positive`*). This means that EIP has been unable to follow-up with **`r hcv_pts_no_education` patients** who were HCV Ab+ and need follow-up results/education (*`r hcv_pts_no_education_percent` of all those HCV Ab+ from the Epic HCV Dashboard needing follow-up, `r hcv_pts_no_education`/`r hcv_pts_fu_needed`*)
+
+Out of those patients that needed follow-up, EIP staff were able to approach and provide results/education to **`r hcv_pts_educated` patients** (*`r hcv_pts_educated_percent` of all those identified as HCV Ab+ through the HCV Dashboard needing follow-up, `r hcv_pts_educated`/`r hcv_pts_fu_needed`*). EIP makes every attempt to approach the patient while they are still located in the ED or admitted to the hospital. The number of patients where EIP was able to initiate face-to-face contact while they were still in the hospital (whether in the ED or roomed elsewhere) was **`r hcv_pts_educated_ed` patients** (*`r hcv_pts_educated_ed_percent` of all HCV Ab positive patients that were provided with education, `r hcv_pts_educated_ed`/`r hcv_pts_educated`*). If EIP is unable to approach patients while they were still in the ED/hospital, then attempts are made to follow-up with them using the contact information collected during ED intake. The number of patients where EIP was able to contact them after discharge was **`r hcv_pts_educated_phone` patients** (*`r hcv_pts_educated_phone_percent` of all HCV Ab positive patients that were provided with education, `r hcv_pts_educated_phone`/`r hcv_pts_educated`*).
+
+As part of EIP's follow-up efforts, we try to ensure anyone who is HCV Ab+ has the necessary lab testing to know if they are currently infected with HCV by facilitating RNA testing when appropriate. The total number of patients that had a follow-up RNA test documented within their EIP REDCap record was **`r hcv_pts_rna_known` patients** (*`r hcv_pts_rna_known_percent` of all those HCV Ab+, `r hcv_pts_rna_known`/`r hcv_pts_ab_positive`*). As mentioned above, there were a total of `r hcv_pts_rna_neg` patients that were negative for HCV RNA, which is `r hcv_pts_rna_neg_percent` of all those with a known HCV RNA result (*`r hcv_pts_rna_neg`/`r hcv_pts_rna_known`*). For those patients that were tested for RNA, the total number of those that were found to be true positives for HCV was **`r hcv_pts_rna_pos` patients** (*`r hcv_pts_rna_pos_percent` of all those tested for HCV RNA, `r hcv_pts_rna_pos`/`r hcv_pts_rna_known`*). This is the total number of patients that will be used to determine who was successfully referred to the UC Clinical Pharmacy telehealth appointment system.
+
+The EIP REDCap Database is currently set-up for documentation regarding referral to UC Clinical Pharmacy. However, there is still discussion regarding a job aide for proper flow of referrals and management for the telehealth appointments with UC Clinical Pharmacy. Until this is finalized, the data regarding these referrals will be ad hoc when needed.
+
+
+<br>
+
+### Staff Coverage
+
+In order to evaluate whether we have appropriate EIP staff coverage for this project, this section looks at the time that the HCV Ab test results are available and whether there is an EIP staff member dedicated for this project on staff. Therefore, we can know whether our staff is available to approach the patient in the ED/hospital when the lab results.
+
+::: {.callout-warning collapse="true"}
+## HCV Dashboard dataset does not include Lab Result times.
+The result times for the labs are estimated using the Order Date/Time and estimated resulting time based on CHI lab data.
+:::
+
+The HCV Dashboard does not include result times for the labs. Therefore, an average HCV Ab lab result time was calculated from CHI HCV Ab lab data and used here (*CHI HCV Ab lab result times average is about [3 hours and 53 minutes]{.underline}*). The HCV Ab dashboard lab result times were estimated by adding this average lab result time from the CHI lab data onto the Order Date/Time values for the dashboard labs. Since these are estimated lab result times, there is some variability in this data. Also, since these are estimates, EIP staff coverage times are estimated since those can vary slightly week to week.
+
+Since these lab result times are estimates, they have been categorized into four categories to simplify the plot: [Overnight]{.underline} (12am-5:59am), [Morning]{.underline} (6am-11:59am), [Afternoon]{.underline} (12pm-5:59pm), and [Evening]{.underline} (6pm-11:59pm). Employee staff coverage is used an estimated based on these same parameters. Current staff coverage was used based on the staff shift schedule noted below:
+
+- *RK: Monday-Thursday (7am-5pm; morning-afternoon) or Tuesday-Friday (7am-5pm; morning-afternoon), alternating weeks*
+
+- *JF: Monday and Friday (10am-10pm; morning-evening) and Tuesday (9am-9pm; morning-evening)*
+
+Therefore, it is estimated that EIP staff is available for this project during these times:
+
+- Monday morning - evening
+- Tuesday morning - evening
+- Wednesday morning - afternoon
+- Thursday morning - afternoon
+- Friday morning - evening
+
+The plot below shows the days and time periods of the estimated HCV Ab+ lab result times, as well as the times that there is EIP coverage. The frequency shows the total number of HCV Ab+ results for each day/time since the start of the project. The colored bars indicates that there is EIP staff scheduled during this time to respond to the HCV Dashboard and approach those patients who are HCV Ab+.
+
+<br>
+
+```{r, echo = FALSE, fig.frame="black"}
+
+hcv_staff_coverage <- ggplot(hcv_ab_pos_summary, aes(x = result_day_time, y = frequency, text = paste("Frequency:", frequency, "<br>Day and Time Period:", result_day_time))) +
+  geom_bar(aes(fill = has_coverage), stat = "identity", color = "black", show.legend = FALSE) +
+  labs(title = "Frequency of HCV Ab+ Results by Day/Time Period Estimates",
+       x = "Day and Time Period Estimates",
+       y = "Total Frequency") +
+  scale_fill_manual(values = c("FALSE" = "white", "TRUE" = "lightskyblue"), guide = FALSE) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none") +
+  geom_vline(xintercept = seq(4.5, length(unique(hcv_ab_pos_summary$result_day_time)), by = 4), color = "gray", linetype = "dashed")
+hcv_staff_coverage <- ggplotly(hcv_staff_coverage, tooltip = "text") %>%
+  plotly::config(displayModeBar = FALSE)
+hcv_staff_coverage
+
+```
+
+<br>
+
+The table below summarizes the total number of HCV Ab+ results where an EIP staff member assigned for this project was on shift, and the percentage of the total HCV Ab+ results. This table indicates that **EIP staff was available during `r hcv_ab_pos_with_coverage_percent` of the HCV Ab+ labs** when they were estimated to have resulted and appear in the HCV Dashboard (*`r hcv_ab_pos_with_coverage`/`r hcv_ab_pos_total`*). Also, this table shows that **EIP staff was not on shift for this project during `r hcv_ab_pos_without_coverage_percent` of the HCV Ab+ labs** when they were estimated to have resulted (*`r hcv_ab_pos_without_coverage`/`r hcv_ab_pos_total`*).
+
+<br>
+
+```{r, echo = FALSE}
+
+# Table of HCV Ab+ with EIP Coverage
+hcv_ab_pos_coverage_tbl <- data.frame(matrix(ncol = 3, nrow = 0))
+colnames(hcv_ab_pos_coverage_tbl) <- c('', 'Total Frequency', 'Percent')
+hcv_ab_pos_coverage_tbl[nrow(hcv_ab_pos_coverage_tbl) + 1,] <- list('With EIP Coverage', hcv_ab_pos_with_coverage, hcv_ab_pos_with_coverage_percent)
+hcv_ab_pos_coverage_tbl[nrow(hcv_ab_pos_coverage_tbl) + 1,] <- list('Without EIP Coverage', hcv_ab_pos_without_coverage, hcv_ab_pos_without_coverage_percent)
+hcv_ab_pos_coverage_tbl %>%
+  kbl(align = 'lcc') %>%
+  kable_styling(full_width = F, font_size = 12)
+
+```
+
+
+<br>
+<br>
+<br>
+
+## Additional Items still to add to this report.
+Additional items still in development for this report include: Adding in a visualization for monthly testing/positivity numbers; Analyzing scheduling with UC Clinical Pharmacy Telehealth; Add Katie's coverage; Add reasons for no follow-up (rsns linkage declined/prevented)
+

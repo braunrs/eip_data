@@ -8,6 +8,12 @@ website:
     right:
       - href: index.qmd
         text: Home
+      - text: Clinical
+        menu:
+          - href: hcv.qmd
+            text: HCV
+          - href: sud.qmd
+            text: SUD
       - text: Deliverables
         menu:
           - href: ctr_deliverables.qmd
