@@ -1,6 +1,7 @@
 ---
 title: "EIP Data Website"
 image: eip_logo.png
+navbar: FALSE
 about:
     template: trestles
     image-shape: round

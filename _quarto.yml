@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "eip_data"
+  title: "EIP Data Website"
   navbar:
     right:
       - href: index.qmd
@@ -37,7 +37,7 @@ website:
           - href: talbert.qmd
             text: Talbert
           - href: community.qmd
-            text: Other COmmunity Sites
+            text: Other Community Sites
 
 format:
   html:
