@@ -1,0 +1,29 @@
+---
+title: "Talbert"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, include=FALSE}
+
+rm(list=ls(all=T))
+
+library(dplyr)
+library(tidyverse)
+library(lubridate)
+library(plotly)
+library(ggplot2)
+library(reactable)
+library(htmltools)
+library(lubridate)
+library(hrbrthemes)
+library(gt)
+library(janitor)
+library(scales)
+library(apyramid)
+
+```
+
+

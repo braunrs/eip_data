@@ -1,0 +1,49 @@
+---
+title: "Pharmacogenomics (PGx) Study"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Start of Study: 6/17/2020
+Enrollment Completed: 11/8/2021
+
+Study Personnel - UCMC
+*Ahmed, S*
+*Alsheyyab, R.*
+*Appelmann, H.*
+*Baute, N.*
+*Black, R.*
+*Canteria, R.*
+*Freiermuth, C.*
+*Hayes, D.*
+*Henderson-Carr, N.*
+*Herbst, G.*
+*Jones, M.*
+*Kondragunta, A.*
+*Luba, M.*
+*Qualkenbush-Frye, N.*
+*Reddy, A.*
+*Rehman, S.*
+*Ryan, H.*
+*Sall, H.*
+*Shugar, S.*
+*Smith, E.*
+*Stuller, K.*
+*Thomas, S.*
+*Varga, S.*
+*Walton, L.*
+*Wells, A.*
+
+Study Personnel - OSU
+*Boldoser, C.*
+*Jolley, D.*
+*Kazimi, M.*
+*Rawlins, K.*
+*Reider, C.*
+*Smith, T.*
+
+
+**Include Publications?**
+

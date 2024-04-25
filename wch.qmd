@@ -1,0 +1,11 @@
+---
+title: "West Chester Hospital (WCH)"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+The data table below is compiled using the weekly CHI files that are received. The total number of encounters are determined by unique CSNs and the total number of unique patients are determined by unique MRNs.
+

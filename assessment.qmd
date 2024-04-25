@@ -1,0 +1,114 @@
+---
+title: "Assessment Data"
+description: |
+  This page is currently under construction. The purpose of this page will be to highlight the numbers of assessments performed by EIP staff, and breakdown some information gathered such as risk, substance use, mental health, and other data.
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+The diagram below is an example of the flow within the Risk/Needs Assessment. This is still under evaluation for the best way to present this information. For example, it could be combined into a full flow diagram of the EIP Database, which would be presented in a different way and in a different section of this website.
+
+```{r, echo = FALSE}
+
+library(collapsibleTree)
+
+
+Assessments <- data.frame(
+  topic = c("Risk Referral",
+            "Sexual Health & Behavior",
+            "HIV Testing Hx",
+            "Substance Use",
+            "Substance Use",
+            "Substance Use",
+            "Substance Use",
+            "Substance Use",
+            "Substance Use",
+            "Substance Use",
+            "Substance Use",
+            "Substance Use",
+            "Substance Use",
+            "Substance Use",
+            "Substance Use",
+            "Mental Health",
+            "Mental Health",
+            "Mental Health",
+            "Other Risks",
+            "SES & Help Seeking Behavior",
+            "PrEP Assessment & Referral"),
+  condition = c(NA,
+                NA,
+                NA,
+                "SUD",
+                "SUD",
+                "SUD",
+                "SUD",
+                "SUD",
+                "SUD",
+                "SUD",
+                "SUD",
+                "SUD",
+                "SUD",
+                "SUD",
+                "Harm Reduction",
+                "Anxiety",
+                "Depression",
+                "PTSD",
+                NA,
+                NA,
+                NA),
+  measure = c(NA,
+              NA,
+              NA,
+              "AUDIT-C",
+              "NIDA-Modified ASSIST",
+              "NIDA-Modified ASSIST",
+              "NIDA-Modified ASSIST",
+              "NIDA-Modified ASSIST",
+              "NIDA-Modified ASSIST",
+              "NIDA-Modified ASSIST",
+              "NIDA-Modified ASSIST",
+              "NIDA-Modified ASSIST",
+              "NIDA-Modified ASSIST",
+              "NIDA-Modified ASSIST",
+              "Fentaly Test Strips (FTS)",
+              "Generalized Anxiety Disorder (GAD)",
+              "Patient Health Questionnaire (PHQ)",
+              "PTSD CheckList - Civilian (PCL-C)",
+              NA,
+              NA,
+              NA),
+  details = c(NA,
+              NA,
+              NA,
+              "Alcohol abuse",
+              "Marijuana abuse",
+              "Cocaine abuse",
+              "Rx Amphetamine abuse",
+              "Methamphetamine abuse",
+              "Inhalant abuse",
+              "Sedative abuse",
+              "Hallucinogen abuse",
+              "Street Opioid abuse",
+              "Rx Opioid abuse",
+              "Other Drug abuse",
+              NA,
+              NA,
+              NA,
+              NA,
+              NA,
+              NA,
+              NA))
+assessment_diagram <- collapsibleTree(Assessments, c("topic", "condition", "measure", "details"),
+                                      fill = "lightsteelblue",
+                                      fontsize = 8,
+                                      tooltip = FALSE)
+assessment_diagram
+
+```
+
+
+
+
