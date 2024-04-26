@@ -1,5 +1,13 @@
 ---
 title: "Hepatitis C Virus (HCV)"
+lightbox:
+  match: auto
+format:
+  html: 
+    grid:
+      sidebar-width: 200px
+      body-width: 1050px
+      margin-width: 250px
 ---
 
 ```{r setup, include=FALSE}
@@ -925,9 +933,12 @@ Since EIP is meant to approach each individual that has a reactive HCV Ab test t
 
 ### EIP Follow-up
 
-A summary flow diagram for EIP's follow-up efforts regarding those that are identified HCV Ab+ through the HCV Dashboard is provided below. You can zoom into this flow diagram by clicking on the image.
+As mentioned above, there were a total of `r hcv_ab_positive` HCV positive tests, with `r hcv_pts_ab_positive` unique individuals. For EIP follow-up, we will focus on the unique number of patients in in regards to education of results or additional testing needed, and linkage to care efforts. A summary flow diagram for EIP's follow-up efforts regarding those that are identified HCV Ab+ through the HCV Dashboard is provided below. You can zoom into this flow diagram by clicking on the image.
 
 ```{r, echo = FALSE, warning = FALSE}
+#| lightbox:
+#|   description: HCV Epic Dashboard EIP Follow-up
+
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
