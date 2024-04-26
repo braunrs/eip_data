@@ -24,45 +24,36 @@ library(forcats)
 
 
 # EIP Database Data
-eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240415_1058.csv')
+eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240426_1059.csv')
 dim(eip)
 
 # HCV Epic Dashboard Data
 hcv1 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240207_1213.csv')
 dim(hcv1)
-
 hcv2 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240220_1128.csv')
 dim(hcv2)
-
 hcv3 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240304_1119.csv')
 dim(hcv3)
-
 hcv4 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240312_0946.csv')
 dim(hcv4)
-
 hcv5 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240318_1125.csv')
 dim(hcv5)
-
 hcv6 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240325_1414.csv')
 dim(hcv6)
-
 hcv7 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240329_1737.csv')
 dim(hcv7)
-
 hcv8 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240401_0944.csv')
 dim(hcv8)
-
 hcv9 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240402_1943.csv')
 dim(hcv9)
-
 hcv10 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240407_2119.csv')
 dim(hcv10)
-
 hcv11 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240415_0935.csv')
 dim(hcv11)
+hcv12 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240426_1107.csv')
+dim(hcv12)
 
-
-hcv <- rbind(hcv1, hcv2, hcv3, hcv4, hcv5, hcv6, hcv7, hcv8, hcv9, hcv10, hcv11)
+hcv <- rbind(hcv1, hcv2, hcv3, hcv4, hcv5, hcv6, hcv7, hcv8, hcv9, hcv10, hcv11, hcv12)
 dim(hcv)
 hcv <- distinct(hcv)
 dim(hcv)

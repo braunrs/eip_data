@@ -34,7 +34,7 @@ eip23 <- read.csv('M:/EIP Data/EIP Database/REDCap Ver 5.0/EIP Database Data 202
 dim(eip23)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240415_1058.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240426_1059.csv')
 dim(eip24)
 
 ```
@@ -1922,7 +1922,7 @@ eip$datediff50 <- as.numeric(interval(eip$enc_date, eip$followup_date50)/ddays(1
 ###############################################################################################################
 
 summary(eip$enc_date)
-enc <- eip[which(eip$enc_date >= '2023-01-01' & eip$enc_date <= '2023-12-31'), ]
+enc <- eip[which(eip$enc_date >= '2023-01-01' & eip$enc_date <= '2024-12-31'), ]
 summary(enc$enc_date)
 
 

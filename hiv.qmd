@@ -1,5 +1,7 @@
 ---
-title: "Housing"
+title: "HIV Testing & Linkage to Care"
+description: |
+  This will pull together all of the different HIV testing methods (CTR, EHE, Lab) showing independent testing programs as well as total testing through EIP.
 date: "`r Sys.Date()`"
 ---
 
@@ -602,7 +604,7 @@ dim(eip24)
 
 ```
 
-``` {r Combining Datasets, include=FALSE}
+```{r Combining Datasets, include=FALSE}
 
 ### Combine 2023/2024 Data
 
@@ -1288,7 +1290,7 @@ dim(eip)
 
 ```
 
-``` {r Patient Information, include=FALSE}
+```{r Patient Information, include=FALSE}
 
 # Formatting variables
 
@@ -1915,405 +1917,1389 @@ eip$datediff50 <- as.numeric(interval(eip$enc_date, eip$followup_date50)/ddays(1
 
 ```
 
-```{r Housing, include=FALSE}
+```{r HIV, include=FALSE}
 
 ###############################################################################################################
 #########################################  Creating Encounter Dataset  ########################################
 ###############################################################################################################
 
 summary(eip$enc_date)
-enc <- eip[which(eip$enc_date >= '2023-01-01' & eip$enc_date <= '2024-12-31'), ]
+enc <- eip[which(eip$enc_date >= '2023-01-01' & eip$enc_date <= '2023-12-31'), ]
 summary(enc$enc_date)
 
 
-eip_encounters <- nrow(enc)
-eip_encounters
 
 
 
-###########################################################
 
+##########  CTR Testing  ##########
 
-# Housing Linkage Data
+table(enc$ctr_calc)
+ctr_tests <- enc[which(enc$ctr_calc == 1), ]
+ctr_tests <- nrow(ctr_tests)
+ctr_tests
 
-table(enc$additional_services___2)
-enc$housing_ltc[enc$additional_services___2 == 1] <- 1
-table(enc$housing_ltc)
+table(enc$ctr_calc, enc$final_test_status_hiv)
+ctr_positive <- enc[which(enc$ctr_calc == 1 & enc$final_test_status_hiv == 1), ]
+ctr_positive <- nrow(ctr_positive)
+ctr_positive
 
-table(enc$housing_ltc)
-housing_ltc <- enc[which(enc$housing_ltc == 1), ]
-dim(housing_ltc)
-housing_ltc <- nrow(housing_ltc)
-housing_ltc
+table(enc$ctr_calc, enc$final_test_status_hiv, enc$diagnosis_hiv)
+ctr_new_positive <- enc[which(enc$ctr_calc == 1 & enc$final_test_status_hiv == 1 & enc$diagnosis_hiv == 1), ]
+ctr_new_positive <- nrow(ctr_new_positive)
+ctr_new_positive
 
+ctr_positivity_rate <- percent(ctr_new_positive/ctr_tests, accuracy = 0.01)
+ctr_positivity_rate
 
 
-# Ineligible Housing Linkage - Already Linked
+#####  CTR Deliverables
 
-table(enc$ltc_housing_declined_rsn___23)
-table(enc$ltc_housing_prevented_rsn___16)
-enc$housing_already_linked <- NA
-enc$housing_already_linked[enc$housing_ltc == 1 &
-                         (enc$ltc_housing_declined_rsn___23 == 1 |
-                            enc$ltc_housing_prevented_rsn___16 == 1)] <- 1
-table(enc$housing_already_linked)
 
-table(enc$housing_already_linked)
-housing_already_linked <- enc[which(enc$housing_already_linked == 1), ]
-dim(housing_already_linked)
-housing_already_linked <- nrow(housing_already_linked)
-housing_already_linked
+# HIV Status
 
+table(enc$ltc_services___1, enc$diagnosis_hiv)
+enc$hiv_status[enc$ltc_services___1 == 1 & enc$diagnosis_hiv == 1] <- 'New HIV Diagnosis'
+enc$hiv_status[enc$ltc_services___1 == 1 & enc$diagnosis_hiv == 2] <- 'Previous HIV Diagnosis'
+enc$hiv_status[enc$ltc_services___1 == 1 & is.na(enc$diagnosis_hiv)] <- 'Unknown HIV Status'
+table(enc$hiv_status)
 
 
-# Ineligible Housing Linkage - Deceased
 
-table(enc$ltc_housing_declined_rsn___35)
-table(enc$ltc_housing_prevented_rsn___17)
-enc$housing_deceased <- NA
-enc$housing_deceased[enc$housing_ltc == 1 &
-                   (enc$ltc_housing_declined_rsn___35 == 1 |
-                      enc$ltc_housing_prevented_rsn___17 == 1)] <- 1
-table(enc$housing_deceased)
+# HRHS CTR Tested (goal is 900)
 
-table(enc$housing_deceased)
-housing_deceased <- enc[which(enc$housing_deceased == 1), ]
-dim(housing_deceased)
-housing_deceased <- nrow(housing_deceased)
-housing_deceased
+table(enc$HRHS, enc$ctr_calc)
+enc$ctr_hrhs_tested[enc$ctr_calc == 1 & enc$HRHS == 1] <- 1
+table(enc$ctr_hrhs_tested)
 
+table(enc$ctr_hrhs_tested)
+ctr_hrhs_tested <- enc[which(enc$ctr_hrhs_tested == 1), ]
+dim(ctr_hrhs_tested)
+ctr_hrhs_tested <- nrow(ctr_hrhs_tested)
+ctr_hrhs_tested
 
 
-# Ineligible Housing Linkage - Incarcerated
 
-table(enc$ltc_housing_prevented_rsn___12)
-enc$housing_incarcerated <- NA
-enc$housing_incarcerated[enc$housing_ltc == 1 &
-                       enc$ltc_housing_prevented_rsn___12 == 1] <- 1
-table(enc$housing_incarcerated)
+# HRHS/WOC CTR Tested (goal is 100)
 
-table(enc$housing_incarcerated)
-housing_incarcerated <- enc[which(enc$housing_incarcerated == 1), ]
-dim(housing_incarcerated)
-housing_incarcerated <- nrow(housing_incarcerated)
-housing_incarcerated
+table(enc$HRHS, enc$WOC, enc$ctr_calc)
+enc$ctr_hrhs_woc_tested[enc$ctr_calc == 1 & enc$HRHS == 1 & enc$WOC == 1] <- 1
+table(enc$ctr_hrhs_woc_tested)
 
+table(enc$ctr_hrhs_woc_tested)
+ctr_hrhs_woc_tested <- enc[which(enc$ctr_hrhs_woc_tested == 1), ]
+dim(ctr_hrhs_woc_tested)
+ctr_hrhs_woc_tested <- nrow(ctr_hrhs_woc_tested)
+ctr_hrhs_woc_tested
 
 
-# Ineligible Housing Linkage - Declined Linkage Service
 
-table(enc$ltc_housing_final_ltc_status)
-enc$housing_linkage_declined <- NA
-enc$housing_linkage_declined[(enc$housing_ltc == 1 &
-                            enc$ltc_housing_final_ltc_status == 2) &
-                           (is.na(enc$housing_already_linked) &
-                              is.na(enc$housing_deceased) &
-                              is.na(enc$housing_incarcerated))] <- 1
-table(enc$housing_linkage_declined)
+# HRHS/Youth CTR Tested (goal is 200)
 
-table(enc$housing_linkage_declined)
-housing_linkage_declined <- enc[which(enc$housing_linkage_declined == 1), ]
-dim(housing_linkage_declined)
-housing_linkage_declined <- nrow(housing_linkage_declined)
-housing_linkage_declined
+table(enc$HRHS, enc$Youth, enc$ctr_calc)
+enc$ctr_hrhs_youth_tested[enc$ctr_calc == 1 & enc$HRHS == 1 & enc$Youth == 1] <- 1
+table(enc$ctr_hrhs_youth_tested)
 
+table(enc$ctr_hrhs_youth_tested)
+ctr_hrhs_youth_tested <- enc[which(enc$ctr_hrhs_youth_tested == 1), ]
+dim(ctr_hrhs_youth_tested)
+ctr_hrhs_youth_tested <- nrow(ctr_hrhs_youth_tested)
+ctr_hrhs_youth_tested
 
 
-# Ineligible Housing Linkage - Linkage in Progress
 
-table(enc$ltc_housing_prevented_rsn___18)
-enc$housing_ongoing_linkage <- NA
-enc$housing_ongoing_linkage[enc$housing_ltc == 1 &
-                          enc$ltc_housing_prevented_rsn___18 == 1] <- 1
-table(enc$housing_ongoing_linkage)
+# HRHS/IDU CTR Tested (goal is 300)
 
-table(enc$housing_ongoing_linkage)
-housing_ongoing_linkage <- enc[which(enc$housing_ongoing_linkage == 1), ]
-dim(housing_ongoing_linkage)
-housing_ongoing_linkage <- nrow(housing_ongoing_linkage)
-housing_ongoing_linkage
+table(enc$HRHS, enc$IDU, enc$ctr_calc)
+enc$ctr_hrhs_idu_tested[enc$ctr_calc == 1 & enc$HRHS == 1 & enc$IDU == 1] <- 1
+table(enc$ctr_hrhs_idu_tested)
 
+table(enc$ctr_hrhs_idu_tested)
+ctr_hrhs_idu_tested <- enc[which(enc$ctr_hrhs_idu_tested == 1), ]
+dim(ctr_hrhs_idu_tested)
+ctr_hrhs_idu_tested <- nrow(ctr_hrhs_idu_tested)
+ctr_hrhs_idu_tested
 
 
 
-# Housing Ineligible Cases
+# MSM CTR Tested (goal is 100)
 
-enc$housing_ineligible_ltc[enc$housing_already_linked == 1 |
-                         enc$housing_deceased == 1 |
-                         enc$housing_incarcerated == 1 |
-                         enc$housing_linkage_declined == 1 |
-                         enc$housing_ongoing_linkage == 1] <- 1
-table(enc$housing_ineligible_ltc)
+table(enc$MSM, enc$ctr_calc)
+enc$ctr_msm_tested[enc$ctr_calc == 1 & enc$MSM == 1] <- 1
+table(enc$ctr_msm_tested)
 
-table(enc$housing_ineligible_ltc)
-housing_ineligible_ltc <- enc[which(enc$housing_ineligible_ltc == 1), ]
-dim(housing_ineligible_ltc)
-housing_ineligible_ltc <- nrow(housing_ineligible_ltc)
-housing_ineligible_ltc
+table(enc$ctr_msm_tested)
+ctr_msm_tested <- enc[which(enc$ctr_msm_tested == 1), ]
+dim(ctr_msm_tested)
+ctr_msm_tested <- nrow(ctr_msm_tested)
+ctr_msm_tested
 
-housing_ineligible_ltc_percent <- percent(housing_ineligible_ltc/housing_ltc, accuracy = 0.1)
-housing_ineligible_ltc_percent
 
-housing_already_linked_percent <- percent(housing_already_linked/housing_ineligible_ltc, accuracy = 0.1)
-housing_already_linked_percent
 
-housing_deceased_percent <- percent(housing_deceased/housing_ineligible_ltc, accuracy = 0.1)
-housing_deceased_percent
+# MSM/Youth CTR Tested (goal is 20)
 
-housing_incarcerated_percent <- percent(housing_incarcerated/housing_ineligible_ltc, accuracy = 0.1)
-housing_incarcerated_percent
+table(enc$MSM, enc$Youth, enc$ctr_calc)
+enc$ctr_msm_youth_tested[enc$ctr_calc == 1 & enc$MSM == 1 & enc$Youth == 1] <- 1
+table(enc$ctr_msm_youth_tested)
 
-housing_linkage_declined_percent <- percent(housing_linkage_declined/housing_ineligible_ltc, accuracy = 0.1)
-housing_linkage_declined_percent
+table(enc$ctr_msm_youth_tested)
+ctr_msm_youth_tested <- enc[which(enc$ctr_msm_youth_tested == 1), ]
+dim(ctr_msm_youth_tested)
+ctr_msm_youth_tested <- nrow(ctr_msm_youth_tested)
+ctr_msm_youth_tested
 
-housing_ongoing_linkage_percent <- percent(housing_ongoing_linkage/housing_ineligible_ltc, accuracy = 0.1)
-housing_ongoing_linkage_percent
 
 
+# MSM/IDU CTR Tested (goal is 20)
 
+table(enc$MSM, enc$IDU, enc$ctr_calc)
+enc$ctr_msm_idu_tested[enc$ctr_calc == 1 & enc$MSM == 1 & enc$IDU == 1] <- 1
+table(enc$ctr_msm_idu_tested)
 
-# Housing Eligibility to be Linked
+table(enc$ctr_msm_idu_tested)
+ctr_msm_idu_tested <- enc[which(enc$ctr_msm_idu_tested == 1), ]
+dim(ctr_msm_idu_tested)
+ctr_msm_idu_tested <- nrow(ctr_msm_idu_tested)
+ctr_msm_idu_tested
 
-enc$housing_eligible_ltc[enc$housing_ltc == 1 &
-                       (is.na(enc$housing_already_linked) &
-                          is.na(enc$housing_deceased) &
-                          is.na(enc$housing_incarcerated) &
-                          is.na(enc$housing_linkage_declined) &
-                          is.na(enc$housing_ongoing_linkage))] <- 1
-table(enc$housing_eligible_ltc)
 
-table(enc$housing_eligible_ltc)
-housing_eligible_ltc <- enc[which(enc$housing_eligible_ltc == 1), ]
-dim(housing_eligible_ltc)
-housing_eligible_ltc <- nrow(housing_eligible_ltc)
-housing_eligible_ltc
 
-housing_eligible_ltc_percent <- percent(housing_eligible_ltc/housing_ltc, accuracy = 0.1)
-housing_eligible_ltc_percent
+# MSM CTR New Positive (goal is 3-5)
 
+table(enc$MSM, enc$ctr_calc, enc$hiv_status)
+enc$ctr_msm_new_dx[enc$ctr_calc == 1 & enc$MSM == 1 & enc$hiv_status == 'New HIV Diagnosis'] <- 1
+table(enc$ctr_msm_new_dx)
 
+table(enc$ctr_msm_new_dx)
+ctr_msm_new_dx <- enc[which(enc$ctr_msm_new_dx == 1), ]
+dim(ctr_msm_new_dx)
+ctr_msm_new_dx <- nrow(ctr_msm_new_dx)
+ctr_msm_new_dx
 
 
-# Housing Open/Closed Cases
 
-table(enc$ltc_housing_open_case_calc)
-enc$housing_in_progress[enc$housing_eligible_ltc == 1 &
-                      enc$ltc_housing_open_case_calc == 1] <- 1
-table(enc$housing_in_progress)
+# HRHS CTR New Positive (goal is 9)
 
-table(enc$housing_in_progress)
-housing_in_progress <- enc[which(enc$housing_in_progress == 1), ]
-dim(housing_in_progress)
-housing_in_progress <- nrow(housing_in_progress)
-housing_in_progress
+table(enc$HRHS, enc$ctr_calc, enc$hiv_status)
+enc$ctr_hrhs_new_dx[enc$ctr_calc == 1 & enc$HRHS == 1 & enc$hiv_status == 'New HIV Diagnosis'] <- 1
+table(enc$ctr_hrhs_new_dx)
 
-housing_in_progress_percent <- percent(housing_in_progress/housing_eligible_ltc, accuracy = 0.1)
-housing_in_progress_percent
+table(enc$ctr_hrhs_new_dx)
+ctr_hrhs_new_dx <- enc[which(enc$ctr_hrhs_new_dx == 1), ]
+dim(ctr_hrhs_new_dx)
+ctr_hrhs_new_dx <- nrow(ctr_hrhs_new_dx)
+ctr_hrhs_new_dx
 
 
 
-table(enc$housing_eligible_ltc, enc$housing_in_progress)
-enc$housing_closed_case[enc$housing_eligible_ltc == 1 &
-                      is.na(enc$housing_in_progress)] <- 1
-table(enc$housing_closed_case)
+##########  EHE Testing  ##########
 
-table(enc$housing_closed_case)
-housing_closed_case <- enc[which(enc$housing_closed_case == 1), ]
-dim(housing_closed_case)
-housing_closed_case <- nrow(housing_closed_case)
-housing_closed_case
+table(enc$ehe_calc)
+ehe_tests <- enc[which(enc$ehe_calc == 1), ]
+ehe_tests <- nrow(ehe_tests)
+ehe_tests
 
-housing_closed_case_percent <- percent(housing_closed_case/housing_eligible_ltc, accuracy = 0.1)
-housing_closed_case_percent
+table(enc$ehe_calc, enc$final_test_status_hiv)
+ehe_positive <- enc[which(enc$ehe_calc == 1 & enc$final_test_status_hiv == 1), ]
+ehe_positive <- nrow(ehe_positive)
+ehe_positive
 
+table(enc$ehe_calc, enc$final_test_status_hiv, enc$diagnosis_hiv)
+ehe_new_positive <- enc[which(enc$ehe_calc == 1 & enc$final_test_status_hiv == 1 & enc$diagnosis_hiv == 1), ]
+ehe_new_positive <- nrow(ehe_new_positive)
+ehe_new_positive
 
+ehe_positivity_rate <- percent(ehe_new_positive/ehe_tests, accuracy = 0.01)
+ehe_positivity_rate
 
-table(enc$housing_in_progress)
-enc$housing_ltc_days_open <- difftime(Sys.Date(), enc$enc_date, units="days")
-table(enc$housing_ltc_days_open)
-enc$housing_in_progress_90days[enc$housing_in_progress == 1 &
-                             (enc$housing_ltc_days_open > 90)] <- 1
-table(enc$housing_in_progress_90days)
 
-table(enc$housing_in_progress_90days)
-housing_in_progress_90days <- enc[which(enc$housing_in_progress_90days == 1), ]
-dim(housing_in_progress_90days)
-housing_in_progress_90days <- nrow(housing_in_progress_90days)
-housing_in_progress_90days
 
-housing_in_progress_90days_percent <- percent(housing_in_progress_90days/housing_in_progress, accuracy = 0.1)
-housing_in_progress_90days_percent
 
+# HRHS Tested (goal is 875)
 
+table(enc$HRHS, enc$ehe_calc)
+enc$ehe_hrhs_tested[enc$ehe_calc == 1 & enc$HRHS == 1] <- 1
+table(enc$ehe_hrhs_tested)
 
+table(enc$ehe_hrhs_tested)
+ehe_hrhs_tested <- enc[which(enc$ehe_hrhs_tested == 1), ]
+dim(ehe_hrhs_tested)
+ehe_hrhs_tested <- nrow(ehe_hrhs_tested)
+ehe_hrhs_tested
 
-# Housing Cases Linked to Care
 
-table(enc$housing_closed_case, enc$ltc_housing_final_ltc_status)
-enc$housing_linked[enc$housing_closed_case == 1 &
-                 enc$ltc_housing_final_ltc_status == 1] <- 1
-table(enc$housing_linked)
 
-table(enc$housing_linked)
-housing_linked <- enc[which(enc$housing_linked == 1), ]
-dim(housing_linked)
-housing_linked <- nrow(housing_linked)
-housing_linked
+# MSM Tested (goal is 75)
 
-housing_linked_percent <- percent(housing_linked/housing_closed_case, accuracy = 0.1)
-housing_linked_percent
+table(enc$MSM, enc$ehe_calc)
+enc$ehe_msm_tested[enc$ehe_calc == 1 & enc$MSM == 1] <- 1
+table(enc$ehe_msm_tested)
 
+table(enc$ehe_msm_tested)
+ehe_msm_tested <- enc[which(enc$ehe_msm_tested == 1), ]
+dim(ehe_msm_tested)
+ehe_msm_tested <- nrow(ehe_msm_tested)
+ehe_msm_tested
 
 
 
-enc$housing_not_linked[enc$housing_eligible_ltc == 1 & is.na(enc$housing_in_progress) & is.na(enc$housing_linked)] <- 1
-table(enc$housing_not_linked)
+# MSM/Youth Tested (goal is 40)
 
-table(enc$housing_not_linked)
-housing_not_linked <- enc[which(enc$housing_not_linked == 1), ]
-dim(housing_not_linked)
-housing_not_linked <- nrow(housing_not_linked)
-housing_not_linked
+table(enc$MSM, enc$Youth, enc$ehe_calc)
+enc$ehe_msm_youth_tested[enc$ehe_calc == 1 & enc$MSM == 1 & enc$Youth == 1] <- 1
+table(enc$ehe_msm_youth_tested)
 
-housing_not_linked_percent <- percent(housing_not_linked/housing_closed_case, accuracy = 0.1)
-housing_not_linked_percent
+table(enc$ehe_msm_youth_tested)
+ehe_msm_youth_tested <- enc[which(enc$ehe_msm_youth_tested == 1), ]
+dim(ehe_msm_youth_tested)
+ehe_msm_youth_tested <- nrow(ehe_msm_youth_tested)
+ehe_msm_youth_tested
 
 
 
+# MSM/IDU Tested (goal is 12)
 
-# Housing Reasons Not Linked to Care
+table(enc$MSM, enc$IDU, enc$ehe_calc)
+enc$ehe_msm_idu_tested[enc$ehe_calc == 1 & enc$MSM == 1 & enc$IDU == 1] <- 1
+table(enc$ehe_msm_idu_tested)
 
-enc$housing_not_linked_med_staff[(enc$housing_closed_case == 1 & is.na(enc$housing_linked)) &
-                               (enc$ltc_housing_prevented_rsn___1 == 1 |
-                                  enc$ltc_housing_prevented_rsn___2 == 1 |
-                                  enc$ltc_housing_prevented_rsn___11 == 1)] <- 1
-table(enc$housing_not_linked_med_staff)
+table(enc$ehe_msm_idu_tested)
+ehe_msm_idu_tested <- enc[which(enc$ehe_msm_idu_tested == 1), ]
+dim(ehe_msm_idu_tested)
+ehe_msm_idu_tested <- nrow(ehe_msm_idu_tested)
+ehe_msm_idu_tested
 
-table(enc$housing_not_linked_med_staff)
-housing_not_linked_med_staff <- enc[which(enc$housing_not_linked_med_staff == 1), ]
-dim(housing_not_linked_med_staff)
-housing_not_linked_med_staff <- nrow(housing_not_linked_med_staff)
-housing_not_linked_med_staff
 
-housing_not_linked_med_staff_percent <- percent(housing_not_linked_med_staff/housing_not_linked, accuracy = 0.1)
-housing_not_linked_med_staff_percent
 
 
+# Overall Positivity Rate for Rapid-testing
 
-enc$housing_not_linked_family[(enc$housing_closed_case == 1 & is.na(enc$housing_linked)) &
-                            (enc$ltc_housing_prevented_rsn___3 == 1)] <- 1
-table(enc$housing_not_linked_family)
+eip_total_hiv_tests <- ctr_tests + ehe_tests
+eip_total_hiv_tests
+eip_total_pos_hiv_tests <- ctr_new_positive + ehe_new_positive
+eip_total_pos_hiv_tests
+eip_positivity_rate <- percent(eip_total_pos_hiv_tests/eip_total_hiv_tests, accuracy = 0.01)
+eip_positivity_rate
 
-table(enc$housing_not_linked_family)
-housing_not_linked_family <- enc[which(enc$housing_not_linked_family == 1), ]
-dim(housing_not_linked_family)
-housing_not_linked_family <- nrow(housing_not_linked_family)
-housing_not_linked_family
 
-housing_not_linked_family_percent <- percent(housing_not_linked_family/housing_not_linked, accuracy = 0.1)
-housing_not_linked_family_percent
 
+# Daily Testing NUmbers
 
+daily_hiv_testing <- select(enc, enc_date, record_id, ctr_calc, ehe_calc)
+daily_hiv_testing <- daily_hiv_testing[which(daily_hiv_testing$ctr_calc == 1 | daily_hiv_testing$ehe_calc == 1), ]
+head(daily_hiv_testing)
+daily_hiv_testing <- select(daily_hiv_testing, -record_id)
+head(daily_hiv_testing)
+colnames(daily_hiv_testing)[2] <- 'ctr_tests'
+colnames(daily_hiv_testing)[3] <- 'ehe_tests'
+head(daily_hiv_testing)
 
-enc$housing_not_linked_not_talking[(enc$housing_closed_case == 1 & is.na(enc$housing_linked)) &
-                                 (enc$ltc_housing_prevented_rsn___4 == 1)] <- 1
-table(enc$housing_not_linked_not_talking)
+daily_hiv_tests <- aggregate(x = daily_hiv_testing[c("ctr_tests","ehe_tests")],
+                             FUN = sum,
+                             by = list(Date = daily_hiv_testing$enc_date))
+daily_hiv_tests$ctr_tests[is.na(daily_hiv_tests$ctr_tests)] <- 0
+daily_hiv_tests$ehe_tests[is.na(daily_hiv_tests$ehe_tests)] <- 0
+head(daily_hiv_tests)
+daily_hiv_tests
 
-table(enc$housing_not_linked_not_talking)
-housing_not_linked_not_talking <- enc[which(enc$housing_not_linked_not_talking == 1), ]
-dim(housing_not_linked_not_talking)
-housing_not_linked_not_talking <- nrow(housing_not_linked_not_talking)
-housing_not_linked_not_talking
 
-housing_not_linked_not_talking_percent <- percent(housing_not_linked_not_talking/housing_not_linked, accuracy = 0.1)
-housing_not_linked_not_talking_percent
 
+# Monthly Testing NUmbers
 
+monthly_hiv_testing <- select(enc, enc_date, record_id, ctr_calc, ehe_calc)
+monthly_hiv_testing <- monthly_hiv_testing[which(monthly_hiv_testing$ctr_calc == 1 | monthly_hiv_testing$ehe_calc == 1), ]
+head(monthly_hiv_testing)
+monthly_hiv_testing <- select(monthly_hiv_testing, -record_id)
+head(monthly_hiv_testing)
+colnames(monthly_hiv_testing)[2] <- 'ctr_tests'
+colnames(monthly_hiv_testing)[3] <- 'ehe_tests'
+monthly_hiv_testing$ctr_tests[is.na(monthly_hiv_testing$ctr_tests)] <- 0
+monthly_hiv_testing$ehe_tests[is.na(monthly_hiv_testing$ehe_tests)] <- 0
+head(monthly_hiv_testing)
 
-enc$housing_not_linked_safety[(enc$housing_closed_case == 1 & is.na(enc$housing_linked)) &
-                            (enc$ltc_housing_prevented_rsn___5 == 1)] <- 1
-table(enc$housing_not_linked_safety)
+monthly_hiv_testing$Date <- format(as.Date(monthly_hiv_testing$enc_date, format="%d/%m/%Y"),"%m/%Y")
+head(monthly_hiv_testing)
 
-table(enc$housing_not_linked_safety)
-housing_not_linked_safety <- enc[which(enc$housing_not_linked_safety == 1), ]
-dim(housing_not_linked_safety)
-housing_not_linked_safety <- nrow(housing_not_linked_safety)
-housing_not_linked_safety
 
-housing_not_linked_safety_percent <- percent(housing_not_linked_safety/housing_not_linked, accuracy = 0.1)
-housing_not_linked_safety_percent
+monthly_hiv_tests <- aggregate(cbind(ctr_tests, ehe_tests) ~ Date,
+                               monthly_hiv_testing,
+                               FUN = sum)
+head(monthly_hiv_tests)
+monthly_hiv_tests
 
 
 
-enc$housing_not_linked_medical[(enc$housing_closed_case == 1 & is.na(enc$housing_linked)) &
-                             (enc$ltc_housing_prevented_rsn___6 == 1 |
-                                enc$ltc_housing_prevented_rsn___8)] <- 1
-table(enc$housing_not_linked_medical)
 
-table(enc$housing_not_linked_medical)
-housing_not_linked_medical <- enc[which(enc$housing_not_linked_medical == 1), ]
-dim(housing_not_linked_medical)
-housing_not_linked_medical <- nrow(housing_not_linked_medical)
-housing_not_linked_medical
 
-housing_not_linked_medical_percent <- percent(housing_not_linked_medical/housing_not_linked, accuracy = 0.1)
-housing_not_linked_medical_percent
 
 
 
-enc$housing_not_linked_contact[(enc$housing_closed_case == 1 & is.na(enc$housing_linked)) &
-                             (enc$ltc_housing_prevented_rsn___20 == 1)] <- 1
-table(enc$housing_not_linked_contact)
+################################################################################
 
-table(enc$housing_not_linked_contact)
-housing_not_linked_contact <- enc[which(enc$housing_not_linked_contact == 1), ]
-dim(housing_not_linked_contact)
-housing_not_linked_contact <- nrow(housing_not_linked_contact)
-housing_not_linked_contact
+##########  HIV Linkage Data  ##########
 
-housing_not_linked_contact_percent <- percent(housing_not_linked_contact/housing_not_linked, accuracy = 0.1)
-housing_not_linked_contact_percent
+# PLWHA
 
+enc$plwha[(enc$history_hiv_test_result == 1 |
+             enc$reason_for_offer_category_hiv_test == 7 |
+             enc$reason_for_offer_category_hiv_test == 8 |
+             enc$offer_outcome_declined_hiv___21 == 1 |
+             enc$offer_outcome_declined_hiv_2___21 == 1 |
+             enc$offer_outcome_declined_hiv_3___21 == 1 |
+             enc$final_test_status_hiv == 1 |
+             enc$diagnosis_hiv == 1 |
+             enc$diagnosis_hiv == 2)] <- 1
+table(enc$plwha)
 
 
-enc$housing_not_linked_language[(enc$housing_closed_case == 1 & is.na(enc$housing_linked)) &
-                              (enc$ltc_housing_prevented_rsn___9 == 1)] <- 1
-table(enc$housing_not_linked_language)
+table(enc$plwha)
+plwha <- enc[which(enc$plwha == 1), ]
+dim(plwha)
+plwha <- nrow(plwha)
+plwha
 
-table(enc$housing_not_linked_language)
-housing_not_linked_language <- enc[which(enc$housing_not_linked_language == 1), ]
-dim(housing_not_linked_language)
-housing_not_linked_language <- nrow(housing_not_linked_language)
-housing_not_linked_language
 
-housing_not_linked_language_percent <- percent(housing_not_linked_language/housing_not_linked, accuracy = 0.1)
-housing_not_linked_language_percent
 
 
+# HIV Linkage Data
 
-enc$housing_not_linked_other[(enc$housing_closed_case == 1 & is.na(enc$housing_linked)) &
-                           (enc$ltc_housing_prevented_rsn___0 == 1)] <- 1
-table(enc$housing_not_linked_other)
+table(enc$ltc_services___1)
+enc$hiv_ltc[enc$ltc_services___1 == 1] <- 1
+table(enc$hiv_ltc)
 
-table(enc$housing_not_linked_other)
-housing_not_linked_other <- enc[which(enc$housing_not_linked_other == 1), ]
-dim(housing_not_linked_other)
-housing_not_linked_other <- nrow(housing_not_linked_other)
-housing_not_linked_other
+table(enc$hiv_ltc)
+hiv_ltc <- enc[which(enc$hiv_ltc == 1), ]
+dim(hiv_ltc)
+hiv_ltc <- nrow(hiv_ltc)
+hiv_ltc
 
-housing_not_linked_other_percent <- percent(housing_not_linked_other/housing_not_linked, accuracy = 0.1)
-housing_not_linked_other_percent
+hiv_ltc_percent <- percent(hiv_ltc/plwha, accuracy = 0.1)
+hiv_ltc_percent
+
+
+
+# Ineligible HIV Linkage - Already Linked
+
+table(enc$ltc_hiv_declined_rsn___23)
+table(enc$ltc_hiv_prevented_rsn___16)
+enc$hiv_already_linked[enc$hiv_ltc == 1 &
+                         (enc$ltc_hiv_declined_rsn___23 == 1 |
+                            enc$ltc_hiv_prevented_rsn___16 == 1)] <- 1
+table(enc$hiv_already_linked)
+
+table(enc$hiv_already_linked)
+hiv_already_linked <- enc[which(enc$hiv_already_linked == 1), ]
+dim(hiv_already_linked)
+hiv_already_linked <- nrow(hiv_already_linked)
+hiv_already_linked
+
+
+
+# Ineligible HIV Linkage - Deceased
+
+table(enc$ltc_hiv_declined_rsn___35)
+table(enc$ltc_hiv_prevented_rsn___17)
+enc$hiv_deceased[enc$hiv_ltc == 1 &
+                   (enc$ltc_hiv_declined_rsn___35 == 1 |
+                      enc$ltc_hiv_prevented_rsn___17 == 1)] <- 1
+table(enc$hiv_deceased)
+
+table(enc$hiv_deceased)
+hiv_deceased <- enc[which(enc$hiv_deceased == 1), ]
+dim(hiv_deceased)
+hiv_deceased <- nrow(hiv_deceased)
+hiv_deceased
+
+
+
+# Ineligible HIV Linkage - Incarcerated
+
+table(enc$ltc_hiv_prevented_rsn___12)
+enc$hiv_incarcerated[enc$hiv_ltc == 1 &
+                       enc$ltc_hiv_prevented_rsn___12 == 1] <- 1
+table(enc$hiv_incarcerated)
+
+table(enc$hiv_incarcerated)
+hiv_incarcerated <- enc[which(enc$hiv_incarcerated == 1), ]
+dim(hiv_incarcerated)
+hiv_incarcerated <- nrow(hiv_incarcerated)
+hiv_incarcerated
+
+
+
+# Ineligible HIV Linkage - Declined Linkage Service
+
+table(enc$ltc_hiv_final_ltc_status)
+enc$hiv_linkage_declined[(enc$hiv_ltc == 1 &
+                            enc$ltc_hiv_final_ltc_status == 2) &
+                           (is.na(enc$hiv_already_linked) &
+                              is.na(enc$hiv_deceased) &
+                              is.na(enc$hiv_incarcerated))] <- 1
+table(enc$hiv_linkage_declined)
+
+table(enc$hiv_linkage_declined)
+hiv_linkage_declined <- enc[which(enc$hiv_linkage_declined == 1), ]
+dim(hiv_linkage_declined)
+hiv_linkage_declined <- nrow(hiv_linkage_declined)
+hiv_linkage_declined
+
+
+
+
+# Ineligible HIV Linkage - Linkage in Progress
+
+table(enc$ltc_hiv_prevented_rsn___18)
+enc$hiv_ongoing_linkage[enc$hiv_ltc == 1 &
+                          enc$ltc_hiv_prevented_rsn___18 == 1] <- 1
+table(enc$hiv_ongoing_linkage)
+
+table(enc$hiv_ongoing_linkage)
+hiv_ongoing_linkage <- enc[which(enc$hiv_ongoing_linkage == 1), ]
+dim(hiv_ongoing_linkage)
+hiv_ongoing_linkage <- nrow(hiv_ongoing_linkage)
+hiv_ongoing_linkage
+
+
+
+
+# HIV Ineligible Cases
+
+enc$hiv_ineligible_ltc[enc$hiv_already_linked == 1 |
+                         enc$hiv_deceased == 1 |
+                         enc$hiv_incarcerated == 1 |
+                         enc$hiv_linkage_declined == 1 |
+                         enc$hiv_ongoing_linkage == 1] <- 1
+table(enc$hiv_ineligible_ltc)
+
+table(enc$hiv_ineligible_ltc)
+hiv_ineligible_ltc <- enc[which(enc$hiv_ineligible_ltc == 1), ]
+dim(hiv_ineligible_ltc)
+hiv_ineligible_ltc <- nrow(hiv_ineligible_ltc)
+hiv_ineligible_ltc
+
+hiv_ineligible_ltc_percent <- percent(hiv_ineligible_ltc/hiv_ltc, accuracy = 0.1)
+hiv_ineligible_ltc_percent
+
+hiv_already_linked_percent <- percent(hiv_already_linked/hiv_ineligible_ltc, accuracy = 0.1)
+hiv_already_linked_percent
+
+hiv_deceased_percent <- percent(hiv_deceased/hiv_ineligible_ltc, accuracy = 0.1)
+hiv_deceased_percent
+
+hiv_incarcerated_percent <- percent(hiv_incarcerated/hiv_ineligible_ltc, accuracy = 0.1)
+hiv_incarcerated_percent
+
+hiv_linkage_declined_percent <- percent(hiv_linkage_declined/hiv_ineligible_ltc, accuracy = 0.1)
+hiv_linkage_declined_percent
+
+hiv_ongoing_linkage_percent <- percent(hiv_ongoing_linkage/hiv_ineligible_ltc, accuracy = 0.1)
+hiv_ongoing_linkage_percent
+
+
+
+
+# HIV Eligibility to be Linked
+
+enc$hiv_eligible_ltc[enc$hiv_ltc == 1 &
+                       (is.na(enc$hiv_already_linked) &
+                          is.na(enc$hiv_deceased) &
+                          is.na(enc$hiv_incarcerated) &
+                          is.na(enc$hiv_linkage_declined) &
+                          is.na(enc$hiv_ongoing_linkage))] <- 1
+table(enc$hiv_eligible_ltc)
+
+table(enc$hiv_eligible_ltc)
+hiv_eligible_ltc <- enc[which(enc$hiv_eligible_ltc == 1), ]
+dim(hiv_eligible_ltc)
+hiv_eligible_ltc <- nrow(hiv_eligible_ltc)
+hiv_eligible_ltc
+
+hiv_eligible_ltc_percent <- percent(hiv_eligible_ltc/hiv_ltc, accuracy = 0.1)
+hiv_eligible_ltc_percent
+
+
+
+table(enc$hiv_eligible_ltc, enc$hiv_status)
+enc$hiv_new_eligible_ltc[enc$hiv_eligible_ltc == 1 &
+                           enc$hiv_status == 'New HIV Diagnosis'] <- 1
+table(enc$hiv_new_eligible_ltc)
+
+table(enc$hiv_new_eligible_ltc)
+hiv_new_eligible_ltc <- enc[which(enc$hiv_new_eligible_ltc == 1), ]
+dim(hiv_new_eligible_ltc)
+hiv_new_eligible_ltc <- nrow(hiv_new_eligible_ltc)
+hiv_new_eligible_ltc
+
+hiv_new_eligible_ltc_percent <- percent(hiv_new_eligible_ltc/hiv_eligible_ltc, accuracy = 0.1)
+hiv_new_eligible_ltc_percent
+
+
+
+
+table(enc$hiv_eligible_ltc, enc$hiv_status)
+enc$hiv_prev_eligible_ltc[enc$hiv_eligible_ltc == 1 &
+                            enc$hiv_status == 'Previous HIV Diagnosis'] <- 1
+table(enc$hiv_prev_eligible_ltc)
+
+table(enc$hiv_prev_eligible_ltc)
+hiv_prev_eligible_ltc <- enc[which(enc$hiv_prev_eligible_ltc == 1), ]
+dim(hiv_prev_eligible_ltc)
+hiv_prev_eligible_ltc <- nrow(hiv_prev_eligible_ltc)
+hiv_prev_eligible_ltc
+
+hiv_prev_eligible_ltc_percent <- percent(hiv_prev_eligible_ltc/hiv_eligible_ltc, accuracy = 0.1)
+hiv_prev_eligible_ltc_percent
+
+
+
+table(enc$hiv_eligible_ltc, enc$hiv_status)
+enc$hiv_unk_eligible_ltc[(enc$hiv_eligible_ltc == 1 &
+                            (enc$hiv_status == 'Unknown HIV Status' |
+                               is.na(enc$hiv_status)))] <- 1
+table(enc$hiv_unk_eligible_ltc)
+
+table(enc$hiv_unk_eligible_ltc)
+hiv_unk_eligible_ltc <- enc[which(enc$hiv_unk_eligible_ltc == 1), ]
+dim(hiv_unk_eligible_ltc)
+hiv_unk_eligible_ltc <- nrow(hiv_unk_eligible_ltc)
+hiv_unk_eligible_ltc
+
+hiv_unk_eligible_ltc_percent <- percent(hiv_unk_eligible_ltc/hiv_eligible_ltc, accuracy = 0.1)
+hiv_unk_eligible_ltc_percent
+
+
+
+
+# HIV Open/Closed Cases
+
+table(enc$ltc_hiv_open_case_calc)
+enc$hiv_in_progress[enc$hiv_eligible_ltc == 1 &
+                      enc$ltc_hiv_open_case_calc == 1] <- 1
+table(enc$hiv_in_progress)
+
+table(enc$hiv_in_progress)
+hiv_in_progress <- enc[which(enc$hiv_in_progress == 1), ]
+dim(hiv_in_progress)
+hiv_in_progress <- nrow(hiv_in_progress)
+hiv_in_progress
+
+hiv_in_progress_percent <- percent(hiv_in_progress/hiv_eligible_ltc, accuracy = 0.1)
+hiv_in_progress_percent
+
+
+
+table(enc$hiv_in_progress, enc$hiv_status)
+enc$hiv_new_in_progress[enc$hiv_in_progress == 1 &
+                          enc$hiv_status == 'New HIV Diagnosis'] <- 1
+table(enc$hiv_new_in_progress)
+
+table(enc$hiv_new_in_progress)
+hiv_new_in_progress <- enc[which(enc$hiv_new_in_progress == 1), ]
+dim(hiv_new_in_progress)
+hiv_new_in_progress <- nrow(hiv_new_in_progress)
+hiv_new_in_progress
+
+hiv_new_in_progress_percent <- percent(hiv_new_in_progress/hiv_new_eligible_ltc, accuracy = 0.1)
+hiv_new_in_progress_percent
+
+
+
+table(enc$hiv_in_progress, enc$hiv_status)
+enc$hiv_prev_in_progress[enc$hiv_in_progress == 1 &
+                           enc$hiv_status == 'Previous HIV Diagnosis'] <- 1
+table(enc$hiv_prev_in_progress)
+
+table(enc$hiv_prev_in_progress)
+hiv_prev_in_progress <- enc[which(enc$hiv_prev_in_progress == 1), ]
+dim(hiv_prev_in_progress)
+hiv_prev_in_progress <- nrow(hiv_prev_in_progress)
+hiv_prev_in_progress
+
+hiv_prev_in_progress_percent <- percent(hiv_prev_in_progress/hiv_prev_eligible_ltc, accuracy = 0.1)
+hiv_prev_in_progress_percent
+
+
+
+table(enc$hiv_in_progress, enc$hiv_status)
+enc$hiv_unk_in_progress[enc$hiv_in_progress == 1 &
+                          (enc$hiv_status == 'Unknown HIV Status' |
+                             is.na(enc$hiv_status))] <- 1
+table(enc$hiv_unk_in_progress)
+
+table(enc$hiv_unk_in_progress)
+hiv_unk_in_progress <- enc[which(enc$hiv_unk_in_progress == 1), ]
+dim(hiv_unk_in_progress)
+hiv_unk_in_progress <- nrow(hiv_unk_in_progress)
+hiv_unk_in_progress
+
+hiv_unk_in_progress_percent <- percent(hiv_unk_in_progress/hiv_unk_eligible_ltc, accuracy = 0.1)
+hiv_unk_in_progress_percent
+
+
+
+table(enc$hiv_eligible_ltc, enc$hiv_in_progress)
+enc$hiv_closed_case[enc$hiv_eligible_ltc == 1 &
+                      is.na(enc$hiv_in_progress)] <- 1
+table(enc$hiv_closed_case)
+
+table(enc$hiv_closed_case)
+hiv_closed_case <- enc[which(enc$hiv_closed_case == 1), ]
+dim(hiv_closed_case)
+hiv_closed_case <- nrow(hiv_closed_case)
+hiv_closed_case
+
+hiv_closed_case_percent <- percent(hiv_closed_case/hiv_eligible_ltc, accuracy = 0.1)
+hiv_closed_case_percent
+
+
+
+
+table(enc$hiv_in_progress)
+enc$hiv_ltc_days_open <- difftime(Sys.Date(), enc$enc_date, units="days")
+table(enc$hiv_ltc_days_open)
+enc$hiv_in_progress_90days[enc$hiv_in_progress == 1 &
+                             (enc$hiv_ltc_days_open > 90)] <- 1
+table(enc$hiv_in_progress_90days)
+
+table(enc$hiv_in_progress_90days)
+hiv_in_progress_90days <- enc[which(enc$hiv_in_progress_90days == 1), ]
+dim(hiv_in_progress_90days)
+hiv_in_progress_90days <- nrow(hiv_in_progress_90days)
+hiv_in_progress_90days
+
+hiv_in_progress_90days_percent <- percent(hiv_in_progress_90days/hiv_in_progress, accuracy = 0.1)
+hiv_in_progress_90days_percent
+
+
+
+
+# HIV Cases Linked to Care
+
+table(enc$hiv_closed_case, enc$ltc_hiv_final_ltc_status)
+enc$hiv_linked[enc$hiv_closed_case == 1 &
+                 enc$ltc_hiv_final_ltc_status == 1] <- 1
+table(enc$hiv_linked)
+
+table(enc$hiv_linked)
+hiv_linked <- enc[which(enc$hiv_linked == 1), ]
+dim(hiv_linked)
+hiv_linked <- nrow(hiv_linked)
+hiv_linked
+
+hiv_linked_gauge <- (hiv_linked/hiv_closed_case)*100
+hiv_linked_gauge
+hiv_linked_percent <- percent(hiv_linked/hiv_closed_case, accuracy = 0.1)
+hiv_linked_percent
+
+
+
+table(enc$hiv_status, enc$hiv_eligible_ltc)
+table(enc$hiv_linked, enc$hiv_status)
+enc$hiv_new_linked[enc$hiv_linked == 1 &
+                     enc$hiv_status == 'New HIV Diagnosis'] <- 1
+table(enc$hiv_new_linked)
+
+table(enc$hiv_new_linked)
+hiv_new_linked <- enc[which(enc$hiv_new_linked == 1), ]
+dim(hiv_new_linked)
+hiv_new_linked <- nrow(hiv_new_linked)
+hiv_new_linked
+
+hiv_new_linked_percent <- percent(hiv_new_linked/hiv_new_eligible_ltc, accuracy = 0.1)
+hiv_new_linked_percent
+
+
+
+table(enc$hiv_status, enc$hiv_eligible_ltc)
+table(enc$hiv_linked, enc$hiv_status)
+enc$hiv_prev_linked[enc$hiv_linked == 1 &
+                      enc$hiv_status == 'Previous HIV Diagnosis'] <- 1
+table(enc$hiv_prev_linked)
+
+table(enc$hiv_prev_linked)
+hiv_prev_linked <- enc[which(enc$hiv_prev_linked == 1), ]
+dim(hiv_prev_linked)
+hiv_prev_linked <- nrow(hiv_prev_linked)
+hiv_prev_linked
+
+hiv_prev_linked_percent <- percent(hiv_prev_linked/hiv_prev_eligible_ltc, accuracy = 0.1)
+hiv_prev_linked_percent
+
+
+
+
+enc$hiv_not_linked[enc$hiv_eligible_ltc == 1 & is.na(enc$hiv_in_progress) & is.na(enc$hiv_linked)] <- 1
+table(enc$hiv_not_linked)
+
+table(enc$hiv_not_linked)
+hiv_not_linked <- enc[which(enc$hiv_not_linked == 1), ]
+dim(hiv_not_linked)
+hiv_not_linked <- nrow(hiv_not_linked)
+hiv_not_linked
+
+hiv_not_linked_percent <- percent(hiv_not_linked/hiv_closed_case, accuracy = 0.1)
+hiv_not_linked_percent
+
+
+
+table(enc$hiv_not_linked, enc$hiv_status)
+enc$hiv_new_not_linked[enc$hiv_not_linked == 1 &
+                         enc$hiv_status == 'New HIV Diagnosis'] <- 1
+table(enc$hiv_new_not_linked)
+
+table(enc$hiv_new_not_linked)
+hiv_new_not_linked <- enc[which(enc$hiv_new_not_linked == 1), ]
+dim(hiv_new_not_linked)
+hiv_new_not_linked <- nrow(hiv_new_not_linked)
+hiv_new_not_linked
+
+hiv_new_not_linked_percent <- percent(hiv_new_not_linked/hiv_new_eligible_ltc, accuracy = 0.1)
+hiv_new_not_linked_percent
+
+
+
+table(enc$hiv_not_linked, enc$hiv_status)
+enc$hiv_prev_not_linked[enc$hiv_not_linked == 1 &
+                          enc$hiv_status == 'Previous HIV Diagnosis'] <- 1
+table(enc$hiv_prev_not_linked)
+
+table(enc$hiv_prev_not_linked)
+hiv_prev_not_linked <- enc[which(enc$hiv_prev_not_linked == 1), ]
+dim(hiv_prev_not_linked)
+hiv_prev_not_linked <- nrow(hiv_prev_not_linked)
+hiv_prev_not_linked
+
+hiv_prev_not_linked_percent <- percent(hiv_prev_not_linked/hiv_prev_eligible_ltc, accuracy = 0.1)
+hiv_prev_not_linked_percent
+
+
+
+
+# HIV Reasons Not Linked to Care
+
+enc$hiv_not_linked_med_staff[(enc$hiv_closed_case == 1 & is.na(enc$hiv_linked)) &
+                               (enc$ltc_hiv_prevented_rsn___1 == 1 |
+                                  enc$ltc_hiv_prevented_rsn___2 == 1 |
+                                  enc$ltc_hiv_prevented_rsn___11 == 1)] <- 1
+table(enc$hiv_not_linked_med_staff)
+
+table(enc$hiv_not_linked_med_staff)
+hiv_not_linked_med_staff <- enc[which(enc$hiv_not_linked_med_staff == 1), ]
+dim(hiv_not_linked_med_staff)
+hiv_not_linked_med_staff <- nrow(hiv_not_linked_med_staff)
+hiv_not_linked_med_staff
+
+hiv_not_linked_med_staff_percent <- percent(hiv_not_linked_med_staff/hiv_not_linked, accuracy = 0.1)
+hiv_not_linked_med_staff_percent
+
+
+
+enc$hiv_not_linked_family[(enc$hiv_closed_case == 1 & is.na(enc$hiv_linked)) &
+                            (enc$ltc_hiv_prevented_rsn___3 == 1)] <- 1
+table(enc$hiv_not_linked_family)
+
+table(enc$hiv_not_linked_family)
+hiv_not_linked_family <- enc[which(enc$hiv_not_linked_family == 1), ]
+dim(hiv_not_linked_family)
+hiv_not_linked_family <- nrow(hiv_not_linked_family)
+hiv_not_linked_family
+
+hiv_not_linked_family_percent <- percent(hiv_not_linked_family/hiv_not_linked, accuracy = 0.1)
+hiv_not_linked_family_percent
+
+
+
+enc$hiv_not_linked_not_talking[(enc$hiv_closed_case == 1 & is.na(enc$hiv_linked)) &
+                                 (enc$ltc_hiv_prevented_rsn___4 == 1)] <- 1
+table(enc$hiv_not_linked_not_talking)
+
+table(enc$hiv_not_linked_not_talking)
+hiv_not_linked_not_talking <- enc[which(enc$hiv_not_linked_not_talking == 1), ]
+dim(hiv_not_linked_not_talking)
+hiv_not_linked_not_talking <- nrow(hiv_not_linked_not_talking)
+hiv_not_linked_not_talking
+
+hiv_not_linked_not_talking_percent <- percent(hiv_not_linked_not_talking/hiv_not_linked, accuracy = 0.1)
+hiv_not_linked_not_talking_percent
+
+
+
+enc$hiv_not_linked_safety[(enc$hiv_closed_case == 1 & is.na(enc$hiv_linked)) &
+                            (enc$ltc_hiv_prevented_rsn___5 == 1)] <- 1
+table(enc$hiv_not_linked_safety)
+
+table(enc$hiv_not_linked_safety)
+hiv_not_linked_safety <- enc[which(enc$hiv_not_linked_safety == 1), ]
+dim(hiv_not_linked_safety)
+hiv_not_linked_safety <- nrow(hiv_not_linked_safety)
+hiv_not_linked_safety
+
+hiv_not_linked_safety_percent <- percent(hiv_not_linked_safety/hiv_not_linked, accuracy = 0.1)
+hiv_not_linked_safety_percent
+
+
+
+enc$hiv_not_linked_medical[(enc$hiv_closed_case == 1 & is.na(enc$hiv_linked)) &
+                             (enc$ltc_hiv_prevented_rsn___6 == 1 |
+                                enc$ltc_hiv_prevented_rsn___8)] <- 1
+table(enc$hiv_not_linked_medical)
+
+table(enc$hiv_not_linked_medical)
+hiv_not_linked_medical <- enc[which(enc$hiv_not_linked_medical == 1), ]
+dim(hiv_not_linked_medical)
+hiv_not_linked_medical <- nrow(hiv_not_linked_medical)
+hiv_not_linked_medical
+
+hiv_not_linked_medical_percent <- percent(hiv_not_linked_medical/hiv_not_linked, accuracy = 0.1)
+hiv_not_linked_medical_percent
+
+
+
+enc$hiv_not_linked_contact[(enc$hiv_closed_case == 1 & is.na(enc$hiv_linked)) &
+                             (enc$ltc_hiv_prevented_rsn___20 == 1)] <- 1
+table(enc$hiv_not_linked_contact)
+
+table(enc$hiv_not_linked_contact)
+hiv_not_linked_contact <- enc[which(enc$hiv_not_linked_contact == 1), ]
+dim(hiv_not_linked_contact)
+hiv_not_linked_contact <- nrow(hiv_not_linked_contact)
+hiv_not_linked_contact
+
+hiv_not_linked_contact_percent <- percent(hiv_not_linked_contact/hiv_not_linked, accuracy = 0.1)
+hiv_not_linked_contact_percent
+
+
+
+enc$hiv_not_linked_language[(enc$hiv_closed_case == 1 & is.na(enc$hiv_linked)) &
+                              (enc$ltc_hiv_prevented_rsn___9 == 1)] <- 1
+table(enc$hiv_not_linked_language)
+
+table(enc$hiv_not_linked_language)
+hiv_not_linked_language <- enc[which(enc$hiv_not_linked_language == 1), ]
+dim(hiv_not_linked_language)
+hiv_not_linked_language <- nrow(hiv_not_linked_language)
+hiv_not_linked_language
+
+hiv_not_linked_language_percent <- percent(hiv_not_linked_language/hiv_not_linked, accuracy = 0.1)
+hiv_not_linked_language_percent
+
+
+
+enc$hiv_not_linked_other[(enc$hiv_closed_case == 1 & is.na(enc$hiv_linked)) &
+                           (enc$ltc_hiv_prevented_rsn___0 == 1)] <- 1
+table(enc$hiv_not_linked_other)
+
+table(enc$hiv_not_linked_other)
+hiv_not_linked_other <- enc[which(enc$hiv_not_linked_other == 1), ]
+dim(hiv_not_linked_other)
+hiv_not_linked_other <- nrow(hiv_not_linked_other)
+hiv_not_linked_other
+
+hiv_not_linked_other_percent <- percent(hiv_not_linked_other/hiv_not_linked, accuracy = 0.1)
+hiv_not_linked_other_percent
+
+
+```
+
+## HIV Testing - Overview
+
+Testing for Human Immunodeficiency Virus (HIV) is a major focus for EIP, and there are several methods for testing and funding streams that are a part of the program. The various programs that involve HIV testing are covered on this page. In parallel with lab-based testing conducted within the hospital and/or clinical settings, rapid-based testing conducted by EIP has been around since the start of the program in 1998 in some form or another.
+
+The following table shows an overview of the total number of tests within each testing program, the total number of positives as well as the number of newly identified positive cases, and the positivity rate for each program. The overall positivity rate for the combined rapid-based testing methods within EIP is [**`r eip_positivity_rate`**]{style="color: red;"} (`r eip_total_pos_hiv_tests` total new positives out of `r eip_total_hiv_tests` total rapid-HIV tests).
+
+```{r, echo = FALSE}
+
+hiv_testing_tbl <- data.frame(matrix(ncol = 3, nrow = 0))
+colnames(hiv_testing_tbl) <- c('.', 'CTR', 'EHE')
+hiv_testing_tbl[nrow(hiv_testing_tbl) + 1,] <- list('Number of Tests', ctr_tests, ehe_tests)
+hiv_testing_tbl[nrow(hiv_testing_tbl) + 1,] <- list('Positives', ctr_positive, ehe_positive)
+hiv_testing_tbl[nrow(hiv_testing_tbl) + 1,] <- list('New Positives', ctr_new_positive, ehe_new_positive)
+hiv_testing_tbl[nrow(hiv_testing_tbl) + 1,] <- list('Positivity Rate', ctr_positivity_rate, ehe_positivity_rate)
+reactable(hiv_testing_tbl,
+          theme = reactableTheme(
+            color = "hsl(233, 9%, 87%)",
+            backgroundColor = "hsl(233, 9%, 19%)",
+            borderColor = "hsl(233, 9%, 22%)",
+            stripedColor = "hsl(233, 12%, 22%)",
+            highlightColor = "hsl(233, 12%, 24%)",
+            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
+          resizable = TRUE)
+
+
+```
+
+Daily HIV testing is tracked for each independent program and is shown in the chart below. The subsequent table also shows the number of tests for each HIV testing method on a daily basis.
+
+```{r, echo = FALSE}
+
+daily_hiv_testing_plot <- ggplot(daily_hiv_tests, aes(x = Date)) +
+  geom_line(aes(y = ctr_tests), color = "lightskyblue") +
+  geom_line(aes(y = ehe_tests), color = "darkgreen") +
+  ylab("Count") +
+  ggtitle("Daily HIV Testing")
+
+ggplotly(daily_hiv_testing_plot)
+
+
+daily_hiv_testing_table <- select(daily_hiv_tests, Date, ctr_tests, ehe_tests)
+colnames(daily_hiv_testing_table)[2] <- 'CTR Tests'
+colnames(daily_hiv_testing_table)[3] <- 'EHE Tests'
+reactable(daily_hiv_testing_table,
+          showPageSizeOptions = TRUE,
+          pageSizeOptions = c(10, 15, 31),
+          defaultPageSize = 10,
+          theme = reactableTheme(
+            color = "hsl(233, 9%, 87%)",
+            backgroundColor = "hsl(233, 9%, 19%)",
+            borderColor = "hsl(233, 9%, 22%)",
+            stripedColor = "hsl(233, 12%, 22%)",
+            highlightColor = "hsl(233, 12%, 24%)",
+            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
+          resizable = TRUE)
+
+```
+
+However, since the reporting for each of these programs is done on a monthly basis, it is easier to look at the total number of tests that are conducted for each program within a monthly structure. The figure below shows the monthly testing numbers for each of the programs, as well as in the subsequent table.
+
+```{r, echo = FALSE}
+
+monthly_hiv_testing_plot <- plot_ly(data = monthly_hiv_tests, x = ~Date, y = ~ctr_tests, type = 'bar', name = 'CTR Tests',
+             text = ~ctr_tests, textposition = 'auto',
+             marker = list(color = 'lightskyblue')) %>%
+  add_trace(y = ~ehe_tests, name = 'EHE Tests',
+            text = ~ehe_tests, textposition = 'auto',
+            marker = list(color = 'darkgreen')) %>%
+  layout(yaxis = list(title = 'Total HIV Tests'), barmode = 'stack')
+monthly_hiv_testing_plot
+
+
+
+monthly_hiv_testing_table <- select(monthly_hiv_tests, Date, ctr_tests, ehe_tests)
+colnames(monthly_hiv_testing_table)[2] <- 'CTR Tests'
+colnames(monthly_hiv_testing_table)[3] <- 'EHE Tests'
+reactable(monthly_hiv_testing_table,
+          showPageSizeOptions = TRUE,
+          pageSizeOptions = c(12, 24),
+          defaultPageSize = 12,
+          theme = reactableTheme(
+            color = "hsl(233, 9%, 87%)",
+            backgroundColor = "hsl(233, 9%, 19%)",
+            borderColor = "hsl(233, 9%, 22%)",
+            stripedColor = "hsl(233, 12%, 22%)",
+            highlightColor = "hsl(233, 12%, 24%)",
+            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
+          resizable = TRUE)
+
+```
+
+# CTR Testing
+
+The Counseling, Testing, and Referral to treatment (CTR) testing program...
+
+```{r, echo = FALSE}
+
+ctr_hrhs_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 0.45), y = c(0, 1)),
+  value = ctr_hrhs_tested,
+  title = list(text = "HRHS CTR Tested", font = list(size = 18)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 900)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_hrhs_tested_gauge <- ctr_hrhs_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+
+
+ctr_hrhs_woc_tested_gauge <- plot_ly(
+  domain = list(x = c(0.55, 1), y = c(0, 1)),
+  value = ctr_hrhs_woc_tested,
+  title = list(text = "HRHS/WOC CTR Tested", font = list(size = 18)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 100)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_hrhs_woc_tested_gauge <- ctr_hrhs_woc_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+
+
+
+
+ctr_hrhs_youth_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 0.45), y = c(0, 1)),
+  value = ctr_hrhs_youth_tested,
+  title = list(text = "HRHS/Youth CTR Tested", font = list(size = 18)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 200)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_hrhs_youth_tested_gauge <- ctr_hrhs_youth_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+
+
+
+
+ctr_hrhs_idu_tested_gauge <- plot_ly(
+  domain = list(x = c(0.55, 1), y = c(0, 1)),
+  value = ctr_hrhs_idu_tested,
+  title = list(text = "HRHS/IDU CTR Tested", font = list(size = 18)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 300)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_hrhs_idu_tested_gauge <- ctr_hrhs_idu_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+
+
+
+
+ctr_msm_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 0.45), y = c(0, 1)),
+  value = ctr_msm_tested,
+  title = list(text = "MSM CTR Tested", font = list(size = 18)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 100)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_msm_tested_gauge <- ctr_msm_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+
+
+
+
+ctr_msm_youth_tested_gauge <- plot_ly(
+  domain = list(x = c(0.55, 1), y = c(0, 1)),
+  value = ctr_msm_youth_tested,
+  title = list(text = "MSM/Youth CTR Tested", font = list(size = 18)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 20)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_msm_youth_tested_gauge <- ctr_msm_youth_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+
+
+
+
+ctr_msm_idu_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 0.45), y = c(0, 1)),
+  value = ctr_msm_idu_tested,
+  title = list(text = "MSM/IDU CTR Tested", font = list(size = 18)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 20)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_msm_idu_tested_gauge <- ctr_msm_idu_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+
+
+
+
+ctr_msm_new_dx_gauge <- plot_ly(
+  domain = list(x = c(0, 0.45), y = c(0, 1)),
+  value = ctr_msm_new_dx,
+  title = list(text = "MSM CTR New Positive", font = list(size = 18)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 5)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray",
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = 3))) 
+ctr_msm_new_dx_gauge <- ctr_msm_new_dx_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+
+
+
+
+ctr_hrhs_new_dx_gauge <- plot_ly(
+  domain = list(x = c(0.55, 1), y = c(0, 1)),
+  value = ctr_hrhs_new_dx,
+  title = list(text = "HRHS CTR New Positive", font = list(size = 18)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 9)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_hrhs_new_dx_gauge <- ctr_hrhs_new_dx_gauge %>%
+  layout(margin = list(l=100,r=150))
 
 ```
 
 
-# Housing Linkage to Care
+The deliverables for the CTR testing program are shown in the gauge charts below. All deliverables are based on the program funding year, and are counted between January 1st and December 31st to determine whether we meet these goals for the program.
 
 
-The flowchart of the housing Linkage to Care efforts for EIP are shown below.
+```{r, echo = FALSE}
+
+hiv_gauge_subplot1 <- subplot(ctr_hrhs_tested_gauge, ctr_hrhs_woc_tested_gauge)
+hiv_gauge_subplot1
+
+hiv_gauge_subplot2 <- subplot(ctr_hrhs_youth_tested_gauge, ctr_hrhs_idu_tested_gauge)
+hiv_gauge_subplot2
+
+hiv_gauge_subplot3 <- subplot(ctr_msm_tested_gauge, ctr_msm_youth_tested_gauge)
+hiv_gauge_subplot3
+
+hiv_gauge_subplot4 <- subplot(ctr_msm_idu_tested_gauge)
+hiv_gauge_subplot4
+
+hiv_gauge_subplot5 <- subplot(ctr_msm_new_dx_gauge, ctr_hrhs_new_dx_gauge)
+hiv_gauge_subplot5
+
+```
+
+```{r, echo = FALSE}
+
+ctr_deliverables_tbl <- data.frame(matrix(ncol = 3, nrow = 0))
+colnames(ctr_deliverables_tbl) <- c('CTR Deliverable', 'Goal', 'Achieved')
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS tested', 900, ctr_hrhs_tested)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS WOC tested', 100, ctr_hrhs_woc_tested)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS Youth tested', 200, ctr_hrhs_youth_tested)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS IDU tested', 300, ctr_hrhs_idu_tested)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM tested', 100, ctr_msm_tested)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM Youth tested', 20, ctr_msm_youth_tested)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM IDU tested', 20, ctr_msm_idu_tested)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM New CTR positive', '3-5', ctr_msm_new_dx)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS New CTR positive', 9, ctr_hrhs_new_dx)
+reactable(ctr_deliverables_tbl,
+          theme = reactableTheme(
+            color = "hsl(233, 9%, 87%)",
+            backgroundColor = "hsl(233, 9%, 19%)",
+            borderColor = "hsl(233, 9%, 22%)",
+            stripedColor = "hsl(233, 12%, 22%)",
+            highlightColor = "hsl(233, 12%, 24%)",
+            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
+          resizable = TRUE)
+
+```
 
 
-```{r, echo=FALSE}
+The CTR program also has site and population-specific deliverables that need to be met.
+
+
+-- At UCMC: 75 MSM tested, 550 HRHS tested
+-- At WCH: 10 MSM tested, 100 HRHS tested
+-- At Exchange: 10 MSM tested, 150 HRHS tested
+-- At Talbert: 5 MSM tested, 100 HRHS tested
+
+
+
+# EHE Testing
+
+The Ending the HIV Epidemic (EHE) testing program...
+
+
+```{r, echo = FALSE}
+
+ehe_hrhs_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = ehe_hrhs_tested,
+  title = list(text = "HRHS EHE Tested", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 875)),
+    bar = list(color = "darkgreen"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ehe_hrhs_tested_gauge <- ehe_hrhs_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+ehe_hrhs_tested_gauge
+
+
+
+ehe_msm_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = ehe_msm_tested,
+  title = list(text = "MSM EHE Tested", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 75)),
+    bar = list(color = "darkgreen"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ehe_msm_tested_gauge <- ehe_msm_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+ehe_msm_tested_gauge
+
+
+
+ehe_msm_youth_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = ehe_msm_youth_tested,
+  title = list(text = "MSM EHE Tested", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 40)),
+    bar = list(color = "darkgreen"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ehe_msm_youth_tested_gauge <- ehe_msm_youth_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+ehe_msm_youth_tested_gauge
+
+
+
+ehe_msm_idu_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = ehe_msm_idu_tested,
+  title = list(text = "MSM EHE Tested", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 12)),
+    bar = list(color = "darkgreen"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ehe_msm_idu_tested_gauge <- ehe_msm_idu_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+ehe_msm_idu_tested_gauge
+
+```
+
+```{r, echo = FALSE}
+
+ehe_hrhs_tested_gauge
+
+```
+
+```{r, echo = FALSE}
+
+ehe_msm_tested_gauge
+
+```
+
+```{r, echo = FALSE}
+
+ehe_msm_youth_tested_gauge
+
+```
+
+```{r, echo = FALSE}
+
+ehe_msm_idu_tested_gauge
+
+```
+
+
+```{r, echo = FALSE}
+
+ehe_deliverables_tbl <- data.frame(matrix(ncol = 3, nrow = 0))
+colnames(ehe_deliverables_tbl) <- c('EHE Deliverable', 'Goal', 'Achieved')
+ehe_deliverables_tbl[nrow(ehe_deliverables_tbl) + 1,] <- list('HRHS tested', 875, ehe_hrhs_tested)
+ehe_deliverables_tbl[nrow(ehe_deliverables_tbl) + 1,] <- list('MSM tested', 75, ehe_msm_tested)
+ehe_deliverables_tbl[nrow(ehe_deliverables_tbl) + 1,] <- list('MSM Youth tested', 40, ehe_msm_youth_tested)
+ehe_deliverables_tbl[nrow(ehe_deliverables_tbl) + 1,] <- list('MSM IDU tested', 12, ehe_msm_idu_tested)
+reactable(ehe_deliverables_tbl,
+          theme = reactableTheme(
+            color = "hsl(233, 9%, 87%)",
+            backgroundColor = "hsl(233, 9%, 19%)",
+            borderColor = "hsl(233, 9%, 22%)",
+            stripedColor = "hsl(233, 12%, 22%)",
+            highlightColor = "hsl(233, 12%, 24%)",
+            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
+          resizable = TRUE)
+
+```
+
+
+# HIV Linkage to Care
+
+Any individual that is identified as a person living with HIV/AIDS (PLWHA), whether newly diagnosed or a previously known positive individual, is meant to have a linkage case started to determine the need and level of follow-up by the EIP Linkage team. All encounters where an individual is identified as a PLWHA is counted, and then their need for linkage is assessed by the linkage team so that the true number of those in need of our services can be determined. The total number of encounters where an individual is identified as a PLWHA is **`r plwha`**, and the total number of linkage cases initiated (*should be equal*) is **`r hiv_ltc`** (*`r hiv_ltc_percent` of those encounters with PLWHA, `r hiv_ltc`/`r plwha`*). A consort diagram of these HIV Linkage cases is shown later.
+
+Once an linkage case is started, the linkage team determines whether the linkage case can be realistically worked and the efforts of our linkage staff can continue follow-up with their outreach capacity. There are several factors that have been determined that make a linkage case "ineleigible" to be worked, and are thus excluded from the total number reported to funding entities when reporting linkage data. These situations are not necessarily mutually exclusive.
+
+If an individual states that they are already in care, or if there is clear evidence within the medical record that the individual is successfully engaging in care, then they are termed "ineligible" due to alrady being linked to care. The total number of HIV linkage cases where the individual was known to already be in care are **`r hiv_already_linked`** (*`r hiv_already_linked_percent` of all HIV linkage cases initiated, `r hiv_already_linked`/`r hiv_ltc`*).
+
+If the individual passes away during their encounter in the emergency department, or while our linkage team is attempting to get them linked to care, then they are termed "ineligible" and are not able to be linked, and thus are excluded. The total number of HIV linkage cases where the individual was deceased before linkage could be completed was **`r hiv_deceased`** (*`r hiv_deceased_percent` of all HIV linkage cases initiated, `r hiv_deceased`/`r hiv_ltc`*).
+
+If the individual is in police custody, or incarcerated while the linkage team is attempting to get them linked to care, then there are often difficulties in establishing communication with the individual and getting them to an appointment with a specialist. While not impossible to link them to care in these situations, it does make it more difficult and could provide significant barriers, and thus are termed "ineligible" if this is the case in that situation. The total number of HIV linkage cases where the individual was incarcerated or in police custody, therefore complicating linkage access, was **`r hiv_incarcerated`** (*`r hiv_incarcerated_percent` of all HIV linkage cases initiated, `r hiv_incarcerated`/`r hiv_ltc`*).
+
+If the individual declines our team's linkage services for any reason, even after multiple offers for support, then they are termed "ineligible" due to not wanting linkage servies at that time. The total number of HIV linkage cases where the individual declined linkage services was **`r hiv_linkage_declined`** (*`r hiv_linkage_declined_percent` of all HIV linkage cases initiated, `r hiv_linkage_declined`/`r hiv_ltc`*).
+
+Due to the length of time that some linkage cases may take, there are several instances where the individual may return and be identified by EIP while they already have ongoing linkage cases. Rather than duplicating the need for linkage, and only maintaining one linkage case at a time, the individual is still marked as identified for linkage, but termed "ineligible" due to ongoing linkage already in progress.The total number of HIV linkage cases where the individual already had an ongoing linkage case in progress was **`r hiv_ongoing_linkage`** (*`r hiv_ongoing_linkage_percent` of all HIV linkage cases initiated, `r hiv_ongoing_linkage`/`r hiv_ltc`*).
+
+There are a total number of **`r hiv_ineligible_ltc`** HIV linkage cases where the individual meets at least one of these "ineligible" criteria (*`r hiv_ineligible_ltc_percent` of all HIV linkage cases initiated, `r hiv_ineligible_ltc`/`r hiv_ltc`*), leaving **`r hiv_eligible_ltc`** HIV linkage cases that are eligible to be worked by our linkage team (*`r hiv_eligible_ltc_percent` of all HIV linkage cases initiated, `r hiv_eligible_ltc`/`r hiv_ltc`*). This is the total number of HIV Linkage cases that is used when reporting our linkage efforts for HIV. Additionally, HIV linkage is broken out by linkage efforts for those who are newly diagnosed and those those are previous positives requiring re-engagement in care. There are **`r hiv_new_eligible_ltc`** linkage cases eligible for individuals who are New Diagnoses (*`r hiv_new_eligible_ltc_percent` of all eligible HIV linkage cases, `r hiv_new_eligible_ltc`/`r hiv_eligible_ltc`*) and there are **`r hiv_prev_eligible_ltc`** linkage cases for individuals who are Previous Diagnoses (*`r hiv_prev_eligible_ltc_percent` of all eligible HIV linkage cases, `r hiv_prev_eligible_ltc`/`r hiv_eligible_ltc`*). It may take some time before it is known whether an individual has a previous diagnosis, or if that instance of when staff identify them as positive is a new diagnosis, depending on the situation. Therefore, it is also tracked on the number of eligible HIV linkage cases where the individual has an "unknown diagnosis" status. This does not mean their status is unknown (*since HIV linkage is only done for those who are positive*), it is unknown whether they are new or previous at the time of the data pull. There are **`r hiv_unk_eligible_ltc`** HIV linkage cases where they are in this unknown state (*`r hiv_unk_eligible_ltc_percent` of all eligible HIV linkage cases, `r hiv_unk_eligible_ltc`/`r hiv_eligible_ltc`*).
+
+From this point, it is tracked whether a case in open and currently being worked, or whether it is closed and what the final linkage status is for the case. There are a total of **`r hiv_in_progress`** HIV linkage cases that are currently open and in progress (*`r hiv_in_progress_percent` of all eligible HIV linkage cases, `r hiv_in_progress`/`r hiv_eligible_ltc`*). There are **`r hiv_new_in_progress`** cases open that are for New Diagnoses (*`r hiv_new_in_progress_percent` of all eligible HIV cases for New Diagnoses, `r hiv_new_in_progress`/`r hiv_new_eligible_ltc`*) and there are **`r hiv_prev_in_progress`** cases open that are for Previous Diagnoses (*`r hiv_prev_in_progress_percent` of all eligible HIV cases for Previous Diagnoses, `r hiv_prev_in_progress`/`r hiv_prev_eligible_ltc`*).
+
+There are a total of **`r hiv_closed_case`** closed HIV linkage cases (*`r hiv_closed_case_percent` of all eligible HIV linkage cases, `r hiv_closed_case`/`r hiv_eligible_ltc`*). There was a total of **`r hiv_linked`** eligible HIV linkage cases where the individual was successfully connected to care (*`r hiv_linked_percent` of all eligible HIV linkage cases, `r hiv_linked`/`r hiv_eligible_ltc`*). The definition used for successful linkage for PLWHA is that they are known to attend an appointment or individualized meeting with a specialist for HIV care, such as at UCMC Infectious Disease Center (IDC). There were a total of **`r hiv_new_linked`** cases where the individual was newly diagnosed for HIV that were linked to care (*`r hiv_new_linked_percent` of all eligible HIV linkage cases for New Diagnoses, `r hiv_new_linked`/`r hiv_new_eligible_ltc`*), and a total of **`r hiv_prev_linked`** cases where the individual was a previously known positive for HIV that were linked to care (*`r hiv_prev_linked_percent` of all eligible HIV linkage cases for Previous Diagnoses, `r hiv_prev_linked`/`r hiv_prev_eligible_ltc`*).
+
+For those situations where the individual was unable to be linked to care, there were a total of **`r hiv_not_linked`** cases where they were not successfully established with treatment (*`r hiv_not_linked_percent` of all eligible HIV linkage cases, `r hiv_not_linked`/`r hiv_eligible_ltc`*). Out of these, **`r hiv_new_not_linked`** were cases where the individual was newly diagnosed (*`r hiv_new_not_linked_percent` of all eligible HIV linkage cases for New Diagnoses, `r hiv_new_not_linked`/`r hiv_new_eligible_ltc`*) and **`r hiv_prev_not_linked`** were cases where the individual was previously diagnosed (*`r hiv_prev_not_linked_percent` of all eligible HIV linkage cases for Previous Diagnoses, `r hiv_prev_not_linked`/`r hiv_prev_eligible_ltc`*). For situations where the individual was not successfully established with care, the specific reasons as to why they were unable to be linked are documented within the linkage record. There are numerous reasons why an individual can be prevented from being linked, and these reasons are not mutually exclusive. The medical staff or the family may interfere with attempts to get them into care, the patient may refuse to communicate with our linkage team, or there may be no reliable way to contact the individual during follow-up, or any other number of reasons. These reasons are shown in the consort diagram below.
+
+The consort or flow diagram below represents all of the linkage data described above visually. All numbers are represented as total (n, [blue]{style="color: blue;"}) and percent (%, [steel blue]{style="color: steelblue;"}). To know the denominator of each percent represented in the consort diagram below, please refer to the description of the data points in the text above.
+
+
+```{r, echo = FALSE}
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
@@ -2326,13 +3312,13 @@ grid_data %>%
 
 
 grid +
-  # Housing Linkage Cases
+  # HIV Linkage Cases
   geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
-            fill = 'darkslategray1', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 97, label = 'Housing Linkage Cases', size = 2) +
+            fill = 'lightblue', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 97, label = 'HIV Linkage Cases', size = 2) +
   geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 93, label = housing_ltc, size = 2, color = 'dodgerblue2') +
+  annotate('text', x = 10.5, y = 93, label = hiv_ltc, size = 2, color = 'blue') +
   
   # Ineligible for Linkage
   geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
@@ -2340,8 +3326,8 @@ grid +
   annotate('text', x = 52.5, y = 82, label = 'Ineligible for Linkage', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 78, label = housing_ineligible_ltc, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 60, y = 78, label = housing_ineligible_ltc_percent, size = 2, color = 'cyan4') +
+  annotate('text', x = 51.5, y = 78, label = hiv_ineligible_ltc, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 78, label = hiv_ineligible_ltc_percent, size = 2, color = 'steelblue') +
   
   
   # Reasons Ineligible for Linkage
@@ -2354,26 +3340,42 @@ grid +
   annotate('text', x = 87, y = 73, label = 'Ongoing linkage ', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 94, y = 85, label = housing_already_linked, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 85, label = housing_already_linked_percent, size = 2, color = 'cyan4') +
-  annotate('text', x = 94, y = 82, label = housing_deceased, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 82, label = housing_deceased_percent, size = 2, color = 'cyan4') +
-  annotate('text', x = 94, y = 79, label = housing_incarcerated, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 79, label = housing_incarcerated_percent, size = 2, color = 'cyan4') +
-  annotate('text', x = 94, y = 76, label = housing_linkage_declined, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 76, label = housing_linkage_declined_percent, size = 2, color = 'cyan4') +
-  annotate('text', x = 94, y = 73, label = housing_ongoing_linkage, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 73, label = housing_ongoing_linkage_percent, size = 2, color = 'cyan4') +
+  annotate('text', x = 94, y = 85, label = hiv_already_linked, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 85, label = hiv_already_linked_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 82, label = hiv_deceased, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 82, label = hiv_deceased_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 79, label = hiv_incarcerated, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 79, label = hiv_incarcerated_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 76, label = hiv_linkage_declined, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 76, label = hiv_linkage_declined_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 73, label = hiv_ongoing_linkage, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 73, label = hiv_ongoing_linkage_percent, size = 2, color = 'steelblue') +
   
   
   # Eligible for Linkage
   geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
-            fill = 'darkslategray1', size = 0.25, size = 0.25) +
+            fill = 'lightblue', size = 0.25, size = 0.25) +
   annotate('text', x = 10.5, y = 67, label = 'Eligible for Linkage', size = 2) +
   geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 63, label = housing_eligible_ltc, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 19, y = 63, label = housing_eligible_ltc_percent, size = 2, color = 'cyan4') +
+  annotate('text', x = 10.5, y = 63, label = hiv_eligible_ltc, size = 2, color = 'blue') +
+  annotate('text', x = 19, y = 63, label = hiv_eligible_ltc_percent, size = 2, color = 'steelblue') +
+  
+  
+  # New vs. Prev vs. Unk Eligibility
+  geom_rect(xmin = 25, xmax = 35, ymin = 60, ymax = 70, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 26, y = 69, label = 'New Dx:', size = 2) +
+  annotate('text', x = 26, y = 65, label = 'Prev Dx:', size = 2) +
+  annotate('text', x = 26, y = 61, label = 'Unk Dx:', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 30, y = 69, label = hiv_new_eligible_ltc, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 69, label = hiv_new_eligible_ltc_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 30, y = 65, label = hiv_prev_eligible_ltc, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 65, label = hiv_prev_eligible_ltc_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 30, y = 61, label = hiv_unk_eligible_ltc, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 61, label = hiv_unk_eligible_ltc_percent, size = 2, color = 'steelblue') +
   
   
   # In Progress
@@ -2382,8 +3384,8 @@ grid +
   annotate('text', x = 50.5, y = 52, label = 'In Progress', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 48, label = housing_in_progress, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 60, y = 48, label = housing_in_progress_percent, size = 2, color = 'cyan4') +
+  annotate('text', x = 51.5, y = 48, label = hiv_in_progress, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 48, label = hiv_in_progress_percent, size = 2, color = 'steelblue') +
   
   
   # In Progress over 90 days
@@ -2392,18 +3394,34 @@ grid +
   annotate('text', x = 52, y = 42, label = '>90 days:', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 56, y = 42, label = housing_in_progress_90days, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 60, y = 42, label = housing_in_progress_90days_percent, size = 2, color = 'cyan4') +
+  annotate('text', x = 56, y = 42, label = hiv_in_progress_90days, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 42, label = hiv_in_progress_90days_percent, size = 2, color = 'steelblue') +
+  
+  
+  # New vs. Prev vs. Unk In Progress
+  geom_rect(xmin = 66, xmax = 88, ymin = 45, ymax = 55, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 67, y = 54, label = 'New Dx:', size = 2) +
+  annotate('text', x = 67, y = 50, label = 'Prev Dx:', size = 2) +
+  annotate('text', x = 67, y = 46, label = 'Unk Dx:', size = 2) +
+  geom_rect(xmin = 66, xmax = 88, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 71, y = 54, label = hiv_new_in_progress, size = 2, color = 'blue') +
+  annotate('text', x = 75, y = 54, label = hiv_new_in_progress_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 71, y = 50, label = hiv_prev_in_progress, size = 2, color = 'blue') +
+  annotate('text', x = 75, y = 50, label = hiv_prev_in_progress_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 71, y = 46, label = hiv_unk_in_progress, size = 2, color = 'blue') +
+  annotate('text', x = 75, y = 46, label = hiv_unk_in_progress_percent, size = 2, color = 'steelblue') +
   
   
   # Closed Cases
   geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
-            fill = 'darkslategray1', size = 0.25, size = 0.25) +
+            fill = 'lightblue', size = 0.25, size = 0.25) +
   annotate('text', x = 10.5, y = 37, label = 'Closed Cases', size = 2) +
   geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 33, label = housing_closed_case, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 19, y = 33, label = housing_closed_case_percent, size = 2, color = 'cyan4') +
+  annotate('text', x = 10.5, y = 33, label = hiv_closed_case, size = 2, color = 'blue') +
+  annotate('text', x = 19, y = 33, label = hiv_closed_case_percent, size = 2, color = 'steelblue') +
   
   
   # Not Linked
@@ -2412,8 +3430,21 @@ grid +
   annotate('text', x = 50.5, y = 22, label = 'Not Linked', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 18, label = housing_not_linked, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 60, y = 18, label = housing_not_linked_percent, size = 2, color = 'cyan4') +
+  annotate('text', x = 51.5, y = 18, label = hiv_not_linked, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 18, label = hiv_not_linked_percent, size = 2, color = 'steelblue') +
+  
+  
+  # New vs. Prev Not Linked
+  geom_rect(xmin = 41, xmax = 63, ymin = 7, ymax = 14, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 52, y = 12, label = 'New Dx:', size = 2) +
+  annotate('text', x = 52, y = 8, label = 'Prev Dx:', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 7, ymax = 14, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 56, y = 12, label = hiv_new_not_linked, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 12, label = hiv_new_not_linked_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 56, y = 8, label = hiv_prev_not_linked, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 8, label = hiv_prev_not_linked_percent, size = 2, color = 'steelblue') +
   
   
   # Reasons Not Linked
@@ -2429,32 +3460,45 @@ grid +
   annotate('text', x = 87, y = 5, label = '                   Other', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 30, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 94, y = 26, label = housing_not_linked_med_staff, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 26, label = housing_not_linked_med_staff_percent, size = 2, color = 'cyan4') +
-  annotate('text', x = 94, y = 23, label = housing_not_linked_family, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 23, label = housing_not_linked_family_percent, size = 2, color = 'cyan4') +
-  annotate('text', x = 94, y = 20, label = housing_not_linked_not_talking, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 20, label = housing_not_linked_not_talking_percent, size = 2, color = 'cyan4') +
-  annotate('text', x = 94, y = 17, label = housing_not_linked_safety, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 17, label = housing_not_linked_safety_percent, size = 2, color = 'cyan4') +
-  annotate('text', x = 94, y = 14, label = housing_not_linked_medical, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 14, label = housing_not_linked_medical_percent, size = 2, color = 'cyan4') +
-  annotate('text', x = 94, y = 11, label = housing_not_linked_contact, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 11, label = housing_not_linked_contact_percent, size = 2, color = 'cyan4') +
-  annotate('text', x = 94, y = 8, label = housing_not_linked_language, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 8, label = housing_not_linked_language_percent, size = 2, color = 'cyan4') +
-  annotate('text', x = 94, y = 5, label = housing_not_linked_other, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 98, y = 5, label = housing_not_linked_other_percent, size = 2, color = 'cyan4') +
+  annotate('text', x = 94, y = 26, label = hiv_not_linked_med_staff, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 26, label = hiv_not_linked_med_staff_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 23, label = hiv_not_linked_family, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 23, label = hiv_not_linked_family_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 20, label = hiv_not_linked_not_talking, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 20, label = hiv_not_linked_not_talking_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 17, label = hiv_not_linked_safety, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 17, label = hiv_not_linked_safety_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 14, label = hiv_not_linked_medical, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 14, label = hiv_not_linked_medical_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 11, label = hiv_not_linked_contact, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 11, label = hiv_not_linked_contact_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 8, label = hiv_not_linked_language, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 8, label = hiv_not_linked_language_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 5, label = hiv_not_linked_other, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 5, label = hiv_not_linked_other_percent, size = 2, color = 'steelblue') +
   
   
   # Linked to Care
   geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
-            fill = 'darkslategray1', size = 0.25, size = 0.25) +
+            fill = 'lightblue', size = 0.25, size = 0.25) +
   annotate('text', x = 10.5, y = 7, label = 'Linked to Care', size = 2) +
   geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 3, label = housing_linked, size = 2, color = 'dodgerblue2') +
-  annotate('text', x = 19, y = 3, label = housing_linked_percent, size = 2, color = 'cyan4') +
+  annotate('text', x = 10.5, y = 3, label = hiv_linked, size = 2, color = 'blue') +
+  annotate('text', x = 19, y = 3, label = hiv_linked_percent, size = 2, color = 'steelblue') +
+  
+  
+  # New vs. Prev Linked to Care
+  geom_rect(xmin = 25, xmax = 35, ymin = 0, ymax = 10, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 26, y = 7, label = 'New Dx:', size = 2) +
+  annotate('text', x = 26, y = 3, label = 'Prev Dx:', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 30, y = 7, label = hiv_new_linked, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 7, label = hiv_new_linked_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 30, y = 3, label = hiv_prev_linked, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 3, label = hiv_prev_linked_percent, size = 2, color = 'steelblue') +
   
   
   # Down Arrow 1
@@ -2475,30 +3519,30 @@ grid +
     size = 0.15, linejoin = "mitre", lineend = "butt",
     arrow = arrow(length = unit(2,"mm"), type = "closed")) +
   
-  # Righousing Arrow 1
+  # Right Arrow 1
   geom_segment(
     x = 10.5, xend = 41, y = 80, yend = 80, 
     size = 0.05, linejoin = "mitre", lineend = "butt",
     arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
   
-  # Righousing Arrow 2
+  # Right Arrow 2
   geom_segment(
     x = 10.5, xend = 41, y = 50, yend = 50, 
     size = 0.05, linejoin = "mitre", lineend = "butt",
     arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
   
-  # Righousing Arrow 3
+  # Right Arrow 3
   geom_segment(
     x = 10.5, xend = 41, y = 20, yend = 20, 
     size = 0.05, linejoin = "mitre", lineend = "butt",
     arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
   
-  # Righousing Line 1
+  # Right Line 1
   geom_segment(
     x = 63, xend = 81, y = 80, yend = 80, 
     size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
   
-  # Righousing Line 2
+  # Right Line 2
   geom_segment(
     x = 63, xend = 80, y = 20, yend = 20, 
     size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted")->
@@ -2506,7 +3550,62 @@ grid +
 
 grid + theme_void()
 
+
+
 ```
 
+
+The CTR program also has deliverables for HIV linkage to care, requiring that about 80% of our HIV Linkage cases are connected with treatment, encompassing both new and previous diagnoses. For this metric, the total number of cases reported are the total number of HIV cases that are eligible for linkage (*`r hiv_eligible_ltc` total cases*). The total number successfully linked to care (*`r hiv_linked` linked to care*) is reported, with the overall percentage of the total eligible for linkage (*`r hiv_linked_percent` linked to care*), while also providing the total number of cases that are still in progress (*`r hiv_in_progress` cases in progress*) for their understanding of the overall picture at the time of reporting. Linkage to care data is reported for CTR on a mid-year and end of year period. The gauge to show how close we are to meeting our deliverable for HIV Linkage to Care for the CTR program is shown below.
+
+
+```{r, echo = FALSE}
+
+ctr_linkage_gauge <- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = hiv_linked_gauge,
+  number = list(suffix = "%"),
+  title = list(text = "% PLWHA Linked to Care", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 100)),
+    bar = list(color = "royalblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray",
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = 80))) 
+ctr_linkage_gauge <- ctr_linkage_gauge %>%
+  layout(margin = list(l=100,r=150))
+
+ctr_linkage_gauge
+
+```
+
+
+In addition to a particular percentage that needs to be met for the CTR linkage deliverables, there are also site-specific and population-specific deliverables that are required to meet throughout the funding year. Those deliverables are described and presented below.
+
+
+
+- Site deliverables:
+-- 75 PLWHA linked at UCMC
+-- 15 PLWHA linked at WCH
+-- 5 PLWHA linked at Exchange
+-- 5 PLWHA linked at Talbert
+
+
+- Population deliverables:
+-- 20 PLWHA/WOC linked
+-- 25 PLWHA/Youth linked
+-- 25 PLWHA/IDU linked
+
+
+
+# Additonal things still to include
+
+- Indeterminate tests
+- False positive tests
 
 

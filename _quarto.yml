@@ -6,7 +6,7 @@ website:
   title: "EIP Data Website"
   navbar:
     right:
-      - href: index.qmd
+      - href: main.qmd
         text: Home
       - text: Clinical
         menu:
@@ -14,6 +14,8 @@ website:
             text: HCV
           - href: sud.qmd
             text: SUD
+          - href: human_trafficking.qmd
+            text: Human Trafficking
       - text: Deliverables
         menu:
           - href: ctr_deliverables.qmd
