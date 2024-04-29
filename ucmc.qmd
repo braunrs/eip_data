@@ -72,16 +72,20 @@ patients46 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009
 patients47 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231121.csv')
 patients48 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231128.csv')
 patients49 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231205.csv')
+patients50 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231212.csv')
+patients51 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231219.csv')
+patients52 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231226.csv')
+patients53 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20240102.csv')
 
 ```
 
-```{r, include=FALSE}
+```{r, echo = FALSE}
 
 patients <- rbind(patients1, patients2, patients3, patients4, patients5, patients6, patients7, patients8, patients9, patients10,
                   patients11, patients12, patients13, patients14, patients15, patients16, patients17, patients18, patients19, patients20,
                   patients21, patients22, patients23, patients24, patients25, patients26, patients27, patients28, patients29, patients30,
                   patients31, patients32, patients33, patients34, patients35, patients36, patients37, patients38, patients39, patients40,
-                  patients41, patients42, patients43, patients44, patients45, patients46, patients47, patients48, patients49)
+                  patients41, patients42, patients43, patients44, patients45, patients46, patients47, patients48, patients49, patients50, patients51, patients52, patients53)
 dim(patients)
 head(patients)
 
@@ -304,7 +308,7 @@ ucmc_pts12 <- nrow(ucmc_monthly_pt12)
 ```
 
 
-The data table below is compiled using the weekly CHI files that are received. The total number of encounters are determined by unique CSNs and the total number of unique patients are determined by unique MRNs.
+The data table below is compiled using the weekly CHI files that are received during 2023. The total number of encounters are determined by unique CSNs and the total number of unique patients are determined by unique MRNs.
 
 
 ```{r}
@@ -324,7 +328,7 @@ ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('September', ucmc_enc9, uc
 ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('October', ucmc_enc10, ucmc_pts10)
 ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('November', ucmc_enc11, ucmc_pts11)
 ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('December', ucmc_enc12, ucmc_pts12)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('Totals (*YTD*)', ucmc_encounters, ucmc_patients)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('Totals', ucmc_encounters, ucmc_patients)
 ucmc_monthly_tbl %>%
   kbl() %>%
   kable_paper(bootstrap_options = "striped", full_width = F) %>%
