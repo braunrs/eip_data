@@ -6,7 +6,7 @@ title: "UC Medical Center (UCMC)"
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r, echo = FALSE}
+```{r, include=FALSE}
 
 library(dplyr)
 library(tidyverse)
@@ -79,7 +79,7 @@ patients53 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009
 
 ```
 
-```{r, echo = FALSE}
+```{r, include=FALSE}
 
 patients <- rbind(patients1, patients2, patients3, patients4, patients5, patients6, patients7, patients8, patients9, patients10,
                   patients11, patients12, patients13, patients14, patients15, patients16, patients17, patients18, patients19, patients20,
@@ -311,7 +311,7 @@ ucmc_pts12 <- nrow(ucmc_monthly_pt12)
 The data table below is compiled using the weekly CHI files that are received during 2023. The total number of encounters are determined by unique CSNs and the total number of unique patients are determined by unique MRNs.
 
 
-```{r}
+```{r, echo=FALSE, warning=FALSE}
 
 # Combining Encounter and Patient data into same table
 ucmc_monthly_tbl <- data.frame(matrix(ncol = 3, nrow = 0))

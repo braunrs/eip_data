@@ -606,7 +606,7 @@ dim(eip24)
 
 ```
 
-``` {r Combining Datasets, include=FALSE}
+```{r Combining Datasets, include=FALSE}
 
 ### Combine 2023/2024 Data
 
@@ -1292,7 +1292,7 @@ dim(eip)
 
 ```
 
-``` {r Patient Information, include=FALSE}
+```{r Patient Information, include=FALSE}
 
 # Formatting variables
 
@@ -2838,7 +2838,7 @@ However, when we only consider those questions that were included with Dr. Pulvi
 ht_summary_tbl <- data.frame(matrix(ncol = 6, nrow = 0))
 colnames(ht_summary_tbl) <- c('HT Assessed', '% Assessed', 'HT Assessed (Pulvino)', '% Assessed (Pulvino)', 'Screened HT+', '% HT+')
 ht_summary_tbl[nrow(ht_summary_tbl) + 1,] <- list(ht_assessed, ht_assessed_percent, ht_assessed_pulvino, ht_assessed_pulvino_percent, ht_pos_pulvino, ht_pos_pulvino_percent)
-ht_assessed_pulvino_percent %>%
+ht_summary_tbl %>%
   kbl(table.attr = 'data-quarto-disable-processing="true"') %>%
   kable_paper(bootstrap_options = "striped", full_width = F) %>%
   kable_styling(full_width = F, font_size = 16)
