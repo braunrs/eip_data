@@ -24,6 +24,14 @@ website:
             text: EHE Deliverables
           - href: naccho2.qmd
             text: NACCHO-2 Deliverables
+      - text: Sites
+        menu:
+          - href: ucmc.qmd
+            text: UCMC
+      - text: Research
+        menu:
+          - href: pgx.qmd
+            text: PGx
 
 format:
   html:

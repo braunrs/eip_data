@@ -2838,18 +2838,10 @@ However, when we only consider those questions that were included with Dr. Pulvi
 ht_summary_tbl <- data.frame(matrix(ncol = 6, nrow = 0))
 colnames(ht_summary_tbl) <- c('HT Assessed', '% Assessed', 'HT Assessed (Pulvino)', '% Assessed (Pulvino)', 'Screened HT+', '% HT+')
 ht_summary_tbl[nrow(ht_summary_tbl) + 1,] <- list(ht_assessed, ht_assessed_percent, ht_assessed_pulvino, ht_assessed_pulvino_percent, ht_pos_pulvino, ht_pos_pulvino_percent)
-reactable(ht_summary_tbl,
-          theme = reactableTheme(
-            color = "hsl(233, 9%, 87%)",
-            backgroundColor = "hsl(233, 9%, 19%)",
-            borderColor = "hsl(233, 9%, 22%)",
-            stripedColor = "hsl(233, 12%, 22%)",
-            highlightColor = "hsl(233, 12%, 24%)",
-            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
-          resizable = TRUE)
+ht_assessed_pulvino_percent %>%
+  kbl(table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  kable_styling(full_width = F, font_size = 16)
 
 ```
 

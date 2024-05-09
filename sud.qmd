@@ -37,7 +37,7 @@ eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 202405
 dim(eip24)
 
 # Naloxone Distribution Data
-nalox <- read.csv('M:/EIP Data/EIP Database/EIP Naloxone Distribution Database/EIP Naloxone Distribution/EIP Naloxone Distribution Data 20240108_1343.csv')
+nalox <- read.csv('M:/EIP Data/EIP Database/EIP Naloxone Distribution Database/EIP Naloxone Distribution/EIP Naloxone Distribution Data 20240509_1130.csv')
 dim(nalox)
 
 ```
@@ -605,7 +605,7 @@ dim(eip24)
 
 ```
 
-``` {r Combining Datasets, include=FALSE}
+```{r Combining Datasets, include=FALSE}
 
 ### Combine 2023/2024 Data
 
@@ -1291,7 +1291,7 @@ dim(eip)
 
 ```
 
-``` {r Patient Information, include=FALSE}
+```{r Patient Information, include=FALSE}
 
 # Formatting variables
 
@@ -1918,6 +1918,108 @@ eip$datediff50 <- as.numeric(interval(eip$enc_date, eip$followup_date50)/ddays(1
 
 ```
 
+```{r Naloxone Dataset, include=FALSE}
+
+#####################################  Formatting Naloxone Database Data  ########################################
+
+dim(nalox)
+head(nalox)
+summary(nalox$date)
+nalox$date <- as.Date(nalox$date, format = '%m/%d/%Y')
+summary(nalox$date)
+
+nalox <- nalox[which(nalox$date >= '2023-01-01' & nalox$date <= '2024-12-31'), ]
+summary(nalox$date)
+dim(nalox)
+
+head(nalox)
+table(nalox$version)
+
+nalox_version_individual <- nalox[which(nalox$version == 1), ]
+nalox_version_individual <- select(nalox_version_individual, date)
+nalox_version_individual$individual_dist <- 1
+head(nalox_version_individual)
+individual_naloxone_distribution <- nrow(nalox_version_individual)
+individual_naloxone_distribution
+
+nalox_version_transfer <- nalox[which(nalox$version == 2), ]
+nalox_version_transfer <- select(nalox_version_transfer, date)
+nalox_version_transfer$transfer_dist <- 1
+head(nalox_version_transfer)
+transfer_naloxone_distribution <- nrow(nalox_version_transfer)
+transfer_naloxone_distribution
+
+nalox_version_oad <- nalox[which(nalox$version == 3), ]
+nalox_version_oad <- select(nalox_version_oad, date)
+nalox_version_oad$oad_dist <- 1
+head(nalox_version_oad)
+oad_naloxone_distribution <- nrow(nalox_version_oad)
+oad_naloxone_distribution
+
+table(nalox$transfer_type)
+nalox_version_transfer_partner <- nalox[which(nalox$version == 2 & nalox$transfer_type == 1), ]
+nalox_version_transfer_partner <- select(nalox_version_transfer_partner, date)
+nalox_version_transfer_partner$transfer_partner <- 1
+head(nalox_version_transfer_partner)
+transfer_naloxone_distribution_partner <- nrow(nalox_version_transfer_partner)
+transfer_naloxone_distribution_partner
+
+table(nalox$transfer_type)
+nalox_version_transfer_service <- nalox[which(nalox$version == 2 & nalox$transfer_type == 2), ]
+nalox_version_transfer_service <- select(nalox_version_transfer_service, date)
+nalox_version_transfer_service$transfer_service <- 1
+head(nalox_version_transfer_service)
+transfer_naloxone_distribution_service <- nrow(nalox_version_transfer_service)
+transfer_naloxone_distribution_service
+
+table(nalox$transfer_type)
+nalox_version_transfer_naloxbox <- nalox[which(nalox$version == 2 & nalox$transfer_type == 3), ]
+nalox_version_transfer_naloxbox <- select(nalox_version_transfer_naloxbox, date)
+if (nrow(nalox_version_transfer_naloxbox) > 0) {
+  nalox_version_transfer_naloxbox$transfer_naloxbox <- 1
+  transfer_naloxone_distribution_naloxbox <- nrow(nalox_version_transfer_naloxbox)
+  transfer_naloxone_distribution_naloxbox
+} else {
+  transfer_naloxone_distribution_naloxbox <- 0
+}
+transfer_naloxone_distribution_naloxbox
+
+table(nalox$agency)
+nalox_agency <- nalox[which(nalox$version == 2 | nalox$version == 3), ]
+nalox_agency <- select(nalox_agency, agency)
+dim(nalox_agency)
+nalox_agency <- distinct(nalox_agency)
+dim(nalox_agency)
+nalox_agency
+nalox_agency <- nalox_agency[which(nalox_agency$agency != ''), ]
+nalox_agency
+
+
+# Number of kits distributed
+
+nalox_dist <- select(nalox, date, ucmc_omnicell, wch_omnicell, number_kits)
+head(nalox_dist)
+nalox_dist$site[nalox_dist$ucmc_omnicell == 1] <- 'UCMC Omnicell'
+nalox_dist$site[nalox_dist$wch_omnicell == 1] <- 'WCH Omnicell'
+nalox_dist$site[is.na(nalox_dist$ucmc_omnicell) & is.na(nalox_dist$wch_omnicell)] <- 'Community'
+head(nalox_dist)
+
+
+monthly_nalox_distribution <- select(nalox_dist, date, site, number_kits)
+head(monthly_nalox_distribution)
+dim(monthly_nalox_distribution)
+
+monthly_nalox_distribution$Date <- as.Date(monthly_nalox_distribution$date, format="%d/%m/%Y")
+head(monthly_nalox_distribution)
+
+monthly_nalox_distribution <- aggregate(number_kits ~ as.yearmon(Date) + site,
+                                      data = monthly_nalox_distribution,
+                                      FUN = sum)
+monthly_nalox_distribution$Date <- as.Date(as.yearmon(monthly_nalox_distribution$`as.yearmon(Date)`))
+head(monthly_nalox_distribution)
+
+```
+
 ```{r SUD Data, include=FALSE}
 
 ###############################################################################################################
@@ -2019,9 +2121,9 @@ fts_prior_use_percent
 
 
 
-table(enc$sud_screen_positive, enc$fts_knowledge)
+table(enc$sud_screen_positive, enc$fts_knowledge_assessed)
 enc$sud_pos_fts_knowledge_assessed[enc$sud_screen_positive == 1 &
-                                     !is.na(enc$fts_knowledge)] <- 1
+                                     enc$fts_knowledge_assessed == 1] <- 1
 table(enc$sud_pos_fts_knowledge_assessed)
 
 table(enc$sud_pos_fts_knowledge_assessed)
@@ -2035,9 +2137,9 @@ sud_pos_fts_knowledge_assessed_percent
 
 
 
-table(enc$sud_screen_positive, enc$fts_knowledge)
+table(enc$sud_screen_positive, enc$fts_aware)
 enc$sud_pos_fts_aware[enc$sud_screen_positive == 1 &
-                        enc$fts_knowledge == 1] <- 1
+                        enc$fts_aware == 1] <- 1
 table(enc$sud_pos_fts_aware)
 
 table(enc$sud_pos_fts_aware)
@@ -2051,9 +2153,9 @@ sud_pos_fts_aware_percent
 
 
 
-table(enc$sud_screen_positive, enc$fts_use)
+table(enc$sud_screen_positive, enc$fts_use_assessed)
 enc$sud_pos_fts_use_assessed[enc$sud_screen_positive == 1 &
-                               !is.na(enc$fts_use)] <- 1
+                               enc$fts_use_assessed == 1] <- 1
 table(enc$sud_pos_fts_use_assessed)
 
 table(enc$sud_pos_fts_use_assessed)
@@ -2067,9 +2169,9 @@ sud_pos_fts_use_assessed_percent
 
 
 
-table(enc$sud_screen_positive, enc$fts_use)
+table(enc$sud_screen_positive, enc$fts_prior_use)
 enc$sud_pos_fts_prior_use[enc$sud_screen_positive == 1 &
-                            enc$fts_use == 1] <- 1
+                            enc$fts_prior_use == 1] <- 1
 table(enc$sud_pos_fts_prior_use)
 
 table(enc$sud_pos_fts_prior_use)
@@ -2086,7 +2188,7 @@ sud_pos_fts_prior_use_percent
 # FTS Offered
 
 table(enc$fts_offered)
-enc$fts_offered_assessed[!is.na(enc$fts_offered)] <- 1
+enc$fts_offered_assessed[enc$fts_offered == 0 | enc$fts_offered == 1] <- 1
 table(enc$fts_offered_assessed)
 
 table(enc$fts_offered_assessed)
@@ -2126,9 +2228,9 @@ fts_provided_percent
 
 
 
-table(enc$sud_screen_positive, enc$fts_offered)
+table(enc$sud_screen_positive, enc$fts_offered_assessed)
 enc$sud_pos_fts_interest_assessed[enc$sud_screen_positive == 1 &
-                                    !is.na(enc$fts_offered)] <- 1
+                                    enc$fts_offered_assessed == 1] <- 1
 table(enc$sud_pos_fts_interest_assessed)
 
 table(enc$sud_pos_fts_interest_assessed)
@@ -2142,9 +2244,9 @@ sud_pos_fts_interest_assessed_percent
 
 
 
-table(enc$sud_screen_positive, enc$fts_offered)
+table(enc$sud_screen_positive, enc$fts_interest)
 enc$sud_positive_fts_interest[enc$sud_screen_positive == 1 &
-                                enc$fts_offered == 1] <- 1
+                                enc$fts_interest == 1] <- 1
 table(enc$sud_positive_fts_interest)
 
 table(enc$sud_positive_fts_interest)
@@ -2174,31 +2276,131 @@ sud_pos_fts_provided_percent
 
 
 
+
+##########  Monthly FTS Distribution  ##########
+
+# EIP Database
+
+table(enc$fts_provided)
+eip_fts_distribution <- enc[which(enc$fts_provided == 1), ]
+eip_fts_distribution <- select(eip_fts_distribution, enc_date, enc_location, fts_number, fts_number_other)
+dim(eip_fts_distribution)
+head(eip_fts_distribution)
+eip_fts_distribution$fts_number_other[eip_fts_distribution$fts_number == 1] <- 5
+table(eip_fts_distribution$fts_number_other)
+eip_fts_distribution <- select(eip_fts_distribution, -fts_number)
+head(eip_fts_distribution)
+colnames(eip_fts_distribution)[3] <- 'fts_number'
+eip_fts_distribution$fts_number[is.na(eip_fts_distribution$fts_number)] <- 0
+head(eip_fts_distribution)
+
+eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 5 |
+                                    eip_fts_distribution$enc_location == 1 |
+                                    eip_fts_distribution$enc_location == 6 |
+                                    eip_fts_distribution$enc_location == 7] <- 'ED'
+eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 15 |
+                                    eip_fts_distribution$enc_location == 16 |
+                                    eip_fts_distribution$enc_location == 17 |
+                                    eip_fts_distribution$enc_location == 18 |
+                                    eip_fts_distribution$enc_location == 19 |
+                                    eip_fts_distribution$enc_location == 20 |
+                                    eip_fts_distribution$enc_location == 22 |
+                                    eip_fts_distribution$enc_location == 49 |
+                                    eip_fts_distribution$enc_location == 55 |
+                                    eip_fts_distribution$enc_location == 57 |
+                                    eip_fts_distribution$enc_location == 29 |
+                                    eip_fts_distribution$enc_location == 30 |
+                                    eip_fts_distribution$enc_location == 31 |
+                                    eip_fts_distribution$enc_location == 32 |
+                                    eip_fts_distribution$enc_location == 33] <- 'CAP'
+eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 8 |
+                                    eip_fts_distribution$enc_location == 9 |
+                                    eip_fts_distribution$enc_location == 10 |
+                                    eip_fts_distribution$enc_location == 11 |
+                                    eip_fts_distribution$enc_location == 12 |
+                                    eip_fts_distribution$enc_location == 13 |
+                                    eip_fts_distribution$enc_location == 14] <- 'Hospital'
+eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 45] <- 'Jail'
+eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 24 |
+                                    eip_fts_distribution$enc_location == 25 |
+                                    eip_fts_distribution$enc_location == 26 |
+                                    eip_fts_distribution$enc_location == 27 |
+                                    eip_fts_distribution$enc_location == 28] <- 'Local HD'
+eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 58] <- 'Mobile Unit'
+eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 57] <- 'School/University'
+eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 51 |
+                                    eip_fts_distribution$enc_location == 52 |
+                                    eip_fts_distribution$enc_location == 53 |
+                                    eip_fts_distribution$enc_location == 34 |
+                                    eip_fts_distribution$enc_location == 35 |
+                                    eip_fts_distribution$enc_location == 36 |
+                                    eip_fts_distribution$enc_location == 37 |
+                                    eip_fts_distribution$enc_location == 38 |
+                                    eip_fts_distribution$enc_location == 41 |
+                                    eip_fts_distribution$enc_location == 42 |
+                                    eip_fts_distribution$enc_location == 43] <- 'SSP'
+eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 44 |
+                                    eip_fts_distribution$enc_location == 21 |
+                                    eip_fts_distribution$enc_location == 50 |
+                                    eip_fts_distribution$enc_location == 54 |
+                                    eip_fts_distribution$enc_location == 56 |
+                                    eip_fts_distribution$enc_location == 46 |
+                                    eip_fts_distribution$enc_location == 47 |
+                                    eip_fts_distribution$enc_location == 48] <- 'Treatment/Recovery'
+eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 40] <- 'Other'
+head(eip_fts_distribution)
+dim(eip_fts_distribution)
+
+
+
+# Naloxone Database
+
+table(nalox$fts)
+nalox_fts_distribution <- nalox[which(nalox$fts == 1), ]
+nalox_fts_distribution <- select(nalox_fts_distribution, date, setting, fts_number)
+head(nalox_fts_distribution)
+colnames(nalox_fts_distribution)[1] <- 'enc_date'
+colnames(nalox_fts_distribution)[2] <- 'enc_location'
+head(nalox_fts_distribution)
+
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 1] <- 'CAP'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 2] <- 'Court System'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 3] <- 'ED'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 4] <- 'FQHC/non-LHD Clinic'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 5] <- 'Hospital'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 6] <- 'Jail'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 7] <- 'Leave-Behind (EMS/LEO)'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 8] <- 'Local HD'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 9] <- 'Mobile Unit'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 10] <- 'Online Mail Order'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 11] <- 'Pharmacy'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 12] <- 'QRT'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 13] <- 'School/University'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 14] <- 'Street/Outreach'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 15] <- 'SSP'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 16] <- 'Treatment/Recovery'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 17] <- 'Vending/Dispensing Machine'
+nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 0] <- 'Other'
+head(nalox_fts_distribution)
+dim(nalox_fts_distribution)
+
+
+
+
 # Monthly FTS Distribution
 
-monthly_fts_distribution <- select(enc, enc_date, record_id, fts_provided, fts_number, fts_number_other)
-monthly_fts_distribution <- monthly_fts_distribution[which(monthly_fts_distribution$fts_provided == 1), ]
+monthly_fts_distribution <- rbind(eip_fts_distribution, nalox_fts_distribution)
+head(monthly_fts_distribution)
 dim(monthly_fts_distribution)
-head(monthly_fts_distribution)
-monthly_fts_distribution$fts_number_other[monthly_fts_distribution$fts_number == 1] <- 5
-table(monthly_fts_distribution$fts_number_other)
-monthly_fts_distribution <- select(monthly_fts_distribution, -record_id, -fts_provided, -fts_number)
-head(monthly_fts_distribution)
-colnames(monthly_fts_distribution)[2] <- 'fts_number'
-monthly_fts_distribution$fts_number[is.na(monthly_fts_distribution$fts_number)] <- 0
-head(monthly_fts_distribution)
 
 monthly_fts_distribution$Date <- as.Date(monthly_fts_distribution$enc_date, format="%d/%m/%Y")
 head(monthly_fts_distribution)
 
-
-
-monthly_fts_distributed <- aggregate(fts_number ~ as.yearmon(Date),
-                                     monthly_fts_distribution,
-                               FUN = sum)
-monthly_fts_distributed$Date <- as.Date(as.yearmon(monthly_fts_distributed$`as.yearmon(Date)`))
-head(monthly_fts_distributed)
-monthly_fts_distributed
+monthly_fts_distribution <- aggregate(fts_number ~ as.yearmon(Date) + enc_location,
+                                      data = monthly_fts_distribution,
+                                      FUN = sum)
+monthly_fts_distribution$Date <- as.Date(as.yearmon(monthly_fts_distribution$`as.yearmon(Date)`))
+head(monthly_fts_distribution)
 
 
 
@@ -2578,7 +2780,7 @@ sud_not_linked_other_percent
 
 ## Fentanyl Test Strips
 
-During the EIP assessment and discussion with the patient/client, the HPA asks questions regarding the individual's knowledge of harm reduction tools. More specifically, the individual is asked whether they are aware of tools used to test drugs for the presence of fentanyl, meaning their knowledge of fentanyl test strips (FTS). This assessment of their knowledge of harm reduction tools is available for all those receiving an EIP assessment, regardless of any indication of their own hisotyr of substance use. The total number of assessments where this question was answered was `r fts_knowledge_assessed` (*`r fts_knowledge_assessed_percent` of all assessments completed, `r fts_knowledge_assessed`/`r eip_assessments`*). This question asks for a yes/no response, and the total number of assessments where the indiviudal responded that they were aware of FTS was `r fts_aware` (*`r fts_aware_percent` of all those asked about their knowledge of FTS, `r fts_aware`/`r fts_knowledge_assessed`*). If they stated that they were aware of FTS, the indiviudal is then asked about their prior use of these harm reduction tools. The total number of assessments where the individual stated that they were aware of FTS that answered this follow-up question was `r fts_use_assessed` (*`r fts_use_assessed_percent` of all assessments where the individual was aware of FTS, `r fts_use_assessed`/`r fts_aware`*). Again, this is a yes/no response, and the total number of assessments where the individual stated that they have used FTS before was `r fts_prior_use` (*`r fts_prior_use_percent` of all assessments where the individual was asked about prior FTS use, `r fts_prior_use`/`r fts_use_assessed`*).
+During the EIP assessment and discussion with the patient/client, the HPA asks questions regarding the individual's knowledge of harm reduction tools. More specifically, the individual is asked whether they are aware of tools used to test drugs for the presence of fentanyl, meaning their knowledge of fentanyl test strips (FTS). This assessment of their knowledge of harm reduction tools is available for all those receiving an EIP assessment, regardless of any indication of their own history of substance use. The total number of assessments where this question was answered was `r fts_knowledge_assessed` (*`r fts_knowledge_assessed_percent` of all assessments completed, `r fts_knowledge_assessed`/`r eip_assessments`*). This question asks for a yes/no response, and the total number of assessments where the indiviudal responded that they were aware of FTS was `r fts_aware` (*`r fts_aware_percent` of all those asked about their knowledge of FTS, `r fts_aware`/`r fts_knowledge_assessed`*). If they stated that they were aware of FTS, the indiviudal is then asked about their prior use of these harm reduction tools. The total number of assessments where the individual stated that they were aware of FTS that answered this follow-up question was `r fts_use_assessed` (*`r fts_use_assessed_percent` of all assessments where the individual was aware of FTS, `r fts_use_assessed`/`r fts_aware`*). Again, this is a yes/no response, and the total number of assessments where the individual stated that they have used FTS before was `r fts_prior_use` (*`r fts_prior_use_percent` of all assessments where the individual was asked about prior FTS use, `r fts_prior_use`/`r fts_use_assessed`*).
 
 For those individuals that screened positive for any type of SUD through the EIP assessment, the number of assessments where they were also assessed for their knowledge of FTS was `r sud_pos_fts_knowledge_assessed` (*`r sud_pos_fts_knowledge_assessed_percent` of all SUD positive assessments, `r sud_pos_fts_knowledge_assessed`/`r sud_pos`*), with `r sud_pos_fts_aware` stating that they were aware of FTS (*`r sud_pos_fts_aware_percent` of all SUD positive assessments where the individual was also assessed for FTS knowledge, `r sud_pos_fts_aware`/`r sud_pos_fts_knowledge_assessed`*). The number of assessments where the individual screened positive for any SUD where they were also assessed for their prior use of FTS was `r sud_pos_fts_use_assessed` (*`r sud_pos_fts_use_assessed_percent` of all SUD positive assessments that were aware of FTS, `r sud_pos_fts_use_assessed`/`r sud_pos_fts_aware`*), with `r sud_pos_fts_prior_use` endorsing prior use of FTS (*`r sud_pos_fts_prior_use_percent` of all SUD positive assessments also assessed for prior FTS use, `r sud_pos_fts_prior_use`/`r sud_pos_fts_use_assessed`*).
 
@@ -2591,11 +2793,24 @@ The total number of FTS distributed is reported on a monthly basis required for 
 
 ```{r, echo=FALSE, warning=FALSE}
 
-monthly_fts_distributed <- monthly_fts_distributed[order(monthly_fts_distributed$Date), ]
-monthly_fts_distribution_plot <- plot_ly(data = monthly_fts_distributed, x = ~Date, y = ~fts_number, type = 'bar', name = 'FTS Distributed',
-                                         text = ~fts_number, textposition = 'auto',
-                                         marker = list(color = 'darkseagreen1')) %>%
-  layout(yaxis = list(title = 'Total FTS Distributed'))
+fts_enc_location_colors <- c("ED" = "coral2", "SSP" = "aquamarine3", "Other" = "cornflowerblue")
+
+monthly_fts_distribution_plot <- plot_ly(
+  data = monthly_fts_distribution,
+  x = ~Date,
+  y = ~fts_number,
+  color = ~enc_location,
+  colors = fts_enc_location_colors,
+  type = "bar",
+  text = ~fts_number,
+  textposition = 'auto') %>%
+  layout(
+    title = "Monthly FTS Distribution by Location",
+    xaxis = list(title = "Month"),
+    yaxis = list(title = "Total FTS Distributed"),
+    barmode = 'stack')
+monthly_fts_distribution_plot <- monthly_fts_distribution_plot %>%
+  config(displayModeBar = FALSE)
 monthly_fts_distribution_plot
 
 ```
@@ -2603,12 +2818,90 @@ monthly_fts_distribution_plot
 
 *It is important to note that the number represented here is the number of individual strips, not the number of kits. Standard FTS kits are in packages of 5 strips, and the EIP HPA can select this as an option when documenting the distribution of FTS to individuals. However, they are also able to document non-standard amounts that are distributed in a free text field. Therefore, anytime they select that they distributed the standard kit of 5 strips, this is counted as five individual strips and combined with the free text field of non-standard distribution.*
 
+<br>
+
 
 ## Naloxone Distribution
 
-Naloxone distribution is documented in two different programs within EIP: (1) direct naloxone distribution of kits provided through grants, and (2) facilitated distribution where the EIP staff prompt medical staff to distribute naloxone from the Omnicell within UCMC and WCH EDs. The two programs will be discussed separately below. Also, the number of kits distributed from the UCMC and WCH Omnicells will be provided with the direct distribution information because those numbers are reported alongside the distribution of our EIP kits.
-
 **Work in progress**
+
+Naloxone distribution is documented in two different programs within EIP: (1) direct naloxone distribution of kits provided through grants, and (2) facilitated distribution where EIP prompts medical staff to distribute naloxone from the Omnicell within UCMC and WCH EDs after discussion with the patient. The two programs will be discussed separately below. Also, the number of kits distributed from the UCMC and WCH Omnicells will be provided with the direct distribution information because those numbers are reported alongside the distribution of our EIP kits.
+
+With Project Dawn naloxone distribution, there are three different "versions" or methods of distribution that are recorded: (1) Individual distribution, (2) Transfer to an agency, and (3) Overdose Awareness Day and Recovery Month Event. For each of these versions of distribution, there are different data points collected and required for reporting. Individual distribution is when we provide naloxone kits to an individual person, and we collect data regarding their demographics, area in which they live, and past history with overdose and naloxone use. Transfer to an agency is when we provide a batch of kits for an agency for them to distribute on their own, and we just document how many kits were provided to them, but no additional information is collected as with individual distributions. Finally, Overdose Awareness Day (OAD) and Recovery month events are any combination of the first two versions, only that they must occur on OAD (August 31st) or during recovery month (September 30th). With this version, we also only collect specifics about the setting of the distribution and the total number of kits, but not information about the individual receiving the naloxone kit(s). The table below shows the total number of distribution events (not number of kits) for each of these types of distribution versions.
+
+
+```{r, echo = FALSE}
+
+nalox_version_tbl <- data.frame(matrix(ncol = 2, nrow = 0))
+colnames(nalox_version_tbl) <- c(' ', 'Total distribution events')
+nalox_version_tbl[nrow(nalox_version_tbl) + 1,] <- list('Individual Distribution', individual_naloxone_distribution)
+nalox_version_tbl[nrow(nalox_version_tbl) + 1,] <- list('Transfer to an Agency', transfer_naloxone_distribution)
+nalox_version_tbl[nrow(nalox_version_tbl) + 1,] <- list('OAD & Recovery Month', oad_naloxone_distribution)
+nalox_version_tbl %>%
+  kbl(table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  kable_styling(full_width = F, font_size = 16)
+
+```
+
+
+Additionally for transferring kits to an agency, Project Dawn asks for additional information regarding the type of transfer. There are three transfer types: (1) One-time partner for distribution, (2) Service entity first aid, and (3) Public NaloxBox/cabinet. The table below shows the number of distribution events (not number of kits) involving a transfer of kits to an agency for each of these transfer types.
+
+
+```{r, echo = FALSE}
+
+nalox_transfer_type_tbl <- data.frame(matrix(ncol = 2, nrow = 0))
+colnames(nalox_transfer_type_tbl) <- c(' ', 'Total distribution events')
+nalox_transfer_type_tbl[nrow(nalox_transfer_type_tbl) + 1,] <- list('One-time partner for distribution', transfer_naloxone_distribution_partner)
+nalox_transfer_type_tbl[nrow(nalox_transfer_type_tbl) + 1,] <- list('Service entity first aid', transfer_naloxone_distribution_service)
+nalox_transfer_type_tbl[nrow(nalox_transfer_type_tbl) + 1,] <- list('Public NaloxBox/cabinet', transfer_naloxone_distribution_naloxbox)
+nalox_transfer_type_tbl %>%
+  kbl(table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  kable_styling(full_width = F, font_size = 16)
+
+```
+
+
+The plot below shows the monthly naloxone kit distributions, which are the numbers reported to ODH each month. This plot shows how many kits were distributed by EIP through various community engagements (regular sites and/or special events) as well as the number of kits that are distributed through UCMC and WCH ED through the Omnicell each month.
+
+
+```{r, echo=FALSE, warning=FALSE}
+
+nalox_enc_location_colors <- c("UCMC Omnicell" = "coral2", "WCH Omnicell" = "aquamarine3", "Community" = "cornflowerblue")
+
+total_distribution <- monthly_nalox_distribution %>%
+  group_by(Date) %>%
+  summarise(total_kits = sum(number_kits))
+
+monthly_nalox_distribution_plot <- plot_ly() %>%
+  add_trace(
+    data = monthly_nalox_distribution,
+    x = ~Date,
+    y = ~number_kits,
+    color = ~site,
+    type = "scatter",
+    mode = "lines+markers",
+    colors = nalox_enc_location_colors) %>%
+  add_trace(
+    data = total_distribution,
+    x = ~Date,
+    y = ~total_kits,
+    marker = list(color = "black"),
+    type = "bar",
+    textposition = 'auto',
+    name = "Total Kits") %>%
+  layout(
+    title = "Monthly Naloxone Distribution by Location",
+    xaxis = list(title = "Month"),
+    yaxis = list(title = "Naloxone Kits Distributed"),
+    barmode = "overlay") %>%
+  config(displayModeBar = FALSE)
+monthly_nalox_distribution_plot
+
+```
+
+<br>
 
 
 # SUD Linkage to Care
