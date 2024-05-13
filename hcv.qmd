@@ -32,7 +32,7 @@ library(forcats)
 
 
 # EIP Database Data
-eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240509_1042.csv')
+eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240513_1346.csv')
 dim(eip)
 
 # HCV Epic Dashboard Data
@@ -64,8 +64,10 @@ hcv13 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV
 dim(hcv13)
 hcv14 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240505_0932.csv')
 dim(hcv14)
+hcv15 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240512_1344.csv')
+dim(hcv15)
 
-hcv <- rbind(hcv1, hcv2, hcv3, hcv4, hcv5, hcv6, hcv7, hcv8, hcv9, hcv10, hcv11, hcv12, hcv13, hcv14)
+hcv <- rbind(hcv1, hcv2, hcv3, hcv4, hcv5, hcv6, hcv7, hcv8, hcv9, hcv10, hcv11, hcv12, hcv13, hcv14, hcv15)
 dim(hcv)
 hcv <- distinct(hcv)
 dim(hcv)
@@ -275,7 +277,7 @@ dim(eip)
 # EIP HCV Dashboard Follow-up
 
 eip_hcv <- select(eip, mrn, ltc_hcv_dashboard, ltc_hcv_initial_contact, hcv_rna_result,
-                  ltc_hcv_referral_uc_idc___2, ltc_hcv_referral_uc_idc___3,
+                  ltc_hcv_referral_uc_pharmacy___2, ltc_hcv_referral_uc_pharmacy___3,
                   ltc_hcv_referral_uc_pharmacy_telehealth, ltc_hcv_final_ltc_status,
                   ltc_hcv_declined_rsn___23, ltc_hcv_declined_rsn___27, ltc_hcv_declined_rsn___3,
                   ltc_hcv_declined_rsn___5, ltc_hcv_declined_rsn___6, ltc_hcv_declined_rsn___7,
@@ -523,10 +525,31 @@ table(eip_hcv_main$hcv_education_phone)
 
 
 
+table(eip_hcv$hcv_fu_needed, eip_hcv$ltc_hcv_initial_contact)
+hcv_edu_other <- eip_hcv[which(eip_hcv$hcv_fu_needed == 1 &
+                                 eip_hcv$ltc_hcv_dashboard == 1 &
+                                 eip_hcv$ltc_hcv_initial_contact == 3), ]
+hcv_edu_other <- select(hcv_edu_other, mrn)
+head(hcv_edu_other)
+dim(hcv_edu_other)
+hcv_edu_other <- distinct(hcv_edu_other)
+dim(hcv_edu_other)
+hcv_edu_other$hcv_education_other <- 1
+
+dim(hcv_edu_other)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_edu_other, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_education_other)
+
+
+
 # HCV Linkage
 
-hcv_linked <- eip_hcv[which(eip_hcv$ltc_hcv_referral_uc_idc___2 == 1 |
-                              eip_hcv$ltc_hcv_referral_uc_idc___3 == 1), ]
+eip_hcv$hcv_linked[eip_hcv$ltc_hcv_referral_uc_pharmacy___2 == 1 | eip_hcv$ltc_hcv_referral_uc_pharmacy___3 == 1] <- 1
+hcv_linked <- eip_hcv[which(eip_hcv$hcv_linked == 1), ]
 hcv_linked <- select(hcv_linked, mrn)
 head(hcv_linked)
 dim(hcv_linked)
@@ -553,21 +576,31 @@ table(eip_hcv_main$hcv_linked)
 
 
 
-#hcv_linked_telehealth <- eip_hcv[which(eip_hcv$ltc_hcv_referral_uc_pharmacy_telehealth == 1), ]
-#hcv_linked_telehealth <- select(hcv_linked_telehealth, mrn)
-#head(hcv_linked_telehealth)
-#dim(hcv_linked_telehealth)
-#hcv_linked_telehealth <- distinct(hcv_linked_telehealth)
-#dim(hcv_linked_telehealth)
-#hcv_linked_telehealth$hcv_linked_telehealth <- 1
+hcv_linked_other <- eip_hcv[which(eip_hcv$ltc_hcv_final_ltc_status == 1 & is.na(eip_hcv$hcv_linked)), ]
+hcv_linked_other <- select(hcv_linked_other, mrn)
+head(hcv_linked_other)
+dim(hcv_linked_other)
 
-#dim(hcv_linked_telehealth)
-#dim(eip_hcv_main)
-#eip_hcv_main <- merge(eip_hcv_main, hcv_linked_telehealth, by = 'mrn', all.x=T)
-#dim(eip_hcv_main)
-#eip_hcv_main <- distinct(eip_hcv_main)
-#dim(eip_hcv_main)
-#table(eip_hcv_main$hcv_linked_telehealth)
+if (nrow(hcv_linked_other) > 0) {
+  hcv_linked_other <- select(hcv_linked_other, mrn)
+  hcv_linked_other <- distinct(hcv_linked_other)
+  hcv_linked_other$hcv_linked_other <- 1
+} else {
+  hcv_linked_other <- data.frame()
+  empty_row <- data.frame(mrn = NA, hcv_linked_other = NA)
+  hcv_linked_other <- rbind(hcv_linked_other, empty_row)
+}
+dim(hcv_linked_other)
+head(hcv_linked_other)
+
+dim(hcv_linked_other)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_linked_other, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_linked_other)
+
 
 
 
@@ -792,6 +825,76 @@ hcv_pts_educated_phone_percent
 
 
 
+hcv_pts$hcv_pts_educated_other[hcv_pts$hcv_pts_educated == 1 & hcv_pts$hcv_education_other == 1] <- 1
+hcv_pts_educated_other <- hcv_pts[which(hcv_pts$hcv_pts_educated_other == 1), ]
+dim(hcv_pts_educated_other)
+head(hcv_pts_educated_other)
+hcv_pts_educated_other <- select(hcv_pts_educated_other, mrn)
+head(hcv_pts_educated_other)
+dim(hcv_pts_educated_other)
+hcv_pts_educated_other <- distinct(hcv_pts_educated_other)
+dim(hcv_pts_educated_other)
+
+hcv_pts_educated_other <- nrow(hcv_pts_educated_other)
+hcv_pts_educated_other
+hcv_pts_educated_other_percent <- percent(hcv_pts_educated_other/hcv_pts_educated, accuracy = 0.1)
+hcv_pts_educated_other_percent
+
+
+
+hcv_pts$hcv_pts_linkage_total[hcv_pts$hcv_pts_educated == 1 &
+                                (hcv_pts$hcv_linked == 1 | hcv_pts$hcv_linked_other == 1)] <- 1
+hcv_pts_linkage_total <- hcv_pts[which(hcv_pts$hcv_pts_linkage_total == 1), ]
+dim(hcv_pts_linkage_total)
+head(hcv_pts_linkage_total)
+hcv_pts_linkage_total <- select(hcv_pts_linkage_total, mrn)
+head(hcv_pts_linkage_total)
+dim(hcv_pts_linkage_total)
+hcv_pts_linkage_total <- distinct(hcv_pts_linkage_total)
+dim(hcv_pts_linkage_total)
+
+hcv_pts_linkage_total <- nrow(hcv_pts_linkage_total)
+hcv_pts_linkage_total
+hcv_pts_linkage_total_percent <- percent(hcv_pts_linkage_total/hcv_pts_educated, accuracy = 0.1)
+hcv_pts_linkage_total_percent
+
+
+
+table(hcv_pts$hcv_pts_educated, hcv_pts$hcv_linked)
+hcv_pts$hcv_pts_linked[hcv_pts$hcv_pts_educated == 1 & hcv_pts$hcv_linked == 1] <- 1
+hcv_pts_linked <- hcv_pts[which(hcv_pts$hcv_pts_linked == 1), ]
+dim(hcv_pts_linked)
+head(hcv_pts_linked)
+hcv_pts_linked <- select(hcv_pts_linked, mrn)
+head(hcv_pts_linked)
+dim(hcv_pts_linked)
+hcv_pts_linked <- distinct(hcv_pts_linked)
+dim(hcv_pts_linked)
+
+hcv_pts_linked <- nrow(hcv_pts_linked)
+hcv_pts_linked
+hcv_pts_linked_percent <- percent(hcv_pts_linked/hcv_pts_linkage_total, accuracy = 0.1)
+hcv_pts_linked_percent
+
+
+
+hcv_pts$hcv_pts_linked_other[hcv_pts$hcv_pts_educated == 1 & hcv_pts$hcv_linked_other == 1] <- 1
+hcv_pts_linked_other <- hcv_pts[which(hcv_pts$hcv_pts_linked_other == 1), ]
+dim(hcv_pts_linked_other)
+head(hcv_pts_linked_other)
+hcv_pts_linked_other <- select(hcv_pts_linked_other, mrn)
+head(hcv_pts_linked_other)
+dim(hcv_pts_linked_other)
+hcv_pts_linked_other <- distinct(hcv_pts_linked_other)
+dim(hcv_pts_linked_other)
+
+hcv_pts_linked_other <- nrow(hcv_pts_linked_other)
+hcv_pts_linked_other
+hcv_pts_linked_other_percent <- percent(hcv_pts_linked_other/hcv_pts_linkage_total, accuracy = 0.1)
+hcv_pts_linked_other_percent
+
+
+
 
 # Figuring out time of day the labs were ordered for HCV Ab Positives
 
@@ -841,13 +944,16 @@ hcv_ab_pos_summary <- hcv_ab_pos %>%
 # Adding in staff times
 ## JF: M/F 10a-10p and T 9a-9p
 ## RK: M-Th 7a-5p or T-F 7a-7p (alternating weeks)
-# Estimating 7a-10p coverage M-F, which is M monring through F evening, except overnights
+## KA: W-Sun 3p-11p
+# Estimating 7a-11p coverage M-Sun, which is M morning through Sun evening, except overnights
 has_staff_coverage <- function(time_period) {
   staff_coverage_periods <- c("Monday morning", "Monday afternoon", "Monday evening",
                               "Tuesday morning", "Tuesday afternoon", "Tuesday evening",
-                              "Wednesday morning", "Wednesday afternoon",
-                              "Thursday morning", "Thursday afternoon",
-                              "Friday morning", "Friday afternoon", "Friday evening")
+                              "Wednesday morning", "Wednesday afternoon", "Wednesday evening",
+                              "Thursday morning", "Thursday afternoon", "Thursday evening",
+                              "Friday morning", "Friday afternoon", "Friday evening",
+                              "Saturday morning", "Saturday afternoon", "Saturday evening",
+                              "Sunday morning", "Sunday afternoon", "Sunday evening")
   return(time_period %in% staff_coverage_periods)
 }
 hcv_ab_pos_summary <- hcv_ab_pos_summary %>%
@@ -865,7 +971,6 @@ hcv_ab_pos_without_coverage <- sum(hcv_ab_pos_summary$frequency[!hcv_ab_pos_summ
 hcv_ab_pos_without_coverage
 hcv_ab_pos_without_coverage_percent <- percent(hcv_ab_pos_without_coverage/hcv_ab_pos_total, accuracy = 0.1)
 hcv_ab_pos_without_coverage_percent
-
 
 ```
 
@@ -940,8 +1045,8 @@ Since EIP is meant to approach each individual that has a reactive HCV Ab test t
 As mentioned above, there were a total of `r hcv_ab_positive` HCV positive tests, with `r hcv_pts_ab_positive` unique individuals. For EIP follow-up, we will focus on the unique number of patients in in regards to education of results or additional testing needed, and linkage to care efforts. A summary flow diagram for EIP's follow-up efforts regarding those that are identified HCV Ab+ through the HCV Dashboard is provided below. You can zoom into this flow diagram by clicking on the image.
 
 ```{r, echo = FALSE, warning = FALSE}
-#| lightbox:
-#|   description: HCV Epic Dashboard EIP Follow-up
+#| label: HCV Epic Dashboard Follow-up Flow Diagram 
+#| fig-cap: "** *Unable to match records means that we are unable to match the EIP follow-up data with the data pulled from the Epic HCV Dashboard. The reason(s) for why these records are unable to be matched are: Tested under different MRN than patient record (n = 8).*"
 
 
 grid_data <- tibble(x= 1:100, y= 1:100)
@@ -965,14 +1070,14 @@ grid +
   annotate('text', x = 19, y = 93, label = hcv_pts_ab_positive_percent, size = 2, color = 'goldenrod4') +
   
   
-  # No EIP Record
+  # Unable to match records
   geom_rect(xmin = 11, xmax = 33, ymin = 80, ymax = 88, color = NA,
             fill = 'white', size = 0.25) +
-  annotate('text', x = 15, y = 83, label = 'No EIP Record', size = 2) +
-  geom_rect(xmin = 11, xmax = 33, ymin = 80, ymax = 88, color = NA,
+  annotate('text', x = 19, y = 83, label = 'Unable to match records**', size = 2) +
+  geom_rect(xmin = 13, xmax = 33, ymin = 80, ymax = 88, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 21, y = 83, label = no_eip_record_hcv_ab_pos, size = 2, color = 'black') +
-  annotate('text', x = 25, y = 83, label = no_eip_record_hcv_ab_pos_percent, size = 2, color = 'goldenrod4') +
+  annotate('text', x = 29, y = 83, label = no_eip_record_hcv_ab_pos, size = 2, color = 'black') +
+  annotate('text', x = 33, y = 83, label = no_eip_record_hcv_ab_pos_percent, size = 2, color = 'goldenrod4') +
   
   
   # Known HCV RNA Negative Patients
@@ -1025,7 +1130,7 @@ grid +
   annotate('text', x = 96, y = 50.25, label = 'xx%', size = 2, color = 'goldenrod4') +
   
   
-  # Follow-up achieved
+  # Follow-up Success
   geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
             fill = 'lightyellow', size = 0.25, size = 0.25) +
   annotate('text', x = 10.5, y = 37, label = 'EIP Follow-up Success', size = 2) +
@@ -1036,23 +1141,73 @@ grid +
   
   
   # Follow-up while in ED
-  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
-            fill = 'lightyellow', size = 0.25, size = 0.25) +
-  annotate('text', x = 11, y = 7, label = 'While in the ED/Hospital', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+  geom_rect(xmin = 23, xmax = 45, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25, size = 0.25) +
+  annotate('text', x = 30, y = 38.5, label = 'While in the ED/Hospital', size = 2) +
+  geom_rect(xmin = 23, xmax = 45, ymin = 30, ymax = 40, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 3, label = hcv_pts_educated_ed, size = 2, color = 'black') +
-  annotate('text', x = 19, y = 3, label = hcv_pts_educated_ed_percent, size = 2, color = 'goldenrod4') +
+  annotate('text', x = 39, y = 38.5, label = hcv_pts_educated_ed, size = 2, color = 'black') +
+  annotate('text', x = 43, y = 38.5, label = hcv_pts_educated_ed_percent, size = 2, color = 'goldenrod4') +
   
   
   # Follow-up via Phone Call
-  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 10, color = 'gray',
-            fill = 'lightyellow', size = 0.25) +
-  annotate('text', x = 52, y = 7, label = 'Phone Call after Discharge', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 10, color = NA,
+  geom_rect(xmin = 23, xmax = 45, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25, size = 0.25) +
+  annotate('text', x = 30, y = 35.5, label = 'Phone call after discharge', size = 2) +
+  geom_rect(xmin = 23, xmax = 45, ymin = 30, ymax = 40, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 3, label = hcv_pts_educated_phone, size = 2, color = 'black') +
-  annotate('text', x = 60, y = 3, label = hcv_pts_educated_phone_percent, size = 2, color = 'goldenrod4') +
+  annotate('text', x = 39, y = 35.5, label = hcv_pts_educated_phone, size = 2, color = 'black') +
+  annotate('text', x = 43, y = 35.5, label = hcv_pts_educated_phone_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # Follow-up via Other Staff
+  geom_rect(xmin = 23, xmax = 45, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25, size = 0.25) +
+  annotate('text', x = 30, y = 32.5, label = 'Notified by Other Staff', size = 2) +
+  geom_rect(xmin = 23, xmax = 45, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 39, y = 32.5, label = hcv_pts_educated_other, size = 2, color = 'black') +
+  annotate('text', x = 43, y = 32.5, label = hcv_pts_educated_other_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # Linkage to Care
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
+            fill = 'lightyellow', size = 0.25, size = 0.25) +
+  annotate('text', x = 11, y = 7, label = 'Linked to Care for HCV', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 3, label = hcv_pts_linkage_total, size = 2, color = 'black') +
+  annotate('text', x = 19, y = 3, label = hcv_pts_linkage_total_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # Linked to UC Clinical Pharmacy
+  geom_rect(xmin = 31.5, xmax = 53.5, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 30, y = 7, label = 'UC Clinical Pharmacy', size = 2) +
+  geom_rect(xmin = 23, xmax = 53.5, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 39, y = 7, label = hcv_pts_linked, size = 2, color = 'black') +
+  annotate('text', x = 43, y = 7, label = hcv_pts_linked_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # Linked to Other
+  geom_rect(xmin = 31.5, xmax = 53.5, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 30, y = 3, label = 'Other Location', size = 2) +
+  geom_rect(xmin = 23, xmax = 53.5, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 39, y = 3, label = hcv_pts_linked_other, size = 2, color = 'black') +
+  annotate('text', x = 43, y = 3, label = hcv_pts_linked_other_percent, size = 2, color = 'goldenrod4') +
+  
+  
+  # HCV RNA Positive
+  geom_rect(xmin = 78, xmax = 100, ymin = 0, ymax = 10, color = 'black',
+            fill = 'darkseagreen1', size = 0.25) +
+  annotate('text', x = 89, y = 7, label = 'Known HCV RNA+ Patients', size = 2) +
+  geom_rect(xmin = 78, xmax = 100, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 88.5, y = 3, label = hcv_pts_rna_pos, size = 2, color = 'black') +
+  annotate('text', x = 97, y = 3, label = hcv_pts_rna_pos_percent, size = 2, color = 'goldenrod4') +
   
   
   # Down Arrow 1
@@ -1070,12 +1225,6 @@ grid +
   # Down Arrow 3
   geom_segment(
     x = 10.5, xend = 10.5, y = 30, yend = 10, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Down Arrow 4
-  geom_segment(
-    x = 51.5, xend = 51.5, y = 20, yend = 10, 
     size = 0.15, linejoin = "mitre", lineend = "butt",
     arrow = arrow(length = unit(2,"mm"), type = "closed")) +
   
@@ -1099,12 +1248,7 @@ grid +
   # Right Line 2
   geom_segment(
     x = 63, xend = 81, y = 50, yend = 50, 
-    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
-  
-  # Right Line 3
-  geom_segment(
-    x = 10.5, xend = 51.5, y = 20, yend = 20, 
-    size = 0.15, linejoin = "mitre", lineend = "butt")->
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") ->
   grid
 
 grid + theme_void()
@@ -1116,11 +1260,12 @@ As already mentioned, there were a total of `r hcv_pts_ab_positive` HCV Ab+ pati
 
 Therefore, the number of patients who were identified as HCV Ab+ but either are HCV RNA positive or do not have a RNA lab resulted was **`r hcv_pts_fu_needed` patients** needing follow-up education and referral (*`r hcv_pts_fu_needed_percent` of all those HCV Ab+ from the Epic HCV Dashboard, `r hcv_pts_fu_needed`/`r hcv_pts_ab_positive`*). This means that EIP has been unable to follow-up with **`r hcv_pts_no_education` patients** who were HCV Ab+ and need follow-up results/education (*`r hcv_pts_no_education_percent` of all those HCV Ab+ from the Epic HCV Dashboard needing follow-up, `r hcv_pts_no_education`/`r hcv_pts_fu_needed`*)
 
-Out of those patients that needed follow-up, EIP staff were able to approach and provide results/education to **`r hcv_pts_educated` patients** (*`r hcv_pts_educated_percent` of all those identified as HCV Ab+ through the HCV Dashboard needing follow-up, `r hcv_pts_educated`/`r hcv_pts_fu_needed`*). EIP makes every attempt to approach the patient while they are still located in the ED or admitted to the hospital. The number of patients where EIP was able to initiate face-to-face contact while they were still in the hospital (whether in the ED or roomed elsewhere) was **`r hcv_pts_educated_ed` patients** (*`r hcv_pts_educated_ed_percent` of all HCV Ab positive patients that were provided with education, `r hcv_pts_educated_ed`/`r hcv_pts_educated`*). If EIP is unable to approach patients while they were still in the ED/hospital, then attempts are made to follow-up with them using the contact information collected during ED intake. The number of patients where EIP was able to contact them after discharge was **`r hcv_pts_educated_phone` patients** (*`r hcv_pts_educated_phone_percent` of all HCV Ab positive patients that were provided with education, `r hcv_pts_educated_phone`/`r hcv_pts_educated`*).
+Out of those patients that needed follow-up, EIP staff were able to approach and provide results/education to **`r hcv_pts_educated` patients** (*`r hcv_pts_educated_percent` of all those identified as HCV Ab+ through the HCV Dashboard needing follow-up, `r hcv_pts_educated`/`r hcv_pts_fu_needed`*). EIP makes every attempt to approach the patient while they are still located in the ED or admitted to the hospital. The number of patients where EIP was able to initiate face-to-face contact while they were still in the hospital (whether in the ED or roomed elsewhere) was **`r hcv_pts_educated_ed` patients** (*`r hcv_pts_educated_ed_percent` of all HCV Ab positive patients that were provided with education, `r hcv_pts_educated_ed`/`r hcv_pts_educated`*). If EIP is unable to approach patients while they were still in the ED/hospital, then attempts are made to follow-up with them using the contact information collected during ED intake. The number of patients where EIP was able to contact them after discharge was **`r hcv_pts_educated_phone` patients** (*`r hcv_pts_educated_phone_percent` of all HCV Ab positive patients that were provided with education, `r hcv_pts_educated_phone`/`r hcv_pts_educated`*). Additionally, if EIP is aware that an individual was provided with their results, education, and follow-up linkage referral by other staff through their typical ED treatment and care, then we monitor the case rather than direct involvement in order to decrease duplication of work in getting the patient linked to care. The number of patients where EIP was aware that the patient has been referred for HCV treatment by other staff was **`r hcv_pts_educated_other` patients** (*`r hcv_pts_educated_other_percent` of all HCV Ab positive patients that were provided with education, `r hcv_pts_educated_other`/`r hcv_pts_educated`*).
 
-As part of EIP's follow-up efforts, we try to ensure anyone who is HCV Ab+ has the necessary lab testing to know if they are currently infected with HCV by facilitating RNA testing when appropriate. The total number of patients that had a follow-up RNA test documented within their EIP REDCap record was **`r hcv_pts_rna_known` patients** (*`r hcv_pts_rna_known_percent` of all those HCV Ab+, `r hcv_pts_rna_known`/`r hcv_pts_ab_positive`*). As mentioned above, there were a total of `r hcv_pts_rna_neg` patients that were negative for HCV RNA, which is `r hcv_pts_rna_neg_percent` of all those with a known HCV RNA result (*`r hcv_pts_rna_neg`/`r hcv_pts_rna_known`*). For those patients that were tested for RNA, the total number of those that were found to be true positives for HCV was **`r hcv_pts_rna_pos` patients** (*`r hcv_pts_rna_pos_percent` of all those tested for HCV RNA, `r hcv_pts_rna_pos`/`r hcv_pts_rna_known`*). This is the total number of patients that will be used to determine who was successfully referred to the UC Clinical Pharmacy telehealth appointment system.
+The EIP REDCap Database allows for documentation regarding referral to UC Clinical Pharmacy, as well as linkage to other locations that can manage/treat their HCV. The total number of patients that have been linked to care for HCV was **`r hcv_pts_linkage_total` patients** (*`r hcv_pts_linkage_total_percent` of all those EIP provided education to, `r hcv_pts_linkage_total`/`r hcv_pts_educated`*). The number of patients that were linked to care specifically to the UC Clinical Pharmacy was **`r hcv_pts_linked` patients** (*`r hcv_pts_linked_percent` of all those patients linked to care, `r hcv_pts_linked`/`r hcv_pts_linkage_total`*). Once EIP refers a patient to UC Clinical Pharmacy and gets them scheduled, they are documented as linked to care. It is our current process that UC Clinical Pharmacy will manage and follow-up with those individuals who do not successfully attend those appointments, re-linking them as needed. However, our documentation ends once the referral is made and the appointment is scheduled. The number of patients that were linked to care to a location other than the UC Clinical Pharmacy for HCV treatment is **`r hcv_pts_linked_other` patients** (*`r hcv_pts_linked_other_percent` of all those patients linked to care, `r hcv_pts_linked_other`/`r hcv_pts_linkage_total`*).
 
-The EIP REDCap Database is currently set-up for documentation regarding referral to UC Clinical Pharmacy. However, there is still discussion regarding a job aide for proper flow of referrals and management for the telehealth appointments with UC Clinical Pharmacy. Until this is finalized, the data regarding these referrals will be ad hoc when needed.
+As part of EIP's follow-up efforts, we try to ensure anyone who is HCV Ab+ has the necessary lab testing to know if they are currently infected with HCV by facilitating RNA testing when appropriate. The total number of patients that had a follow-up RNA test documented within their EIP REDCap record was **`r hcv_pts_rna_known` patients** (*`r hcv_pts_rna_known_percent` of all those HCV Ab+, `r hcv_pts_rna_known`/`r hcv_pts_ab_positive`*). As mentioned above, there were a total of `r hcv_pts_rna_neg` patients that were negative for HCV RNA, which is `r hcv_pts_rna_neg_percent` of all those with a known HCV RNA result (*`r hcv_pts_rna_neg`/`r hcv_pts_rna_known`*). For those patients that were tested for RNA, the total number of those that were found to be true positives for HCV was **`r hcv_pts_rna_pos` patients** (*`r hcv_pts_rna_pos_percent` of all those tested for HCV RNA, `r hcv_pts_rna_pos`/`r hcv_pts_rna_known`*).
+
 
 
 <br>
@@ -1130,8 +1275,8 @@ The EIP REDCap Database is currently set-up for documentation regarding referral
 In order to evaluate whether we have appropriate EIP staff coverage for this project, this section looks at the time that the HCV Ab test results are available and whether there is an EIP staff member dedicated for this project on staff. Therefore, we can know whether our staff is available to approach the patient in the ED/hospital when the lab results.
 
 ::: {.callout-warning collapse="true"}
-## HCV Dashboard dataset does not include Lab Result times.
-The result times for the labs are estimated using the Order Date/Time and estimated resulting time based on CHI lab data.
+## Lab Result times.
+HCV Epic Dashboard dataset does not include Lab Result times. The result times for the labs are estimated using the Order Date/Time of the test and the average resulting time for HCV antibody tests based on CHI lab data.
 :::
 
 The HCV Dashboard does not include result times for the labs. Therefore, an average HCV Ab lab result time was calculated from CHI HCV Ab lab data and used here (*CHI HCV Ab lab result times average is about [3 hours and 53 minutes]{.underline}*). The HCV Ab dashboard lab result times were estimated by adding this average lab result time from the CHI lab data onto the Order Date/Time values for the dashboard labs. Since these are estimated lab result times, there is some variability in this data. Also, since these are estimates, EIP staff coverage times are estimated since those can vary slightly week to week.
@@ -1142,13 +1287,10 @@ Since these lab result times are estimates, they have been categorized into four
 
 - *JF: Monday and Friday (10am-10pm; morning-evening) and Tuesday (9am-9pm; morning-evening)*
 
-Therefore, it is estimated that EIP staff is available for this project during these times:
+- *KA: Wednesday-Sunday (3pm-11pm; afternoon-evening)*
 
-- Monday morning - evening
-- Tuesday morning - evening
-- Wednesday morning - afternoon
-- Thursday morning - afternoon
-- Friday morning - evening
+
+Therefore, it is estimated that EIP staff is available for this project during most day/times except for the overnight shifts for each day.
 
 The plot below shows the days and time periods of the estimated HCV Ab+ lab result times, as well as the times that there is EIP coverage. The frequency shows the total number of HCV Ab+ results for each day/time since the start of the project. The colored bars indicates that there is EIP staff scheduled during this time to respond to the HCV Dashboard and approach those patients who are HCV Ab+.
 
@@ -1174,7 +1316,7 @@ hcv_staff_coverage
 
 <br>
 
-The table below summarizes the total number of HCV Ab+ results where an EIP staff member assigned for this project was on shift, and the percentage of the total HCV Ab+ results. This table indicates that **EIP staff was available during `r hcv_ab_pos_with_coverage_percent` of the HCV Ab+ labs** when they were estimated to have resulted and appear in the HCV Dashboard (*`r hcv_ab_pos_with_coverage`/`r hcv_ab_pos_total`*). Also, this table shows that **EIP staff was not on shift for this project during `r hcv_ab_pos_without_coverage_percent` of the HCV Ab+ labs** when they were estimated to have resulted (*`r hcv_ab_pos_without_coverage`/`r hcv_ab_pos_total`*).
+The table below summarizes the total number of HCV Ab+ results where an EIP staff member assigned for this project was on shift, and the percentage of the total HCV Ab+ results. This table indicates that **EIP staff was available during `r hcv_ab_pos_with_coverage_percent` of the HCV Ab+ labs** when they were estimated to have resulted and appear in the HCV Dashboard (*`r hcv_ab_pos_with_coverage`/`r hcv_ab_pos_total`*). Also, this table shows that **EIP staff was not on shift for this project during `r hcv_ab_pos_without_coverage_percent` of the HCV Ab+ labs** when they were estimated to have resulted (*`r hcv_ab_pos_without_coverage`/`r hcv_ab_pos_total`*). *Reminder: this is looking at the total number of HCV Ab positive tests (n = `r hcv_ab_pos_total`), rather than the unique number of patients positive for HCV Ab (n = `r hcv_pts_ab_positive`) as used in the EIP follow-up flow diagram.*
 
 <br>
 
@@ -1197,5 +1339,5 @@ hcv_ab_pos_coverage_tbl %>%
 <br>
 
 ## Additional Items still to add to this report.
-Additional items still in development for this report include: Adding in a visualization for monthly testing/positivity numbers; Analyzing scheduling with UC Clinical Pharmacy Telehealth; Add Katie's coverage; Add reasons for no follow-up (rsns linkage declined/prevented)
+Additional items still in development for this report include: Adding in a visualization for monthly testing/positivity numbers; Add reasons for no follow-up (rsns linkage declined/prevented)
 
