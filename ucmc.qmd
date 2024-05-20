@@ -6,7 +6,7 @@ title: "UC Medical Center (UCMC)"
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r, include=FALSE}
+```{r 2023 Data, include=FALSE}
 
 library(dplyr)
 library(tidyverse)
@@ -23,315 +23,316 @@ library(scales)
 library(apyramid)
 library(kableExtra)
 
-patients1 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230103.csv')
-patients2 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230110.csv')
-patients3 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230117.csv')
-patients4 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230124.csv')
-patients5 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230131.csv')
-patients6 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230203.csv')
-patients7 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230207.csv')
-patients8 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230221.csv')
-patients9 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230301.csv')
-patients10 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230307.csv')
-patients11 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230314.csv')
-patients12 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230321.csv')
-patients13 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230328.csv')
-patients14 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230403.csv')
-patients15 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230411.csv')
-patients16 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230418.csv')
-patients17 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230425.csv')
-patients18 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230502.csv')
-patients19 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230509.csv')
-patients20 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230516.csv')
-patients21 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230523.csv')
-patients22 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230601.csv')
-patients23 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230606.csv')
-patients24 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230613.csv')
-patients25 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230620.csv')
-patients26 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230627.csv')
-patients27 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230706.csv')
-patients28 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230711.csv')
-patients29 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230718.csv')
-patients30 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230725.csv')
-patients31 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230801.csv')
-patients32 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230808.csv')
-patients33 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230815.csv')
-patients34 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230822.csv')
-patients35 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230829.csv')
-patients36 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230905.csv')
-patients37 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230912.csv')
-patients38 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230919.csv')
-patients39 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230926.csv')
-patients40 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231003.csv')
-patients41 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231010.csv')
-patients42 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231017.csv')
-patients43 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231024.csv')
-patients44 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231101.csv')
-patients45 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231107.csv')
-patients46 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231114.csv')
-patients47 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231121.csv')
-patients48 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231128.csv')
-patients49 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231205.csv')
-patients50 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231212.csv')
-patients51 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231219.csv')
-patients52 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231226.csv')
-patients53 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20240102.csv')
+patients23_1 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230103.csv')
+patients23_2 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230110.csv')
+patients23_3 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230117.csv')
+patients23_4 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230124.csv')
+patients23_5 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230131.csv')
+patients23_6 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230203.csv')
+patients23_7 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230207.csv')
+patients23_8 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230221.csv')
+patients23_9 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230301.csv')
+patients23_10 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230307.csv')
+patients23_11 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230314.csv')
+patients23_12 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230321.csv')
+patients23_13 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230328.csv')
+patients23_14 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230403.csv')
+patients23_15 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230411.csv')
+patients23_16 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230418.csv')
+patients23_17 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230425.csv')
+patients23_18 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230502.csv')
+patients23_19 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230509.csv')
+patients23_20 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230516.csv')
+patients23_21 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230523.csv')
+patients23_22 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230601.csv')
+patients23_23 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230606.csv')
+patients23_24 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230613.csv')
+patients23_25 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230620.csv')
+patients23_26 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230627.csv')
+patients23_27 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230706.csv')
+patients23_28 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230711.csv')
+patients23_29 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230718.csv')
+patients23_30 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230725.csv')
+patients23_31 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230801.csv')
+patients23_32 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230808.csv')
+patients23_33 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230815.csv')
+patients23_34 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230822.csv')
+patients23_35 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230829.csv')
+patients23_36 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230905.csv')
+patients23_37 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230912.csv')
+patients23_38 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230919.csv')
+patients23_39 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20230926.csv')
+patients23_40 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231003.csv')
+patients23_41 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231010.csv')
+patients23_42 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231017.csv')
+patients23_43 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231024.csv')
+patients23_44 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231101.csv')
+patients23_45 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231107.csv')
+patients23_46 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231114.csv')
+patients23_47 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231121.csv')
+patients23_48 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231128.csv')
+patients23_49 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231205.csv')
+patients23_50 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231212.csv')
+patients23_51 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231219.csv')
+patients23_52 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20231226.csv')
+patients23_53 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2023/DPI_1009_ed_patient_list_20240102.csv')
 
-```
 
-```{r, include=FALSE}
 
-patients <- rbind(patients1, patients2, patients3, patients4, patients5, patients6, patients7, patients8, patients9, patients10,
-                  patients11, patients12, patients13, patients14, patients15, patients16, patients17, patients18, patients19, patients20,
-                  patients21, patients22, patients23, patients24, patients25, patients26, patients27, patients28, patients29, patients30,
-                  patients31, patients32, patients33, patients34, patients35, patients36, patients37, patients38, patients39, patients40,
-                  patients41, patients42, patients43, patients44, patients45, patients46, patients47, patients48, patients49, patients50, patients51, patients52, patients53)
-dim(patients)
-head(patients)
+patients23 <- rbind(patients23_1, patients23_2, patients23_3, patients23_4, patients23_5, patients23_6, patients23_7, patients23_8, patients23_9, patients23_10,
+                  patients23_11, patients23_12, patients23_13, patients23_14, patients23_15, patients23_16, patients23_17, patients23_18, patients23_19, patients23_20,
+                  patients23_21, patients23_22, patients23_23, patients23_24, patients23_25, patients23_26, patients23_27, patients23_28, patients23_29, patients23_30,
+                  patients23_31, patients23_32, patients23_33, patients23_34, patients23_35, patients23_36, patients23_37, patients23_38, patients23_39, patients23_40,
+                  patients23_41, patients23_42, patients23_43, patients23_44, patients23_45, patients23_46, patients23_47, patients23_48, patients23_49, patients23_50, patients23_51, patients23_52, patients23_53)
+dim(patients23)
+head(patients23)
 
-summary(patients$EVENT_TIME)
-patients$date <- as.Date(patients$EVENT_TIME, format = '%m/%d/%Y')
-summary(patients$date)
-patients <- patients[which(patients$date >= '2023-01-01' & patients$date <= '2023-12-31'), ]
-summary(patients$date)
-dim(patients)
+summary(patients23$EVENT_TIME)
+patients23$date <- as.Date(patients23$EVENT_TIME, format = '%m/%d/%Y')
+summary(patients23$date)
+patients23 <- patients23[which(patients23$date >= '2023-01-01' & patients23$date <= '2023-12-31'), ]
+summary(patients23$date)
+dim(patients23)
 
-table(patients$DEPARTMENT)
-patients <- patients[which(patients$DEPARTMENT == 'UH EMERGENCY DEPT'), ]
-table(patients$DEPARTMENT)
-dim(patients)
+table(patients23$DEPARTMENT)
+patients23 <- patients23[which(patients23$DEPARTMENT == 'UH EMERGENCY DEPT'), ]
+table(patients23$DEPARTMENT)
+dim(patients23)
 
-patients <- select(patients, PAT_ENC_CSN_ID, date, MRN, PATIENT_LAST_NAME, PATIENT_FIRST_NAME,
-                   PATIENT_MIDDLE_NAME, DOB, AGE, RACE, GENDER)
-colnames(patients)[1] <- 'csn'
-colnames(patients)[3] <- 'mrn'
-colnames(patients)[4] <- 'last_name'
-colnames(patients)[5] <- 'first_name'
-colnames(patients)[6] <- 'middle_name'
-colnames(patients)[7] <- 'dob'
-colnames(patients)[8] <- 'age'
-colnames(patients)[9] <- 'race'
-colnames(patients)[10] <- 'gender'
-head(patients)
+patients23 <- select(patients23, PAT_ENC_CSN_ID, date, MRN, PATIENT_LAST_NAME, PATIENT_FIRST_NAME,
+                     PATIENT_MIDDLE_NAME, DOB, AGE, RACE, GENDER)
+colnames(patients23)[1] <- 'csn'
+colnames(patients23)[3] <- 'mrn'
+colnames(patients23)[4] <- 'last_name'
+colnames(patients23)[5] <- 'first_name'
+colnames(patients23)[6] <- 'middle_name'
+colnames(patients23)[7] <- 'dob'
+colnames(patients23)[8] <- 'age'
+colnames(patients23)[9] <- 'race'
+colnames(patients23)[10] <- 'gender'
+head(patients23)
 
 
 # Number of Encounters at UCMC
-ucmc_encounters <- select(patients, csn)
-dim(ucmc_encounters)
-head(ucmc_encounters)
-ucmc_encounters <- distinct(ucmc_encounters)
-dim(ucmc_encounters)
-ucmc_encounters <- nrow(ucmc_encounters)
-ucmc_encounters
+ucmc_encounters23 <- select(patients23, csn)
+dim(ucmc_encounters23)
+head(ucmc_encounters23)
+ucmc_encounters23 <- distinct(ucmc_encounters23)
+dim(ucmc_encounters23)
+ucmc_encounters23 <- nrow(ucmc_encounters23)
+ucmc_encounters23
 
 
-ucmc_monthly_enc1 <- patients[which(patients$date >= '2023-01-01' & patients$date <= '2023-01-31'), ]
-ucmc_monthly_enc1 <- select(ucmc_monthly_enc1, csn)
-dim(ucmc_monthly_enc1)
-ucmc_monthly_enc1 <- distinct(ucmc_monthly_enc1)
-dim(ucmc_monthly_enc1)
-ucmc_enc1 <- nrow(ucmc_monthly_enc1)
+ucmc_monthly_enc23_1 <- patients23[which(patients23$date >= '2023-01-01' & patients23$date <= '2023-01-31'), ]
+ucmc_monthly_enc23_1 <- select(ucmc_monthly_enc23_1, csn)
+dim(ucmc_monthly_enc23_1)
+ucmc_monthly_enc23_1 <- distinct(ucmc_monthly_enc23_1)
+dim(ucmc_monthly_enc23_1)
+ucmc_enc23_1 <- nrow(ucmc_monthly_enc23_1)
 
-ucmc_monthly_enc2 <- patients[which(patients$date >= '2023-02-01' & patients$date <= '2023-02-28'), ]
-ucmc_monthly_enc2 <- select(ucmc_monthly_enc2, csn)
-dim(ucmc_monthly_enc2)
-ucmc_monthly_enc2 <- distinct(ucmc_monthly_enc2)
-dim(ucmc_monthly_enc2)
-ucmc_enc2 <- nrow(ucmc_monthly_enc2)
+ucmc_monthly_enc23_2 <- patients23[which(patients23$date >= '2023-02-01' & patients23$date <= '2023-02-28'), ]
+ucmc_monthly_enc23_2 <- select(ucmc_monthly_enc23_2, csn)
+dim(ucmc_monthly_enc23_2)
+ucmc_monthly_enc23_2 <- distinct(ucmc_monthly_enc23_2)
+dim(ucmc_monthly_enc23_2)
+ucmc_enc23_2 <- nrow(ucmc_monthly_enc23_2)
 
-ucmc_monthly_enc3 <- patients[which(patients$date >= '2023-03-01' & patients$date <= '2023-03-31'), ]
-ucmc_monthly_enc3 <- select(ucmc_monthly_enc3, csn)
-dim(ucmc_monthly_enc3)
-ucmc_monthly_enc3 <- distinct(ucmc_monthly_enc3)
-dim(ucmc_monthly_enc3)
-ucmc_enc3 <- nrow(ucmc_monthly_enc3)
+ucmc_monthly_enc23_3 <- patients23[which(patients23$date >= '2023-03-01' & patients23$date <= '2023-03-31'), ]
+ucmc_monthly_enc23_3 <- select(ucmc_monthly_enc23_3, csn)
+dim(ucmc_monthly_enc23_3)
+ucmc_monthly_enc23_3 <- distinct(ucmc_monthly_enc23_3)
+dim(ucmc_monthly_enc23_3)
+ucmc_enc23_3 <- nrow(ucmc_monthly_enc23_3)
 
-ucmc_monthly_enc4 <- patients[which(patients$date >= '2023-04-01' & patients$date <= '2023-04-30'), ]
-ucmc_monthly_enc4 <- select(ucmc_monthly_enc4, csn)
-dim(ucmc_monthly_enc4)
-ucmc_monthly_enc4 <- distinct(ucmc_monthly_enc4)
-dim(ucmc_monthly_enc4)
-ucmc_enc4 <- nrow(ucmc_monthly_enc4)
+ucmc_monthly_enc23_4 <- patients23[which(patients23$date >= '2023-04-01' & patients23$date <= '2023-04-30'), ]
+ucmc_monthly_enc23_4 <- select(ucmc_monthly_enc23_4, csn)
+dim(ucmc_monthly_enc23_4)
+ucmc_monthly_enc23_4 <- distinct(ucmc_monthly_enc23_4)
+dim(ucmc_monthly_enc23_4)
+ucmc_enc23_4 <- nrow(ucmc_monthly_enc23_4)
 
-ucmc_monthly_enc5 <- patients[which(patients$date >= '2023-05-01' & patients$date <= '2023-05-31'), ]
-ucmc_monthly_enc5 <- select(ucmc_monthly_enc5, csn)
-dim(ucmc_monthly_enc5)
-ucmc_monthly_enc5 <- distinct(ucmc_monthly_enc5)
-dim(ucmc_monthly_enc5)
-ucmc_enc5 <- nrow(ucmc_monthly_enc5)
+ucmc_monthly_enc23_5 <- patients23[which(patients23$date >= '2023-05-01' & patients23$date <= '2023-05-31'), ]
+ucmc_monthly_enc23_5 <- select(ucmc_monthly_enc23_5, csn)
+dim(ucmc_monthly_enc23_5)
+ucmc_monthly_enc23_5 <- distinct(ucmc_monthly_enc23_5)
+dim(ucmc_monthly_enc23_5)
+ucmc_enc23_5 <- nrow(ucmc_monthly_enc23_5)
 
-ucmc_monthly_enc6 <- patients[which(patients$date >= '2023-06-01' & patients$date <= '2023-06-30'), ]
-ucmc_monthly_enc6 <- select(ucmc_monthly_enc6, csn)
-dim(ucmc_monthly_enc6)
-ucmc_monthly_enc6 <- distinct(ucmc_monthly_enc6)
-dim(ucmc_monthly_enc6)
-ucmc_enc6 <- nrow(ucmc_monthly_enc6)
+ucmc_monthly_enc23_6 <- patients23[which(patients23$date >= '2023-06-01' & patients23$date <= '2023-06-30'), ]
+ucmc_monthly_enc23_6 <- select(ucmc_monthly_enc23_6, csn)
+dim(ucmc_monthly_enc23_6)
+ucmc_monthly_enc23_6 <- distinct(ucmc_monthly_enc23_6)
+dim(ucmc_monthly_enc23_6)
+ucmc_enc23_6 <- nrow(ucmc_monthly_enc23_6)
 
-ucmc_monthly_enc7 <- patients[which(patients$date >= '2023-07-01' & patients$date <= '2023-07-31'), ]
-ucmc_monthly_enc7 <- select(ucmc_monthly_enc7, csn)
-dim(ucmc_monthly_enc7)
-ucmc_monthly_enc7 <- distinct(ucmc_monthly_enc7)
-dim(ucmc_monthly_enc7)
-ucmc_enc7 <- nrow(ucmc_monthly_enc7)
+ucmc_monthly_enc23_7 <- patients23[which(patients23$date >= '2023-07-01' & patients23$date <= '2023-07-31'), ]
+ucmc_monthly_enc23_7 <- select(ucmc_monthly_enc23_7, csn)
+dim(ucmc_monthly_enc23_7)
+ucmc_monthly_enc23_7 <- distinct(ucmc_monthly_enc23_7)
+dim(ucmc_monthly_enc23_7)
+ucmc_enc23_7 <- nrow(ucmc_monthly_enc23_7)
 
-ucmc_monthly_enc8 <- patients[which(patients$date >= '2023-08-01' & patients$date <= '2023-08-31'), ]
-ucmc_monthly_enc8 <- select(ucmc_monthly_enc8, csn)
-dim(ucmc_monthly_enc8)
-ucmc_monthly_enc8 <- distinct(ucmc_monthly_enc8)
-dim(ucmc_monthly_enc8)
-ucmc_enc8 <- nrow(ucmc_monthly_enc8)
+ucmc_monthly_enc23_8 <- patients23[which(patients23$date >= '2023-08-01' & patients23$date <= '2023-08-31'), ]
+ucmc_monthly_enc23_8 <- select(ucmc_monthly_enc23_8, csn)
+dim(ucmc_monthly_enc23_8)
+ucmc_monthly_enc23_8 <- distinct(ucmc_monthly_enc23_8)
+dim(ucmc_monthly_enc23_8)
+ucmc_enc23_8 <- nrow(ucmc_monthly_enc23_8)
 
-ucmc_monthly_enc9 <- patients[which(patients$date >= '2023-09-01' & patients$date <= '2023-09-30'), ]
-ucmc_monthly_enc9 <- select(ucmc_monthly_enc9, csn)
-dim(ucmc_monthly_enc9)
-ucmc_monthly_enc9 <- distinct(ucmc_monthly_enc9)
-dim(ucmc_monthly_enc9)
-ucmc_enc9 <- nrow(ucmc_monthly_enc9)
+ucmc_monthly_enc23_9 <- patients23[which(patients23$date >= '2023-09-01' & patients23$date <= '2023-09-30'), ]
+ucmc_monthly_enc23_9 <- select(ucmc_monthly_enc23_9, csn)
+dim(ucmc_monthly_enc23_9)
+ucmc_monthly_enc23_9 <- distinct(ucmc_monthly_enc23_9)
+dim(ucmc_monthly_enc23_9)
+ucmc_enc23_9 <- nrow(ucmc_monthly_enc23_9)
 
-ucmc_monthly_enc10 <- patients[which(patients$date >= '2023-10-01' & patients$date <= '2023-10-31'), ]
-ucmc_monthly_enc10 <- select(ucmc_monthly_enc10, csn)
-dim(ucmc_monthly_enc10)
-ucmc_monthly_enc10 <- distinct(ucmc_monthly_enc10)
-dim(ucmc_monthly_enc10)
-ucmc_enc10 <- nrow(ucmc_monthly_enc10)
+ucmc_monthly_enc23_10 <- patients23[which(patients23$date >= '2023-10-01' & patients23$date <= '2023-10-31'), ]
+ucmc_monthly_enc23_10 <- select(ucmc_monthly_enc23_10, csn)
+dim(ucmc_monthly_enc23_10)
+ucmc_monthly_enc23_10 <- distinct(ucmc_monthly_enc23_10)
+dim(ucmc_monthly_enc23_10)
+ucmc_enc23_10 <- nrow(ucmc_monthly_enc23_10)
 
-ucmc_monthly_enc11 <- patients[which(patients$date >= '2023-11-01' & patients$date <= '2023-11-30'), ]
-ucmc_monthly_enc11 <- select(ucmc_monthly_enc11, csn)
-dim(ucmc_monthly_enc11)
-ucmc_monthly_enc11 <- distinct(ucmc_monthly_enc11)
-dim(ucmc_monthly_enc11)
-ucmc_enc11 <- nrow(ucmc_monthly_enc11)
+ucmc_monthly_enc23_11 <- patients23[which(patients23$date >= '2023-11-01' & patients23$date <= '2023-11-30'), ]
+ucmc_monthly_enc23_11 <- select(ucmc_monthly_enc23_11, csn)
+dim(ucmc_monthly_enc23_11)
+ucmc_monthly_enc23_11 <- distinct(ucmc_monthly_enc23_11)
+dim(ucmc_monthly_enc23_11)
+ucmc_enc23_11 <- nrow(ucmc_monthly_enc23_11)
 
-ucmc_monthly_enc12 <- patients[which(patients$date >= '2023-12-01' & patients$date <= '2023-12-31'), ]
-ucmc_monthly_enc12 <- select(ucmc_monthly_enc12, csn)
-dim(ucmc_monthly_enc12)
-ucmc_monthly_enc12 <- distinct(ucmc_monthly_enc12)
-dim(ucmc_monthly_enc12)
-ucmc_enc12 <- nrow(ucmc_monthly_enc12)
+ucmc_monthly_enc23_12 <- patients23[which(patients23$date >= '2023-12-01' & patients23$date <= '2023-12-31'), ]
+ucmc_monthly_enc23_12 <- select(ucmc_monthly_enc23_12, csn)
+dim(ucmc_monthly_enc23_12)
+ucmc_monthly_enc23_12 <- distinct(ucmc_monthly_enc23_12)
+dim(ucmc_monthly_enc23_12)
+ucmc_enc23_12 <- nrow(ucmc_monthly_enc23_12)
 
 
 # Number of Patients at UCMC
-ucmc_patients <- select(patients, mrn)
-dim(ucmc_patients)
-head(ucmc_patients)
-ucmc_patients <- distinct(ucmc_patients)
-dim(ucmc_patients)
-ucmc_patients <- nrow(ucmc_patients)
-ucmc_patients
+ucmc_patients23 <- select(patients23, mrn)
+dim(ucmc_patients23)
+head(ucmc_patients23)
+ucmc_patients23 <- distinct(ucmc_patients23)
+dim(ucmc_patients23)
+ucmc_patients23 <- nrow(ucmc_patients23)
+ucmc_patients23
 
 
-ucmc_monthly_pt1 <- patients[which(patients$date >= '2023-01-01' & patients$date <= '2023-01-31'), ]
-ucmc_monthly_pt1 <- select(ucmc_monthly_pt1, mrn)
-dim(ucmc_monthly_pt1)
-ucmc_monthly_pt1 <- distinct(ucmc_monthly_pt1)
-dim(ucmc_monthly_pt1)
-ucmc_pts1 <- nrow(ucmc_monthly_pt1)
+ucmc_monthly_pt23_1 <- patients23[which(patients23$date >= '2023-01-01' & patients23$date <= '2023-01-31'), ]
+ucmc_monthly_pt23_1 <- select(ucmc_monthly_pt23_1, mrn)
+dim(ucmc_monthly_pt23_1)
+ucmc_monthly_pt23_1 <- distinct(ucmc_monthly_pt23_1)
+dim(ucmc_monthly_pt23_1)
+ucmc_pts23_1 <- nrow(ucmc_monthly_pt23_1)
 
-ucmc_monthly_pt2 <- patients[which(patients$date >= '2023-02-01' & patients$date <= '2023-02-28'), ]
-ucmc_monthly_pt2 <- select(ucmc_monthly_pt2, mrn)
-dim(ucmc_monthly_pt2)
-ucmc_monthly_pt2 <- distinct(ucmc_monthly_pt2)
-dim(ucmc_monthly_pt2)
-ucmc_pts2 <- nrow(ucmc_monthly_pt2)
+ucmc_monthly_pt23_2 <- patients23[which(patients23$date >= '2023-02-01' & patients23$date <= '2023-02-28'), ]
+ucmc_monthly_pt23_2 <- select(ucmc_monthly_pt23_2, mrn)
+dim(ucmc_monthly_pt23_2)
+ucmc_monthly_pt23_2 <- distinct(ucmc_monthly_pt23_2)
+dim(ucmc_monthly_pt23_2)
+ucmc_pts23_2 <- nrow(ucmc_monthly_pt23_2)
 
-ucmc_monthly_pt3 <- patients[which(patients$date >= '2023-03-01' & patients$date <= '2023-03-31'), ]
-ucmc_monthly_pt3 <- select(ucmc_monthly_pt3, mrn)
-dim(ucmc_monthly_pt3)
-ucmc_monthly_pt3 <- distinct(ucmc_monthly_pt3)
-dim(ucmc_monthly_pt3)
-ucmc_pts3 <- nrow(ucmc_monthly_pt3)
+ucmc_monthly_pt23_3 <- patients23[which(patients23$date >= '2023-03-01' & patients23$date <= '2023-03-31'), ]
+ucmc_monthly_pt23_3 <- select(ucmc_monthly_pt23_3, mrn)
+dim(ucmc_monthly_pt23_3)
+ucmc_monthly_pt23_3 <- distinct(ucmc_monthly_pt23_3)
+dim(ucmc_monthly_pt23_3)
+ucmc_pts23_3 <- nrow(ucmc_monthly_pt23_3)
 
-ucmc_monthly_pt4 <- patients[which(patients$date >= '2023-04-01' & patients$date <= '2023-04-30'), ]
-ucmc_monthly_pt4 <- select(ucmc_monthly_pt4, mrn)
-dim(ucmc_monthly_pt4)
-ucmc_monthly_pt4 <- distinct(ucmc_monthly_pt4)
-dim(ucmc_monthly_pt4)
-ucmc_pts4 <- nrow(ucmc_monthly_pt4)
+ucmc_monthly_pt23_4 <- patients23[which(patients23$date >= '2023-04-01' & patients23$date <= '2023-04-30'), ]
+ucmc_monthly_pt23_4 <- select(ucmc_monthly_pt23_4, mrn)
+dim(ucmc_monthly_pt23_4)
+ucmc_monthly_pt23_4 <- distinct(ucmc_monthly_pt23_4)
+dim(ucmc_monthly_pt23_4)
+ucmc_pts23_4 <- nrow(ucmc_monthly_pt23_4)
 
-ucmc_monthly_pt5 <- patients[which(patients$date >= '2023-05-01' & patients$date <= '2023-05-31'), ]
-ucmc_monthly_pt5 <- select(ucmc_monthly_pt5, mrn)
-dim(ucmc_monthly_pt5)
-ucmc_monthly_pt5 <- distinct(ucmc_monthly_pt5)
-dim(ucmc_monthly_pt5)
-ucmc_pts5 <- nrow(ucmc_monthly_pt5)
+ucmc_monthly_pt23_5 <- patients23[which(patients23$date >= '2023-05-01' & patients23$date <= '2023-05-31'), ]
+ucmc_monthly_pt23_5 <- select(ucmc_monthly_pt23_5, mrn)
+dim(ucmc_monthly_pt23_5)
+ucmc_monthly_pt23_5 <- distinct(ucmc_monthly_pt23_5)
+dim(ucmc_monthly_pt23_5)
+ucmc_pts23_5 <- nrow(ucmc_monthly_pt23_5)
 
-ucmc_monthly_pt6 <- patients[which(patients$date >= '2023-06-01' & patients$date <= '2023-06-30'), ]
-ucmc_monthly_pt6 <- select(ucmc_monthly_pt6, mrn)
-dim(ucmc_monthly_pt6)
-ucmc_monthly_pt6 <- distinct(ucmc_monthly_pt6)
-dim(ucmc_monthly_pt6)
-ucmc_pts6 <- nrow(ucmc_monthly_pt6)
+ucmc_monthly_pt23_6 <- patients23[which(patients23$date >= '2023-06-01' & patients23$date <= '2023-06-30'), ]
+ucmc_monthly_pt23_6 <- select(ucmc_monthly_pt23_6, mrn)
+dim(ucmc_monthly_pt23_6)
+ucmc_monthly_pt23_6 <- distinct(ucmc_monthly_pt23_6)
+dim(ucmc_monthly_pt23_6)
+ucmc_pts23_6 <- nrow(ucmc_monthly_pt23_6)
 
-ucmc_monthly_pt7 <- patients[which(patients$date >= '2023-07-01' & patients$date <= '2023-07-31'), ]
-ucmc_monthly_pt7 <- select(ucmc_monthly_pt7, mrn)
-dim(ucmc_monthly_pt7)
-ucmc_monthly_pt7 <- distinct(ucmc_monthly_pt7)
-dim(ucmc_monthly_pt7)
-ucmc_pts7 <- nrow(ucmc_monthly_pt7)
+ucmc_monthly_pt23_7 <- patients23[which(patients23$date >= '2023-07-01' & patients23$date <= '2023-07-31'), ]
+ucmc_monthly_pt23_7 <- select(ucmc_monthly_pt23_7, mrn)
+dim(ucmc_monthly_pt23_7)
+ucmc_monthly_pt23_7 <- distinct(ucmc_monthly_pt23_7)
+dim(ucmc_monthly_pt23_7)
+ucmc_pts23_7 <- nrow(ucmc_monthly_pt23_7)
 
-ucmc_monthly_pt8 <- patients[which(patients$date >= '2023-08-01' & patients$date <= '2023-08-31'), ]
-ucmc_monthly_pt8 <- select(ucmc_monthly_pt8, mrn)
-dim(ucmc_monthly_pt8)
-ucmc_monthly_pt8 <- distinct(ucmc_monthly_pt8)
-dim(ucmc_monthly_pt8)
-ucmc_pts8 <- nrow(ucmc_monthly_pt8)
+ucmc_monthly_pt23_8 <- patients23[which(patients23$date >= '2023-08-01' & patients23$date <= '2023-08-31'), ]
+ucmc_monthly_pt23_8 <- select(ucmc_monthly_pt23_8, mrn)
+dim(ucmc_monthly_pt23_8)
+ucmc_monthly_pt23_8 <- distinct(ucmc_monthly_pt23_8)
+dim(ucmc_monthly_pt23_8)
+ucmc_pts23_8 <- nrow(ucmc_monthly_pt23_8)
 
-ucmc_monthly_pt9 <- patients[which(patients$date >= '2023-09-01' & patients$date <= '2023-09-30'), ]
-ucmc_monthly_pt9 <- select(ucmc_monthly_pt9, mrn)
-dim(ucmc_monthly_pt9)
-ucmc_monthly_pt9 <- distinct(ucmc_monthly_pt9)
-dim(ucmc_monthly_pt9)
-ucmc_pts9 <- nrow(ucmc_monthly_pt9)
+ucmc_monthly_pt23_9 <- patients23[which(patients23$date >= '2023-09-01' & patients23$date <= '2023-09-30'), ]
+ucmc_monthly_pt23_9 <- select(ucmc_monthly_pt23_9, mrn)
+dim(ucmc_monthly_pt23_9)
+ucmc_monthly_pt23_9 <- distinct(ucmc_monthly_pt23_9)
+dim(ucmc_monthly_pt23_9)
+ucmc_pts23_9 <- nrow(ucmc_monthly_pt23_9)
 
-ucmc_monthly_pt10 <- patients[which(patients$date >= '2023-10-01' & patients$date <= '2023-10-31'), ]
-ucmc_monthly_pt10 <- select(ucmc_monthly_pt10, mrn)
-dim(ucmc_monthly_pt10)
-ucmc_monthly_pt10 <- distinct(ucmc_monthly_pt10)
-dim(ucmc_monthly_pt10)
-ucmc_pts10 <- nrow(ucmc_monthly_pt10)
+ucmc_monthly_pt23_10 <- patients23[which(patients23$date >= '2023-10-01' & patients23$date <= '2023-10-31'), ]
+ucmc_monthly_pt23_10 <- select(ucmc_monthly_pt23_10, mrn)
+dim(ucmc_monthly_pt23_10)
+ucmc_monthly_pt23_10 <- distinct(ucmc_monthly_pt23_10)
+dim(ucmc_monthly_pt23_10)
+ucmc_pts23_10 <- nrow(ucmc_monthly_pt23_10)
 
-ucmc_monthly_pt11 <- patients[which(patients$date >= '2023-11-01' & patients$date <= '2023-11-30'), ]
-ucmc_monthly_pt11 <- select(ucmc_monthly_pt11, mrn)
-dim(ucmc_monthly_pt11)
-ucmc_monthly_pt11 <- distinct(ucmc_monthly_pt11)
-dim(ucmc_monthly_pt11)
-ucmc_pts11 <- nrow(ucmc_monthly_pt11)
+ucmc_monthly_pt23_11 <- patients23[which(patients23$date >= '2023-11-01' & patients23$date <= '2023-11-30'), ]
+ucmc_monthly_pt23_11 <- select(ucmc_monthly_pt23_11, mrn)
+dim(ucmc_monthly_pt23_11)
+ucmc_monthly_pt23_11 <- distinct(ucmc_monthly_pt23_11)
+dim(ucmc_monthly_pt23_11)
+ucmc_pts23_11 <- nrow(ucmc_monthly_pt23_11)
 
-ucmc_monthly_pt12 <- patients[which(patients$date >= '2023-12-01' & patients$date <= '2023-12-31'), ]
-ucmc_monthly_pt12 <- select(ucmc_monthly_pt12, mrn)
-dim(ucmc_monthly_pt12)
-ucmc_monthly_pt12 <- distinct(ucmc_monthly_pt12)
-dim(ucmc_monthly_pt12)
-ucmc_pts12 <- nrow(ucmc_monthly_pt12)
-
+ucmc_monthly_pt23_12 <- patients23[which(patients23$date >= '2023-12-01' & patients23$date <= '2023-12-31'), ]
+ucmc_monthly_pt23_12 <- select(ucmc_monthly_pt23_12, mrn)
+dim(ucmc_monthly_pt23_12)
+ucmc_monthly_pt23_12 <- distinct(ucmc_monthly_pt23_12)
+dim(ucmc_monthly_pt23_12)
+ucmc_pts23_12 <- nrow(ucmc_monthly_pt23_12)
 
 ```
 
 
-The data table below is compiled using the weekly CHI files that are received during 2023. The total number of encounters are determined by unique CSNs and the total number of unique patients are determined by unique MRNs.
+# Total Encounters & Unique Patients
+
+The data table below is estimated encounter and patient data compiled using the weekly CHI files. The total number of encounters are determined by unique CSNs and the total number of unique patients are determined by unique MRNs.
 
 
 ```{r, echo=FALSE, warning=FALSE}
 
 # Combining Encounter and Patient data into same table
 ucmc_monthly_tbl <- data.frame(matrix(ncol = 3, nrow = 0))
-colnames(ucmc_monthly_tbl) <- c('Month', 'Encounters', 'Patients')
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('January', ucmc_enc1, ucmc_pts1)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('February', ucmc_enc2, ucmc_pts2)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('March', ucmc_enc3, ucmc_pts3)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('April', ucmc_enc4, ucmc_pts4)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('May', ucmc_enc5, ucmc_pts5)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('June', ucmc_enc6, ucmc_pts6)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('July', ucmc_enc7, ucmc_pts7)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('August', ucmc_enc8, ucmc_pts8)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('September', ucmc_enc9, ucmc_pts9)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('October', ucmc_enc10, ucmc_pts10)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('November', ucmc_enc11, ucmc_pts11)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('December', ucmc_enc12, ucmc_pts12)
-ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('Totals', ucmc_encounters, ucmc_patients)
+colnames(ucmc_monthly_tbl) <- c('Month', 'Encounters/Visits', 'Unique Patients')
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('January', ucmc_enc23_1, ucmc_pts23_1)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('February', ucmc_enc23_2, ucmc_pts23_2)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('March', ucmc_enc23_3, ucmc_pts23_3)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('April', ucmc_enc23_4, ucmc_pts23_4)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('May', ucmc_enc23_5, ucmc_pts23_5)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('June', ucmc_enc23_6, ucmc_pts23_6)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('July', ucmc_enc23_7, ucmc_pts23_7)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('August', ucmc_enc23_8, ucmc_pts23_8)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('September', ucmc_enc23_9, ucmc_pts23_9)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('October', ucmc_enc23_10, ucmc_pts23_10)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('November', ucmc_enc23_11, ucmc_pts23_11)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('December', ucmc_enc23_12, ucmc_pts23_12)
+ucmc_monthly_tbl[nrow(ucmc_monthly_tbl) + 1,] <- list('2023 Totals', ucmc_encounters23, ucmc_patients23)
 ucmc_monthly_tbl %>%
-  kbl() %>%
+  kbl(table.attr = 'data-quarto-disable-processing="true"') %>%
   kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  pack_rows("2023", 1, 13, label_row_css = "background-color: #F0F0F0") %>%
+  add_indent(c(1,2,3,4,5,6,7,8,9,10,11,12,13)) %>%
   kable_styling(full_width = F, font_size = 12)
 
 ```

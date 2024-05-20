@@ -32,7 +32,7 @@ library(forcats)
 
 
 # EIP Database Data
-eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240513_1346.csv')
+eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240520_1003.csv')
 dim(eip)
 
 # HCV Epic Dashboard Data
@@ -66,8 +66,10 @@ hcv14 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV
 dim(hcv14)
 hcv15 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240512_1344.csv')
 dim(hcv15)
+hcv16 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240519_1227.csv')
+dim(hcv16)
 
-hcv <- rbind(hcv1, hcv2, hcv3, hcv4, hcv5, hcv6, hcv7, hcv8, hcv9, hcv10, hcv11, hcv12, hcv13, hcv14, hcv15)
+hcv <- rbind(hcv1,hcv2,hcv3,hcv4,hcv5,hcv6,hcv7,hcv8,hcv9,hcv10,hcv11,hcv12,hcv13,hcv14,hcv15,hcv16)
 dim(hcv)
 hcv <- distinct(hcv)
 dim(hcv)
@@ -665,6 +667,9 @@ no_eip_record_hcv_ab_pos <- nrow(no_eip_record_hcv_ab_pos)
 no_eip_record_hcv_ab_pos
 no_eip_record_hcv_ab_pos_percent <- percent(no_eip_record_hcv_ab_pos/hcv_pts_ab_positive, accuracy = 0.1)
 no_eip_record_hcv_ab_pos_percent
+#check <- hcv_pts[which(is.na(hcv_pts$eip_record) & hcv_pts$hcv_ab_positive == 1), ]
+#check <- select(check, mrn)
+#check
 
 
 
