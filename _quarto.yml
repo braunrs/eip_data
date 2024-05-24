@@ -16,6 +16,8 @@ website:
             text: SUD
           - href: human_trafficking.qmd
             text: Human Trafficking
+          - href: sti.qmd
+            text: STI
       - text: Deliverables
         menu:
           - href: ctr_deliverables.qmd

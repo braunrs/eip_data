@@ -1,5 +1,5 @@
 ---
-title: "Additional Services"
+title: "Sexually Transmitted Infections (STI)"
 date: "`r Sys.Date()`"
 ---
 
@@ -36,6 +36,55 @@ dim(eip23)
 # 2024
 eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240520_1003.csv')
 dim(eip24)
+
+# CHI Lab Files
+labs1 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240102.csv')
+dim(labs1)
+labs2 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240109.csv')
+dim(labs2)
+labs3 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240116.csv')
+dim(labs3)
+labs4 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240123.csv')
+dim(labs4)
+labs5 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240130.csv')
+dim(labs5)
+labs6 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240202.csv')
+dim(labs6)
+labs7 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240206.csv')
+dim(labs7)
+labs8 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240213.csv')
+dim(labs8)
+labs9 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240220.csv')
+dim(labs9)
+labs10 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240227.csv')
+dim(labs10)
+labs11 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240304.csv')
+dim(labs11)
+labs12 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240305.csv')
+dim(labs12)
+labs13 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240312.csv')
+dim(labs13)
+labs14 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240319.csv')
+dim(labs14)
+labs15 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240326.csv')
+dim(labs15)
+labs16 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240416.csv')
+dim(labs16)
+labs17 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240423.csv')
+dim(labs17)
+labs18 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240430.csv')
+dim(labs18)
+labs19 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240502.csv')
+dim(labs19)
+labs20 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240507.csv')
+dim(labs20)
+labs21 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240514.csv')
+dim(labs21)
+
+labs <- rbind(labs1,labs2,labs3,labs4,labs5,labs6,labs7,labs8,labs9,labs10,
+              labs11,labs12,labs13,labs14,labs15,labs16,labs17,labs18, labs19, labs20, labs21)
+dim(labs)
+head(labs)
 
 ```
 
@@ -2190,7 +2239,233 @@ eip$datediff50 <- as.numeric(interval(eip$enc_date, eip$followup_date50)/ddays(1
 
 ```
 
-```{r Additional Services, include=FALSE}
+```{r CCTST Syphilis Testing, include=FALSE}
+
+# Formatting labs for what is needed
+
+labs <- labs[which(labs$ORDER_STATUS == 'Completed'), ]
+labs <- labs[which(labs$DEPARTMENT_NAME == 'UH EMERGENCY DEPT'), ]
+labs <- labs[which(labs$PROC_NAME == 'TREPONEMA PALLIDUM AB WITH REFLEX' | labs$PROC_NAME == 'RPR W TITER'), ]
+summary(labs$ORDERING_DATE)
+labs$ORDERING_DATE <- as.Date(labs$ORDERING_DATE, format = '%m/%d/%Y')
+summary(labs$ORDERING_DATE)
+labs <- labs[which(labs$ORDERING_DATE >= '2024-01-01'), ]
+summary(labs$ORDERING_DATE)
+
+
+syph <- select(labs, -EPIC_PAT_ID, -LAST_NAME, -FIRST_NAME, -MIDDLE_NAME, -DOB,
+               -PROC_NAME, -PROC_ID, -PROC_CODE, -ORDER_PROC_ID, -ORDER_STATUS_CODE, -ORDER_STATUS, -RESULT_TIME,
+               -ORDER_DESCRIPTION, -RESULT_LINE_NUMBER, -COMPONENT_ID, -COMPONENT_ABBREV,
+               -LAB_STATUS, -AUTHRZING_PROV, -AUTHRZING_PROV_TYPE, -AUTHRZING_PROV_CLINICIAN_TITLE,
+               -BILLING_PROV, -BILLING_PROV_TYPE, -BILLING_PROV_CLINICIAN_TITLE,- ORD_CREATR_USER,
+               -TECHNOLOGIST_ID, -INSTNTOR_USER_ID, -FUTURE_OR_STAND, -INSTANTIATED_TIME,
+               -ADT_DEPARTMENT_ID, -ADT_DEPARTMENT_NAME, -PAT_LOC_ID, -DEPARTMENT_NAME)
+head(syph)
+dim(syph)
+
+
+
+
+# Renaming variables
+colnames(syph)[1] <- 'mrn'
+colnames(syph)[2] <- 'csn'
+colnames(syph)[3] <- 'order_date'
+head(syph)
+
+
+
+
+# Creating main dataset to match variables to (by csn)
+
+syph_main <- select(syph, csn)
+dim(syph_main)
+syph_main <- distinct(syph_main)
+dim(syph_main)
+head(syph_main)
+
+
+
+
+# Trepia Results
+
+syph_tested <- syph[which(syph$RESULT_VALUE == 'Positive' | syph$RESULT_VALUE == 'Negative'), ]
+dim(syph_tested)
+head(syph_tested)
+syph_tested <- select(syph_tested, csn, order_date)
+dim(syph_tested)
+syph_tested <- distinct(syph_tested)
+dim(syph_tested)
+syph_tested$syph_tested <- 1
+head(syph_tested)
+dim(syph_tested)
+dim(syph_main)
+syph_main <- merge(syph_main, syph_tested, by = 'csn', all.x = T)
+dim(syph_main)
+head(syph_main)
+syph_main$syph_tested[is.na(syph_main$syph_tested)] <- ''
+table(syph_main$syph_tested)
+head(syph_main)
+syph_main$dup <- duplicated(syph_main$csn)
+syph_main <- syph_main[which(syph_main$dup == F), ]
+dim(syph_main)
+syph_main <- select(syph_main, -dup)
+head(syph_main)
+
+
+syph_trepia <- syph[which(syph$COMPONENT_NAME == 'TREPIA'), ]
+dim(syph_trepia)
+head(syph_trepia)
+table(syph_trepia$RESULT_VALUE)
+
+syph_trepia_pos <- syph_trepia[which(syph_trepia$RESULT_VALUE == 'Positive'), ]
+dim(syph_trepia_pos)
+head(syph_trepia_pos)
+syph_trepia_pos <- select(syph_trepia_pos, csn)
+dim(syph_trepia_pos)
+syph_trepia_pos <- distinct(syph_trepia_pos)
+dim(syph_trepia_pos)
+syph_trepia_pos$syph_trepia_pos <- 1
+head(syph_trepia_pos)
+dim(syph_trepia_pos)
+dim(syph_main)
+syph_main <- merge(syph_main, syph_trepia_pos, by = 'csn', all.x = T)
+dim(syph_main)
+head(syph_main)
+syph_main$syph_trepia_pos[is.na(syph_main$syph_trepia_pos)] <- ''
+table(syph_main$syph_trepia_pos)
+head(syph_main)
+
+syph_trepia_neg <- syph_trepia[which(syph_trepia$RESULT_VALUE == 'Negative'), ]
+dim(syph_trepia_neg)
+head(syph_trepia_neg)
+syph_trepia_neg <- select(syph_trepia_neg, csn)
+dim(syph_trepia_neg)
+syph_trepia_neg <- distinct(syph_trepia_neg)
+dim(syph_trepia_neg)
+syph_trepia_neg$syph_trepia_neg <- 1
+head(syph_trepia_neg)
+dim(syph_trepia_neg)
+dim(syph_main)
+syph_main <- merge(syph_main, syph_trepia_neg, by = 'csn', all.x = T)
+dim(syph_main)
+head(syph_main)
+syph_main$syph_trepia_neg[is.na(syph_main$syph_trepia_neg)] <- ''
+table(syph_main$syph_trepia_neg)
+head(syph_main)
+
+
+syph_rpr <- syph[which(syph$COMPONENT_NAME == 'RPR WITH REFLEX'), ]
+dim(syph_rpr)
+head(syph_rpr)
+table(syph_rpr$RESULT_VALUE)
+
+syph_rpr_pos <- syph_rpr[which(syph_rpr$RESULT_VALUE == 'Reactive'), ]
+dim(syph_rpr_pos)
+head(syph_rpr_pos)
+syph_rpr_pos <- select(syph_rpr_pos, csn)
+dim(syph_rpr_pos)
+syph_rpr_pos <- distinct(syph_rpr_pos)
+dim(syph_rpr_pos)
+syph_rpr_pos$syph_rpr_pos <- 1
+head(syph_rpr_pos)
+dim(syph_rpr_pos)
+dim(syph_main)
+syph_main <- merge(syph_main, syph_rpr_pos, by = 'csn', all.x = T)
+dim(syph_main)
+head(syph_main)
+syph_main$syph_rpr_pos[is.na(syph_main$syph_rpr_pos)] <- ''
+table(syph_main$syph_rpr_pos)
+head(syph_main)
+
+syph_rpr_neg <- syph_rpr[which(syph_rpr$RESULT_VALUE == 'Non-Reactive'), ]
+dim(syph_rpr_neg)
+head(syph_rpr_neg)
+syph_rpr_neg <- select(syph_rpr_neg, csn)
+dim(syph_rpr_neg)
+syph_rpr_neg <- distinct(syph_rpr_neg)
+dim(syph_rpr_neg)
+syph_rpr_neg$syph_rpr_neg <- 1
+head(syph_rpr_neg)
+dim(syph_rpr_neg)
+dim(syph_main)
+syph_main <- merge(syph_main, syph_rpr_neg, by = 'csn', all.x = T)
+dim(syph_main)
+head(syph_main)
+syph_main$syph_rpr_neg[is.na(syph_main$syph_rpr_neg)] <- ''
+table(syph_main$syph_rpr_neg)
+head(syph_main)
+
+
+# Creating variables for total number of daily tests
+
+syph_tested <- syph_main[which(syph_main$syph_tested == 1), ]
+syph_tested <- nrow(syph_tested)
+syph_tested
+
+
+syph_main$syph_reactive[syph_main$syph_trepia_pos == 1] <- 1
+syph_main$syph_reactive[is.na(syph_main$syph_reactive)] <- 0
+table(syph_main$syph_reactive)
+syph_reactive <- syph_main[which(syph_main$syph_reactive == 1), ]
+syph_reactive <- nrow(syph_reactive)
+syph_reactive
+
+
+syph_main$syph_positive[syph_main$syph_reactive == 1 & syph_main$syph_rpr_pos == 1] <- 1
+syph_main$syph_positive[is.na(syph_main$syph_positive)] <- 0
+table(syph_main$syph_positive)
+syph_positive <- syph_main[which(syph_main$syph_positive == 1), ]
+syph_positive <- nrow(syph_positive)
+syph_positive
+
+
+syph_main$syph_negative[syph_main$syph_reactive == 1 & syph_main$syph_rpr_neg == 1] <- 1
+syph_main$syph_negative[is.na(syph_main$syph_negative)] <- 0
+table(syph_main$syph_negative)
+syph_negative <- syph_main[which(syph_main$syph_negative == 1), ]
+syph_negative <- nrow(syph_negative)
+syph_negative
+
+
+syph_main$syph_indeterminate[syph_main$syph_reactive == 1 &
+                               (syph_main$syph_rpr_pos == '' & syph_main$syph_rpr_neg == '')] <- 1
+syph_main$syph_indeterminate[is.na(syph_main$syph_indeterminate)] <- 0
+table(syph_main$syph_indeterminate)
+syph_indeterminate <- syph_main[which(syph_main$syph_indeterminate == 1), ]
+syph_indeterminate <- nrow(syph_indeterminate)
+syph_indeterminate
+
+
+# Sorting Syphilis dataset and removing untested
+
+syph_main$order_date <- as.Date(syph_main$order_date, format = '%m/%d/%Y')
+syph_main <- syph_main %>%
+  mutate(month_year = floor_date(order_date, "month"))
+head(syph_main)
+syph_main <- syph_main[which(syph_main$syph_tested == 1), ]
+dim(syph_main)
+
+syph_main$syph_tested <- as.numeric(syph_main$syph_tested)
+
+# Aggregate data by order_date
+daily_syph_tests <- syph_main %>%
+  group_by(order_date) %>%
+  summarise(total_tests = sum(syph_tested),
+            total_positive = sum(syph_positive),
+            percent_positive = round((total_positive / total_tests) * 100, 1))
+daily_syph_tests
+
+
+monthly_syph_tests <- syph_main %>%
+  group_by(month_year) %>%
+  summarise(total_tests = sum(syph_tested),
+            total_positive = sum(syph_positive),
+            percent_positive = round((total_positive / total_tests) * 100, 1))
+monthly_syph_tests
+
+```
+
+```{r STI Linkage, include=FALSE}
 
 ###############################################################################################################
 #########################################  Creating Encounter Dataset  ########################################
@@ -2207,1885 +2482,515 @@ eip_encounters
 
 
 ################################################################################
-#############################  Food Linkage Data  ##############################
+############################  STI Linkage Data  ################################
 ################################################################################
 
-table(enc$additional_services___4)
-enc$food_ltc[enc$additional_services___4 == 1] <- 1
-table(enc$food_ltc)
+table(enc$additional_services___8)
+enc$sti_ltc[enc$additional_services___8 == 1] <- 1
+table(enc$sti_ltc)
 
-table(enc$food_ltc)
-food_ltc <- enc[which(enc$food_ltc == 1), ]
-dim(food_ltc)
-food_ltc <- nrow(food_ltc)
-food_ltc
+table(enc$sti_ltc)
+sti_ltc <- enc[which(enc$sti_ltc == 1), ]
+dim(sti_ltc)
+sti_ltc <- nrow(sti_ltc)
+sti_ltc
 
 
 
-# Ineligible Food Linkage - Already Linked
+# Ineligible STI Linkage - Already Linked
 
-table(enc$ltc_food_declined_rsn___23)
-table(enc$ltc_food_prevented_rsn___16)
-enc$food_already_linked <- NA
-enc$food_already_linked[enc$food_ltc == 1 &
-                         (enc$ltc_food_declined_rsn___23 == 1 |
-                            enc$ltc_food_prevented_rsn___16 == 1)] <- 1
-table(enc$food_already_linked)
+table(enc$ltc_sti_declined_rsn___23)
+table(enc$ltc_sti_prevented_rsn___16)
+enc$sti_ltc_already_linked <- NA
+enc$sti_ltc_already_linked[enc$sti_ltc == 1 &
+                         (enc$ltc_sti_declined_rsn___23 == 1 |
+                            enc$ltc_sti_prevented_rsn___16 == 1)] <- 1
+table(enc$sti_ltc_already_linked)
 
-table(enc$food_already_linked)
-food_already_linked <- enc[which(enc$food_already_linked == 1), ]
-dim(food_already_linked)
-food_already_linked <- nrow(food_already_linked)
-food_already_linked
+table(enc$sti_ltc_already_linked)
+sti_ltc_already_linked <- enc[which(enc$sti_ltc_already_linked == 1), ]
+dim(sti_ltc_already_linked)
+sti_ltc_already_linked <- nrow(sti_ltc_already_linked)
+sti_ltc_already_linked
 
 
 
-# Ineligible Food Linkage - Deceased
+# Ineligible STI Linkage - Deceased
 
-table(enc$ltc_food_declined_rsn___35)
-table(enc$ltc_food_prevented_rsn___17)
-enc$food_deceased <- NA
-enc$food_deceased[enc$food_ltc == 1 &
-                   (enc$ltc_food_declined_rsn___35 == 1 |
-                      enc$ltc_food_prevented_rsn___17 == 1)] <- 1
-table(enc$food_deceased)
+table(enc$ltc_sti_declined_rsn___35)
+table(enc$ltc_sti_prevented_rsn___17)
+enc$sti_ltc_deceased <- NA
+enc$sti_ltc_deceased[enc$sti_ltc == 1 &
+                   (enc$ltc_sti_declined_rsn___35 == 1 |
+                      enc$ltc_sti_prevented_rsn___17 == 1)] <- 1
+table(enc$sti_ltc_deceased)
 
-table(enc$food_deceased)
-food_deceased <- enc[which(enc$food_deceased == 1), ]
-dim(food_deceased)
-food_deceased <- nrow(food_deceased)
-food_deceased
+table(enc$sti_ltc_deceased)
+sti_ltc_deceased <- enc[which(enc$sti_ltc_deceased == 1), ]
+dim(sti_ltc_deceased)
+sti_ltc_deceased <- nrow(sti_ltc_deceased)
+sti_ltc_deceased
 
 
 
-# Ineligible Food Linkage - Incarcerated
+# Ineligible STI Linkage - Incarcerated
 
-table(enc$ltc_food_prevented_rsn___12)
-enc$food_incarcerated <- NA
-enc$food_incarcerated[enc$food_ltc == 1 &
-                       enc$ltc_food_prevented_rsn___12 == 1] <- 1
-table(enc$food_incarcerated)
+table(enc$ltc_sti_prevented_rsn___12)
+enc$sti_ltc_incarcerated <- NA
+enc$sti_ltc_incarcerated[enc$sti_ltc == 1 &
+                       enc$ltc_sti_prevented_rsn___12 == 1] <- 1
+table(enc$sti_ltc_incarcerated)
 
-table(enc$food_incarcerated)
-food_incarcerated <- enc[which(enc$food_incarcerated == 1), ]
-dim(food_incarcerated)
-food_incarcerated <- nrow(food_incarcerated)
-food_incarcerated
+table(enc$sti_ltc_incarcerated)
+sti_ltc_incarcerated <- enc[which(enc$sti_ltc_incarcerated == 1), ]
+dim(sti_ltc_incarcerated)
+sti_ltc_incarcerated <- nrow(sti_ltc_incarcerated)
+sti_ltc_incarcerated
 
 
 
-# Ineligible Food Linkage - Declined Linkage Service
+# Ineligible STI Linkage - Declined Linkage Service
 
-table(enc$ltc_food_final_ltc_status)
-enc$food_linkage_declined <- NA
-enc$food_linkage_declined[(enc$food_ltc == 1 &
-                            enc$ltc_food_final_ltc_status == 2) &
-                           (is.na(enc$food_already_linked) &
-                              is.na(enc$food_deceased) &
-                              is.na(enc$food_incarcerated))] <- 1
-table(enc$food_linkage_declined)
+table(enc$ltc_sti_final_ltc_status)
+enc$sti_ltc_linkage_declined <- NA
+enc$sti_ltc_linkage_declined[(enc$sti_ltc == 1 &
+                            enc$ltc_sti_final_ltc_status == 2) &
+                           (is.na(enc$sti_ltc_already_linked) &
+                              is.na(enc$sti_ltc_deceased) &
+                              is.na(enc$sti_ltc_incarcerated))] <- 1
+table(enc$sti_ltc_linkage_declined)
 
-table(enc$food_linkage_declined)
-food_linkage_declined <- enc[which(enc$food_linkage_declined == 1), ]
-dim(food_linkage_declined)
-food_linkage_declined <- nrow(food_linkage_declined)
-food_linkage_declined
+table(enc$sti_ltc_linkage_declined)
+sti_ltc_linkage_declined <- enc[which(enc$sti_ltc_linkage_declined == 1), ]
+dim(sti_ltc_linkage_declined)
+sti_ltc_linkage_declined <- nrow(sti_ltc_linkage_declined)
+sti_ltc_linkage_declined
 
 
 
-# Ineligible Food Linkage - Linkage in Progress
+# Ineligible STI Linkage - Linkage in Progress
 
-table(enc$ltc_food_prevented_rsn___18)
-enc$food_ongoing_linkage <- NA
-enc$food_ongoing_linkage[enc$food_ltc == 1 &
-                          enc$ltc_food_prevented_rsn___18 == 1] <- 1
-table(enc$food_ongoing_linkage)
+table(enc$ltc_sti_prevented_rsn___18)
+enc$sti_ltc_ongoing_linkage <- NA
+enc$sti_ltc_ongoing_linkage[enc$sti_ltc == 1 &
+                          enc$ltc_sti_prevented_rsn___18 == 1] <- 1
+table(enc$sti_ltc_ongoing_linkage)
 
-table(enc$food_ongoing_linkage)
-food_ongoing_linkage <- enc[which(enc$food_ongoing_linkage == 1), ]
-dim(food_ongoing_linkage)
-food_ongoing_linkage <- nrow(food_ongoing_linkage)
-food_ongoing_linkage
+table(enc$sti_ltc_ongoing_linkage)
+sti_ltc_ongoing_linkage <- enc[which(enc$sti_ltc_ongoing_linkage == 1), ]
+dim(sti_ltc_ongoing_linkage)
+sti_ltc_ongoing_linkage <- nrow(sti_ltc_ongoing_linkage)
+sti_ltc_ongoing_linkage
 
 
 
 
-# Food Ineligible Cases
+# STI Ineligible Cases
 
-enc$food_ineligible_ltc[enc$food_already_linked == 1 |
-                         enc$food_deceased == 1 |
-                         enc$food_incarcerated == 1 |
-                         enc$food_linkage_declined == 1 |
-                         enc$food_ongoing_linkage == 1] <- 1
-table(enc$food_ineligible_ltc)
+enc$sti_ltc_ineligible_ltc[enc$sti_ltc_already_linked == 1 |
+                         enc$sti_ltc_deceased == 1 |
+                         enc$sti_ltc_incarcerated == 1 |
+                         enc$sti_ltc_linkage_declined == 1 |
+                         enc$sti_ltc_ongoing_linkage == 1] <- 1
+table(enc$sti_ltc_ineligible_ltc)
 
-table(enc$food_ineligible_ltc)
-food_ineligible_ltc <- enc[which(enc$food_ineligible_ltc == 1), ]
-dim(food_ineligible_ltc)
-food_ineligible_ltc <- nrow(food_ineligible_ltc)
-food_ineligible_ltc
+table(enc$sti_ltc_ineligible_ltc)
+sti_ltc_ineligible_ltc <- enc[which(enc$sti_ltc_ineligible_ltc == 1), ]
+dim(sti_ltc_ineligible_ltc)
+sti_ltc_ineligible_ltc <- nrow(sti_ltc_ineligible_ltc)
+sti_ltc_ineligible_ltc
 
-food_ineligible_ltc_percent <- percent(food_ineligible_ltc/food_ltc, accuracy = 0.1)
-food_ineligible_ltc_percent
+sti_ltc_ineligible_ltc_percent <- percent(sti_ltc_ineligible_ltc/sti_ltc, accuracy = 0.1)
+sti_ltc_ineligible_ltc_percent
 
-food_already_linked_percent <- percent(food_already_linked/food_ineligible_ltc, accuracy = 0.1)
-food_already_linked_percent
+sti_ltc_already_linked_percent <- percent(sti_ltc_already_linked/sti_ltc_ineligible_ltc, accuracy = 0.1)
+sti_ltc_already_linked_percent
 
-food_deceased_percent <- percent(food_deceased/food_ineligible_ltc, accuracy = 0.1)
-food_deceased_percent
+sti_ltc_deceased_percent <- percent(sti_ltc_deceased/sti_ltc_ineligible_ltc, accuracy = 0.1)
+sti_ltc_deceased_percent
 
-food_incarcerated_percent <- percent(food_incarcerated/food_ineligible_ltc, accuracy = 0.1)
-food_incarcerated_percent
+sti_ltc_incarcerated_percent <- percent(sti_ltc_incarcerated/sti_ltc_ineligible_ltc, accuracy = 0.1)
+sti_ltc_incarcerated_percent
 
-food_linkage_declined_percent <- percent(food_linkage_declined/food_ineligible_ltc, accuracy = 0.1)
-food_linkage_declined_percent
+sti_ltc_linkage_declined_percent <- percent(sti_ltc_linkage_declined/sti_ltc_ineligible_ltc, accuracy = 0.1)
+sti_ltc_linkage_declined_percent
 
-food_ongoing_linkage_percent <- percent(food_ongoing_linkage/food_ineligible_ltc, accuracy = 0.1)
-food_ongoing_linkage_percent
+sti_ltc_ongoing_linkage_percent <- percent(sti_ltc_ongoing_linkage/sti_ltc_ineligible_ltc, accuracy = 0.1)
+sti_ltc_ongoing_linkage_percent
 
 
 
 
-# Food Eligibility to be Linked
+# STI Eligibility to be Linked
 
-enc$food_eligible_ltc[enc$food_ltc == 1 &
-                       (is.na(enc$food_already_linked) &
-                          is.na(enc$food_deceased) &
-                          is.na(enc$food_incarcerated) &
-                          is.na(enc$food_linkage_declined) &
-                          is.na(enc$food_ongoing_linkage))] <- 1
-table(enc$food_eligible_ltc)
+enc$sti_ltc_eligible_ltc[enc$sti_ltc == 1 &
+                       (is.na(enc$sti_ltc_already_linked) &
+                          is.na(enc$sti_ltc_deceased) &
+                          is.na(enc$sti_ltc_incarcerated) &
+                          is.na(enc$sti_ltc_linkage_declined) &
+                          is.na(enc$sti_ltc_ongoing_linkage))] <- 1
+table(enc$sti_ltc_eligible_ltc)
 
-table(enc$food_eligible_ltc)
-food_eligible_ltc <- enc[which(enc$food_eligible_ltc == 1), ]
-dim(food_eligible_ltc)
-food_eligible_ltc <- nrow(food_eligible_ltc)
-food_eligible_ltc
+table(enc$sti_ltc_eligible_ltc)
+sti_ltc_eligible_ltc <- enc[which(enc$sti_ltc_eligible_ltc == 1), ]
+dim(sti_ltc_eligible_ltc)
+sti_ltc_eligible_ltc <- nrow(sti_ltc_eligible_ltc)
+sti_ltc_eligible_ltc
 
-food_eligible_ltc_percent <- percent(food_eligible_ltc/food_ltc, accuracy = 0.1)
-food_eligible_ltc_percent
+sti_ltc_eligible_ltc_percent <- percent(sti_ltc_eligible_ltc/sti_ltc, accuracy = 0.1)
+sti_ltc_eligible_ltc_percent
 
 
 
 
-# Food Open/Closed Cases
+# STI Open/Closed Cases
 
-table(enc$ltc_food_open_case_calc)
-enc$food_in_progress[enc$food_eligible_ltc == 1 &
-                      enc$ltc_food_open_case_calc == 1] <- 1
-table(enc$food_in_progress)
+table(enc$ltc_sti_open_case_calc)
+enc$sti_ltc_in_progress[enc$sti_ltc_eligible_ltc == 1 &
+                      enc$ltc_sti_open_case_calc == 1] <- 1
+table(enc$sti_ltc_in_progress)
 
-table(enc$food_in_progress)
-food_in_progress <- enc[which(enc$food_in_progress == 1), ]
-dim(food_in_progress)
-food_in_progress <- nrow(food_in_progress)
-food_in_progress
+table(enc$sti_ltc_in_progress)
+sti_ltc_in_progress <- enc[which(enc$sti_ltc_in_progress == 1), ]
+dim(sti_ltc_in_progress)
+sti_ltc_in_progress <- nrow(sti_ltc_in_progress)
+sti_ltc_in_progress
 
-food_in_progress_percent <- percent(food_in_progress/food_eligible_ltc, accuracy = 0.1)
-food_in_progress_percent
+sti_ltc_in_progress_percent <- percent(sti_ltc_in_progress/sti_ltc_eligible_ltc, accuracy = 0.1)
+sti_ltc_in_progress_percent
 
 
 
-table(enc$food_eligible_ltc, enc$food_in_progress)
-enc$food_closed_case[enc$food_eligible_ltc == 1 &
-                      is.na(enc$food_in_progress)] <- 1
-table(enc$food_closed_case)
+table(enc$sti_ltc_eligible_ltc, enc$sti_ltc_in_progress)
+enc$sti_ltc_closed_case[enc$sti_ltc_eligible_ltc == 1 &
+                      is.na(enc$sti_ltc_in_progress)] <- 1
+table(enc$sti_ltc_closed_case)
 
-table(enc$food_closed_case)
-food_closed_case <- enc[which(enc$food_closed_case == 1), ]
-dim(food_closed_case)
-food_closed_case <- nrow(food_closed_case)
-food_closed_case
+table(enc$sti_ltc_closed_case)
+sti_ltc_closed_case <- enc[which(enc$sti_ltc_closed_case == 1), ]
+dim(sti_ltc_closed_case)
+sti_ltc_closed_case <- nrow(sti_ltc_closed_case)
+sti_ltc_closed_case
 
-food_closed_case_percent <- percent(food_closed_case/food_eligible_ltc, accuracy = 0.1)
-food_closed_case_percent
+sti_ltc_closed_case_percent <- percent(sti_ltc_closed_case/sti_ltc_eligible_ltc, accuracy = 0.1)
+sti_ltc_closed_case_percent
 
 
 
-table(enc$food_in_progress)
-enc$food_ltc_days_open <- difftime(Sys.Date(), enc$enc_date, units="days")
-table(enc$food_ltc_days_open)
-enc$food_in_progress_90days[enc$food_in_progress == 1 &
-                             (enc$food_ltc_days_open > 90)] <- 1
-table(enc$food_in_progress_90days)
+table(enc$sti_ltc_in_progress)
+enc$sti_ltc_ltc_days_open <- difftime(Sys.Date(), enc$enc_date, units="days")
+table(enc$sti_ltc_ltc_days_open)
+enc$sti_ltc_in_progress_90days[enc$sti_ltc_in_progress == 1 &
+                             (enc$sti_ltc_ltc_days_open > 90)] <- 1
+table(enc$sti_ltc_in_progress_90days)
 
-table(enc$food_in_progress_90days)
-food_in_progress_90days <- enc[which(enc$food_in_progress_90days == 1), ]
-dim(food_in_progress_90days)
-food_in_progress_90days <- nrow(food_in_progress_90days)
-food_in_progress_90days
+table(enc$sti_ltc_in_progress_90days)
+sti_ltc_in_progress_90days <- enc[which(enc$sti_ltc_in_progress_90days == 1), ]
+dim(sti_ltc_in_progress_90days)
+sti_ltc_in_progress_90days <- nrow(sti_ltc_in_progress_90days)
+sti_ltc_in_progress_90days
 
-food_in_progress_90days_percent <- percent(food_in_progress_90days/food_in_progress, accuracy = 0.1)
-food_in_progress_90days_percent
+sti_ltc_in_progress_90days_percent <- percent(sti_ltc_in_progress_90days/sti_ltc_in_progress, accuracy = 0.1)
+sti_ltc_in_progress_90days_percent
 
 
 
 
-# Food Cases Linked to Care
+# STI Cases Linked to Care
 
-table(enc$food_closed_case, enc$ltc_food_final_ltc_status)
-enc$food_linked[enc$food_closed_case == 1 &
-                 enc$ltc_food_final_ltc_status == 1] <- 1
-table(enc$food_linked)
+table(enc$sti_ltc_closed_case, enc$ltc_sti_final_ltc_status)
+enc$sti_ltc_linked[enc$sti_ltc_closed_case == 1 &
+                 enc$ltc_sti_final_ltc_status == 1] <- 1
+table(enc$sti_ltc_linked)
 
-table(enc$food_linked)
-food_linked <- enc[which(enc$food_linked == 1), ]
-dim(food_linked)
-food_linked <- nrow(food_linked)
-food_linked
+table(enc$sti_ltc_linked)
+sti_ltc_linked <- enc[which(enc$sti_ltc_linked == 1), ]
+dim(sti_ltc_linked)
+sti_ltc_linked <- nrow(sti_ltc_linked)
+sti_ltc_linked
 
-food_linked_percent <- percent(food_linked/food_closed_case, accuracy = 0.1)
-food_linked_percent
+sti_ltc_linked_percent <- percent(sti_ltc_linked/sti_ltc_closed_case, accuracy = 0.1)
+sti_ltc_linked_percent
 
 
 
 
-enc$food_not_linked[enc$food_eligible_ltc == 1 & is.na(enc$food_in_progress) & is.na(enc$food_linked)] <- 1
-table(enc$food_not_linked)
+enc$sti_ltc_not_linked[enc$sti_ltc_eligible_ltc == 1 & is.na(enc$sti_ltc_in_progress) & is.na(enc$sti_ltc_linked)] <- 1
+table(enc$sti_ltc_not_linked)
 
-table(enc$food_not_linked)
-food_not_linked <- enc[which(enc$food_not_linked == 1), ]
-dim(food_not_linked)
-food_not_linked <- nrow(food_not_linked)
-food_not_linked
+table(enc$sti_ltc_not_linked)
+sti_ltc_not_linked <- enc[which(enc$sti_ltc_not_linked == 1), ]
+dim(sti_ltc_not_linked)
+sti_ltc_not_linked <- nrow(sti_ltc_not_linked)
+sti_ltc_not_linked
 
-food_not_linked_percent <- percent(food_not_linked/food_closed_case, accuracy = 0.1)
-food_not_linked_percent
+sti_ltc_not_linked_percent <- percent(sti_ltc_not_linked/sti_ltc_closed_case, accuracy = 0.1)
+sti_ltc_not_linked_percent
 
 
 
 
-# Food Reasons Not Linked to Care
+# STI Reasons Not Linked to Care
 
-enc$food_not_linked_med_staff[(enc$food_closed_case == 1 & is.na(enc$food_linked)) &
-                               (enc$ltc_food_prevented_rsn___1 == 1 |
-                                  enc$ltc_food_prevented_rsn___2 == 1 |
-                                  enc$ltc_food_prevented_rsn___11 == 1)] <- 1
-table(enc$food_not_linked_med_staff)
+enc$sti_ltc_not_linked_med_staff[(enc$sti_ltc_closed_case == 1 & is.na(enc$sti_ltc_linked)) &
+                               (enc$ltc_sti_prevented_rsn___1 == 1 |
+                                  enc$ltc_sti_prevented_rsn___2 == 1 |
+                                  enc$ltc_sti_prevented_rsn___11 == 1)] <- 1
+table(enc$sti_ltc_not_linked_med_staff)
 
-table(enc$food_not_linked_med_staff)
-food_not_linked_med_staff <- enc[which(enc$food_not_linked_med_staff == 1), ]
-dim(food_not_linked_med_staff)
-food_not_linked_med_staff <- nrow(food_not_linked_med_staff)
-food_not_linked_med_staff
+table(enc$sti_ltc_not_linked_med_staff)
+sti_ltc_not_linked_med_staff <- enc[which(enc$sti_ltc_not_linked_med_staff == 1), ]
+dim(sti_ltc_not_linked_med_staff)
+sti_ltc_not_linked_med_staff <- nrow(sti_ltc_not_linked_med_staff)
+sti_ltc_not_linked_med_staff
 
-food_not_linked_med_staff_percent <- percent(food_not_linked_med_staff/food_not_linked, accuracy = 0.1)
-food_not_linked_med_staff_percent
+sti_ltc_not_linked_med_staff_percent <- percent(sti_ltc_not_linked_med_staff/sti_ltc_not_linked, accuracy = 0.1)
+sti_ltc_not_linked_med_staff_percent
 
 
 
-enc$food_not_linked_family[(enc$food_closed_case == 1 & is.na(enc$food_linked)) &
-                            (enc$ltc_food_prevented_rsn___3 == 1)] <- 1
-table(enc$food_not_linked_family)
+enc$sti_ltc_not_linked_family[(enc$sti_ltc_closed_case == 1 & is.na(enc$sti_ltc_linked)) &
+                            (enc$ltc_sti_prevented_rsn___3 == 1)] <- 1
+table(enc$sti_ltc_not_linked_family)
 
-table(enc$food_not_linked_family)
-food_not_linked_family <- enc[which(enc$food_not_linked_family == 1), ]
-dim(food_not_linked_family)
-food_not_linked_family <- nrow(food_not_linked_family)
-food_not_linked_family
+table(enc$sti_ltc_not_linked_family)
+sti_ltc_not_linked_family <- enc[which(enc$sti_ltc_not_linked_family == 1), ]
+dim(sti_ltc_not_linked_family)
+sti_ltc_not_linked_family <- nrow(sti_ltc_not_linked_family)
+sti_ltc_not_linked_family
 
-food_not_linked_family_percent <- percent(food_not_linked_family/food_not_linked, accuracy = 0.1)
-food_not_linked_family_percent
+sti_ltc_not_linked_family_percent <- percent(sti_ltc_not_linked_family/sti_ltc_not_linked, accuracy = 0.1)
+sti_ltc_not_linked_family_percent
 
 
 
-enc$food_not_linked_not_talking[(enc$food_closed_case == 1 & is.na(enc$food_linked)) &
-                                 (enc$ltc_food_prevented_rsn___4 == 1)] <- 1
-table(enc$food_not_linked_not_talking)
+enc$sti_ltc_not_linked_not_talking[(enc$sti_ltc_closed_case == 1 & is.na(enc$sti_ltc_linked)) &
+                                 (enc$ltc_sti_prevented_rsn___4 == 1)] <- 1
+table(enc$sti_ltc_not_linked_not_talking)
 
-table(enc$food_not_linked_not_talking)
-food_not_linked_not_talking <- enc[which(enc$food_not_linked_not_talking == 1), ]
-dim(food_not_linked_not_talking)
-food_not_linked_not_talking <- nrow(food_not_linked_not_talking)
-food_not_linked_not_talking
+table(enc$sti_ltc_not_linked_not_talking)
+sti_ltc_not_linked_not_talking <- enc[which(enc$sti_ltc_not_linked_not_talking == 1), ]
+dim(sti_ltc_not_linked_not_talking)
+sti_ltc_not_linked_not_talking <- nrow(sti_ltc_not_linked_not_talking)
+sti_ltc_not_linked_not_talking
 
-food_not_linked_not_talking_percent <- percent(food_not_linked_not_talking/food_not_linked, accuracy = 0.1)
-food_not_linked_not_talking_percent
+sti_ltc_not_linked_not_talking_percent <- percent(sti_ltc_not_linked_not_talking/sti_ltc_not_linked, accuracy = 0.1)
+sti_ltc_not_linked_not_talking_percent
 
 
 
-enc$food_not_linked_safety[(enc$food_closed_case == 1 & is.na(enc$food_linked)) &
-                            (enc$ltc_food_prevented_rsn___5 == 1)] <- 1
-table(enc$food_not_linked_safety)
+enc$sti_ltc_not_linked_safety[(enc$sti_ltc_closed_case == 1 & is.na(enc$sti_ltc_linked)) &
+                            (enc$ltc_sti_prevented_rsn___5 == 1)] <- 1
+table(enc$sti_ltc_not_linked_safety)
 
-table(enc$food_not_linked_safety)
-food_not_linked_safety <- enc[which(enc$food_not_linked_safety == 1), ]
-dim(food_not_linked_safety)
-food_not_linked_safety <- nrow(food_not_linked_safety)
-food_not_linked_safety
+table(enc$sti_ltc_not_linked_safety)
+sti_ltc_not_linked_safety <- enc[which(enc$sti_ltc_not_linked_safety == 1), ]
+dim(sti_ltc_not_linked_safety)
+sti_ltc_not_linked_safety <- nrow(sti_ltc_not_linked_safety)
+sti_ltc_not_linked_safety
 
-food_not_linked_safety_percent <- percent(food_not_linked_safety/food_not_linked, accuracy = 0.1)
-food_not_linked_safety_percent
+sti_ltc_not_linked_safety_percent <- percent(sti_ltc_not_linked_safety/sti_ltc_not_linked, accuracy = 0.1)
+sti_ltc_not_linked_safety_percent
 
 
 
-enc$food_not_linked_medical[(enc$food_closed_case == 1 & is.na(enc$food_linked)) &
-                             (enc$ltc_food_prevented_rsn___6 == 1 |
-                                enc$ltc_food_prevented_rsn___8)] <- 1
-table(enc$food_not_linked_medical)
+enc$sti_ltc_not_linked_medical[(enc$sti_ltc_closed_case == 1 & is.na(enc$sti_ltc_linked)) &
+                             (enc$ltc_sti_prevented_rsn___6 == 1 |
+                                enc$ltc_sti_prevented_rsn___8)] <- 1
+table(enc$sti_ltc_not_linked_medical)
 
-table(enc$food_not_linked_medical)
-food_not_linked_medical <- enc[which(enc$food_not_linked_medical == 1), ]
-dim(food_not_linked_medical)
-food_not_linked_medical <- nrow(food_not_linked_medical)
-food_not_linked_medical
+table(enc$sti_ltc_not_linked_medical)
+sti_ltc_not_linked_medical <- enc[which(enc$sti_ltc_not_linked_medical == 1), ]
+dim(sti_ltc_not_linked_medical)
+sti_ltc_not_linked_medical <- nrow(sti_ltc_not_linked_medical)
+sti_ltc_not_linked_medical
 
-food_not_linked_medical_percent <- percent(food_not_linked_medical/food_not_linked, accuracy = 0.1)
-food_not_linked_medical_percent
+sti_ltc_not_linked_medical_percent <- percent(sti_ltc_not_linked_medical/sti_ltc_not_linked, accuracy = 0.1)
+sti_ltc_not_linked_medical_percent
 
 
 
-enc$food_not_linked_contact[(enc$food_closed_case == 1 & is.na(enc$food_linked)) &
-                             (enc$ltc_food_prevented_rsn___20 == 1)] <- 1
-table(enc$food_not_linked_contact)
+enc$sti_ltc_not_linked_contact[(enc$sti_ltc_closed_case == 1 & is.na(enc$sti_ltc_linked)) &
+                             (enc$ltc_sti_prevented_rsn___20 == 1)] <- 1
+table(enc$sti_ltc_not_linked_contact)
 
-table(enc$food_not_linked_contact)
-food_not_linked_contact <- enc[which(enc$food_not_linked_contact == 1), ]
-dim(food_not_linked_contact)
-food_not_linked_contact <- nrow(food_not_linked_contact)
-food_not_linked_contact
+table(enc$sti_ltc_not_linked_contact)
+sti_ltc_not_linked_contact <- enc[which(enc$sti_ltc_not_linked_contact == 1), ]
+dim(sti_ltc_not_linked_contact)
+sti_ltc_not_linked_contact <- nrow(sti_ltc_not_linked_contact)
+sti_ltc_not_linked_contact
 
-food_not_linked_contact_percent <- percent(food_not_linked_contact/food_not_linked, accuracy = 0.1)
-food_not_linked_contact_percent
+sti_ltc_not_linked_contact_percent <- percent(sti_ltc_not_linked_contact/sti_ltc_not_linked, accuracy = 0.1)
+sti_ltc_not_linked_contact_percent
 
 
 
-enc$food_not_linked_language[(enc$food_closed_case == 1 & is.na(enc$food_linked)) &
-                              (enc$ltc_food_prevented_rsn___9 == 1)] <- 1
-table(enc$food_not_linked_language)
+enc$sti_ltc_not_linked_language[(enc$sti_ltc_closed_case == 1 & is.na(enc$sti_ltc_linked)) &
+                              (enc$ltc_sti_prevented_rsn___9 == 1)] <- 1
+table(enc$sti_ltc_not_linked_language)
 
-table(enc$food_not_linked_language)
-food_not_linked_language <- enc[which(enc$food_not_linked_language == 1), ]
-dim(food_not_linked_language)
-food_not_linked_language <- nrow(food_not_linked_language)
-food_not_linked_language
+table(enc$sti_ltc_not_linked_language)
+sti_ltc_not_linked_language <- enc[which(enc$sti_ltc_not_linked_language == 1), ]
+dim(sti_ltc_not_linked_language)
+sti_ltc_not_linked_language <- nrow(sti_ltc_not_linked_language)
+sti_ltc_not_linked_language
 
-food_not_linked_language_percent <- percent(food_not_linked_language/food_not_linked, accuracy = 0.1)
-food_not_linked_language_percent
+sti_ltc_not_linked_language_percent <- percent(sti_ltc_not_linked_language/sti_ltc_not_linked, accuracy = 0.1)
+sti_ltc_not_linked_language_percent
 
 
 
-enc$food_not_linked_other[(enc$food_closed_case == 1 & is.na(enc$food_linked)) &
-                           (enc$ltc_food_prevented_rsn___0 == 1)] <- 1
-table(enc$food_not_linked_other)
+enc$sti_ltc_not_linked_other[(enc$sti_ltc_closed_case == 1 & is.na(enc$sti_ltc_linked)) &
+                           (enc$ltc_sti_prevented_rsn___0 == 1)] <- 1
+table(enc$sti_ltc_not_linked_other)
 
-table(enc$food_not_linked_other)
-food_not_linked_other <- enc[which(enc$food_not_linked_other == 1), ]
-dim(food_not_linked_other)
-food_not_linked_other <- nrow(food_not_linked_other)
-food_not_linked_other
+table(enc$sti_ltc_not_linked_other)
+sti_ltc_not_linked_other <- enc[which(enc$sti_ltc_not_linked_other == 1), ]
+dim(sti_ltc_not_linked_other)
+sti_ltc_not_linked_other <- nrow(sti_ltc_not_linked_other)
+sti_ltc_not_linked_other
 
-food_not_linked_other_percent <- percent(food_not_linked_other/food_not_linked, accuracy = 0.1)
-food_not_linked_other_percent
+sti_ltc_not_linked_other_percent <- percent(sti_ltc_not_linked_other/sti_ltc_not_linked, accuracy = 0.1)
+sti_ltc_not_linked_other_percent
 
-
-
-
-################################################################################
-##########################  Financial Linkage Data  ############################
-################################################################################
-
-table(enc$additional_services___5)
-enc$finance_ltc[enc$additional_services___5 == 1] <- 1
-table(enc$finance_ltc)
-
-table(enc$finance_ltc)
-finance_ltc <- enc[which(enc$finance_ltc == 1), ]
-dim(finance_ltc)
-finance_ltc <- nrow(finance_ltc)
-finance_ltc
-
-
-
-# Ineligible Financial Linkage - Already Linked
-
-table(enc$ltc_finance_declined_rsn___23)
-table(enc$ltc_finance_prevented_rsn___16)
-enc$finance_already_linked <- NA
-enc$finance_already_linked[enc$finance_ltc == 1 &
-                         (enc$ltc_finance_declined_rsn___23 == 1 |
-                            enc$ltc_finance_prevented_rsn___16 == 1)] <- 1
-table(enc$finance_already_linked)
-
-table(enc$finance_already_linked)
-finance_already_linked <- enc[which(enc$finance_already_linked == 1), ]
-dim(finance_already_linked)
-finance_already_linked <- nrow(finance_already_linked)
-finance_already_linked
-
-
-
-# Ineligible Financial Linkage - Deceased
-
-table(enc$ltc_finance_declined_rsn___35)
-table(enc$ltc_finance_prevented_rsn___17)
-enc$finance_deceased <- NA
-enc$finance_deceased[enc$finance_ltc == 1 &
-                   (enc$ltc_finance_declined_rsn___35 == 1 |
-                      enc$ltc_finance_prevented_rsn___17 == 1)] <- 1
-table(enc$finance_deceased)
-
-table(enc$finance_deceased)
-finance_deceased <- enc[which(enc$finance_deceased == 1), ]
-dim(finance_deceased)
-finance_deceased <- nrow(finance_deceased)
-finance_deceased
-
-
-
-# Ineligible Financial Linkage - Incarcerated
-
-table(enc$ltc_finance_prevented_rsn___12)
-enc$finance_incarcerated <- NA
-enc$finance_incarcerated[enc$finance_ltc == 1 &
-                       enc$ltc_finance_prevented_rsn___12 == 1] <- 1
-table(enc$finance_incarcerated)
-
-table(enc$finance_incarcerated)
-finance_incarcerated <- enc[which(enc$finance_incarcerated == 1), ]
-dim(finance_incarcerated)
-finance_incarcerated <- nrow(finance_incarcerated)
-finance_incarcerated
-
-
-
-# Ineligible Financial Linkage - Declined Linkage Service
-
-table(enc$ltc_finance_final_ltc_status)
-enc$finance_linkage_declined <- NA
-enc$finance_linkage_declined[(enc$finance_ltc == 1 &
-                            enc$ltc_finance_final_ltc_status == 2) &
-                           (is.na(enc$finance_already_linked) &
-                              is.na(enc$finance_deceased) &
-                              is.na(enc$finance_incarcerated))] <- 1
-table(enc$finance_linkage_declined)
-
-table(enc$finance_linkage_declined)
-finance_linkage_declined <- enc[which(enc$finance_linkage_declined == 1), ]
-dim(finance_linkage_declined)
-finance_linkage_declined <- nrow(finance_linkage_declined)
-finance_linkage_declined
-
-
-
-# Ineligible Financial Linkage - Linkage in Progress
-
-table(enc$ltc_finance_prevented_rsn___18)
-enc$finance_ongoing_linkage <- NA
-enc$finance_ongoing_linkage[enc$finance_ltc == 1 &
-                          enc$ltc_finance_prevented_rsn___18 == 1] <- 1
-table(enc$finance_ongoing_linkage)
-
-table(enc$finance_ongoing_linkage)
-finance_ongoing_linkage <- enc[which(enc$finance_ongoing_linkage == 1), ]
-dim(finance_ongoing_linkage)
-finance_ongoing_linkage <- nrow(finance_ongoing_linkage)
-finance_ongoing_linkage
-
-
-
-
-# Financial Ineligible Cases
-
-enc$finance_ineligible_ltc[enc$finance_already_linked == 1 |
-                         enc$finance_deceased == 1 |
-                         enc$finance_incarcerated == 1 |
-                         enc$finance_linkage_declined == 1 |
-                         enc$finance_ongoing_linkage == 1] <- 1
-table(enc$finance_ineligible_ltc)
-
-table(enc$finance_ineligible_ltc)
-finance_ineligible_ltc <- enc[which(enc$finance_ineligible_ltc == 1), ]
-dim(finance_ineligible_ltc)
-finance_ineligible_ltc <- nrow(finance_ineligible_ltc)
-finance_ineligible_ltc
-
-finance_ineligible_ltc_percent <- percent(finance_ineligible_ltc/finance_ltc, accuracy = 0.1)
-finance_ineligible_ltc_percent
-
-finance_already_linked_percent <- percent(finance_already_linked/finance_ineligible_ltc, accuracy = 0.1)
-finance_already_linked_percent
-
-finance_deceased_percent <- percent(finance_deceased/finance_ineligible_ltc, accuracy = 0.1)
-finance_deceased_percent
-
-finance_incarcerated_percent <- percent(finance_incarcerated/finance_ineligible_ltc, accuracy = 0.1)
-finance_incarcerated_percent
-
-finance_linkage_declined_percent <- percent(finance_linkage_declined/finance_ineligible_ltc, accuracy = 0.1)
-finance_linkage_declined_percent
-
-finance_ongoing_linkage_percent <- percent(finance_ongoing_linkage/finance_ineligible_ltc, accuracy = 0.1)
-finance_ongoing_linkage_percent
-
-
-
-
-# Financial Eligibility to be Linked
-
-enc$finance_eligible_ltc[enc$finance_ltc == 1 &
-                       (is.na(enc$finance_already_linked) &
-                          is.na(enc$finance_deceased) &
-                          is.na(enc$finance_incarcerated) &
-                          is.na(enc$finance_linkage_declined) &
-                          is.na(enc$finance_ongoing_linkage))] <- 1
-table(enc$finance_eligible_ltc)
-
-table(enc$finance_eligible_ltc)
-finance_eligible_ltc <- enc[which(enc$finance_eligible_ltc == 1), ]
-dim(finance_eligible_ltc)
-finance_eligible_ltc <- nrow(finance_eligible_ltc)
-finance_eligible_ltc
-
-finance_eligible_ltc_percent <- percent(finance_eligible_ltc/finance_ltc, accuracy = 0.1)
-finance_eligible_ltc_percent
-
-
-
-
-# Financial Open/Closed Cases
-
-table(enc$ltc_finance_open_case_calc)
-enc$finance_in_progress[enc$finance_eligible_ltc == 1 &
-                      enc$ltc_financial_open_case_calc == 1] <- 1
-table(enc$finance_in_progress)
-
-table(enc$finance_in_progress)
-finance_in_progress <- enc[which(enc$finance_in_progress == 1), ]
-dim(finance_in_progress)
-finance_in_progress <- nrow(finance_in_progress)
-finance_in_progress
-
-finance_in_progress_percent <- percent(finance_in_progress/finance_eligible_ltc, accuracy = 0.1)
-finance_in_progress_percent
-
-
-
-table(enc$finance_eligible_ltc, enc$finance_in_progress)
-enc$finance_closed_case[enc$finance_eligible_ltc == 1 &
-                      is.na(enc$finance_in_progress)] <- 1
-table(enc$finance_closed_case)
-
-table(enc$finance_closed_case)
-finance_closed_case <- enc[which(enc$finance_closed_case == 1), ]
-dim(finance_closed_case)
-finance_closed_case <- nrow(finance_closed_case)
-finance_closed_case
-
-finance_closed_case_percent <- percent(finance_closed_case/finance_eligible_ltc, accuracy = 0.1)
-finance_closed_case_percent
-
-
-
-table(enc$finance_in_progress)
-enc$finance_ltc_days_open <- difftime(Sys.Date(), enc$enc_date, units="days")
-table(enc$finance_ltc_days_open)
-enc$finance_in_progress_90days[enc$finance_in_progress == 1 &
-                             (enc$finance_ltc_days_open > 90)] <- 1
-table(enc$finance_in_progress_90days)
-
-table(enc$finance_in_progress_90days)
-finance_in_progress_90days <- enc[which(enc$finance_in_progress_90days == 1), ]
-dim(finance_in_progress_90days)
-finance_in_progress_90days <- nrow(finance_in_progress_90days)
-finance_in_progress_90days
-
-finance_in_progress_90days_percent <- percent(finance_in_progress_90days/finance_in_progress, accuracy = 0.1)
-finance_in_progress_90days_percent
-
-
-
-
-# Financial Cases Linked to Care
-
-table(enc$finance_closed_case, enc$ltc_financial_final_ltc_status)
-enc$finance_linked[enc$finance_closed_case == 1 &
-                 enc$ltc_financial_final_ltc_status == 1] <- 1
-table(enc$finance_linked)
-
-table(enc$finance_linked)
-finance_linked <- enc[which(enc$finance_linked == 1), ]
-dim(finance_linked)
-finance_linked <- nrow(finance_linked)
-finance_linked
-
-finance_linked_percent <- percent(finance_linked/finance_closed_case, accuracy = 0.1)
-finance_linked_percent
-
-
-
-
-enc$finance_not_linked[enc$finance_eligible_ltc == 1 & is.na(enc$finance_in_progress) & is.na(enc$finance_linked)] <- 1
-table(enc$finance_not_linked)
-
-table(enc$finance_not_linked)
-finance_not_linked <- enc[which(enc$finance_not_linked == 1), ]
-dim(finance_not_linked)
-finance_not_linked <- nrow(finance_not_linked)
-finance_not_linked
-
-finance_not_linked_percent <- percent(finance_not_linked/finance_closed_case, accuracy = 0.1)
-finance_not_linked_percent
-
-
-
-
-# Financial Reasons Not Linked to Care
-
-enc$finance_not_linked_med_staff[(enc$finance_closed_case == 1 & is.na(enc$finance_linked)) &
-                               (enc$ltc_financial_prevented_rsn___1 == 1 |
-                                  enc$ltc_financial_prevented_rsn___2 == 1 |
-                                  enc$ltc_financial_prevented_rsn___11 == 1)] <- 1
-table(enc$finance_not_linked_med_staff)
-
-table(enc$finance_not_linked_med_staff)
-finance_not_linked_med_staff <- enc[which(enc$finance_not_linked_med_staff == 1), ]
-dim(finance_not_linked_med_staff)
-finance_not_linked_med_staff <- nrow(finance_not_linked_med_staff)
-finance_not_linked_med_staff
-
-finance_not_linked_med_staff_percent <- percent(finance_not_linked_med_staff/finance_not_linked, accuracy = 0.1)
-finance_not_linked_med_staff_percent
-
-
-
-enc$finance_not_linked_family[(enc$finance_closed_case == 1 & is.na(enc$finance_linked)) &
-                            (enc$ltc_financial_prevented_rsn___3 == 1)] <- 1
-table(enc$finance_not_linked_family)
-
-table(enc$finance_not_linked_family)
-finance_not_linked_family <- enc[which(enc$finance_not_linked_family == 1), ]
-dim(finance_not_linked_family)
-finance_not_linked_family <- nrow(finance_not_linked_family)
-finance_not_linked_family
-
-finance_not_linked_family_percent <- percent(finance_not_linked_family/finance_not_linked, accuracy = 0.1)
-finance_not_linked_family_percent
-
-
-
-enc$finance_not_linked_not_talking[(enc$finance_closed_case == 1 & is.na(enc$finance_linked)) &
-                                 (enc$ltc_financial_prevented_rsn___4 == 1)] <- 1
-table(enc$finance_not_linked_not_talking)
-
-table(enc$finance_not_linked_not_talking)
-finance_not_linked_not_talking <- enc[which(enc$finance_not_linked_not_talking == 1), ]
-dim(finance_not_linked_not_talking)
-finance_not_linked_not_talking <- nrow(finance_not_linked_not_talking)
-finance_not_linked_not_talking
-
-finance_not_linked_not_talking_percent <- percent(finance_not_linked_not_talking/finance_not_linked, accuracy = 0.1)
-finance_not_linked_not_talking_percent
-
-
-
-enc$finance_not_linked_safety[(enc$finance_closed_case == 1 & is.na(enc$finance_linked)) &
-                            (enc$ltc_financial_prevented_rsn___5 == 1)] <- 1
-table(enc$finance_not_linked_safety)
-
-table(enc$finance_not_linked_safety)
-finance_not_linked_safety <- enc[which(enc$finance_not_linked_safety == 1), ]
-dim(finance_not_linked_safety)
-finance_not_linked_safety <- nrow(finance_not_linked_safety)
-finance_not_linked_safety
-
-finance_not_linked_safety_percent <- percent(finance_not_linked_safety/finance_not_linked, accuracy = 0.1)
-finance_not_linked_safety_percent
-
-
-
-enc$finance_not_linked_medical[(enc$finance_closed_case == 1 & is.na(enc$finance_linked)) &
-                             (enc$ltc_financial_prevented_rsn___6 == 1 |
-                                enc$ltc_financial_prevented_rsn___8)] <- 1
-table(enc$finance_not_linked_medical)
-
-table(enc$finance_not_linked_medical)
-finance_not_linked_medical <- enc[which(enc$finance_not_linked_medical == 1), ]
-dim(finance_not_linked_medical)
-finance_not_linked_medical <- nrow(finance_not_linked_medical)
-finance_not_linked_medical
-
-finance_not_linked_medical_percent <- percent(finance_not_linked_medical/finance_not_linked, accuracy = 0.1)
-finance_not_linked_medical_percent
-
-
-
-enc$finance_not_linked_contact[(enc$finance_closed_case == 1 & is.na(enc$finance_linked)) &
-                             (enc$ltc_financial_prevented_rsn___20 == 1)] <- 1
-table(enc$finance_not_linked_contact)
-
-table(enc$finance_not_linked_contact)
-finance_not_linked_contact <- enc[which(enc$finance_not_linked_contact == 1), ]
-dim(finance_not_linked_contact)
-finance_not_linked_contact <- nrow(finance_not_linked_contact)
-finance_not_linked_contact
-
-finance_not_linked_contact_percent <- percent(finance_not_linked_contact/finance_not_linked, accuracy = 0.1)
-finance_not_linked_contact_percent
-
-
-
-enc$finance_not_linked_language[(enc$finance_closed_case == 1 & is.na(enc$finance_linked)) &
-                              (enc$ltc_financial_prevented_rsn___9 == 1)] <- 1
-table(enc$finance_not_linked_language)
-
-table(enc$finance_not_linked_language)
-finance_not_linked_language <- enc[which(enc$finance_not_linked_language == 1), ]
-dim(finance_not_linked_language)
-finance_not_linked_language <- nrow(finance_not_linked_language)
-finance_not_linked_language
-
-finance_not_linked_language_percent <- percent(finance_not_linked_language/finance_not_linked, accuracy = 0.1)
-finance_not_linked_language_percent
-
-
-
-enc$finance_not_linked_other[(enc$finance_closed_case == 1 & is.na(enc$finance_linked)) &
-                           (enc$ltc_financial_prevented_rsn___0 == 1)] <- 1
-table(enc$finance_not_linked_other)
-
-table(enc$finance_not_linked_other)
-finance_not_linked_other <- enc[which(enc$finance_not_linked_other == 1), ]
-dim(finance_not_linked_other)
-finance_not_linked_other <- nrow(finance_not_linked_other)
-finance_not_linked_other
-
-finance_not_linked_other_percent <- percent(finance_not_linked_other/finance_not_linked, accuracy = 0.1)
-finance_not_linked_other_percent
-
-
-
-
-################################################################################
-########################  Person Abuse Linkage Data  ###########################
-################################################################################
-
-table(enc$additional_services___6)
-enc$abuse_ltc[enc$additional_services___6 == 1] <- 1
-table(enc$abuse_ltc)
-
-table(enc$abuse_ltc)
-abuse_ltc <- enc[which(enc$abuse_ltc == 1), ]
-dim(abuse_ltc)
-abuse_ltc <- nrow(abuse_ltc)
-abuse_ltc
-
-
-
-# Ineligible Person Abuse Linkage - Already Linked
-
-table(enc$ltc_abuse_declined_rsn___23)
-table(enc$ltc_abuse_prevented_rsn___16)
-enc$abuse_already_linked <- NA
-enc$abuse_already_linked[enc$abuse_ltc == 1 &
-                         (enc$ltc_abuse_declined_rsn___23 == 1 |
-                            enc$ltc_abuse_prevented_rsn___16 == 1)] <- 1
-table(enc$abuse_already_linked)
-
-table(enc$abuse_already_linked)
-abuse_already_linked <- enc[which(enc$abuse_already_linked == 1), ]
-dim(abuse_already_linked)
-abuse_already_linked <- nrow(abuse_already_linked)
-abuse_already_linked
-
-
-
-# Ineligible Person Abuse Linkage - Deceased
-
-table(enc$ltc_abuse_declined_rsn___35)
-table(enc$ltc_abuse_prevented_rsn___17)
-enc$abuse_deceased <- NA
-enc$abuse_deceased[enc$abuse_ltc == 1 &
-                   (enc$ltc_abuse_declined_rsn___35 == 1 |
-                      enc$ltc_abuse_prevented_rsn___17 == 1)] <- 1
-table(enc$abuse_deceased)
-
-table(enc$abuse_deceased)
-abuse_deceased <- enc[which(enc$abuse_deceased == 1), ]
-dim(abuse_deceased)
-abuse_deceased <- nrow(abuse_deceased)
-abuse_deceased
-
-
-
-# Ineligible Person Abuse Linkage - Incarcerated
-
-table(enc$ltc_abuse_prevented_rsn___12)
-enc$abuse_incarcerated <- NA
-enc$abuse_incarcerated[enc$abuse_ltc == 1 &
-                       enc$ltc_abuse_prevented_rsn___12 == 1] <- 1
-table(enc$abuse_incarcerated)
-
-table(enc$abuse_incarcerated)
-abuse_incarcerated <- enc[which(enc$abuse_incarcerated == 1), ]
-dim(abuse_incarcerated)
-abuse_incarcerated <- nrow(abuse_incarcerated)
-abuse_incarcerated
-
-
-
-# Ineligible Person Abuse Linkage - Declined Linkage Service
-
-table(enc$ltc_abuse_final_ltc_status)
-enc$abuse_linkage_declined <- NA
-enc$abuse_linkage_declined[(enc$abuse_ltc == 1 &
-                            enc$ltc_abuse_final_ltc_status == 2) &
-                           (is.na(enc$abuse_already_linked) &
-                              is.na(enc$abuse_deceased) &
-                              is.na(enc$abuse_incarcerated))] <- 1
-table(enc$abuse_linkage_declined)
-
-table(enc$abuse_linkage_declined)
-abuse_linkage_declined <- enc[which(enc$abuse_linkage_declined == 1), ]
-dim(abuse_linkage_declined)
-abuse_linkage_declined <- nrow(abuse_linkage_declined)
-abuse_linkage_declined
-
-
-
-# Ineligible Person Abuse Linkage - Linkage in Progress
-
-table(enc$ltc_abuse_prevented_rsn___18)
-enc$abuse_ongoing_linkage <- NA
-enc$abuse_ongoing_linkage[enc$abuse_ltc == 1 &
-                          enc$ltc_abuse_prevented_rsn___18 == 1] <- 1
-table(enc$abuse_ongoing_linkage)
-
-table(enc$abuse_ongoing_linkage)
-abuse_ongoing_linkage <- enc[which(enc$abuse_ongoing_linkage == 1), ]
-dim(abuse_ongoing_linkage)
-abuse_ongoing_linkage <- nrow(abuse_ongoing_linkage)
-abuse_ongoing_linkage
-
-
-
-
-# Person Abuse Ineligible Cases
-
-enc$abuse_ineligible_ltc[enc$abuse_already_linked == 1 |
-                         enc$abuse_deceased == 1 |
-                         enc$abuse_incarcerated == 1 |
-                         enc$abuse_linkage_declined == 1 |
-                         enc$abuse_ongoing_linkage == 1] <- 1
-table(enc$abuse_ineligible_ltc)
-
-table(enc$abuse_ineligible_ltc)
-abuse_ineligible_ltc <- enc[which(enc$abuse_ineligible_ltc == 1), ]
-dim(abuse_ineligible_ltc)
-abuse_ineligible_ltc <- nrow(abuse_ineligible_ltc)
-abuse_ineligible_ltc
-
-abuse_ineligible_ltc_percent <- percent(abuse_ineligible_ltc/abuse_ltc, accuracy = 0.1)
-abuse_ineligible_ltc_percent
-
-abuse_already_linked_percent <- percent(abuse_already_linked/abuse_ineligible_ltc, accuracy = 0.1)
-abuse_already_linked_percent
-
-abuse_deceased_percent <- percent(abuse_deceased/abuse_ineligible_ltc, accuracy = 0.1)
-abuse_deceased_percent
-
-abuse_incarcerated_percent <- percent(abuse_incarcerated/abuse_ineligible_ltc, accuracy = 0.1)
-abuse_incarcerated_percent
-
-abuse_linkage_declined_percent <- percent(abuse_linkage_declined/abuse_ineligible_ltc, accuracy = 0.1)
-abuse_linkage_declined_percent
-
-abuse_ongoing_linkage_percent <- percent(abuse_ongoing_linkage/abuse_ineligible_ltc, accuracy = 0.1)
-abuse_ongoing_linkage_percent
-
-
-
-
-# Person Abuse Eligibility to be Linked
-
-enc$abuse_eligible_ltc[enc$abuse_ltc == 1 &
-                       (is.na(enc$abuse_already_linked) &
-                          is.na(enc$abuse_deceased) &
-                          is.na(enc$abuse_incarcerated) &
-                          is.na(enc$abuse_linkage_declined) &
-                          is.na(enc$abuse_ongoing_linkage))] <- 1
-table(enc$abuse_eligible_ltc)
-
-table(enc$abuse_eligible_ltc)
-abuse_eligible_ltc <- enc[which(enc$abuse_eligible_ltc == 1), ]
-dim(abuse_eligible_ltc)
-abuse_eligible_ltc <- nrow(abuse_eligible_ltc)
-abuse_eligible_ltc
-
-abuse_eligible_ltc_percent <- percent(abuse_eligible_ltc/abuse_ltc, accuracy = 0.1)
-abuse_eligible_ltc_percent
-
-
-
-
-# Person Abuse Open/Closed Cases
-
-table(enc$ltc_abuse_open_case_calc)
-enc$abuse_in_progress[enc$abuse_eligible_ltc == 1 &
-                      enc$ltc_abuse_open_case_calc == 1] <- 1
-table(enc$abuse_in_progress)
-
-table(enc$abuse_in_progress)
-abuse_in_progress <- enc[which(enc$abuse_in_progress == 1), ]
-dim(abuse_in_progress)
-abuse_in_progress <- nrow(abuse_in_progress)
-abuse_in_progress
-
-abuse_in_progress_percent <- percent(abuse_in_progress/abuse_eligible_ltc, accuracy = 0.1)
-abuse_in_progress_percent
-
-
-
-table(enc$abuse_eligible_ltc, enc$abuse_in_progress)
-enc$abuse_closed_case[enc$abuse_eligible_ltc == 1 &
-                      is.na(enc$abuse_in_progress)] <- 1
-table(enc$abuse_closed_case)
-
-table(enc$abuse_closed_case)
-abuse_closed_case <- enc[which(enc$abuse_closed_case == 1), ]
-dim(abuse_closed_case)
-abuse_closed_case <- nrow(abuse_closed_case)
-abuse_closed_case
-
-abuse_closed_case_percent <- percent(abuse_closed_case/abuse_eligible_ltc, accuracy = 0.1)
-abuse_closed_case_percent
-
-
-
-table(enc$abuse_in_progress)
-enc$abuse_ltc_days_open <- difftime(Sys.Date(), enc$enc_date, units="days")
-table(enc$abuse_ltc_days_open)
-enc$abuse_in_progress_90days[enc$abuse_in_progress == 1 &
-                             (enc$abuse_ltc_days_open > 90)] <- 1
-table(enc$abuse_in_progress_90days)
-
-table(enc$abuse_in_progress_90days)
-abuse_in_progress_90days <- enc[which(enc$abuse_in_progress_90days == 1), ]
-dim(abuse_in_progress_90days)
-abuse_in_progress_90days <- nrow(abuse_in_progress_90days)
-abuse_in_progress_90days
-
-abuse_in_progress_90days_percent <- percent(abuse_in_progress_90days/abuse_in_progress, accuracy = 0.1)
-abuse_in_progress_90days_percent
-
-
-
-
-# Person Abuse Cases Linked to Care
-
-table(enc$abuse_closed_case, enc$ltc_abuse_final_ltc_status)
-enc$abuse_linked[enc$abuse_closed_case == 1 &
-                 enc$ltc_abuse_final_ltc_status == 1] <- 1
-table(enc$abuse_linked)
-
-table(enc$abuse_linked)
-abuse_linked <- enc[which(enc$abuse_linked == 1), ]
-dim(abuse_linked)
-abuse_linked <- nrow(abuse_linked)
-abuse_linked
-
-abuse_linked_percent <- percent(abuse_linked/abuse_closed_case, accuracy = 0.1)
-abuse_linked_percent
-
-
-
-
-enc$abuse_not_linked[enc$abuse_eligible_ltc == 1 & is.na(enc$abuse_in_progress) & is.na(enc$abuse_linked)] <- 1
-table(enc$abuse_not_linked)
-
-table(enc$abuse_not_linked)
-abuse_not_linked <- enc[which(enc$abuse_not_linked == 1), ]
-dim(abuse_not_linked)
-abuse_not_linked <- nrow(abuse_not_linked)
-abuse_not_linked
-
-abuse_not_linked_percent <- percent(abuse_not_linked/abuse_closed_case, accuracy = 0.1)
-abuse_not_linked_percent
-
-
-
-
-# Person Abuse Reasons Not Linked to Care
-
-enc$abuse_not_linked_med_staff[(enc$abuse_closed_case == 1 & is.na(enc$abuse_linked)) &
-                               (enc$ltc_abuse_prevented_rsn___1 == 1 |
-                                  enc$ltc_abuse_prevented_rsn___2 == 1 |
-                                  enc$ltc_abuse_prevented_rsn___11 == 1)] <- 1
-table(enc$abuse_not_linked_med_staff)
-
-table(enc$abuse_not_linked_med_staff)
-abuse_not_linked_med_staff <- enc[which(enc$abuse_not_linked_med_staff == 1), ]
-dim(abuse_not_linked_med_staff)
-abuse_not_linked_med_staff <- nrow(abuse_not_linked_med_staff)
-abuse_not_linked_med_staff
-
-abuse_not_linked_med_staff_percent <- percent(abuse_not_linked_med_staff/abuse_not_linked, accuracy = 0.1)
-abuse_not_linked_med_staff_percent
-
-
-
-enc$abuse_not_linked_family[(enc$abuse_closed_case == 1 & is.na(enc$abuse_linked)) &
-                            (enc$ltc_abuse_prevented_rsn___3 == 1)] <- 1
-table(enc$abuse_not_linked_family)
-
-table(enc$abuse_not_linked_family)
-abuse_not_linked_family <- enc[which(enc$abuse_not_linked_family == 1), ]
-dim(abuse_not_linked_family)
-abuse_not_linked_family <- nrow(abuse_not_linked_family)
-abuse_not_linked_family
-
-abuse_not_linked_family_percent <- percent(abuse_not_linked_family/abuse_not_linked, accuracy = 0.1)
-abuse_not_linked_family_percent
-
-
-
-enc$abuse_not_linked_not_talking[(enc$abuse_closed_case == 1 & is.na(enc$abuse_linked)) &
-                                 (enc$ltc_abuse_prevented_rsn___4 == 1)] <- 1
-table(enc$abuse_not_linked_not_talking)
-
-table(enc$abuse_not_linked_not_talking)
-abuse_not_linked_not_talking <- enc[which(enc$abuse_not_linked_not_talking == 1), ]
-dim(abuse_not_linked_not_talking)
-abuse_not_linked_not_talking <- nrow(abuse_not_linked_not_talking)
-abuse_not_linked_not_talking
-
-abuse_not_linked_not_talking_percent <- percent(abuse_not_linked_not_talking/abuse_not_linked, accuracy = 0.1)
-abuse_not_linked_not_talking_percent
-
-
-
-enc$abuse_not_linked_safety[(enc$abuse_closed_case == 1 & is.na(enc$abuse_linked)) &
-                            (enc$ltc_abuse_prevented_rsn___5 == 1)] <- 1
-table(enc$abuse_not_linked_safety)
-
-table(enc$abuse_not_linked_safety)
-abuse_not_linked_safety <- enc[which(enc$abuse_not_linked_safety == 1), ]
-dim(abuse_not_linked_safety)
-abuse_not_linked_safety <- nrow(abuse_not_linked_safety)
-abuse_not_linked_safety
-
-abuse_not_linked_safety_percent <- percent(abuse_not_linked_safety/abuse_not_linked, accuracy = 0.1)
-abuse_not_linked_safety_percent
-
-
-
-enc$abuse_not_linked_medical[(enc$abuse_closed_case == 1 & is.na(enc$abuse_linked)) &
-                             (enc$ltc_abuse_prevented_rsn___6 == 1 |
-                                enc$ltc_abuse_prevented_rsn___8)] <- 1
-table(enc$abuse_not_linked_medical)
-
-table(enc$abuse_not_linked_medical)
-abuse_not_linked_medical <- enc[which(enc$abuse_not_linked_medical == 1), ]
-dim(abuse_not_linked_medical)
-abuse_not_linked_medical <- nrow(abuse_not_linked_medical)
-abuse_not_linked_medical
-
-abuse_not_linked_medical_percent <- percent(abuse_not_linked_medical/abuse_not_linked, accuracy = 0.1)
-abuse_not_linked_medical_percent
-
-
-
-enc$abuse_not_linked_contact[(enc$abuse_closed_case == 1 & is.na(enc$abuse_linked)) &
-                             (enc$ltc_abuse_prevented_rsn___20 == 1)] <- 1
-table(enc$abuse_not_linked_contact)
-
-table(enc$abuse_not_linked_contact)
-abuse_not_linked_contact <- enc[which(enc$abuse_not_linked_contact == 1), ]
-dim(abuse_not_linked_contact)
-abuse_not_linked_contact <- nrow(abuse_not_linked_contact)
-abuse_not_linked_contact
-
-abuse_not_linked_contact_percent <- percent(abuse_not_linked_contact/abuse_not_linked, accuracy = 0.1)
-abuse_not_linked_contact_percent
-
-
-
-enc$abuse_not_linked_language[(enc$abuse_closed_case == 1 & is.na(enc$abuse_linked)) &
-                              (enc$ltc_abuse_prevented_rsn___9 == 1)] <- 1
-table(enc$abuse_not_linked_language)
-
-table(enc$abuse_not_linked_language)
-abuse_not_linked_language <- enc[which(enc$abuse_not_linked_language == 1), ]
-dim(abuse_not_linked_language)
-abuse_not_linked_language <- nrow(abuse_not_linked_language)
-abuse_not_linked_language
-
-abuse_not_linked_language_percent <- percent(abuse_not_linked_language/abuse_not_linked, accuracy = 0.1)
-abuse_not_linked_language_percent
-
-
-
-enc$abuse_not_linked_other[(enc$abuse_closed_case == 1 & is.na(enc$abuse_linked)) &
-                           (enc$ltc_abuse_prevented_rsn___0 == 1)] <- 1
-table(enc$abuse_not_linked_other)
-
-table(enc$abuse_not_linked_other)
-abuse_not_linked_other <- enc[which(enc$abuse_not_linked_other == 1), ]
-dim(abuse_not_linked_other)
-abuse_not_linked_other <- nrow(abuse_not_linked_other)
-abuse_not_linked_other
-
-abuse_not_linked_other_percent <- percent(abuse_not_linked_other/abuse_not_linked, accuracy = 0.1)
-abuse_not_linked_other_percent
-
-
-
-
-
-################################################################################
-#######################  General Health Linkage Data  ##########################
-################################################################################
-
-table(enc$additional_services___7)
-enc$general_ltc[enc$additional_services___7 == 1] <- 1
-table(enc$general_ltc)
-
-table(enc$general_ltc)
-general_ltc <- enc[which(enc$general_ltc == 1), ]
-dim(general_ltc)
-general_ltc <- nrow(general_ltc)
-general_ltc
-
-
-
-# Ineligible General Health Linkage - Already Linked
-
-table(enc$ltc_general_ltc_declined_rsn___23)
-table(enc$ltc_general_ltc_prevented_rsn___16)
-enc$general_ltc_already_linked <- NA
-enc$general_ltc_already_linked[enc$general_ltc == 1 &
-                         (enc$ltc_general_ltc_declined_rsn___23 == 1 |
-                            enc$ltc_general_ltc_prevented_rsn___16 == 1)] <- 1
-table(enc$general_ltc_already_linked)
-
-table(enc$general_ltc_already_linked)
-general_ltc_already_linked <- enc[which(enc$general_ltc_already_linked == 1), ]
-dim(general_ltc_already_linked)
-general_ltc_already_linked <- nrow(general_ltc_already_linked)
-general_ltc_already_linked
-
-
-
-# Ineligible General Health Linkage - Deceased
-
-table(enc$ltc_general_ltc_declined_rsn___35)
-table(enc$ltc_general_ltc_prevented_rsn___17)
-enc$general_ltc_deceased <- NA
-enc$general_ltc_deceased[enc$general_ltc == 1 &
-                   (enc$ltc_general_ltc_declined_rsn___35 == 1 |
-                      enc$ltc_general_ltc_prevented_rsn___17 == 1)] <- 1
-table(enc$general_ltc_deceased)
-
-table(enc$general_ltc_deceased)
-general_ltc_deceased <- enc[which(enc$general_ltc_deceased == 1), ]
-dim(general_ltc_deceased)
-general_ltc_deceased <- nrow(general_ltc_deceased)
-general_ltc_deceased
-
-
-
-# Ineligible General Health Linkage - Incarcerated
-
-table(enc$ltc_general_ltc_prevented_rsn___12)
-enc$general_ltc_incarcerated <- NA
-enc$general_ltc_incarcerated[enc$general_ltc == 1 &
-                       enc$ltc_general_ltc_prevented_rsn___12 == 1] <- 1
-table(enc$general_ltc_incarcerated)
-
-table(enc$general_ltc_incarcerated)
-general_ltc_incarcerated <- enc[which(enc$general_ltc_incarcerated == 1), ]
-dim(general_ltc_incarcerated)
-general_ltc_incarcerated <- nrow(general_ltc_incarcerated)
-general_ltc_incarcerated
-
-
-
-# Ineligible General Health Linkage - Declined Linkage Service
-
-table(enc$ltc_general_final_ltc_status)
-enc$general_ltc_linkage_declined <- NA
-enc$general_ltc_linkage_declined[(enc$general_ltc == 1 &
-                            enc$ltc_general_final_ltc_status == 2) &
-                           (is.na(enc$general_ltc_already_linked) &
-                              is.na(enc$general_ltc_deceased) &
-                              is.na(enc$general_ltc_incarcerated))] <- 1
-table(enc$general_ltc_linkage_declined)
-
-table(enc$general_ltc_linkage_declined)
-general_ltc_linkage_declined <- enc[which(enc$general_ltc_linkage_declined == 1), ]
-dim(general_ltc_linkage_declined)
-general_ltc_linkage_declined <- nrow(general_ltc_linkage_declined)
-general_ltc_linkage_declined
-
-
-
-# Ineligible General Health Linkage - Linkage in Progress
-
-table(enc$ltc_general_ltc_prevented_rsn___18)
-enc$general_ltc_ongoing_linkage <- NA
-enc$general_ltc_ongoing_linkage[enc$general_ltc == 1 &
-                          enc$ltc_general_ltc_prevented_rsn___18 == 1] <- 1
-table(enc$general_ltc_ongoing_linkage)
-
-table(enc$general_ltc_ongoing_linkage)
-general_ltc_ongoing_linkage <- enc[which(enc$general_ltc_ongoing_linkage == 1), ]
-dim(general_ltc_ongoing_linkage)
-general_ltc_ongoing_linkage <- nrow(general_ltc_ongoing_linkage)
-general_ltc_ongoing_linkage
-
-
-
-
-# General Health Ineligible Cases
-
-enc$general_ltc_ineligible_ltc[enc$general_ltc_already_linked == 1 |
-                         enc$general_ltc_deceased == 1 |
-                         enc$general_ltc_incarcerated == 1 |
-                         enc$general_ltc_linkage_declined == 1 |
-                         enc$general_ltc_ongoing_linkage == 1] <- 1
-table(enc$general_ltc_ineligible_ltc)
-
-table(enc$general_ltc_ineligible_ltc)
-general_ltc_ineligible_ltc <- enc[which(enc$general_ltc_ineligible_ltc == 1), ]
-dim(general_ltc_ineligible_ltc)
-general_ltc_ineligible_ltc <- nrow(general_ltc_ineligible_ltc)
-general_ltc_ineligible_ltc
-
-general_ltc_ineligible_ltc_percent <- percent(general_ltc_ineligible_ltc/general_ltc, accuracy = 0.1)
-general_ltc_ineligible_ltc_percent
-
-general_ltc_already_linked_percent <- percent(general_ltc_already_linked/general_ltc_ineligible_ltc, accuracy = 0.1)
-general_ltc_already_linked_percent
-
-general_ltc_deceased_percent <- percent(general_ltc_deceased/general_ltc_ineligible_ltc, accuracy = 0.1)
-general_ltc_deceased_percent
-
-general_ltc_incarcerated_percent <- percent(general_ltc_incarcerated/general_ltc_ineligible_ltc, accuracy = 0.1)
-general_ltc_incarcerated_percent
-
-general_ltc_linkage_declined_percent <- percent(general_ltc_linkage_declined/general_ltc_ineligible_ltc, accuracy = 0.1)
-general_ltc_linkage_declined_percent
-
-general_ltc_ongoing_linkage_percent <- percent(general_ltc_ongoing_linkage/general_ltc_ineligible_ltc, accuracy = 0.1)
-general_ltc_ongoing_linkage_percent
-
-
-
-
-# General Health Eligibility to be Linked
-
-enc$general_ltc_eligible_ltc[enc$general_ltc == 1 &
-                       (is.na(enc$general_ltc_already_linked) &
-                          is.na(enc$general_ltc_deceased) &
-                          is.na(enc$general_ltc_incarcerated) &
-                          is.na(enc$general_ltc_linkage_declined) &
-                          is.na(enc$general_ltc_ongoing_linkage))] <- 1
-table(enc$general_ltc_eligible_ltc)
-
-table(enc$general_ltc_eligible_ltc)
-general_ltc_eligible_ltc <- enc[which(enc$general_ltc_eligible_ltc == 1), ]
-dim(general_ltc_eligible_ltc)
-general_ltc_eligible_ltc <- nrow(general_ltc_eligible_ltc)
-general_ltc_eligible_ltc
-
-general_ltc_eligible_ltc_percent <- percent(general_ltc_eligible_ltc/general_ltc, accuracy = 0.1)
-general_ltc_eligible_ltc_percent
-
-
-
-
-# General Health Open/Closed Cases
-
-table(enc$ltc_general_ltc_open_case_calc)
-enc$general_ltc_in_progress[enc$general_ltc_eligible_ltc == 1 &
-                      enc$ltc_general_open_case_calc == 1] <- 1
-table(enc$general_ltc_in_progress)
-
-table(enc$general_ltc_in_progress)
-general_ltc_in_progress <- enc[which(enc$general_ltc_in_progress == 1), ]
-dim(general_ltc_in_progress)
-general_ltc_in_progress <- nrow(general_ltc_in_progress)
-general_ltc_in_progress
-
-general_ltc_in_progress_percent <- percent(general_ltc_in_progress/general_ltc_eligible_ltc, accuracy = 0.1)
-general_ltc_in_progress_percent
-
-
-
-table(enc$general_ltc_eligible_ltc, enc$general_ltc_in_progress)
-enc$general_ltc_closed_case[enc$general_ltc_eligible_ltc == 1 &
-                      is.na(enc$general_ltc_in_progress)] <- 1
-table(enc$general_ltc_closed_case)
-
-table(enc$general_ltc_closed_case)
-general_ltc_closed_case <- enc[which(enc$general_ltc_closed_case == 1), ]
-dim(general_ltc_closed_case)
-general_ltc_closed_case <- nrow(general_ltc_closed_case)
-general_ltc_closed_case
-
-general_ltc_closed_case_percent <- percent(general_ltc_closed_case/general_ltc_eligible_ltc, accuracy = 0.1)
-general_ltc_closed_case_percent
-
-
-
-table(enc$general_ltc_in_progress)
-enc$general_ltc_ltc_days_open <- difftime(Sys.Date(), enc$enc_date, units="days")
-table(enc$general_ltc_ltc_days_open)
-enc$general_ltc_in_progress_90days[enc$general_ltc_in_progress == 1 &
-                             (enc$general_ltc_ltc_days_open > 90)] <- 1
-table(enc$general_ltc_in_progress_90days)
-
-table(enc$general_ltc_in_progress_90days)
-general_ltc_in_progress_90days <- enc[which(enc$general_ltc_in_progress_90days == 1), ]
-dim(general_ltc_in_progress_90days)
-general_ltc_in_progress_90days <- nrow(general_ltc_in_progress_90days)
-general_ltc_in_progress_90days
-
-general_ltc_in_progress_90days_percent <- percent(general_ltc_in_progress_90days/general_ltc_in_progress, accuracy = 0.1)
-general_ltc_in_progress_90days_percent
-
-
-
-
-# General Health Cases Linked to Care
-
-table(enc$general_ltc_closed_case, enc$ltc_general_final_ltc_status)
-enc$general_ltc_linked[enc$general_ltc_closed_case == 1 &
-                 enc$ltc_general_final_ltc_status == 1] <- 1
-table(enc$general_ltc_linked)
-
-table(enc$general_ltc_linked)
-general_ltc_linked <- enc[which(enc$general_ltc_linked == 1), ]
-dim(general_ltc_linked)
-general_ltc_linked <- nrow(general_ltc_linked)
-general_ltc_linked
-
-general_ltc_linked_percent <- percent(general_ltc_linked/general_ltc_closed_case, accuracy = 0.1)
-general_ltc_linked_percent
-
-
-
-
-enc$general_ltc_not_linked[enc$general_ltc_eligible_ltc == 1 & is.na(enc$general_ltc_in_progress) & is.na(enc$general_ltc_linked)] <- 1
-table(enc$general_ltc_not_linked)
-
-table(enc$general_ltc_not_linked)
-general_ltc_not_linked <- enc[which(enc$general_ltc_not_linked == 1), ]
-dim(general_ltc_not_linked)
-general_ltc_not_linked <- nrow(general_ltc_not_linked)
-general_ltc_not_linked
-
-general_ltc_not_linked_percent <- percent(general_ltc_not_linked/general_ltc_closed_case, accuracy = 0.1)
-general_ltc_not_linked_percent
-
-
-
-
-# General Health Reasons Not Linked to Care
-
-enc$general_ltc_not_linked_med_staff[(enc$general_ltc_closed_case == 1 & is.na(enc$general_ltc_linked)) &
-                               (enc$ltc_general_prevented_rsn___1 == 1 |
-                                  enc$ltc_general_prevented_rsn___2 == 1 |
-                                  enc$ltc_general_prevented_rsn___11 == 1)] <- 1
-table(enc$general_ltc_not_linked_med_staff)
-
-table(enc$general_ltc_not_linked_med_staff)
-general_ltc_not_linked_med_staff <- enc[which(enc$general_ltc_not_linked_med_staff == 1), ]
-dim(general_ltc_not_linked_med_staff)
-general_ltc_not_linked_med_staff <- nrow(general_ltc_not_linked_med_staff)
-general_ltc_not_linked_med_staff
-
-general_ltc_not_linked_med_staff_percent <- percent(general_ltc_not_linked_med_staff/general_ltc_not_linked, accuracy = 0.1)
-general_ltc_not_linked_med_staff_percent
-
-
-
-enc$general_ltc_not_linked_family[(enc$general_ltc_closed_case == 1 & is.na(enc$general_ltc_linked)) &
-                            (enc$ltc_general_prevented_rsn___3 == 1)] <- 1
-table(enc$general_ltc_not_linked_family)
-
-table(enc$general_ltc_not_linked_family)
-general_ltc_not_linked_family <- enc[which(enc$general_ltc_not_linked_family == 1), ]
-dim(general_ltc_not_linked_family)
-general_ltc_not_linked_family <- nrow(general_ltc_not_linked_family)
-general_ltc_not_linked_family
-
-general_ltc_not_linked_family_percent <- percent(general_ltc_not_linked_family/general_ltc_not_linked, accuracy = 0.1)
-general_ltc_not_linked_family_percent
-
-
-
-enc$general_ltc_not_linked_not_talking[(enc$general_ltc_closed_case == 1 & is.na(enc$general_ltc_linked)) &
-                                 (enc$ltc_general_prevented_rsn___4 == 1)] <- 1
-table(enc$general_ltc_not_linked_not_talking)
-
-table(enc$general_ltc_not_linked_not_talking)
-general_ltc_not_linked_not_talking <- enc[which(enc$general_ltc_not_linked_not_talking == 1), ]
-dim(general_ltc_not_linked_not_talking)
-general_ltc_not_linked_not_talking <- nrow(general_ltc_not_linked_not_talking)
-general_ltc_not_linked_not_talking
-
-general_ltc_not_linked_not_talking_percent <- percent(general_ltc_not_linked_not_talking/general_ltc_not_linked, accuracy = 0.1)
-general_ltc_not_linked_not_talking_percent
-
-
-
-enc$general_ltc_not_linked_safety[(enc$general_ltc_closed_case == 1 & is.na(enc$general_ltc_linked)) &
-                            (enc$ltc_general_prevented_rsn___5 == 1)] <- 1
-table(enc$general_ltc_not_linked_safety)
-
-table(enc$general_ltc_not_linked_safety)
-general_ltc_not_linked_safety <- enc[which(enc$general_ltc_not_linked_safety == 1), ]
-dim(general_ltc_not_linked_safety)
-general_ltc_not_linked_safety <- nrow(general_ltc_not_linked_safety)
-general_ltc_not_linked_safety
-
-general_ltc_not_linked_safety_percent <- percent(general_ltc_not_linked_safety/general_ltc_not_linked, accuracy = 0.1)
-general_ltc_not_linked_safety_percent
-
-
-
-enc$general_ltc_not_linked_medical[(enc$general_ltc_closed_case == 1 & is.na(enc$general_ltc_linked)) &
-                             (enc$ltc_general_prevented_rsn___6 == 1 |
-                                enc$ltc_general_prevented_rsn___8)] <- 1
-table(enc$general_ltc_not_linked_medical)
-
-table(enc$general_ltc_not_linked_medical)
-general_ltc_not_linked_medical <- enc[which(enc$general_ltc_not_linked_medical == 1), ]
-dim(general_ltc_not_linked_medical)
-general_ltc_not_linked_medical <- nrow(general_ltc_not_linked_medical)
-general_ltc_not_linked_medical
-
-general_ltc_not_linked_medical_percent <- percent(general_ltc_not_linked_medical/general_ltc_not_linked, accuracy = 0.1)
-general_ltc_not_linked_medical_percent
-
-
-
-enc$general_ltc_not_linked_contact[(enc$general_ltc_closed_case == 1 & is.na(enc$general_ltc_linked)) &
-                             (enc$ltc_general_prevented_rsn___20 == 1)] <- 1
-table(enc$general_ltc_not_linked_contact)
-
-table(enc$general_ltc_not_linked_contact)
-general_ltc_not_linked_contact <- enc[which(enc$general_ltc_not_linked_contact == 1), ]
-dim(general_ltc_not_linked_contact)
-general_ltc_not_linked_contact <- nrow(general_ltc_not_linked_contact)
-general_ltc_not_linked_contact
-
-general_ltc_not_linked_contact_percent <- percent(general_ltc_not_linked_contact/general_ltc_not_linked, accuracy = 0.1)
-general_ltc_not_linked_contact_percent
-
-
-
-enc$general_ltc_not_linked_language[(enc$general_ltc_closed_case == 1 & is.na(enc$general_ltc_linked)) &
-                              (enc$ltc_general_prevented_rsn___9 == 1)] <- 1
-table(enc$general_ltc_not_linked_language)
-
-table(enc$general_ltc_not_linked_language)
-general_ltc_not_linked_language <- enc[which(enc$general_ltc_not_linked_language == 1), ]
-dim(general_ltc_not_linked_language)
-general_ltc_not_linked_language <- nrow(general_ltc_not_linked_language)
-general_ltc_not_linked_language
-
-general_ltc_not_linked_language_percent <- percent(general_ltc_not_linked_language/general_ltc_not_linked, accuracy = 0.1)
-general_ltc_not_linked_language_percent
-
-
-
-enc$general_ltc_not_linked_other[(enc$general_ltc_closed_case == 1 & is.na(enc$general_ltc_linked)) &
-                           (enc$ltc_general_prevented_rsn___0 == 1)] <- 1
-table(enc$general_ltc_not_linked_other)
-
-table(enc$general_ltc_not_linked_other)
-general_ltc_not_linked_other <- enc[which(enc$general_ltc_not_linked_other == 1), ]
-dim(general_ltc_not_linked_other)
-general_ltc_not_linked_other <- nrow(general_ltc_not_linked_other)
-general_ltc_not_linked_other
-
-general_ltc_not_linked_other_percent <- percent(general_ltc_not_linked_other/general_ltc_not_linked, accuracy = 0.1)
-general_ltc_not_linked_other_percent
-
-
-
-
-################################################################################
-############################  Other Linkage Data  ##############################
-################################################################################
-
-table(enc$additional_services___0)
-enc$other_ltc[enc$additional_services___0 == 1] <- 1
-table(enc$other_ltc)
-
-table(enc$other_ltc)
-other_ltc <- enc[which(enc$other_ltc == 1), ]
-dim(other_ltc)
-other_ltc <- nrow(other_ltc)
-other_ltc
-
-
-
-# Ineligible Other Linkage - Already Linked
-
-table(enc$ltc_other_declined_rsn___23)
-table(enc$ltc_other_prevented_rsn___16)
-enc$other_ltc_already_linked <- NA
-enc$other_ltc_already_linked[enc$other_ltc == 1 &
-                         (enc$ltc_other_declined_rsn___23 == 1 |
-                            enc$ltc_other_prevented_rsn___16 == 1)] <- 1
-table(enc$other_ltc_already_linked)
-
-table(enc$other_ltc_already_linked)
-other_ltc_already_linked <- enc[which(enc$other_ltc_already_linked == 1), ]
-dim(other_ltc_already_linked)
-other_ltc_already_linked <- nrow(other_ltc_already_linked)
-other_ltc_already_linked
-
-
-
-# Ineligible Other Linkage - Deceased
-
-table(enc$ltc_other_declined_rsn___35)
-table(enc$ltc_other_prevented_rsn___17)
-enc$other_ltc_deceased <- NA
-enc$other_ltc_deceased[enc$other_ltc == 1 &
-                   (enc$ltc_other_declined_rsn___35 == 1 |
-                      enc$ltc_other_prevented_rsn___17 == 1)] <- 1
-table(enc$other_ltc_deceased)
-
-table(enc$other_ltc_deceased)
-other_ltc_deceased <- enc[which(enc$other_ltc_deceased == 1), ]
-dim(other_ltc_deceased)
-other_ltc_deceased <- nrow(other_ltc_deceased)
-other_ltc_deceased
-
-
-
-# Ineligible Other Linkage - Incarcerated
-
-table(enc$ltc_other_prevented_rsn___12)
-enc$other_ltc_incarcerated <- NA
-enc$other_ltc_incarcerated[enc$other_ltc == 1 &
-                       enc$ltc_other_prevented_rsn___12 == 1] <- 1
-table(enc$other_ltc_incarcerated)
-
-table(enc$other_ltc_incarcerated)
-other_ltc_incarcerated <- enc[which(enc$other_ltc_incarcerated == 1), ]
-dim(other_ltc_incarcerated)
-other_ltc_incarcerated <- nrow(other_ltc_incarcerated)
-other_ltc_incarcerated
-
-
-
-# Ineligible Other Linkage - Declined Linkage Service
-
-table(enc$ltc_other_final_ltc_status)
-enc$other_ltc_linkage_declined <- NA
-enc$other_ltc_linkage_declined[(enc$other_ltc == 1 &
-                            enc$ltc_other_final_ltc_status == 2) &
-                           (is.na(enc$other_ltc_already_linked) &
-                              is.na(enc$other_ltc_deceased) &
-                              is.na(enc$other_ltc_incarcerated))] <- 1
-table(enc$other_ltc_linkage_declined)
-
-table(enc$other_ltc_linkage_declined)
-other_ltc_linkage_declined <- enc[which(enc$other_ltc_linkage_declined == 1), ]
-dim(other_ltc_linkage_declined)
-other_ltc_linkage_declined <- nrow(other_ltc_linkage_declined)
-other_ltc_linkage_declined
-
-
-
-# Ineligible Other Linkage - Linkage in Progress
-
-table(enc$ltc_other_prevented_rsn___18)
-enc$other_ltc_ongoing_linkage <- NA
-enc$other_ltc_ongoing_linkage[enc$other_ltc == 1 &
-                          enc$ltc_other_prevented_rsn___18 == 1] <- 1
-table(enc$other_ltc_ongoing_linkage)
-
-table(enc$other_ltc_ongoing_linkage)
-other_ltc_ongoing_linkage <- enc[which(enc$other_ltc_ongoing_linkage == 1), ]
-dim(other_ltc_ongoing_linkage)
-other_ltc_ongoing_linkage <- nrow(other_ltc_ongoing_linkage)
-other_ltc_ongoing_linkage
-
-
-
-
-# Other Ineligible Cases
-
-enc$other_ltc_ineligible_ltc[enc$other_ltc_already_linked == 1 |
-                         enc$other_ltc_deceased == 1 |
-                         enc$other_ltc_incarcerated == 1 |
-                         enc$other_ltc_linkage_declined == 1 |
-                         enc$other_ltc_ongoing_linkage == 1] <- 1
-table(enc$other_ltc_ineligible_ltc)
-
-table(enc$other_ltc_ineligible_ltc)
-other_ltc_ineligible_ltc <- enc[which(enc$other_ltc_ineligible_ltc == 1), ]
-dim(other_ltc_ineligible_ltc)
-other_ltc_ineligible_ltc <- nrow(other_ltc_ineligible_ltc)
-other_ltc_ineligible_ltc
-
-other_ltc_ineligible_ltc_percent <- percent(other_ltc_ineligible_ltc/other_ltc, accuracy = 0.1)
-other_ltc_ineligible_ltc_percent
-
-other_ltc_already_linked_percent <- percent(other_ltc_already_linked/other_ltc_ineligible_ltc, accuracy = 0.1)
-other_ltc_already_linked_percent
-
-other_ltc_deceased_percent <- percent(other_ltc_deceased/other_ltc_ineligible_ltc, accuracy = 0.1)
-other_ltc_deceased_percent
-
-other_ltc_incarcerated_percent <- percent(other_ltc_incarcerated/other_ltc_ineligible_ltc, accuracy = 0.1)
-other_ltc_incarcerated_percent
-
-other_ltc_linkage_declined_percent <- percent(other_ltc_linkage_declined/other_ltc_ineligible_ltc, accuracy = 0.1)
-other_ltc_linkage_declined_percent
-
-other_ltc_ongoing_linkage_percent <- percent(other_ltc_ongoing_linkage/other_ltc_ineligible_ltc, accuracy = 0.1)
-other_ltc_ongoing_linkage_percent
-
-
-
-
-# Other Eligibility to be Linked
-
-enc$other_ltc_eligible_ltc[enc$other_ltc == 1 &
-                       (is.na(enc$other_ltc_already_linked) &
-                          is.na(enc$other_ltc_deceased) &
-                          is.na(enc$other_ltc_incarcerated) &
-                          is.na(enc$other_ltc_linkage_declined) &
-                          is.na(enc$other_ltc_ongoing_linkage))] <- 1
-table(enc$other_ltc_eligible_ltc)
-
-table(enc$other_ltc_eligible_ltc)
-other_ltc_eligible_ltc <- enc[which(enc$other_ltc_eligible_ltc == 1), ]
-dim(other_ltc_eligible_ltc)
-other_ltc_eligible_ltc <- nrow(other_ltc_eligible_ltc)
-other_ltc_eligible_ltc
-
-other_ltc_eligible_ltc_percent <- percent(other_ltc_eligible_ltc/other_ltc, accuracy = 0.1)
-other_ltc_eligible_ltc_percent
-
-
-
-
-# Other Open/Closed Cases
-
-table(enc$ltc_other_open_case_calc)
-enc$other_ltc_in_progress[enc$other_ltc_eligible_ltc == 1 &
-                      enc$ltc_other_open_case_calc == 1] <- 1
-table(enc$other_ltc_in_progress)
-
-table(enc$other_ltc_in_progress)
-other_ltc_in_progress <- enc[which(enc$other_ltc_in_progress == 1), ]
-dim(other_ltc_in_progress)
-other_ltc_in_progress <- nrow(other_ltc_in_progress)
-other_ltc_in_progress
-
-other_ltc_in_progress_percent <- percent(other_ltc_in_progress/other_ltc_eligible_ltc, accuracy = 0.1)
-other_ltc_in_progress_percent
-
-
-
-table(enc$other_ltc_eligible_ltc, enc$other_ltc_in_progress)
-enc$other_ltc_closed_case[enc$other_ltc_eligible_ltc == 1 &
-                      is.na(enc$other_ltc_in_progress)] <- 1
-table(enc$other_ltc_closed_case)
-
-table(enc$other_ltc_closed_case)
-other_ltc_closed_case <- enc[which(enc$other_ltc_closed_case == 1), ]
-dim(other_ltc_closed_case)
-other_ltc_closed_case <- nrow(other_ltc_closed_case)
-other_ltc_closed_case
-
-other_ltc_closed_case_percent <- percent(other_ltc_closed_case/other_ltc_eligible_ltc, accuracy = 0.1)
-other_ltc_closed_case_percent
-
-
-
-table(enc$other_ltc_in_progress)
-enc$other_ltc_ltc_days_open <- difftime(Sys.Date(), enc$enc_date, units="days")
-table(enc$other_ltc_ltc_days_open)
-enc$other_ltc_in_progress_90days[enc$other_ltc_in_progress == 1 &
-                             (enc$other_ltc_ltc_days_open > 90)] <- 1
-table(enc$other_ltc_in_progress_90days)
-
-table(enc$other_ltc_in_progress_90days)
-other_ltc_in_progress_90days <- enc[which(enc$other_ltc_in_progress_90days == 1), ]
-dim(other_ltc_in_progress_90days)
-other_ltc_in_progress_90days <- nrow(other_ltc_in_progress_90days)
-other_ltc_in_progress_90days
-
-other_ltc_in_progress_90days_percent <- percent(other_ltc_in_progress_90days/other_ltc_in_progress, accuracy = 0.1)
-other_ltc_in_progress_90days_percent
-
-
-
-
-# Other Cases Linked to Care
-
-table(enc$other_ltc_closed_case, enc$ltc_other_final_ltc_status)
-enc$other_ltc_linked[enc$other_ltc_closed_case == 1 &
-                 enc$ltc_other_final_ltc_status == 1] <- 1
-table(enc$other_ltc_linked)
-
-table(enc$other_ltc_linked)
-other_ltc_linked <- enc[which(enc$other_ltc_linked == 1), ]
-dim(other_ltc_linked)
-other_ltc_linked <- nrow(other_ltc_linked)
-other_ltc_linked
-
-other_ltc_linked_percent <- percent(other_ltc_linked/other_ltc_closed_case, accuracy = 0.1)
-other_ltc_linked_percent
-
-
-
-
-enc$other_ltc_not_linked[enc$other_ltc_eligible_ltc == 1 & is.na(enc$other_ltc_in_progress) & is.na(enc$other_ltc_linked)] <- 1
-table(enc$other_ltc_not_linked)
-
-table(enc$other_ltc_not_linked)
-other_ltc_not_linked <- enc[which(enc$other_ltc_not_linked == 1), ]
-dim(other_ltc_not_linked)
-other_ltc_not_linked <- nrow(other_ltc_not_linked)
-other_ltc_not_linked
-
-other_ltc_not_linked_percent <- percent(other_ltc_not_linked/other_ltc_closed_case, accuracy = 0.1)
-other_ltc_not_linked_percent
-
-
-
-
-# Other Reasons Not Linked to Care
-
-enc$other_ltc_not_linked_med_staff[(enc$other_ltc_closed_case == 1 & is.na(enc$other_ltc_linked)) &
-                               (enc$ltc_other_prevented_rsn___1 == 1 |
-                                  enc$ltc_other_prevented_rsn___2 == 1 |
-                                  enc$ltc_other_prevented_rsn___11 == 1)] <- 1
-table(enc$other_ltc_not_linked_med_staff)
-
-table(enc$other_ltc_not_linked_med_staff)
-other_ltc_not_linked_med_staff <- enc[which(enc$other_ltc_not_linked_med_staff == 1), ]
-dim(other_ltc_not_linked_med_staff)
-other_ltc_not_linked_med_staff <- nrow(other_ltc_not_linked_med_staff)
-other_ltc_not_linked_med_staff
-
-other_ltc_not_linked_med_staff_percent <- percent(other_ltc_not_linked_med_staff/other_ltc_not_linked, accuracy = 0.1)
-other_ltc_not_linked_med_staff_percent
-
-
-
-enc$other_ltc_not_linked_family[(enc$other_ltc_closed_case == 1 & is.na(enc$other_ltc_linked)) &
-                            (enc$ltc_other_prevented_rsn___3 == 1)] <- 1
-table(enc$other_ltc_not_linked_family)
-
-table(enc$other_ltc_not_linked_family)
-other_ltc_not_linked_family <- enc[which(enc$other_ltc_not_linked_family == 1), ]
-dim(other_ltc_not_linked_family)
-other_ltc_not_linked_family <- nrow(other_ltc_not_linked_family)
-other_ltc_not_linked_family
-
-other_ltc_not_linked_family_percent <- percent(other_ltc_not_linked_family/other_ltc_not_linked, accuracy = 0.1)
-other_ltc_not_linked_family_percent
-
-
-
-enc$other_ltc_not_linked_not_talking[(enc$other_ltc_closed_case == 1 & is.na(enc$other_ltc_linked)) &
-                                 (enc$ltc_other_prevented_rsn___4 == 1)] <- 1
-table(enc$other_ltc_not_linked_not_talking)
-
-table(enc$other_ltc_not_linked_not_talking)
-other_ltc_not_linked_not_talking <- enc[which(enc$other_ltc_not_linked_not_talking == 1), ]
-dim(other_ltc_not_linked_not_talking)
-other_ltc_not_linked_not_talking <- nrow(other_ltc_not_linked_not_talking)
-other_ltc_not_linked_not_talking
-
-other_ltc_not_linked_not_talking_percent <- percent(other_ltc_not_linked_not_talking/other_ltc_not_linked, accuracy = 0.1)
-other_ltc_not_linked_not_talking_percent
-
-
-
-enc$other_ltc_not_linked_safety[(enc$other_ltc_closed_case == 1 & is.na(enc$other_ltc_linked)) &
-                            (enc$ltc_other_prevented_rsn___5 == 1)] <- 1
-table(enc$other_ltc_not_linked_safety)
-
-table(enc$other_ltc_not_linked_safety)
-other_ltc_not_linked_safety <- enc[which(enc$other_ltc_not_linked_safety == 1), ]
-dim(other_ltc_not_linked_safety)
-other_ltc_not_linked_safety <- nrow(other_ltc_not_linked_safety)
-other_ltc_not_linked_safety
-
-other_ltc_not_linked_safety_percent <- percent(other_ltc_not_linked_safety/other_ltc_not_linked, accuracy = 0.1)
-other_ltc_not_linked_safety_percent
-
-
-
-enc$other_ltc_not_linked_medical[(enc$other_ltc_closed_case == 1 & is.na(enc$other_ltc_linked)) &
-                             (enc$ltc_other_prevented_rsn___6 == 1 |
-                                enc$ltc_other_prevented_rsn___8)] <- 1
-table(enc$other_ltc_not_linked_medical)
-
-table(enc$other_ltc_not_linked_medical)
-other_ltc_not_linked_medical <- enc[which(enc$other_ltc_not_linked_medical == 1), ]
-dim(other_ltc_not_linked_medical)
-other_ltc_not_linked_medical <- nrow(other_ltc_not_linked_medical)
-other_ltc_not_linked_medical
-
-other_ltc_not_linked_medical_percent <- percent(other_ltc_not_linked_medical/other_ltc_not_linked, accuracy = 0.1)
-other_ltc_not_linked_medical_percent
-
-
-
-enc$other_ltc_not_linked_contact[(enc$other_ltc_closed_case == 1 & is.na(enc$other_ltc_linked)) &
-                             (enc$ltc_other_prevented_rsn___20 == 1)] <- 1
-table(enc$other_ltc_not_linked_contact)
-
-table(enc$other_ltc_not_linked_contact)
-other_ltc_not_linked_contact <- enc[which(enc$other_ltc_not_linked_contact == 1), ]
-dim(other_ltc_not_linked_contact)
-other_ltc_not_linked_contact <- nrow(other_ltc_not_linked_contact)
-other_ltc_not_linked_contact
-
-other_ltc_not_linked_contact_percent <- percent(other_ltc_not_linked_contact/other_ltc_not_linked, accuracy = 0.1)
-other_ltc_not_linked_contact_percent
-
-
-
-enc$other_ltc_not_linked_language[(enc$other_ltc_closed_case == 1 & is.na(enc$other_ltc_linked)) &
-                              (enc$ltc_other_prevented_rsn___9 == 1)] <- 1
-table(enc$other_ltc_not_linked_language)
-
-table(enc$other_ltc_not_linked_language)
-other_ltc_not_linked_language <- enc[which(enc$other_ltc_not_linked_language == 1), ]
-dim(other_ltc_not_linked_language)
-other_ltc_not_linked_language <- nrow(other_ltc_not_linked_language)
-other_ltc_not_linked_language
-
-other_ltc_not_linked_language_percent <- percent(other_ltc_not_linked_language/other_ltc_not_linked, accuracy = 0.1)
-other_ltc_not_linked_language_percent
-
-
-
-enc$other_ltc_not_linked_other[(enc$other_ltc_closed_case == 1 & is.na(enc$other_ltc_linked)) &
-                           (enc$ltc_other_prevented_rsn___0 == 1)] <- 1
-table(enc$other_ltc_not_linked_other)
-
-table(enc$other_ltc_not_linked_other)
-other_ltc_not_linked_other <- enc[which(enc$other_ltc_not_linked_other == 1), ]
-dim(other_ltc_not_linked_other)
-other_ltc_not_linked_other <- nrow(other_ltc_not_linked_other)
-other_ltc_not_linked_other
-
-other_ltc_not_linked_other_percent <- percent(other_ltc_not_linked_other/other_ltc_not_linked, accuracy = 0.1)
-other_ltc_not_linked_other_percent
 
 ```
 
 
-# Food Insecurity Linkage to Care
+## CCTST Syphilis Screening
+
+The CCTST Syphilis screening project looks at the ED testing data since **January 1st, 2024**. This report lists all University of Cincinnati Medical Center Emergency Department (UCMC ED) based Syphilis testing ordered. EIP staff began prompting medical staff to additionally order Syphilis testing with other STI/HIV testing on **April 1st, 2024**. An Epic BPA to suggest Syphilis testing in addition to when Chlamydia/Gonorrhea is ordered took effect on **May 21st, 2024**.
+
+The total daily testing numbers for Syphilis *TREPONEMA PALLIDUM AB WITH REFLEX* (Trepia Ab) tests are shown in the table below, as well as a plot showing the daily trend in testing numbers. Since the testing algorithm for UCMC is the intiial Trepia Ab test with a reflex to *RPR W TITER* (RPR), it is assumed using the Trepia testing numbers as the number for total tests is accurate. The overall Syphilis positivity rate for the tests is included, using the RPR as the confirmatory test for a known positive case. The unique number of tests is determined by the *CSN* for the encounter in which the test was ordered. The test is only included if the *Order Status* is "Completed" and is currently only including tests conducted at **UCMC ED**.
+
+It is important to note that since CHI lab data is received every Tuesday afternoon, the data for the daily/monthly numbers for the current day/month are only estiamtes until the full dataset is received. For example, if data is pulled in the afternoon, then the tests conducted in the morning are counted, but not tests conducted later in the evening for that day. The day that this report was compiled is shown at the top of the report, and the data likely represents data collected up through the Monday/Tuesday prior, depending on when CHI pulled the data. Also, depending on when the data was pulled, not all test results are finalized, so the positivity rate and number of positive tests/patients may also be slightly different. However, this should only pertain to the day the data is pulled, and not prior days included in the analysis.
+
+<br>
+
+::: {.panel-tabset}
+
+## Daily
+
+<div align="center">
+```{r, echo = FALSE}
+
+# Table of daily Syphilis testing
+reactable(daily_syph_tests,
+          columns = list(
+            order_date = colDef(name = "Order Date", align = "center", width = 125),
+            total_tests = colDef(name = "Syphilis Tests", align = "center", width = 130),
+            total_positive = colDef(name = "Syphilis +", align = "center", width = 125),
+            percent_positive = colDef(name = "Percent +", align = "center", width = 125)),
+          bordered = TRUE,
+          highlight = TRUE,
+          searchable = TRUE,
+          paginationType = "simple",
+          defaultColDef = colDef(style = list(fontSize = "12px", maxWidth = 505)),
+          style = list(width = "63.5%"))
+
+```
+</div>
+
+<br>
+<div align="center">
+``` {r, echo = FALSE, fig.frame="black"}
+#| label: CCTST Syphilis Screening - Daily
+#| fig-cap: "*The red line indicates when EIP intervention began, prompting medical staff to include syphilis testing when appropriate.*"
+
+# Line graph of daily Syphilis testing
+eip_start_date_daily <- "2024-04-01"
+daily_syph_tests_plot <- daily_syph_tests %>%
+  plot_ly(x = ~order_date, y = ~total_tests, name = "Syphilis Tests", type = 'scatter', mode = 'lines', line = list(color = '#DC9540')) %>%
+  add_trace(y = ~total_positive, name = "Syphilis+", line = list(color = 'royalblue')) %>%
+  layout(
+    xaxis = list(title = "Order Date"),
+    yaxis = list(title = "Total Syphilis Tests", range = c(0, max(daily_syph_tests$total_tests) + 10)),
+    title = list(text = "CHI Data Daily Syphilis Tests", font = list(size = 20)),
+    margin = list(l = 50, r = 50, b = 50, t = 50),
+    template = "plotly_dark",
+    shapes = list(
+      list(
+        type = "line",
+        x0 = eip_start_date_daily,
+        x1 = eip_start_date_daily,
+        y0 = 0,
+        y1 = 1,
+        yref = "paper",
+        line = list(color = "red", dash = "dash")))) %>%
+  config(displayModeBar = FALSE)
+daily_syph_tests_plot
+
+```
+</div>
+<br>
+
+## Monthly
+
+<div align="center">
+```{r, echo = FALSE}
+
+reactable(monthly_syph_tests,
+          columns = list(
+            order_date = colDef(name = "Order Date", align = "center", width = 125),
+            total_tests = colDef(name = "Syphilis Tests", align = "center", width = 130),
+            total_positive = colDef(name = "Syphilis +", align = "center", width = 125),
+            percent_positive = colDef(name = "Percent +", align = "center", width = 125)),
+          bordered = TRUE,
+          highlight = TRUE,
+          searchable = TRUE,
+          paginationType = "simple",
+          defaultColDef = colDef(style = list(fontSize = "12px", maxWidth = 505)),
+          style = list(width = "63.5%"))
+
+```
+</div>
+
+<br>
+<div align="center">
+``` {r, echo = FALSE, fig.frame="black"}
+#| label: CCTST Syphilis Screening - Monthly
+#| fig-cap: "*The red line indicates when EIP intervention began, prompting medical staff to include syphilis testing when appropriate.*"
+
+# Line graph of monthly Syphilis testing
+monthly_syph_tests <- monthly_syph_tests %>%
+  mutate(month_year = format(month_year, "%Y-%m"))
+eip_start_date_monthly <- "2024-04"
+monthly_syph_tests_plot <- monthly_syph_tests %>%
+  plot_ly(x = ~month_year, y = ~total_tests, name = "Syphilis Tests", type = 'scatter', mode = 'lines', line = list(color = '#DC9540')) %>%
+  add_trace(y = ~total_positive, name = "Syphilis+", line = list(color = 'royalblue')) %>%
+  layout(
+    xaxis = list(title = "Order Date"),
+    yaxis = list(title = "Total Syphilis Tests", range = c(0, max(monthly_syph_tests$total_tests) + 10)),
+    title = list(text = "CHI Data Monthly Syphilis Tests", font = list(size = 20)),
+    margin = list(l = 50, r = 50, b = 50, t = 50),
+    template = "plotly_dark",
+    shapes = list(
+      list(
+        type = "line",
+        x0 = eip_start_date_monthly,
+        x1 = eip_start_date_monthly,
+        y0 = 0,
+        y1 = 1,
+        yref = "paper",
+        line = list(color = "red", dash = "dash")))) %>%
+  config(displayModeBar = FALSE)
+monthly_syph_tests_plot
+
+```
+</div>
+<br>
+
+:::
+
+<br>
+<br>
 
 
-The flowchart of the Food Insecurity Linkage to Care efforts for EIP are shown below.
+
+## STI Linkage to Care
+
+
+The flowchart of the STI Linkage to Care efforts for EIP are shown below. This flow diagram shows linkage to care efforts for all STI linkage cases initiated within EIP.
 
 
 ```{r, echo = FALSE}
@@ -4101,13 +3006,13 @@ grid_data %>%
 
 
 grid +
-  # Food Linkage Cases
+  # STI Linkage Cases
   geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
-            fill = 'plum', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 97, label = 'Food Insecurity Linkage Cases', size = 2) +
+            fill = 'thistle1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 97, label = 'STI Linkage Cases', size = 2) +
   geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 93, label = food_ltc, size = 2, color = 'mediumslateblue') +
+  annotate('text', x = 10.5, y = 93, label = sti_ltc, size = 2, color = 'palevioletred3') +
   
   # Ineligible for Linkage
   geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
@@ -4115,8 +3020,8 @@ grid +
   annotate('text', x = 52.5, y = 82, label = 'Ineligible for Linkage', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 78, label = food_ineligible_ltc, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 60, y = 78, label = food_ineligible_ltc_percent, size = 2, color = 'darkmagenta') +
+  annotate('text', x = 51.5, y = 78, label = sti_ltc_ineligible_ltc, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 60, y = 78, label = sti_ltc_ineligible_ltc_percent, size = 2, color = 'violetred3') +
   
   
   # Reasons Ineligible for Linkage
@@ -4129,26 +3034,26 @@ grid +
   annotate('text', x = 87, y = 73, label = 'Ongoing linkage ', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 94, y = 85, label = food_already_linked, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 85, label = food_already_linked_percent, size = 2, color = 'darkmagenta') +
-  annotate('text', x = 94, y = 82, label = food_deceased, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 82, label = food_deceased_percent, size = 2, color = 'darkmagenta') +
-  annotate('text', x = 94, y = 79, label = food_incarcerated, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 79, label = food_incarcerated_percent, size = 2, color = 'darkmagenta') +
-  annotate('text', x = 94, y = 76, label = food_linkage_declined, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 76, label = food_linkage_declined_percent, size = 2, color = 'darkmagenta') +
-  annotate('text', x = 94, y = 73, label = food_ongoing_linkage, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 73, label = food_ongoing_linkage_percent, size = 2, color = 'darkmagenta') +
+  annotate('text', x = 94, y = 85, label = sti_ltc_already_linked, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 85, label = sti_ltc_already_linked_percent, size = 2, color = 'violetred3') +
+  annotate('text', x = 94, y = 82, label = sti_ltc_deceased, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 82, label = sti_ltc_deceased_percent, size = 2, color = 'violetred3') +
+  annotate('text', x = 94, y = 79, label = sti_ltc_incarcerated, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 79, label = sti_ltc_incarcerated_percent, size = 2, color = 'violetred3') +
+  annotate('text', x = 94, y = 76, label = sti_ltc_linkage_declined, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 76, label = sti_ltc_linkage_declined_percent, size = 2, color = 'violetred3') +
+  annotate('text', x = 94, y = 73, label = sti_ltc_ongoing_linkage, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 73, label = sti_ltc_ongoing_linkage_percent, size = 2, color = 'violetred3') +
   
   
   # Eligible for Linkage
   geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
-            fill = 'plum', size = 0.25, size = 0.25) +
+            fill = 'thistle1', size = 0.25, size = 0.25) +
   annotate('text', x = 10.5, y = 67, label = 'Eligible for Linkage', size = 2) +
   geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 63, label = food_eligible_ltc, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 19, y = 63, label = food_eligible_ltc_percent, size = 2, color = 'darkmagenta') +
+  annotate('text', x = 10.5, y = 63, label = sti_ltc_eligible_ltc, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 19, y = 63, label = sti_ltc_eligible_ltc_percent, size = 2, color = 'violetred3') +
   
   
   # In Progress
@@ -4157,8 +3062,8 @@ grid +
   annotate('text', x = 50.5, y = 52, label = 'In Progress', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 48, label = food_in_progress, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 60, y = 48, label = food_in_progress_percent, size = 2, color = 'darkmagenta') +
+  annotate('text', x = 51.5, y = 48, label = sti_ltc_in_progress, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 60, y = 48, label = sti_ltc_in_progress_percent, size = 2, color = 'violetred3') +
   
   
   # In Progress over 90 days
@@ -4167,18 +3072,18 @@ grid +
   annotate('text', x = 52, y = 42, label = '>90 days:', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 56, y = 42, label = food_in_progress_90days, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 60, y = 42, label = food_in_progress_90days_percent, size = 2, color = 'darkmagenta') +
+  annotate('text', x = 56, y = 42, label = sti_ltc_in_progress_90days, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 60, y = 42, label = sti_ltc_in_progress_90days_percent, size = 2, color = 'violetred3') +
   
   
   # Closed Cases
   geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
-            fill = 'plum', size = 0.25, size = 0.25) +
+            fill = 'thistle1', size = 0.25, size = 0.25) +
   annotate('text', x = 10.5, y = 37, label = 'Closed Cases', size = 2) +
   geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 33, label = food_closed_case, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 19, y = 33, label = food_closed_case_percent, size = 2, color = 'darkmagenta') +
+  annotate('text', x = 10.5, y = 33, label = sti_ltc_closed_case, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 19, y = 33, label = sti_ltc_closed_case_percent, size = 2, color = 'violetred3') +
   
   
   # Not Linked
@@ -4187,8 +3092,8 @@ grid +
   annotate('text', x = 50.5, y = 22, label = 'Not Linked', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 18, label = food_not_linked, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 60, y = 18, label = food_not_linked_percent, size = 2, color = 'darkmagenta') +
+  annotate('text', x = 51.5, y = 18, label = sti_ltc_not_linked, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 60, y = 18, label = sti_ltc_not_linked_percent, size = 2, color = 'violetred3') +
   
   
   # Reasons Not Linked
@@ -4204,32 +3109,32 @@ grid +
   annotate('text', x = 87, y = 5, label = '                   Other', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 30, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 94, y = 26, label = food_not_linked_med_staff, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 26, label = food_not_linked_med_staff_percent, size = 2, color = 'darkmagenta') +
-  annotate('text', x = 94, y = 23, label = food_not_linked_family, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 23, label = food_not_linked_family_percent, size = 2, color = 'darkmagenta') +
-  annotate('text', x = 94, y = 20, label = food_not_linked_not_talking, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 20, label = food_not_linked_not_talking_percent, size = 2, color = 'darkmagenta') +
-  annotate('text', x = 94, y = 17, label = food_not_linked_safety, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 17, label = food_not_linked_safety_percent, size = 2, color = 'darkmagenta') +
-  annotate('text', x = 94, y = 14, label = food_not_linked_medical, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 14, label = food_not_linked_medical_percent, size = 2, color = 'darkmagenta') +
-  annotate('text', x = 94, y = 11, label = food_not_linked_contact, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 11, label = food_not_linked_contact_percent, size = 2, color = 'darkmagenta') +
-  annotate('text', x = 94, y = 8, label = food_not_linked_language, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 8, label = food_not_linked_language_percent, size = 2, color = 'darkmagenta') +
-  annotate('text', x = 94, y = 5, label = food_not_linked_other, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 98, y = 5, label = food_not_linked_other_percent, size = 2, color = 'darkmagenta') +
+  annotate('text', x = 94, y = 26, label = sti_ltc_not_linked_med_staff, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 26, label = sti_ltc_not_linked_med_staff_percent, size = 2, color = 'violetred3') +
+  annotate('text', x = 94, y = 23, label = sti_ltc_not_linked_family, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 23, label = sti_ltc_not_linked_family_percent, size = 2, color = 'violetred3') +
+  annotate('text', x = 94, y = 20, label = sti_ltc_not_linked_not_talking, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 20, label = sti_ltc_not_linked_not_talking_percent, size = 2, color = 'violetred3') +
+  annotate('text', x = 94, y = 17, label = sti_ltc_not_linked_safety, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 17, label = sti_ltc_not_linked_safety_percent, size = 2, color = 'violetred3') +
+  annotate('text', x = 94, y = 14, label = sti_ltc_not_linked_medical, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 14, label = sti_ltc_not_linked_medical_percent, size = 2, color = 'violetred3') +
+  annotate('text', x = 94, y = 11, label = sti_ltc_not_linked_contact, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 11, label = sti_ltc_not_linked_contact_percent, size = 2, color = 'violetred3') +
+  annotate('text', x = 94, y = 8, label = sti_ltc_not_linked_language, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 8, label = sti_ltc_not_linked_language_percent, size = 2, color = 'violetred3') +
+  annotate('text', x = 94, y = 5, label = sti_ltc_not_linked_other, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 98, y = 5, label = sti_ltc_not_linked_other_percent, size = 2, color = 'violetred3') +
   
   
   # Linked to Care
   geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
-            fill = 'plum', size = 0.25, size = 0.25) +
+            fill = 'thistle1', size = 0.25, size = 0.25) +
   annotate('text', x = 10.5, y = 7, label = 'Linked to Care', size = 2) +
   geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 3, label = food_linked, size = 2, color = 'mediumslateblue') +
-  annotate('text', x = 19, y = 3, label = food_linked_percent, size = 2, color = 'darkmagenta') +
+  annotate('text', x = 10.5, y = 3, label = sti_ltc_linked, size = 2, color = 'palevioletred3') +
+  annotate('text', x = 19, y = 3, label = sti_ltc_linked_percent, size = 2, color = 'violetred3') +
   
   
   # Down Arrow 1
@@ -4282,815 +3187,6 @@ grid +
 grid + theme_void()
 
 ```
-
-
-# Financial Assistance Linkage to Care
-
-
-The flowchart of the Financial Assistance Linkage to Care efforts for EIP are shown below.
-
-
-```{r, echo = FALSE}
-
-grid_data <- tibble(x= 1:100, y= 1:100)
-
-grid_data %>% 
-  ggplot(aes(x, y)) +
-  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
-  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
-  theme_linedraw() ->
-  grid
-
-
-grid +
-  # Financial Linkage Cases
-  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
-            fill = 'aquamarine', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 97, label = 'Financial Assistance Linkage Cases', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 93, label = finance_ltc, size = 2, color = 'aquamarine4') +
-  
-  # Ineligible for Linkage
-  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 52.5, y = 82, label = 'Ineligible for Linkage', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 78, label = finance_ineligible_ltc, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 60, y = 78, label = finance_ineligible_ltc_percent, size = 2, color = 'cadetblue4') +
-  
-  
-  # Reasons Ineligible for Linkage
-  geom_rect(xmin = 83, xmax = 100, ymin = 75, ymax = 85, color = NA,
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 87, y = 85, label = 'Already Linked', size = 2) +
-  annotate('text', x = 87, y = 82, label = '        Deceased', size = 2) +
-  annotate('text', x = 87, y = 79, label = '    Incarcerated', size = 2) +
-  annotate('text', x = 87, y = 76, label = '          Declined', size = 2) +
-  annotate('text', x = 87, y = 73, label = 'Ongoing linkage ', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 94, y = 85, label = finance_already_linked, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 85, label = finance_already_linked_percent, size = 2, color = 'cadetblue4') +
-  annotate('text', x = 94, y = 82, label = finance_deceased, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 82, label = finance_deceased_percent, size = 2, color = 'cadetblue4') +
-  annotate('text', x = 94, y = 79, label = finance_incarcerated, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 79, label = finance_incarcerated_percent, size = 2, color = 'cadetblue4') +
-  annotate('text', x = 94, y = 76, label = finance_linkage_declined, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 76, label = finance_linkage_declined_percent, size = 2, color = 'cadetblue4') +
-  annotate('text', x = 94, y = 73, label = finance_ongoing_linkage, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 73, label = finance_ongoing_linkage_percent, size = 2, color = 'cadetblue4') +
-  
-  
-  # Eligible for Linkage
-  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
-            fill = 'aquamarine', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 67, label = 'Eligible for Linkage', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 63, label = finance_eligible_ltc, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 19, y = 63, label = finance_eligible_ltc_percent, size = 2, color = 'cadetblue4') +
-  
-  
-  # In Progress
-  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = 'gray',
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 50.5, y = 52, label = 'In Progress', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 48, label = finance_in_progress, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 60, y = 48, label = finance_in_progress_percent, size = 2, color = 'cadetblue4') +
-  
-  
-  # In Progress over 90 days
-  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
-            fill = 'white', size = 0.25, size = 0.25) +
-  annotate('text', x = 52, y = 42, label = '>90 days:', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 56, y = 42, label = finance_in_progress_90days, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 60, y = 42, label = finance_in_progress_90days_percent, size = 2, color = 'cadetblue4') +
-  
-  
-  # Closed Cases
-  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
-            fill = 'aquamarine', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 37, label = 'Closed Cases', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 33, label = finance_closed_case, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 19, y = 33, label = finance_closed_case_percent, size = 2, color = 'cadetblue4') +
-  
-  
-  # Not Linked
-  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = 'gray',
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 50.5, y = 22, label = 'Not Linked', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 18, label = finance_not_linked, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 60, y = 18, label = finance_not_linked_percent, size = 2, color = 'cadetblue4') +
-  
-  
-  # Reasons Not Linked
-  geom_rect(xmin = 83, xmax = 100, ymin = 0, ymax = 30, color = NA,
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 87, y = 26, label = 'Med Staff interferes    ', size = 2) +
-  annotate('text', x = 87, y = 23, label = '  Family interferes', size = 2) +
-  annotate('text', x = 87, y = 20, label = '    Refuses to talk', size = 2) +
-  annotate('text', x = 87, y = 17, label = '    Personal safety', size = 2) +
-  annotate('text', x = 87, y = 14, label = '    Medical course', size = 2) +
-  annotate('text', x = 87, y = 11, label = 'Inability to contact', size = 2) +
-  annotate('text', x = 87, y = 8, label = ' Language barrier', size = 2) +
-  annotate('text', x = 87, y = 5, label = '                   Other', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 30, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 94, y = 26, label = finance_not_linked_med_staff, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 26, label = finance_not_linked_med_staff_percent, size = 2, color = 'cadetblue4') +
-  annotate('text', x = 94, y = 23, label = finance_not_linked_family, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 23, label = finance_not_linked_family_percent, size = 2, color = 'cadetblue4') +
-  annotate('text', x = 94, y = 20, label = finance_not_linked_not_talking, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 20, label = finance_not_linked_not_talking_percent, size = 2, color = 'cadetblue4') +
-  annotate('text', x = 94, y = 17, label = finance_not_linked_safety, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 17, label = finance_not_linked_safety_percent, size = 2, color = 'cadetblue4') +
-  annotate('text', x = 94, y = 14, label = finance_not_linked_medical, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 14, label = finance_not_linked_medical_percent, size = 2, color = 'cadetblue4') +
-  annotate('text', x = 94, y = 11, label = finance_not_linked_contact, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 11, label = finance_not_linked_contact_percent, size = 2, color = 'cadetblue4') +
-  annotate('text', x = 94, y = 8, label = finance_not_linked_language, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 8, label = finance_not_linked_language_percent, size = 2, color = 'cadetblue4') +
-  annotate('text', x = 94, y = 5, label = finance_not_linked_other, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 98, y = 5, label = finance_not_linked_other_percent, size = 2, color = 'cadetblue4') +
-  
-  
-  # Linked to Care
-  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
-            fill = 'aquamarine', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 7, label = 'Linked to Care', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 3, label = finance_linked, size = 2, color = 'aquamarine4') +
-  annotate('text', x = 19, y = 3, label = finance_linked_percent, size = 2, color = 'cadetblue4') +
-  
-  
-  # Down Arrow 1
-  geom_segment(
-    x = 10.5, xend = 10.5, y = 90, yend = 70, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Down Arrow 2
-  geom_segment(
-    x = 10.5, xend = 10.5, y = 60, yend = 40, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Down Arrow 3
-  geom_segment(
-    x = 10.5, xend = 10.5, y = 30, yend = 10, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Right Arrow 1
-  geom_segment(
-    x = 10.5, xend = 41, y = 80, yend = 80, 
-    size = 0.05, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
-  
-  # Right Arrow 2
-  geom_segment(
-    x = 10.5, xend = 41, y = 50, yend = 50, 
-    size = 0.05, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
-  
-  # Right Arrow 3
-  geom_segment(
-    x = 10.5, xend = 41, y = 20, yend = 20, 
-    size = 0.05, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
-  
-  # Right Line 1
-  geom_segment(
-    x = 63, xend = 81, y = 80, yend = 80, 
-    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
-  
-  # Right Line 2
-  geom_segment(
-    x = 63, xend = 80, y = 20, yend = 20, 
-    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted")->
-  grid
-
-grid + theme_void()
-
-```
-
-
-# Person Abuse Linkage to Care
-
-
-The flowchart of the Person Abuse Linkage to Care efforts for EIP are shown below.
-
-
-```{r, echo = FALSE}
-
-grid_data <- tibble(x= 1:100, y= 1:100)
-
-grid_data %>% 
-  ggplot(aes(x, y)) +
-  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
-  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
-  theme_linedraw() ->
-  grid
-
-
-grid +
-  # Person Abuse Linkage Cases
-  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
-            fill = 'lightcoral', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 97, label = 'Person Abuse Linkage Cases', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 93, label = abuse_ltc, size = 2, color = 'red2') +
-  
-  # Ineligible for Linkage
-  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 52.5, y = 82, label = 'Ineligible for Linkage', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 78, label = abuse_ineligible_ltc, size = 2, color = 'red2') +
-  annotate('text', x = 60, y = 78, label = abuse_ineligible_ltc_percent, size = 2, color = 'firebrick4') +
-  
-  
-  # Reasons Ineligible for Linkage
-  geom_rect(xmin = 83, xmax = 100, ymin = 75, ymax = 85, color = NA,
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 87, y = 85, label = 'Already Linked', size = 2) +
-  annotate('text', x = 87, y = 82, label = '        Deceased', size = 2) +
-  annotate('text', x = 87, y = 79, label = '    Incarcerated', size = 2) +
-  annotate('text', x = 87, y = 76, label = '          Declined', size = 2) +
-  annotate('text', x = 87, y = 73, label = 'Ongoing linkage ', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 94, y = 85, label = abuse_already_linked, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 85, label = abuse_already_linked_percent, size = 2, color = 'firebrick4') +
-  annotate('text', x = 94, y = 82, label = abuse_deceased, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 82, label = abuse_deceased_percent, size = 2, color = 'firebrick4') +
-  annotate('text', x = 94, y = 79, label = abuse_incarcerated, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 79, label = abuse_incarcerated_percent, size = 2, color = 'firebrick4') +
-  annotate('text', x = 94, y = 76, label = abuse_linkage_declined, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 76, label = abuse_linkage_declined_percent, size = 2, color = 'firebrick4') +
-  annotate('text', x = 94, y = 73, label = abuse_ongoing_linkage, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 73, label = abuse_ongoing_linkage_percent, size = 2, color = 'firebrick4') +
-  
-  
-  # Eligible for Linkage
-  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
-            fill = 'lightcoral', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 67, label = 'Eligible for Linkage', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 63, label = abuse_eligible_ltc, size = 2, color = 'red2') +
-  annotate('text', x = 19, y = 63, label = abuse_eligible_ltc_percent, size = 2, color = 'firebrick4') +
-  
-  
-  # In Progress
-  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = 'gray',
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 50.5, y = 52, label = 'In Progress', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 48, label = abuse_in_progress, size = 2, color = 'red2') +
-  annotate('text', x = 60, y = 48, label = abuse_in_progress_percent, size = 2, color = 'firebrick4') +
-  
-  
-  # In Progress over 90 days
-  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
-            fill = 'white', size = 0.25, size = 0.25) +
-  annotate('text', x = 52, y = 42, label = '>90 days:', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 56, y = 42, label = abuse_in_progress_90days, size = 2, color = 'red2') +
-  annotate('text', x = 60, y = 42, label = abuse_in_progress_90days_percent, size = 2, color = 'firebrick4') +
-  
-  
-  # Closed Cases
-  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
-            fill = 'lightcoral', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 37, label = 'Closed Cases', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 33, label = abuse_closed_case, size = 2, color = 'red2') +
-  annotate('text', x = 19, y = 33, label = abuse_closed_case_percent, size = 2, color = 'firebrick4') +
-  
-  
-  # Not Linked
-  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = 'gray',
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 50.5, y = 22, label = 'Not Linked', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 18, label = abuse_not_linked, size = 2, color = 'red2') +
-  annotate('text', x = 60, y = 18, label = abuse_not_linked_percent, size = 2, color = 'firebrick4') +
-  
-  
-  # Reasons Not Linked
-  geom_rect(xmin = 83, xmax = 100, ymin = 0, ymax = 30, color = NA,
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 87, y = 26, label = 'Med Staff interferes    ', size = 2) +
-  annotate('text', x = 87, y = 23, label = '  Family interferes', size = 2) +
-  annotate('text', x = 87, y = 20, label = '    Refuses to talk', size = 2) +
-  annotate('text', x = 87, y = 17, label = '    Personal safety', size = 2) +
-  annotate('text', x = 87, y = 14, label = '    Medical course', size = 2) +
-  annotate('text', x = 87, y = 11, label = 'Inability to contact', size = 2) +
-  annotate('text', x = 87, y = 8, label = ' Language barrier', size = 2) +
-  annotate('text', x = 87, y = 5, label = '                   Other', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 30, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 94, y = 26, label = abuse_not_linked_med_staff, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 26, label = abuse_not_linked_med_staff_percent, size = 2, color = 'firebrick4') +
-  annotate('text', x = 94, y = 23, label = abuse_not_linked_family, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 23, label = abuse_not_linked_family_percent, size = 2, color = 'firebrick4') +
-  annotate('text', x = 94, y = 20, label = abuse_not_linked_not_talking, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 20, label = abuse_not_linked_not_talking_percent, size = 2, color = 'firebrick4') +
-  annotate('text', x = 94, y = 17, label = abuse_not_linked_safety, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 17, label = abuse_not_linked_safety_percent, size = 2, color = 'firebrick4') +
-  annotate('text', x = 94, y = 14, label = abuse_not_linked_medical, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 14, label = abuse_not_linked_medical_percent, size = 2, color = 'firebrick4') +
-  annotate('text', x = 94, y = 11, label = abuse_not_linked_contact, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 11, label = abuse_not_linked_contact_percent, size = 2, color = 'firebrick4') +
-  annotate('text', x = 94, y = 8, label = abuse_not_linked_language, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 8, label = abuse_not_linked_language_percent, size = 2, color = 'firebrick4') +
-  annotate('text', x = 94, y = 5, label = abuse_not_linked_other, size = 2, color = 'red2') +
-  annotate('text', x = 98, y = 5, label = abuse_not_linked_other_percent, size = 2, color = 'firebrick4') +
-  
-  
-  # Linked to Care
-  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
-            fill = 'lightcoral', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 7, label = 'Linked to Care', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 3, label = abuse_linked, size = 2, color = 'red2') +
-  annotate('text', x = 19, y = 3, label = abuse_linked_percent, size = 2, color = 'firebrick4') +
-  
-  
-  # Down Arrow 1
-  geom_segment(
-    x = 10.5, xend = 10.5, y = 90, yend = 70, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Down Arrow 2
-  geom_segment(
-    x = 10.5, xend = 10.5, y = 60, yend = 40, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Down Arrow 3
-  geom_segment(
-    x = 10.5, xend = 10.5, y = 30, yend = 10, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Right Arrow 1
-  geom_segment(
-    x = 10.5, xend = 41, y = 80, yend = 80, 
-    size = 0.05, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
-  
-  # Right Arrow 2
-  geom_segment(
-    x = 10.5, xend = 41, y = 50, yend = 50, 
-    size = 0.05, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
-  
-  # Right Arrow 3
-  geom_segment(
-    x = 10.5, xend = 41, y = 20, yend = 20, 
-    size = 0.05, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
-  
-  # Right Line 1
-  geom_segment(
-    x = 63, xend = 81, y = 80, yend = 80, 
-    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
-  
-  # Right Line 2
-  geom_segment(
-    x = 63, xend = 80, y = 20, yend = 20, 
-    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted")->
-  grid
-
-grid + theme_void()
-
-```
-
-
-# General Health Linkage to Care
-
-
-The flowchart of the General Health Linkage to Care efforts for EIP are shown below.
-
-
-```{r, echo = FALSE}
-
-grid_data <- tibble(x= 1:100, y= 1:100)
-
-grid_data %>% 
-  ggplot(aes(x, y)) +
-  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
-  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
-  theme_linedraw() ->
-  grid
-
-
-grid +
-  # General Health Linkage Cases
-  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
-            fill = 'papayawhip', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 97, label = 'General Health Linkage Cases', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 93, label = general_ltc, size = 2, color = 'tan3') +
-  
-  # Ineligible for Linkage
-  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 52.5, y = 82, label = 'Ineligible for Linkage', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 78, label = general_ltc_ineligible_ltc, size = 2, color = 'tan3') +
-  annotate('text', x = 60, y = 78, label = general_ltc_ineligible_ltc_percent, size = 2, color = 'wheat4') +
-  
-  
-  # Reasons Ineligible for Linkage
-  geom_rect(xmin = 83, xmax = 100, ymin = 75, ymax = 85, color = NA,
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 87, y = 85, label = 'Already Linked', size = 2) +
-  annotate('text', x = 87, y = 82, label = '        Deceased', size = 2) +
-  annotate('text', x = 87, y = 79, label = '    Incarcerated', size = 2) +
-  annotate('text', x = 87, y = 76, label = '          Declined', size = 2) +
-  annotate('text', x = 87, y = 73, label = 'Ongoing linkage ', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 94, y = 85, label = general_ltc_already_linked, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 85, label = general_ltc_already_linked_percent, size = 2, color = 'wheat4') +
-  annotate('text', x = 94, y = 82, label = general_ltc_deceased, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 82, label = general_ltc_deceased_percent, size = 2, color = 'wheat4') +
-  annotate('text', x = 94, y = 79, label = general_ltc_incarcerated, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 79, label = general_ltc_incarcerated_percent, size = 2, color = 'wheat4') +
-  annotate('text', x = 94, y = 76, label = general_ltc_linkage_declined, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 76, label = general_ltc_linkage_declined_percent, size = 2, color = 'wheat4') +
-  annotate('text', x = 94, y = 73, label = general_ltc_ongoing_linkage, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 73, label = general_ltc_ongoing_linkage_percent, size = 2, color = 'wheat4') +
-  
-  
-  # Eligible for Linkage
-  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
-            fill = 'papayawhip', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 67, label = 'Eligible for Linkage', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 63, label = general_ltc_eligible_ltc, size = 2, color = 'tan3') +
-  annotate('text', x = 19, y = 63, label = general_ltc_eligible_ltc_percent, size = 2, color = 'wheat4') +
-  
-  
-  # In Progress
-  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = 'gray',
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 50.5, y = 52, label = 'In Progress', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 48, label = general_ltc_in_progress, size = 2, color = 'tan3') +
-  annotate('text', x = 60, y = 48, label = general_ltc_in_progress_percent, size = 2, color = 'wheat4') +
-  
-  
-  # In Progress over 90 days
-  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
-            fill = 'white', size = 0.25, size = 0.25) +
-  annotate('text', x = 52, y = 42, label = '>90 days:', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 56, y = 42, label = general_ltc_in_progress_90days, size = 2, color = 'tan3') +
-  annotate('text', x = 60, y = 42, label = general_ltc_in_progress_90days_percent, size = 2, color = 'wheat4') +
-  
-  
-  # Closed Cases
-  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
-            fill = 'papayawhip', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 37, label = 'Closed Cases', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 33, label = general_ltc_closed_case, size = 2, color = 'tan3') +
-  annotate('text', x = 19, y = 33, label = general_ltc_closed_case_percent, size = 2, color = 'wheat4') +
-  
-  
-  # Not Linked
-  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = 'gray',
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 50.5, y = 22, label = 'Not Linked', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 18, label = general_ltc_not_linked, size = 2, color = 'tan3') +
-  annotate('text', x = 60, y = 18, label = general_ltc_not_linked_percent, size = 2, color = 'wheat4') +
-  
-  
-  # Reasons Not Linked
-  geom_rect(xmin = 83, xmax = 100, ymin = 0, ymax = 30, color = NA,
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 87, y = 26, label = 'Med Staff interferes    ', size = 2) +
-  annotate('text', x = 87, y = 23, label = '  Family interferes', size = 2) +
-  annotate('text', x = 87, y = 20, label = '    Refuses to talk', size = 2) +
-  annotate('text', x = 87, y = 17, label = '    Personal safety', size = 2) +
-  annotate('text', x = 87, y = 14, label = '    Medical course', size = 2) +
-  annotate('text', x = 87, y = 11, label = 'Inability to contact', size = 2) +
-  annotate('text', x = 87, y = 8, label = ' Language barrier', size = 2) +
-  annotate('text', x = 87, y = 5, label = '                   Other', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 30, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 94, y = 26, label = general_ltc_not_linked_med_staff, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 26, label = general_ltc_not_linked_med_staff_percent, size = 2, color = 'wheat4') +
-  annotate('text', x = 94, y = 23, label = general_ltc_not_linked_family, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 23, label = general_ltc_not_linked_family_percent, size = 2, color = 'wheat4') +
-  annotate('text', x = 94, y = 20, label = general_ltc_not_linked_not_talking, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 20, label = general_ltc_not_linked_not_talking_percent, size = 2, color = 'wheat4') +
-  annotate('text', x = 94, y = 17, label = general_ltc_not_linked_safety, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 17, label = general_ltc_not_linked_safety_percent, size = 2, color = 'wheat4') +
-  annotate('text', x = 94, y = 14, label = general_ltc_not_linked_medical, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 14, label = general_ltc_not_linked_medical_percent, size = 2, color = 'wheat4') +
-  annotate('text', x = 94, y = 11, label = general_ltc_not_linked_contact, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 11, label = general_ltc_not_linked_contact_percent, size = 2, color = 'wheat4') +
-  annotate('text', x = 94, y = 8, label = general_ltc_not_linked_language, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 8, label = general_ltc_not_linked_language_percent, size = 2, color = 'wheat4') +
-  annotate('text', x = 94, y = 5, label = general_ltc_not_linked_other, size = 2, color = 'tan3') +
-  annotate('text', x = 98, y = 5, label = general_ltc_not_linked_other_percent, size = 2, color = 'wheat4') +
-  
-  
-  # Linked to Care
-  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
-            fill = 'papayawhip', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 7, label = 'Linked to Care', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 3, label = general_ltc_linked, size = 2, color = 'tan3') +
-  annotate('text', x = 19, y = 3, label = general_ltc_linked_percent, size = 2, color = 'wheat4') +
-  
-  
-  # Down Arrow 1
-  geom_segment(
-    x = 10.5, xend = 10.5, y = 90, yend = 70, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Down Arrow 2
-  geom_segment(
-    x = 10.5, xend = 10.5, y = 60, yend = 40, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Down Arrow 3
-  geom_segment(
-    x = 10.5, xend = 10.5, y = 30, yend = 10, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Right Arrow 1
-  geom_segment(
-    x = 10.5, xend = 41, y = 80, yend = 80, 
-    size = 0.05, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
-  
-  # Right Arrow 2
-  geom_segment(
-    x = 10.5, xend = 41, y = 50, yend = 50, 
-    size = 0.05, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
-  
-  # Right Arrow 3
-  geom_segment(
-    x = 10.5, xend = 41, y = 20, yend = 20, 
-    size = 0.05, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
-  
-  # Right Line 1
-  geom_segment(
-    x = 63, xend = 81, y = 80, yend = 80, 
-    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
-  
-  # Right Line 2
-  geom_segment(
-    x = 63, xend = 80, y = 20, yend = 20, 
-    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted")->
-  grid
-
-grid + theme_void()
-
-```
-
-
-# Other Linkage to Care
-
-
-The flowchart of the Other Linkage to Care efforts for EIP are shown below.
-
-
-```{r, echo = FALSE}
-
-grid_data <- tibble(x= 1:100, y= 1:100)
-
-grid_data %>% 
-  ggplot(aes(x, y)) +
-  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
-  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
-  theme_linedraw() ->
-  grid
-
-
-grid +
-  # Other Linkage Cases
-  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
-            fill = 'gray92', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 97, label = 'Other Linkage Cases', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 93, label = other_ltc, size = 2, color = 'seashell4') +
-  
-  # Ineligible for Linkage
-  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 52.5, y = 82, label = 'Ineligible for Linkage', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 78, label = other_ltc_ineligible_ltc, size = 2, color = 'seashell4') +
-  annotate('text', x = 60, y = 78, label = other_ltc_ineligible_ltc_percent, size = 2, color = 'slategray') +
-  
-  
-  # Reasons Ineligible for Linkage
-  geom_rect(xmin = 83, xmax = 100, ymin = 75, ymax = 85, color = NA,
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 87, y = 85, label = 'Already Linked', size = 2) +
-  annotate('text', x = 87, y = 82, label = '        Deceased', size = 2) +
-  annotate('text', x = 87, y = 79, label = '    Incarcerated', size = 2) +
-  annotate('text', x = 87, y = 76, label = '          Declined', size = 2) +
-  annotate('text', x = 87, y = 73, label = 'Ongoing linkage ', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 94, y = 85, label = other_ltc_already_linked, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 85, label = other_ltc_already_linked_percent, size = 2, color = 'slategray') +
-  annotate('text', x = 94, y = 82, label = other_ltc_deceased, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 82, label = other_ltc_deceased_percent, size = 2, color = 'slategray') +
-  annotate('text', x = 94, y = 79, label = other_ltc_incarcerated, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 79, label = other_ltc_incarcerated_percent, size = 2, color = 'slategray') +
-  annotate('text', x = 94, y = 76, label = other_ltc_linkage_declined, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 76, label = other_ltc_linkage_declined_percent, size = 2, color = 'slategray') +
-  annotate('text', x = 94, y = 73, label = other_ltc_ongoing_linkage, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 73, label = other_ltc_ongoing_linkage_percent, size = 2, color = 'slategray') +
-  
-  
-  # Eligible for Linkage
-  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
-            fill = 'gray92', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 67, label = 'Eligible for Linkage', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 63, label = other_ltc_eligible_ltc, size = 2, color = 'seashell4') +
-  annotate('text', x = 19, y = 63, label = other_ltc_eligible_ltc_percent, size = 2, color = 'slategray') +
-  
-  
-  # In Progress
-  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = 'gray',
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 50.5, y = 52, label = 'In Progress', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 48, label = other_ltc_in_progress, size = 2, color = 'seashell4') +
-  annotate('text', x = 60, y = 48, label = other_ltc_in_progress_percent, size = 2, color = 'slategray') +
-  
-  
-  # In Progress over 90 days
-  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
-            fill = 'white', size = 0.25, size = 0.25) +
-  annotate('text', x = 52, y = 42, label = '>90 days:', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 56, y = 42, label = other_ltc_in_progress_90days, size = 2, color = 'seashell4') +
-  annotate('text', x = 60, y = 42, label = other_ltc_in_progress_90days_percent, size = 2, color = 'slategray') +
-  
-  
-  # Closed Cases
-  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
-            fill = 'gray92', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 37, label = 'Closed Cases', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 33, label = other_ltc_closed_case, size = 2, color = 'seashell4') +
-  annotate('text', x = 19, y = 33, label = other_ltc_closed_case_percent, size = 2, color = 'slategray') +
-  
-  
-  # Not Linked
-  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = 'gray',
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 50.5, y = 22, label = 'Not Linked', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 51.5, y = 18, label = other_ltc_not_linked, size = 2, color = 'seashell4') +
-  annotate('text', x = 60, y = 18, label = other_ltc_not_linked_percent, size = 2, color = 'slategray') +
-  
-  
-  # Reasons Not Linked
-  geom_rect(xmin = 83, xmax = 100, ymin = 0, ymax = 30, color = NA,
-            fill = 'white', size = 0.25) +
-  annotate('text', x = 87, y = 26, label = 'Med Staff interferes    ', size = 2) +
-  annotate('text', x = 87, y = 23, label = '  Family interferes', size = 2) +
-  annotate('text', x = 87, y = 20, label = '    Refuses to talk', size = 2) +
-  annotate('text', x = 87, y = 17, label = '    Personal safety', size = 2) +
-  annotate('text', x = 87, y = 14, label = '    Medical course', size = 2) +
-  annotate('text', x = 87, y = 11, label = 'Inability to contact', size = 2) +
-  annotate('text', x = 87, y = 8, label = ' Language barrier', size = 2) +
-  annotate('text', x = 87, y = 5, label = '                   Other', size = 2) +
-  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 30, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 94, y = 26, label = other_ltc_not_linked_med_staff, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 26, label = other_ltc_not_linked_med_staff_percent, size = 2, color = 'slategray') +
-  annotate('text', x = 94, y = 23, label = other_ltc_not_linked_family, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 23, label = other_ltc_not_linked_family_percent, size = 2, color = 'slategray') +
-  annotate('text', x = 94, y = 20, label = other_ltc_not_linked_not_talking, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 20, label = other_ltc_not_linked_not_talking_percent, size = 2, color = 'slategray') +
-  annotate('text', x = 94, y = 17, label = other_ltc_not_linked_safety, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 17, label = other_ltc_not_linked_safety_percent, size = 2, color = 'slategray') +
-  annotate('text', x = 94, y = 14, label = other_ltc_not_linked_medical, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 14, label = other_ltc_not_linked_medical_percent, size = 2, color = 'slategray') +
-  annotate('text', x = 94, y = 11, label = other_ltc_not_linked_contact, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 11, label = other_ltc_not_linked_contact_percent, size = 2, color = 'slategray') +
-  annotate('text', x = 94, y = 8, label = other_ltc_not_linked_language, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 8, label = other_ltc_not_linked_language_percent, size = 2, color = 'slategray') +
-  annotate('text', x = 94, y = 5, label = other_ltc_not_linked_other, size = 2, color = 'seashell4') +
-  annotate('text', x = 98, y = 5, label = other_ltc_not_linked_other_percent, size = 2, color = 'slategray') +
-  
-  
-  # Linked to Care
-  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
-            fill = 'gray92', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 7, label = 'Linked to Care', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
-            fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 3, label = other_ltc_linked, size = 2, color = 'seashell4') +
-  annotate('text', x = 19, y = 3, label = other_ltc_linked_percent, size = 2, color = 'slategray') +
-  
-  
-  # Down Arrow 1
-  geom_segment(
-    x = 10.5, xend = 10.5, y = 90, yend = 70, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Down Arrow 2
-  geom_segment(
-    x = 10.5, xend = 10.5, y = 60, yend = 40, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Down Arrow 3
-  geom_segment(
-    x = 10.5, xend = 10.5, y = 30, yend = 10, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
-  
-  # Right Arrow 1
-  geom_segment(
-    x = 10.5, xend = 41, y = 80, yend = 80, 
-    size = 0.05, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
-  
-  # Right Arrow 2
-  geom_segment(
-    x = 10.5, xend = 41, y = 50, yend = 50, 
-    size = 0.05, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
-  
-  # Right Arrow 3
-  geom_segment(
-    x = 10.5, xend = 41, y = 20, yend = 20, 
-    size = 0.05, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
-  
-  # Right Line 1
-  geom_segment(
-    x = 63, xend = 81, y = 80, yend = 80, 
-    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
-  
-  # Right Line 2
-  geom_segment(
-    x = 63, xend = 80, y = 20, yend = 20, 
-    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted")->
-  grid
-
-grid + theme_void()
-
-```
-
 
 
 

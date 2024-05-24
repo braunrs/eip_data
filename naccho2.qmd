@@ -2399,6 +2399,8 @@ naccho_v2_23_oud_peer_pts <- nrow(naccho_v2_23_oud_peer_pts)
 naccho_v2_23_oud_peer_pts
 naccho_v2_23_oud_peer_pts_percent <- percent(naccho_v2_23_oud_peer_pts/naccho_v2_23_pts, accuracy = 0.1)
 naccho_v2_23_oud_peer_pts_percent
+naccho_v2_23_oud_pos_peer_pts_percent <- percent(naccho_v2_23_oud_peer_pts/naccho_v2_23_oud_pos, accuracy = 0.1)
+naccho_v2_23_oud_pos_peer_pts_percent
 
 
 # Attempted contact on OUD+ patients
@@ -2536,9 +2538,8 @@ naccho_v2_23_contact_attempted_day14_percent
 
 
 
-
 naccho_v2_23$contact_attempted_day15[naccho_v2_23$oud_pos == 1 & naccho_v2_23$contact_attempted == 1 &
-                                       (naccho_v2_23$contact_attempted_day14 != 1) &
+                                       is.na(naccho_v2_23$contact_attempted_day14) &
                                        ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 2) |
                                           (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 2) |
                                           (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 2) |
@@ -2606,7 +2607,7 @@ naccho_v2_23_contact_attempted_day15_percent
 
 
 naccho_v2_23$contact_attempted_day16[naccho_v2_23$oud_pos == 1 & naccho_v2_23$contact_attempted == 1 &
-                                       (naccho_v2_23$contact_attempted_day14 != 1 & naccho_v2_23$contact_attempted_day15 != 1) &
+                                       (is.na(naccho_v2_23$contact_attempted_day14) & is.na(naccho_v2_23$contact_attempted_day15)) &
                                        ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 3) |
                                           (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 3) |
                                           (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 3) |
@@ -2674,8 +2675,8 @@ naccho_v2_23_contact_attempted_day16_percent
 
 
 naccho_v2_23$contact_attempted_day30[naccho_v2_23$oud_pos == 1 & naccho_v2_23$contact_attempted == 1 &
-                                       (naccho_v2_23$contact_attempted_day14 != 1 & naccho_v2_23$contact_attempted_day15 != 1 &
-                                          naccho_v2_23$contact_attempted_day16 != 1) &
+                                       (is.na(naccho_v2_23$contact_attempted_day14) & is.na(naccho_v2_23$contact_attempted_day15) &
+                                          is.na(naccho_v2_23$contact_attempted_day16)) &
                                        ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 4) |
                                           (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 4) |
                                           (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 4) |
@@ -2743,8 +2744,8 @@ naccho_v2_23_contact_attempted_day30_percent
 
 
 naccho_v2_23$contact_attempted_day31[naccho_v2_23$oud_pos == 1 & naccho_v2_23$contact_attempted == 1 &
-                                       (naccho_v2_23$contact_attempted_day14 != 1 & naccho_v2_23$contact_attempted_day15 != 1 &
-                                          naccho_v2_23$contact_attempted_day16 != 1 & naccho_v2_23$contact_attempted_day30 != 1) &
+                                       (is.na(naccho_v2_23$contact_attempted_day14) & is.na(naccho_v2_23$contact_attempted_day15) &
+                                          is.na(naccho_v2_23$contact_attempted_day16) & is.na(naccho_v2_23$contact_attempted_day30)) &
                                        ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 5) |
                                           (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 5) |
                                           (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 5) |
@@ -2812,9 +2813,9 @@ naccho_v2_23_contact_attempted_day31_percent
 
 
 naccho_v2_23$contact_attempted_day32[naccho_v2_23$oud_pos == 1 & naccho_v2_23$contact_attempted == 1 &
-                                       (naccho_v2_23$contact_attempted_day14 != 1 & naccho_v2_23$contact_attempted_day15 != 1 &
-                                          naccho_v2_23$contact_attempted_day16 != 1 & naccho_v2_23$contact_attempted_day30 != 1 &
-                                          naccho_v2_23$contact_attempted_day31 != 1) &
+                                       (is.na(naccho_v2_23$contact_attempted_day14) & is.na(naccho_v2_23$contact_attempted_day15) &
+                                          is.na(naccho_v2_23$contact_attempted_day16) & is.na(naccho_v2_23$contact_attempted_day30) &
+                                          is.na(naccho_v2_23$contact_attempted_day31)) &
                                        ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 6) |
                                           (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 6) |
                                           (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 6) |
@@ -2877,8 +2878,6 @@ naccho_v2_23_contact_attempted_day32 <- nrow(naccho_v2_23_contact_attempted_day3
 naccho_v2_23_contact_attempted_day32
 naccho_v2_23_contact_attempted_day32_percent <- percent(naccho_v2_23_contact_attempted_day32/naccho_v2_23_contact_attempted, accuracy = 0.1)
 naccho_v2_23_contact_attempted_day32_percent
-
-
 
 
 # Successful contact on OUD+ patients
@@ -2951,56 +2950,56 @@ naccho_v2_23_contact_success_percent
 
 
 naccho_v2_23$contact_success_day14[naccho_v2_23$oud_pos == 1 & naccho_v2_23$contact_success == 1 &
-                                       ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 1) |
-                                          (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 1) |
-                                          (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 1) |
-                                          (naccho_v2_23$ltc_service4___8 == 1 & naccho_v2_23$naccho_contact_day4 == 1) |
-                                          (naccho_v2_23$ltc_service5___8 == 1 & naccho_v2_23$naccho_contact_day5 == 1) |
-                                          (naccho_v2_23$ltc_service6___8 == 1 & naccho_v2_23$naccho_contact_day6 == 1) |
-                                          (naccho_v2_23$ltc_service7___8 == 1 & naccho_v2_23$naccho_contact_day7 == 1) |
-                                          (naccho_v2_23$ltc_service8___8 == 1 & naccho_v2_23$naccho_contact_day8 == 1) |
-                                          (naccho_v2_23$ltc_service9___8 == 1 & naccho_v2_23$naccho_contact_day9 == 1) |
-                                          (naccho_v2_23$ltc_service10___8 == 1 & naccho_v2_23$naccho_contact_day10 == 1) |
-                                          (naccho_v2_23$ltc_service11___8 == 1 & naccho_v2_23$naccho_contact_day11 == 1) |
-                                          (naccho_v2_23$ltc_service12___8 == 1 & naccho_v2_23$naccho_contact_day12 == 1) |
-                                          (naccho_v2_23$ltc_service13___8 == 1 & naccho_v2_23$naccho_contact_day13 == 1) |
-                                          (naccho_v2_23$ltc_service14___8 == 1 & naccho_v2_23$naccho_contact_day14 == 1) |
-                                          (naccho_v2_23$ltc_service15___8 == 1 & naccho_v2_23$naccho_contact_day15 == 1) |
-                                          (naccho_v2_23$ltc_service16___8 == 1 & naccho_v2_23$naccho_contact_day16 == 1) |
-                                          (naccho_v2_23$ltc_service17___8 == 1 & naccho_v2_23$naccho_contact_day17 == 1) |
-                                          (naccho_v2_23$ltc_service18___8 == 1 & naccho_v2_23$naccho_contact_day18 == 1) |
-                                          (naccho_v2_23$ltc_service19___8 == 1 & naccho_v2_23$naccho_contact_day19 == 1) |
-                                          (naccho_v2_23$ltc_service20___8 == 1 & naccho_v2_23$naccho_contact_day20 == 1) |
-                                          (naccho_v2_23$ltc_service21___8 == 1 & naccho_v2_23$naccho_contact_day21 == 1) |
-                                          (naccho_v2_23$ltc_service22___8 == 1 & naccho_v2_23$naccho_contact_day22 == 1) |
-                                          (naccho_v2_23$ltc_service23___8 == 1 & naccho_v2_23$naccho_contact_day23 == 1) |
-                                          (naccho_v2_23$ltc_service24___8 == 1 & naccho_v2_23$naccho_contact_day24 == 1) |
-                                          (naccho_v2_23$ltc_service25___8 == 1 & naccho_v2_23$naccho_contact_day25 == 1) |
-                                          (naccho_v2_23$ltc_service26___8 == 1 & naccho_v2_23$naccho_contact_day26 == 1) |
-                                          (naccho_v2_23$ltc_service27___8 == 1 & naccho_v2_23$naccho_contact_day27 == 1) |
-                                          (naccho_v2_23$ltc_service28___8 == 1 & naccho_v2_23$naccho_contact_day28 == 1) |
-                                          (naccho_v2_23$ltc_service29___8 == 1 & naccho_v2_23$naccho_contact_day29 == 1) |
-                                          (naccho_v2_23$ltc_service30___8 == 1 & naccho_v2_23$naccho_contact_day30 == 1) |
-                                          (naccho_v2_23$ltc_service31___8 == 1 & naccho_v2_23$naccho_contact_day31 == 1) |
-                                          (naccho_v2_23$ltc_service32___8 == 1 & naccho_v2_23$naccho_contact_day32 == 1) |
-                                          (naccho_v2_23$ltc_service33___8 == 1 & naccho_v2_23$naccho_contact_day33 == 1) |
-                                          (naccho_v2_23$ltc_service34___8 == 1 & naccho_v2_23$naccho_contact_day34 == 1) |
-                                          (naccho_v2_23$ltc_service35___8 == 1 & naccho_v2_23$naccho_contact_day35 == 1) |
-                                          (naccho_v2_23$ltc_service36___8 == 1 & naccho_v2_23$naccho_contact_day36 == 1) |
-                                          (naccho_v2_23$ltc_service37___8 == 1 & naccho_v2_23$naccho_contact_day37 == 1) |
-                                          (naccho_v2_23$ltc_service38___8 == 1 & naccho_v2_23$naccho_contact_day38 == 1) |
-                                          (naccho_v2_23$ltc_service39___8 == 1 & naccho_v2_23$naccho_contact_day39 == 1) |
-                                          (naccho_v2_23$ltc_service40___8 == 1 & naccho_v2_23$naccho_contact_day40 == 1) |
-                                          (naccho_v2_23$ltc_service41___8 == 1 & naccho_v2_23$naccho_contact_day41 == 1) |
-                                          (naccho_v2_23$ltc_service42___8 == 1 & naccho_v2_23$naccho_contact_day42 == 1) |
-                                          (naccho_v2_23$ltc_service43___8 == 1 & naccho_v2_23$naccho_contact_day43 == 1) |
-                                          (naccho_v2_23$ltc_service44___8 == 1 & naccho_v2_23$naccho_contact_day44 == 1) |
-                                          (naccho_v2_23$ltc_service45___8 == 1 & naccho_v2_23$naccho_contact_day45 == 1) |
-                                          (naccho_v2_23$ltc_service46___8 == 1 & naccho_v2_23$naccho_contact_day46 == 1) |
-                                          (naccho_v2_23$ltc_service47___8 == 1 & naccho_v2_23$naccho_contact_day47 == 1) |
-                                          (naccho_v2_23$ltc_service48___8 == 1 & naccho_v2_23$naccho_contact_day48 == 1) |
-                                          (naccho_v2_23$ltc_service49___8 == 1 & naccho_v2_23$naccho_contact_day49 == 1) |
-                                          (naccho_v2_23$ltc_service50___8 == 1 & naccho_v2_23$naccho_contact_day50 == 1))] <- 1
+                                     ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 1) |
+                                        (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 1) |
+                                        (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 1) |
+                                        (naccho_v2_23$ltc_service4___8 == 1 & naccho_v2_23$naccho_contact_day4 == 1) |
+                                        (naccho_v2_23$ltc_service5___8 == 1 & naccho_v2_23$naccho_contact_day5 == 1) |
+                                        (naccho_v2_23$ltc_service6___8 == 1 & naccho_v2_23$naccho_contact_day6 == 1) |
+                                        (naccho_v2_23$ltc_service7___8 == 1 & naccho_v2_23$naccho_contact_day7 == 1) |
+                                        (naccho_v2_23$ltc_service8___8 == 1 & naccho_v2_23$naccho_contact_day8 == 1) |
+                                        (naccho_v2_23$ltc_service9___8 == 1 & naccho_v2_23$naccho_contact_day9 == 1) |
+                                        (naccho_v2_23$ltc_service10___8 == 1 & naccho_v2_23$naccho_contact_day10 == 1) |
+                                        (naccho_v2_23$ltc_service11___8 == 1 & naccho_v2_23$naccho_contact_day11 == 1) |
+                                        (naccho_v2_23$ltc_service12___8 == 1 & naccho_v2_23$naccho_contact_day12 == 1) |
+                                        (naccho_v2_23$ltc_service13___8 == 1 & naccho_v2_23$naccho_contact_day13 == 1) |
+                                        (naccho_v2_23$ltc_service14___8 == 1 & naccho_v2_23$naccho_contact_day14 == 1) |
+                                        (naccho_v2_23$ltc_service15___8 == 1 & naccho_v2_23$naccho_contact_day15 == 1) |
+                                        (naccho_v2_23$ltc_service16___8 == 1 & naccho_v2_23$naccho_contact_day16 == 1) |
+                                        (naccho_v2_23$ltc_service17___8 == 1 & naccho_v2_23$naccho_contact_day17 == 1) |
+                                        (naccho_v2_23$ltc_service18___8 == 1 & naccho_v2_23$naccho_contact_day18 == 1) |
+                                        (naccho_v2_23$ltc_service19___8 == 1 & naccho_v2_23$naccho_contact_day19 == 1) |
+                                        (naccho_v2_23$ltc_service20___8 == 1 & naccho_v2_23$naccho_contact_day20 == 1) |
+                                        (naccho_v2_23$ltc_service21___8 == 1 & naccho_v2_23$naccho_contact_day21 == 1) |
+                                        (naccho_v2_23$ltc_service22___8 == 1 & naccho_v2_23$naccho_contact_day22 == 1) |
+                                        (naccho_v2_23$ltc_service23___8 == 1 & naccho_v2_23$naccho_contact_day23 == 1) |
+                                        (naccho_v2_23$ltc_service24___8 == 1 & naccho_v2_23$naccho_contact_day24 == 1) |
+                                        (naccho_v2_23$ltc_service25___8 == 1 & naccho_v2_23$naccho_contact_day25 == 1) |
+                                        (naccho_v2_23$ltc_service26___8 == 1 & naccho_v2_23$naccho_contact_day26 == 1) |
+                                        (naccho_v2_23$ltc_service27___8 == 1 & naccho_v2_23$naccho_contact_day27 == 1) |
+                                        (naccho_v2_23$ltc_service28___8 == 1 & naccho_v2_23$naccho_contact_day28 == 1) |
+                                        (naccho_v2_23$ltc_service29___8 == 1 & naccho_v2_23$naccho_contact_day29 == 1) |
+                                        (naccho_v2_23$ltc_service30___8 == 1 & naccho_v2_23$naccho_contact_day30 == 1) |
+                                        (naccho_v2_23$ltc_service31___8 == 1 & naccho_v2_23$naccho_contact_day31 == 1) |
+                                        (naccho_v2_23$ltc_service32___8 == 1 & naccho_v2_23$naccho_contact_day32 == 1) |
+                                        (naccho_v2_23$ltc_service33___8 == 1 & naccho_v2_23$naccho_contact_day33 == 1) |
+                                        (naccho_v2_23$ltc_service34___8 == 1 & naccho_v2_23$naccho_contact_day34 == 1) |
+                                        (naccho_v2_23$ltc_service35___8 == 1 & naccho_v2_23$naccho_contact_day35 == 1) |
+                                        (naccho_v2_23$ltc_service36___8 == 1 & naccho_v2_23$naccho_contact_day36 == 1) |
+                                        (naccho_v2_23$ltc_service37___8 == 1 & naccho_v2_23$naccho_contact_day37 == 1) |
+                                        (naccho_v2_23$ltc_service38___8 == 1 & naccho_v2_23$naccho_contact_day38 == 1) |
+                                        (naccho_v2_23$ltc_service39___8 == 1 & naccho_v2_23$naccho_contact_day39 == 1) |
+                                        (naccho_v2_23$ltc_service40___8 == 1 & naccho_v2_23$naccho_contact_day40 == 1) |
+                                        (naccho_v2_23$ltc_service41___8 == 1 & naccho_v2_23$naccho_contact_day41 == 1) |
+                                        (naccho_v2_23$ltc_service42___8 == 1 & naccho_v2_23$naccho_contact_day42 == 1) |
+                                        (naccho_v2_23$ltc_service43___8 == 1 & naccho_v2_23$naccho_contact_day43 == 1) |
+                                        (naccho_v2_23$ltc_service44___8 == 1 & naccho_v2_23$naccho_contact_day44 == 1) |
+                                        (naccho_v2_23$ltc_service45___8 == 1 & naccho_v2_23$naccho_contact_day45 == 1) |
+                                        (naccho_v2_23$ltc_service46___8 == 1 & naccho_v2_23$naccho_contact_day46 == 1) |
+                                        (naccho_v2_23$ltc_service47___8 == 1 & naccho_v2_23$naccho_contact_day47 == 1) |
+                                        (naccho_v2_23$ltc_service48___8 == 1 & naccho_v2_23$naccho_contact_day48 == 1) |
+                                        (naccho_v2_23$ltc_service49___8 == 1 & naccho_v2_23$naccho_contact_day49 == 1) |
+                                        (naccho_v2_23$ltc_service50___8 == 1 & naccho_v2_23$naccho_contact_day50 == 1))] <- 1
 table(naccho_v2_23$contact_success_day14)
 naccho_v2_23_contact_success_day14 <- naccho_v2_23[which(naccho_v2_23$contact_success_day14 == 1), ]
 dim(naccho_v2_23_contact_success_day14)
@@ -3018,57 +3017,57 @@ naccho_v2_23_contact_success_day14_percent
 
 
 naccho_v2_23$contact_success_day15[naccho_v2_23$oud_pos == 1 & naccho_v2_23$contact_success == 1 &
-                                       (naccho_v2_23$contact_success_day14 != 1) &
-                                       ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 2) |
-                                          (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 2) |
-                                          (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 2) |
-                                          (naccho_v2_23$ltc_service4___8 == 1 & naccho_v2_23$naccho_contact_day4 == 2) |
-                                          (naccho_v2_23$ltc_service5___8 == 1 & naccho_v2_23$naccho_contact_day5 == 2) |
-                                          (naccho_v2_23$ltc_service6___8 == 1 & naccho_v2_23$naccho_contact_day6 == 2) |
-                                          (naccho_v2_23$ltc_service7___8 == 1 & naccho_v2_23$naccho_contact_day7 == 2) |
-                                          (naccho_v2_23$ltc_service8___8 == 1 & naccho_v2_23$naccho_contact_day8 == 2) |
-                                          (naccho_v2_23$ltc_service9___8 == 1 & naccho_v2_23$naccho_contact_day9 == 2) |
-                                          (naccho_v2_23$ltc_service10___8 == 1 & naccho_v2_23$naccho_contact_day10 == 2) |
-                                          (naccho_v2_23$ltc_service11___8 == 1 & naccho_v2_23$naccho_contact_day11 == 2) |
-                                          (naccho_v2_23$ltc_service12___8 == 1 & naccho_v2_23$naccho_contact_day12 == 2) |
-                                          (naccho_v2_23$ltc_service13___8 == 1 & naccho_v2_23$naccho_contact_day13 == 2) |
-                                          (naccho_v2_23$ltc_service14___8 == 1 & naccho_v2_23$naccho_contact_day14 == 2) |
-                                          (naccho_v2_23$ltc_service15___8 == 1 & naccho_v2_23$naccho_contact_day15 == 2) |
-                                          (naccho_v2_23$ltc_service16___8 == 1 & naccho_v2_23$naccho_contact_day16 == 2) |
-                                          (naccho_v2_23$ltc_service17___8 == 1 & naccho_v2_23$naccho_contact_day17 == 2) |
-                                          (naccho_v2_23$ltc_service18___8 == 1 & naccho_v2_23$naccho_contact_day18 == 2) |
-                                          (naccho_v2_23$ltc_service19___8 == 1 & naccho_v2_23$naccho_contact_day19 == 2) |
-                                          (naccho_v2_23$ltc_service20___8 == 1 & naccho_v2_23$naccho_contact_day20 == 2) |
-                                          (naccho_v2_23$ltc_service21___8 == 1 & naccho_v2_23$naccho_contact_day21 == 2) |
-                                          (naccho_v2_23$ltc_service22___8 == 1 & naccho_v2_23$naccho_contact_day22 == 2) |
-                                          (naccho_v2_23$ltc_service23___8 == 1 & naccho_v2_23$naccho_contact_day23 == 2) |
-                                          (naccho_v2_23$ltc_service24___8 == 1 & naccho_v2_23$naccho_contact_day24 == 2) |
-                                          (naccho_v2_23$ltc_service25___8 == 1 & naccho_v2_23$naccho_contact_day25 == 2) |
-                                          (naccho_v2_23$ltc_service26___8 == 1 & naccho_v2_23$naccho_contact_day26 == 2) |
-                                          (naccho_v2_23$ltc_service27___8 == 1 & naccho_v2_23$naccho_contact_day27 == 2) |
-                                          (naccho_v2_23$ltc_service28___8 == 1 & naccho_v2_23$naccho_contact_day28 == 2) |
-                                          (naccho_v2_23$ltc_service29___8 == 1 & naccho_v2_23$naccho_contact_day29 == 2) |
-                                          (naccho_v2_23$ltc_service30___8 == 1 & naccho_v2_23$naccho_contact_day30 == 2) |
-                                          (naccho_v2_23$ltc_service31___8 == 1 & naccho_v2_23$naccho_contact_day31 == 2) |
-                                          (naccho_v2_23$ltc_service32___8 == 1 & naccho_v2_23$naccho_contact_day32 == 2) |
-                                          (naccho_v2_23$ltc_service33___8 == 1 & naccho_v2_23$naccho_contact_day33 == 2) |
-                                          (naccho_v2_23$ltc_service34___8 == 1 & naccho_v2_23$naccho_contact_day34 == 2) |
-                                          (naccho_v2_23$ltc_service35___8 == 1 & naccho_v2_23$naccho_contact_day35 == 2) |
-                                          (naccho_v2_23$ltc_service36___8 == 1 & naccho_v2_23$naccho_contact_day36 == 2) |
-                                          (naccho_v2_23$ltc_service37___8 == 1 & naccho_v2_23$naccho_contact_day37 == 2) |
-                                          (naccho_v2_23$ltc_service38___8 == 1 & naccho_v2_23$naccho_contact_day38 == 2) |
-                                          (naccho_v2_23$ltc_service39___8 == 1 & naccho_v2_23$naccho_contact_day39 == 2) |
-                                          (naccho_v2_23$ltc_service40___8 == 1 & naccho_v2_23$naccho_contact_day40 == 2) |
-                                          (naccho_v2_23$ltc_service41___8 == 1 & naccho_v2_23$naccho_contact_day41 == 2) |
-                                          (naccho_v2_23$ltc_service42___8 == 1 & naccho_v2_23$naccho_contact_day42 == 2) |
-                                          (naccho_v2_23$ltc_service43___8 == 1 & naccho_v2_23$naccho_contact_day43 == 2) |
-                                          (naccho_v2_23$ltc_service44___8 == 1 & naccho_v2_23$naccho_contact_day44 == 2) |
-                                          (naccho_v2_23$ltc_service45___8 == 1 & naccho_v2_23$naccho_contact_day45 == 2) |
-                                          (naccho_v2_23$ltc_service46___8 == 1 & naccho_v2_23$naccho_contact_day46 == 2) |
-                                          (naccho_v2_23$ltc_service47___8 == 1 & naccho_v2_23$naccho_contact_day47 == 2) |
-                                          (naccho_v2_23$ltc_service48___8 == 1 & naccho_v2_23$naccho_contact_day48 == 2) |
-                                          (naccho_v2_23$ltc_service49___8 == 1 & naccho_v2_23$naccho_contact_day49 == 2) |
-                                          (naccho_v2_23$ltc_service50___8 == 1 & naccho_v2_23$naccho_contact_day50 == 2))] <- 1
+                                     (is.na(naccho_v2_23$contact_success_day14)) &
+                                     ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 2) |
+                                        (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 2) |
+                                        (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 2) |
+                                        (naccho_v2_23$ltc_service4___8 == 1 & naccho_v2_23$naccho_contact_day4 == 2) |
+                                        (naccho_v2_23$ltc_service5___8 == 1 & naccho_v2_23$naccho_contact_day5 == 2) |
+                                        (naccho_v2_23$ltc_service6___8 == 1 & naccho_v2_23$naccho_contact_day6 == 2) |
+                                        (naccho_v2_23$ltc_service7___8 == 1 & naccho_v2_23$naccho_contact_day7 == 2) |
+                                        (naccho_v2_23$ltc_service8___8 == 1 & naccho_v2_23$naccho_contact_day8 == 2) |
+                                        (naccho_v2_23$ltc_service9___8 == 1 & naccho_v2_23$naccho_contact_day9 == 2) |
+                                        (naccho_v2_23$ltc_service10___8 == 1 & naccho_v2_23$naccho_contact_day10 == 2) |
+                                        (naccho_v2_23$ltc_service11___8 == 1 & naccho_v2_23$naccho_contact_day11 == 2) |
+                                        (naccho_v2_23$ltc_service12___8 == 1 & naccho_v2_23$naccho_contact_day12 == 2) |
+                                        (naccho_v2_23$ltc_service13___8 == 1 & naccho_v2_23$naccho_contact_day13 == 2) |
+                                        (naccho_v2_23$ltc_service14___8 == 1 & naccho_v2_23$naccho_contact_day14 == 2) |
+                                        (naccho_v2_23$ltc_service15___8 == 1 & naccho_v2_23$naccho_contact_day15 == 2) |
+                                        (naccho_v2_23$ltc_service16___8 == 1 & naccho_v2_23$naccho_contact_day16 == 2) |
+                                        (naccho_v2_23$ltc_service17___8 == 1 & naccho_v2_23$naccho_contact_day17 == 2) |
+                                        (naccho_v2_23$ltc_service18___8 == 1 & naccho_v2_23$naccho_contact_day18 == 2) |
+                                        (naccho_v2_23$ltc_service19___8 == 1 & naccho_v2_23$naccho_contact_day19 == 2) |
+                                        (naccho_v2_23$ltc_service20___8 == 1 & naccho_v2_23$naccho_contact_day20 == 2) |
+                                        (naccho_v2_23$ltc_service21___8 == 1 & naccho_v2_23$naccho_contact_day21 == 2) |
+                                        (naccho_v2_23$ltc_service22___8 == 1 & naccho_v2_23$naccho_contact_day22 == 2) |
+                                        (naccho_v2_23$ltc_service23___8 == 1 & naccho_v2_23$naccho_contact_day23 == 2) |
+                                        (naccho_v2_23$ltc_service24___8 == 1 & naccho_v2_23$naccho_contact_day24 == 2) |
+                                        (naccho_v2_23$ltc_service25___8 == 1 & naccho_v2_23$naccho_contact_day25 == 2) |
+                                        (naccho_v2_23$ltc_service26___8 == 1 & naccho_v2_23$naccho_contact_day26 == 2) |
+                                        (naccho_v2_23$ltc_service27___8 == 1 & naccho_v2_23$naccho_contact_day27 == 2) |
+                                        (naccho_v2_23$ltc_service28___8 == 1 & naccho_v2_23$naccho_contact_day28 == 2) |
+                                        (naccho_v2_23$ltc_service29___8 == 1 & naccho_v2_23$naccho_contact_day29 == 2) |
+                                        (naccho_v2_23$ltc_service30___8 == 1 & naccho_v2_23$naccho_contact_day30 == 2) |
+                                        (naccho_v2_23$ltc_service31___8 == 1 & naccho_v2_23$naccho_contact_day31 == 2) |
+                                        (naccho_v2_23$ltc_service32___8 == 1 & naccho_v2_23$naccho_contact_day32 == 2) |
+                                        (naccho_v2_23$ltc_service33___8 == 1 & naccho_v2_23$naccho_contact_day33 == 2) |
+                                        (naccho_v2_23$ltc_service34___8 == 1 & naccho_v2_23$naccho_contact_day34 == 2) |
+                                        (naccho_v2_23$ltc_service35___8 == 1 & naccho_v2_23$naccho_contact_day35 == 2) |
+                                        (naccho_v2_23$ltc_service36___8 == 1 & naccho_v2_23$naccho_contact_day36 == 2) |
+                                        (naccho_v2_23$ltc_service37___8 == 1 & naccho_v2_23$naccho_contact_day37 == 2) |
+                                        (naccho_v2_23$ltc_service38___8 == 1 & naccho_v2_23$naccho_contact_day38 == 2) |
+                                        (naccho_v2_23$ltc_service39___8 == 1 & naccho_v2_23$naccho_contact_day39 == 2) |
+                                        (naccho_v2_23$ltc_service40___8 == 1 & naccho_v2_23$naccho_contact_day40 == 2) |
+                                        (naccho_v2_23$ltc_service41___8 == 1 & naccho_v2_23$naccho_contact_day41 == 2) |
+                                        (naccho_v2_23$ltc_service42___8 == 1 & naccho_v2_23$naccho_contact_day42 == 2) |
+                                        (naccho_v2_23$ltc_service43___8 == 1 & naccho_v2_23$naccho_contact_day43 == 2) |
+                                        (naccho_v2_23$ltc_service44___8 == 1 & naccho_v2_23$naccho_contact_day44 == 2) |
+                                        (naccho_v2_23$ltc_service45___8 == 1 & naccho_v2_23$naccho_contact_day45 == 2) |
+                                        (naccho_v2_23$ltc_service46___8 == 1 & naccho_v2_23$naccho_contact_day46 == 2) |
+                                        (naccho_v2_23$ltc_service47___8 == 1 & naccho_v2_23$naccho_contact_day47 == 2) |
+                                        (naccho_v2_23$ltc_service48___8 == 1 & naccho_v2_23$naccho_contact_day48 == 2) |
+                                        (naccho_v2_23$ltc_service49___8 == 1 & naccho_v2_23$naccho_contact_day49 == 2) |
+                                        (naccho_v2_23$ltc_service50___8 == 1 & naccho_v2_23$naccho_contact_day50 == 2))] <- 1
 table(naccho_v2_23$contact_success_day15)
 naccho_v2_23_contact_success_day15 <- naccho_v2_23[which(naccho_v2_23$contact_success_day15 == 1), ]
 dim(naccho_v2_23_contact_success_day15)
@@ -3086,57 +3085,57 @@ naccho_v2_23_contact_success_day15_percent
 
 
 naccho_v2_23$contact_success_day16[naccho_v2_23$oud_pos == 1 & naccho_v2_23$contact_success == 1 &
-                                       (naccho_v2_23$contact_success_day14 != 1 & naccho_v2_23$contact_success_day15 != 1) &
-                                       ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 3) |
-                                          (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 3) |
-                                          (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 3) |
-                                          (naccho_v2_23$ltc_service4___8 == 1 & naccho_v2_23$naccho_contact_day4 == 3) |
-                                          (naccho_v2_23$ltc_service5___8 == 1 & naccho_v2_23$naccho_contact_day5 == 3) |
-                                          (naccho_v2_23$ltc_service6___8 == 1 & naccho_v2_23$naccho_contact_day6 == 3) |
-                                          (naccho_v2_23$ltc_service7___8 == 1 & naccho_v2_23$naccho_contact_day7 == 3) |
-                                          (naccho_v2_23$ltc_service8___8 == 1 & naccho_v2_23$naccho_contact_day8 == 3) |
-                                          (naccho_v2_23$ltc_service9___8 == 1 & naccho_v2_23$naccho_contact_day9 == 3) |
-                                          (naccho_v2_23$ltc_service10___8 == 1 & naccho_v2_23$naccho_contact_day10 == 3) |
-                                          (naccho_v2_23$ltc_service11___8 == 1 & naccho_v2_23$naccho_contact_day11 == 3) |
-                                          (naccho_v2_23$ltc_service12___8 == 1 & naccho_v2_23$naccho_contact_day12 == 3) |
-                                          (naccho_v2_23$ltc_service13___8 == 1 & naccho_v2_23$naccho_contact_day13 == 3) |
-                                          (naccho_v2_23$ltc_service14___8 == 1 & naccho_v2_23$naccho_contact_day14 == 3) |
-                                          (naccho_v2_23$ltc_service15___8 == 1 & naccho_v2_23$naccho_contact_day15 == 3) |
-                                          (naccho_v2_23$ltc_service16___8 == 1 & naccho_v2_23$naccho_contact_day16 == 3) |
-                                          (naccho_v2_23$ltc_service17___8 == 1 & naccho_v2_23$naccho_contact_day17 == 3) |
-                                          (naccho_v2_23$ltc_service18___8 == 1 & naccho_v2_23$naccho_contact_day18 == 3) |
-                                          (naccho_v2_23$ltc_service19___8 == 1 & naccho_v2_23$naccho_contact_day19 == 3) |
-                                          (naccho_v2_23$ltc_service20___8 == 1 & naccho_v2_23$naccho_contact_day20 == 3) |
-                                          (naccho_v2_23$ltc_service21___8 == 1 & naccho_v2_23$naccho_contact_day21 == 3) |
-                                          (naccho_v2_23$ltc_service22___8 == 1 & naccho_v2_23$naccho_contact_day22 == 3) |
-                                          (naccho_v2_23$ltc_service23___8 == 1 & naccho_v2_23$naccho_contact_day23 == 3) |
-                                          (naccho_v2_23$ltc_service24___8 == 1 & naccho_v2_23$naccho_contact_day24 == 3) |
-                                          (naccho_v2_23$ltc_service25___8 == 1 & naccho_v2_23$naccho_contact_day25 == 3) |
-                                          (naccho_v2_23$ltc_service26___8 == 1 & naccho_v2_23$naccho_contact_day26 == 3) |
-                                          (naccho_v2_23$ltc_service27___8 == 1 & naccho_v2_23$naccho_contact_day27 == 3) |
-                                          (naccho_v2_23$ltc_service28___8 == 1 & naccho_v2_23$naccho_contact_day28 == 3) |
-                                          (naccho_v2_23$ltc_service29___8 == 1 & naccho_v2_23$naccho_contact_day29 == 3) |
-                                          (naccho_v2_23$ltc_service30___8 == 1 & naccho_v2_23$naccho_contact_day30 == 3) |
-                                          (naccho_v2_23$ltc_service31___8 == 1 & naccho_v2_23$naccho_contact_day31 == 3) |
-                                          (naccho_v2_23$ltc_service32___8 == 1 & naccho_v2_23$naccho_contact_day32 == 3) |
-                                          (naccho_v2_23$ltc_service33___8 == 1 & naccho_v2_23$naccho_contact_day33 == 3) |
-                                          (naccho_v2_23$ltc_service34___8 == 1 & naccho_v2_23$naccho_contact_day34 == 3) |
-                                          (naccho_v2_23$ltc_service35___8 == 1 & naccho_v2_23$naccho_contact_day35 == 3) |
-                                          (naccho_v2_23$ltc_service36___8 == 1 & naccho_v2_23$naccho_contact_day36 == 3) |
-                                          (naccho_v2_23$ltc_service37___8 == 1 & naccho_v2_23$naccho_contact_day37 == 3) |
-                                          (naccho_v2_23$ltc_service38___8 == 1 & naccho_v2_23$naccho_contact_day38 == 3) |
-                                          (naccho_v2_23$ltc_service39___8 == 1 & naccho_v2_23$naccho_contact_day39 == 3) |
-                                          (naccho_v2_23$ltc_service40___8 == 1 & naccho_v2_23$naccho_contact_day40 == 3) |
-                                          (naccho_v2_23$ltc_service41___8 == 1 & naccho_v2_23$naccho_contact_day41 == 3) |
-                                          (naccho_v2_23$ltc_service42___8 == 1 & naccho_v2_23$naccho_contact_day42 == 3) |
-                                          (naccho_v2_23$ltc_service43___8 == 1 & naccho_v2_23$naccho_contact_day43 == 3) |
-                                          (naccho_v2_23$ltc_service44___8 == 1 & naccho_v2_23$naccho_contact_day44 == 3) |
-                                          (naccho_v2_23$ltc_service45___8 == 1 & naccho_v2_23$naccho_contact_day45 == 3) |
-                                          (naccho_v2_23$ltc_service46___8 == 1 & naccho_v2_23$naccho_contact_day46 == 3) |
-                                          (naccho_v2_23$ltc_service47___8 == 1 & naccho_v2_23$naccho_contact_day47 == 3) |
-                                          (naccho_v2_23$ltc_service48___8 == 1 & naccho_v2_23$naccho_contact_day48 == 3) |
-                                          (naccho_v2_23$ltc_service49___8 == 1 & naccho_v2_23$naccho_contact_day49 == 3) |
-                                          (naccho_v2_23$ltc_service50___8 == 1 & naccho_v2_23$naccho_contact_day50 == 3))] <- 1
+                                     (is.na(naccho_v2_23$contact_success_day14) & is.na(naccho_v2_23$contact_success_day15)) &
+                                     ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 3) |
+                                        (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 3) |
+                                        (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 3) |
+                                        (naccho_v2_23$ltc_service4___8 == 1 & naccho_v2_23$naccho_contact_day4 == 3) |
+                                        (naccho_v2_23$ltc_service5___8 == 1 & naccho_v2_23$naccho_contact_day5 == 3) |
+                                        (naccho_v2_23$ltc_service6___8 == 1 & naccho_v2_23$naccho_contact_day6 == 3) |
+                                        (naccho_v2_23$ltc_service7___8 == 1 & naccho_v2_23$naccho_contact_day7 == 3) |
+                                        (naccho_v2_23$ltc_service8___8 == 1 & naccho_v2_23$naccho_contact_day8 == 3) |
+                                        (naccho_v2_23$ltc_service9___8 == 1 & naccho_v2_23$naccho_contact_day9 == 3) |
+                                        (naccho_v2_23$ltc_service10___8 == 1 & naccho_v2_23$naccho_contact_day10 == 3) |
+                                        (naccho_v2_23$ltc_service11___8 == 1 & naccho_v2_23$naccho_contact_day11 == 3) |
+                                        (naccho_v2_23$ltc_service12___8 == 1 & naccho_v2_23$naccho_contact_day12 == 3) |
+                                        (naccho_v2_23$ltc_service13___8 == 1 & naccho_v2_23$naccho_contact_day13 == 3) |
+                                        (naccho_v2_23$ltc_service14___8 == 1 & naccho_v2_23$naccho_contact_day14 == 3) |
+                                        (naccho_v2_23$ltc_service15___8 == 1 & naccho_v2_23$naccho_contact_day15 == 3) |
+                                        (naccho_v2_23$ltc_service16___8 == 1 & naccho_v2_23$naccho_contact_day16 == 3) |
+                                        (naccho_v2_23$ltc_service17___8 == 1 & naccho_v2_23$naccho_contact_day17 == 3) |
+                                        (naccho_v2_23$ltc_service18___8 == 1 & naccho_v2_23$naccho_contact_day18 == 3) |
+                                        (naccho_v2_23$ltc_service19___8 == 1 & naccho_v2_23$naccho_contact_day19 == 3) |
+                                        (naccho_v2_23$ltc_service20___8 == 1 & naccho_v2_23$naccho_contact_day20 == 3) |
+                                        (naccho_v2_23$ltc_service21___8 == 1 & naccho_v2_23$naccho_contact_day21 == 3) |
+                                        (naccho_v2_23$ltc_service22___8 == 1 & naccho_v2_23$naccho_contact_day22 == 3) |
+                                        (naccho_v2_23$ltc_service23___8 == 1 & naccho_v2_23$naccho_contact_day23 == 3) |
+                                        (naccho_v2_23$ltc_service24___8 == 1 & naccho_v2_23$naccho_contact_day24 == 3) |
+                                        (naccho_v2_23$ltc_service25___8 == 1 & naccho_v2_23$naccho_contact_day25 == 3) |
+                                        (naccho_v2_23$ltc_service26___8 == 1 & naccho_v2_23$naccho_contact_day26 == 3) |
+                                        (naccho_v2_23$ltc_service27___8 == 1 & naccho_v2_23$naccho_contact_day27 == 3) |
+                                        (naccho_v2_23$ltc_service28___8 == 1 & naccho_v2_23$naccho_contact_day28 == 3) |
+                                        (naccho_v2_23$ltc_service29___8 == 1 & naccho_v2_23$naccho_contact_day29 == 3) |
+                                        (naccho_v2_23$ltc_service30___8 == 1 & naccho_v2_23$naccho_contact_day30 == 3) |
+                                        (naccho_v2_23$ltc_service31___8 == 1 & naccho_v2_23$naccho_contact_day31 == 3) |
+                                        (naccho_v2_23$ltc_service32___8 == 1 & naccho_v2_23$naccho_contact_day32 == 3) |
+                                        (naccho_v2_23$ltc_service33___8 == 1 & naccho_v2_23$naccho_contact_day33 == 3) |
+                                        (naccho_v2_23$ltc_service34___8 == 1 & naccho_v2_23$naccho_contact_day34 == 3) |
+                                        (naccho_v2_23$ltc_service35___8 == 1 & naccho_v2_23$naccho_contact_day35 == 3) |
+                                        (naccho_v2_23$ltc_service36___8 == 1 & naccho_v2_23$naccho_contact_day36 == 3) |
+                                        (naccho_v2_23$ltc_service37___8 == 1 & naccho_v2_23$naccho_contact_day37 == 3) |
+                                        (naccho_v2_23$ltc_service38___8 == 1 & naccho_v2_23$naccho_contact_day38 == 3) |
+                                        (naccho_v2_23$ltc_service39___8 == 1 & naccho_v2_23$naccho_contact_day39 == 3) |
+                                        (naccho_v2_23$ltc_service40___8 == 1 & naccho_v2_23$naccho_contact_day40 == 3) |
+                                        (naccho_v2_23$ltc_service41___8 == 1 & naccho_v2_23$naccho_contact_day41 == 3) |
+                                        (naccho_v2_23$ltc_service42___8 == 1 & naccho_v2_23$naccho_contact_day42 == 3) |
+                                        (naccho_v2_23$ltc_service43___8 == 1 & naccho_v2_23$naccho_contact_day43 == 3) |
+                                        (naccho_v2_23$ltc_service44___8 == 1 & naccho_v2_23$naccho_contact_day44 == 3) |
+                                        (naccho_v2_23$ltc_service45___8 == 1 & naccho_v2_23$naccho_contact_day45 == 3) |
+                                        (naccho_v2_23$ltc_service46___8 == 1 & naccho_v2_23$naccho_contact_day46 == 3) |
+                                        (naccho_v2_23$ltc_service47___8 == 1 & naccho_v2_23$naccho_contact_day47 == 3) |
+                                        (naccho_v2_23$ltc_service48___8 == 1 & naccho_v2_23$naccho_contact_day48 == 3) |
+                                        (naccho_v2_23$ltc_service49___8 == 1 & naccho_v2_23$naccho_contact_day49 == 3) |
+                                        (naccho_v2_23$ltc_service50___8 == 1 & naccho_v2_23$naccho_contact_day50 == 3))] <- 1
 table(naccho_v2_23$contact_success_day16)
 naccho_v2_23_contact_success_day16 <- naccho_v2_23[which(naccho_v2_23$contact_success_day16 == 1), ]
 dim(naccho_v2_23_contact_success_day16)
@@ -3154,58 +3153,58 @@ naccho_v2_23_contact_success_day16_percent
 
 
 naccho_v2_23$contact_success_day30[naccho_v2_23$oud_pos == 1 & naccho_v2_23$contact_success == 1 &
-                                       (naccho_v2_23$contact_success_day14 != 1 & naccho_v2_23$contact_success_day15 != 1 &
-                                          naccho_v2_23$contact_success_day16 != 1) &
-                                       ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 4) |
-                                          (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 4) |
-                                          (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 4) |
-                                          (naccho_v2_23$ltc_service4___8 == 1 & naccho_v2_23$naccho_contact_day4 == 4) |
-                                          (naccho_v2_23$ltc_service5___8 == 1 & naccho_v2_23$naccho_contact_day5 == 4) |
-                                          (naccho_v2_23$ltc_service6___8 == 1 & naccho_v2_23$naccho_contact_day6 == 4) |
-                                          (naccho_v2_23$ltc_service7___8 == 1 & naccho_v2_23$naccho_contact_day7 == 4) |
-                                          (naccho_v2_23$ltc_service8___8 == 1 & naccho_v2_23$naccho_contact_day8 == 4) |
-                                          (naccho_v2_23$ltc_service9___8 == 1 & naccho_v2_23$naccho_contact_day9 == 4) |
-                                          (naccho_v2_23$ltc_service10___8 == 1 & naccho_v2_23$naccho_contact_day10 == 4) |
-                                          (naccho_v2_23$ltc_service11___8 == 1 & naccho_v2_23$naccho_contact_day11 == 4) |
-                                          (naccho_v2_23$ltc_service12___8 == 1 & naccho_v2_23$naccho_contact_day12 == 4) |
-                                          (naccho_v2_23$ltc_service13___8 == 1 & naccho_v2_23$naccho_contact_day13 == 4) |
-                                          (naccho_v2_23$ltc_service14___8 == 1 & naccho_v2_23$naccho_contact_day14 == 4) |
-                                          (naccho_v2_23$ltc_service15___8 == 1 & naccho_v2_23$naccho_contact_day15 == 4) |
-                                          (naccho_v2_23$ltc_service16___8 == 1 & naccho_v2_23$naccho_contact_day16 == 4) |
-                                          (naccho_v2_23$ltc_service17___8 == 1 & naccho_v2_23$naccho_contact_day17 == 4) |
-                                          (naccho_v2_23$ltc_service18___8 == 1 & naccho_v2_23$naccho_contact_day18 == 4) |
-                                          (naccho_v2_23$ltc_service19___8 == 1 & naccho_v2_23$naccho_contact_day19 == 4) |
-                                          (naccho_v2_23$ltc_service20___8 == 1 & naccho_v2_23$naccho_contact_day20 == 4) |
-                                          (naccho_v2_23$ltc_service21___8 == 1 & naccho_v2_23$naccho_contact_day21 == 4) |
-                                          (naccho_v2_23$ltc_service22___8 == 1 & naccho_v2_23$naccho_contact_day22 == 4) |
-                                          (naccho_v2_23$ltc_service23___8 == 1 & naccho_v2_23$naccho_contact_day23 == 4) |
-                                          (naccho_v2_23$ltc_service24___8 == 1 & naccho_v2_23$naccho_contact_day24 == 4) |
-                                          (naccho_v2_23$ltc_service25___8 == 1 & naccho_v2_23$naccho_contact_day25 == 4) |
-                                          (naccho_v2_23$ltc_service26___8 == 1 & naccho_v2_23$naccho_contact_day26 == 4) |
-                                          (naccho_v2_23$ltc_service27___8 == 1 & naccho_v2_23$naccho_contact_day27 == 4) |
-                                          (naccho_v2_23$ltc_service28___8 == 1 & naccho_v2_23$naccho_contact_day28 == 4) |
-                                          (naccho_v2_23$ltc_service29___8 == 1 & naccho_v2_23$naccho_contact_day29 == 4) |
-                                          (naccho_v2_23$ltc_service30___8 == 1 & naccho_v2_23$naccho_contact_day30 == 4) |
-                                          (naccho_v2_23$ltc_service31___8 == 1 & naccho_v2_23$naccho_contact_day31 == 4) |
-                                          (naccho_v2_23$ltc_service32___8 == 1 & naccho_v2_23$naccho_contact_day32 == 4) |
-                                          (naccho_v2_23$ltc_service33___8 == 1 & naccho_v2_23$naccho_contact_day33 == 4) |
-                                          (naccho_v2_23$ltc_service34___8 == 1 & naccho_v2_23$naccho_contact_day34 == 4) |
-                                          (naccho_v2_23$ltc_service35___8 == 1 & naccho_v2_23$naccho_contact_day35 == 4) |
-                                          (naccho_v2_23$ltc_service36___8 == 1 & naccho_v2_23$naccho_contact_day36 == 4) |
-                                          (naccho_v2_23$ltc_service37___8 == 1 & naccho_v2_23$naccho_contact_day37 == 4) |
-                                          (naccho_v2_23$ltc_service38___8 == 1 & naccho_v2_23$naccho_contact_day38 == 4) |
-                                          (naccho_v2_23$ltc_service39___8 == 1 & naccho_v2_23$naccho_contact_day39 == 4) |
-                                          (naccho_v2_23$ltc_service40___8 == 1 & naccho_v2_23$naccho_contact_day40 == 4) |
-                                          (naccho_v2_23$ltc_service41___8 == 1 & naccho_v2_23$naccho_contact_day41 == 4) |
-                                          (naccho_v2_23$ltc_service42___8 == 1 & naccho_v2_23$naccho_contact_day42 == 4) |
-                                          (naccho_v2_23$ltc_service43___8 == 1 & naccho_v2_23$naccho_contact_day43 == 4) |
-                                          (naccho_v2_23$ltc_service44___8 == 1 & naccho_v2_23$naccho_contact_day44 == 4) |
-                                          (naccho_v2_23$ltc_service45___8 == 1 & naccho_v2_23$naccho_contact_day45 == 4) |
-                                          (naccho_v2_23$ltc_service46___8 == 1 & naccho_v2_23$naccho_contact_day46 == 4) |
-                                          (naccho_v2_23$ltc_service47___8 == 1 & naccho_v2_23$naccho_contact_day47 == 4) |
-                                          (naccho_v2_23$ltc_service48___8 == 1 & naccho_v2_23$naccho_contact_day48 == 4) |
-                                          (naccho_v2_23$ltc_service49___8 == 1 & naccho_v2_23$naccho_contact_day49 == 4) |
-                                          (naccho_v2_23$ltc_service50___8 == 1 & naccho_v2_23$naccho_contact_day50 == 4))] <- 1
+                                     (is.na(naccho_v2_23$contact_success_day14) & is.na(naccho_v2_23$contact_success_day15) &
+                                        is.na(naccho_v2_23$contact_success_day16)) &
+                                     ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 4) |
+                                        (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 4) |
+                                        (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 4) |
+                                        (naccho_v2_23$ltc_service4___8 == 1 & naccho_v2_23$naccho_contact_day4 == 4) |
+                                        (naccho_v2_23$ltc_service5___8 == 1 & naccho_v2_23$naccho_contact_day5 == 4) |
+                                        (naccho_v2_23$ltc_service6___8 == 1 & naccho_v2_23$naccho_contact_day6 == 4) |
+                                        (naccho_v2_23$ltc_service7___8 == 1 & naccho_v2_23$naccho_contact_day7 == 4) |
+                                        (naccho_v2_23$ltc_service8___8 == 1 & naccho_v2_23$naccho_contact_day8 == 4) |
+                                        (naccho_v2_23$ltc_service9___8 == 1 & naccho_v2_23$naccho_contact_day9 == 4) |
+                                        (naccho_v2_23$ltc_service10___8 == 1 & naccho_v2_23$naccho_contact_day10 == 4) |
+                                        (naccho_v2_23$ltc_service11___8 == 1 & naccho_v2_23$naccho_contact_day11 == 4) |
+                                        (naccho_v2_23$ltc_service12___8 == 1 & naccho_v2_23$naccho_contact_day12 == 4) |
+                                        (naccho_v2_23$ltc_service13___8 == 1 & naccho_v2_23$naccho_contact_day13 == 4) |
+                                        (naccho_v2_23$ltc_service14___8 == 1 & naccho_v2_23$naccho_contact_day14 == 4) |
+                                        (naccho_v2_23$ltc_service15___8 == 1 & naccho_v2_23$naccho_contact_day15 == 4) |
+                                        (naccho_v2_23$ltc_service16___8 == 1 & naccho_v2_23$naccho_contact_day16 == 4) |
+                                        (naccho_v2_23$ltc_service17___8 == 1 & naccho_v2_23$naccho_contact_day17 == 4) |
+                                        (naccho_v2_23$ltc_service18___8 == 1 & naccho_v2_23$naccho_contact_day18 == 4) |
+                                        (naccho_v2_23$ltc_service19___8 == 1 & naccho_v2_23$naccho_contact_day19 == 4) |
+                                        (naccho_v2_23$ltc_service20___8 == 1 & naccho_v2_23$naccho_contact_day20 == 4) |
+                                        (naccho_v2_23$ltc_service21___8 == 1 & naccho_v2_23$naccho_contact_day21 == 4) |
+                                        (naccho_v2_23$ltc_service22___8 == 1 & naccho_v2_23$naccho_contact_day22 == 4) |
+                                        (naccho_v2_23$ltc_service23___8 == 1 & naccho_v2_23$naccho_contact_day23 == 4) |
+                                        (naccho_v2_23$ltc_service24___8 == 1 & naccho_v2_23$naccho_contact_day24 == 4) |
+                                        (naccho_v2_23$ltc_service25___8 == 1 & naccho_v2_23$naccho_contact_day25 == 4) |
+                                        (naccho_v2_23$ltc_service26___8 == 1 & naccho_v2_23$naccho_contact_day26 == 4) |
+                                        (naccho_v2_23$ltc_service27___8 == 1 & naccho_v2_23$naccho_contact_day27 == 4) |
+                                        (naccho_v2_23$ltc_service28___8 == 1 & naccho_v2_23$naccho_contact_day28 == 4) |
+                                        (naccho_v2_23$ltc_service29___8 == 1 & naccho_v2_23$naccho_contact_day29 == 4) |
+                                        (naccho_v2_23$ltc_service30___8 == 1 & naccho_v2_23$naccho_contact_day30 == 4) |
+                                        (naccho_v2_23$ltc_service31___8 == 1 & naccho_v2_23$naccho_contact_day31 == 4) |
+                                        (naccho_v2_23$ltc_service32___8 == 1 & naccho_v2_23$naccho_contact_day32 == 4) |
+                                        (naccho_v2_23$ltc_service33___8 == 1 & naccho_v2_23$naccho_contact_day33 == 4) |
+                                        (naccho_v2_23$ltc_service34___8 == 1 & naccho_v2_23$naccho_contact_day34 == 4) |
+                                        (naccho_v2_23$ltc_service35___8 == 1 & naccho_v2_23$naccho_contact_day35 == 4) |
+                                        (naccho_v2_23$ltc_service36___8 == 1 & naccho_v2_23$naccho_contact_day36 == 4) |
+                                        (naccho_v2_23$ltc_service37___8 == 1 & naccho_v2_23$naccho_contact_day37 == 4) |
+                                        (naccho_v2_23$ltc_service38___8 == 1 & naccho_v2_23$naccho_contact_day38 == 4) |
+                                        (naccho_v2_23$ltc_service39___8 == 1 & naccho_v2_23$naccho_contact_day39 == 4) |
+                                        (naccho_v2_23$ltc_service40___8 == 1 & naccho_v2_23$naccho_contact_day40 == 4) |
+                                        (naccho_v2_23$ltc_service41___8 == 1 & naccho_v2_23$naccho_contact_day41 == 4) |
+                                        (naccho_v2_23$ltc_service42___8 == 1 & naccho_v2_23$naccho_contact_day42 == 4) |
+                                        (naccho_v2_23$ltc_service43___8 == 1 & naccho_v2_23$naccho_contact_day43 == 4) |
+                                        (naccho_v2_23$ltc_service44___8 == 1 & naccho_v2_23$naccho_contact_day44 == 4) |
+                                        (naccho_v2_23$ltc_service45___8 == 1 & naccho_v2_23$naccho_contact_day45 == 4) |
+                                        (naccho_v2_23$ltc_service46___8 == 1 & naccho_v2_23$naccho_contact_day46 == 4) |
+                                        (naccho_v2_23$ltc_service47___8 == 1 & naccho_v2_23$naccho_contact_day47 == 4) |
+                                        (naccho_v2_23$ltc_service48___8 == 1 & naccho_v2_23$naccho_contact_day48 == 4) |
+                                        (naccho_v2_23$ltc_service49___8 == 1 & naccho_v2_23$naccho_contact_day49 == 4) |
+                                        (naccho_v2_23$ltc_service50___8 == 1 & naccho_v2_23$naccho_contact_day50 == 4))] <- 1
 table(naccho_v2_23$contact_success_day30)
 naccho_v2_23_contact_success_day30 <- naccho_v2_23[which(naccho_v2_23$contact_success_day30 == 1), ]
 dim(naccho_v2_23_contact_success_day30)
@@ -3223,58 +3222,58 @@ naccho_v2_23_contact_success_day30_percent
 
 
 naccho_v2_23$contact_success_day31[naccho_v2_23$oud_pos == 1 & naccho_v2_23$contact_success == 1 &
-                                       (naccho_v2_23$contact_success_day14 != 1 & naccho_v2_23$contact_success_day15 != 1 &
-                                          naccho_v2_23$contact_success_day16 != 1 & naccho_v2_23$contact_success_day30 != 1) &
-                                       ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 5) |
-                                          (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 5) |
-                                          (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 5) |
-                                          (naccho_v2_23$ltc_service4___8 == 1 & naccho_v2_23$naccho_contact_day4 == 5) |
-                                          (naccho_v2_23$ltc_service5___8 == 1 & naccho_v2_23$naccho_contact_day5 == 5) |
-                                          (naccho_v2_23$ltc_service6___8 == 1 & naccho_v2_23$naccho_contact_day6 == 5) |
-                                          (naccho_v2_23$ltc_service7___8 == 1 & naccho_v2_23$naccho_contact_day7 == 5) |
-                                          (naccho_v2_23$ltc_service8___8 == 1 & naccho_v2_23$naccho_contact_day8 == 5) |
-                                          (naccho_v2_23$ltc_service9___8 == 1 & naccho_v2_23$naccho_contact_day9 == 5) |
-                                          (naccho_v2_23$ltc_service10___8 == 1 & naccho_v2_23$naccho_contact_day10 == 5) |
-                                          (naccho_v2_23$ltc_service11___8 == 1 & naccho_v2_23$naccho_contact_day11 == 5) |
-                                          (naccho_v2_23$ltc_service12___8 == 1 & naccho_v2_23$naccho_contact_day12 == 5) |
-                                          (naccho_v2_23$ltc_service13___8 == 1 & naccho_v2_23$naccho_contact_day13 == 5) |
-                                          (naccho_v2_23$ltc_service14___8 == 1 & naccho_v2_23$naccho_contact_day14 == 5) |
-                                          (naccho_v2_23$ltc_service15___8 == 1 & naccho_v2_23$naccho_contact_day15 == 5) |
-                                          (naccho_v2_23$ltc_service16___8 == 1 & naccho_v2_23$naccho_contact_day16 == 5) |
-                                          (naccho_v2_23$ltc_service17___8 == 1 & naccho_v2_23$naccho_contact_day17 == 5) |
-                                          (naccho_v2_23$ltc_service18___8 == 1 & naccho_v2_23$naccho_contact_day18 == 5) |
-                                          (naccho_v2_23$ltc_service19___8 == 1 & naccho_v2_23$naccho_contact_day19 == 5) |
-                                          (naccho_v2_23$ltc_service20___8 == 1 & naccho_v2_23$naccho_contact_day20 == 5) |
-                                          (naccho_v2_23$ltc_service21___8 == 1 & naccho_v2_23$naccho_contact_day21 == 5) |
-                                          (naccho_v2_23$ltc_service22___8 == 1 & naccho_v2_23$naccho_contact_day22 == 5) |
-                                          (naccho_v2_23$ltc_service23___8 == 1 & naccho_v2_23$naccho_contact_day23 == 5) |
-                                          (naccho_v2_23$ltc_service24___8 == 1 & naccho_v2_23$naccho_contact_day24 == 5) |
-                                          (naccho_v2_23$ltc_service25___8 == 1 & naccho_v2_23$naccho_contact_day25 == 5) |
-                                          (naccho_v2_23$ltc_service26___8 == 1 & naccho_v2_23$naccho_contact_day26 == 5) |
-                                          (naccho_v2_23$ltc_service27___8 == 1 & naccho_v2_23$naccho_contact_day27 == 5) |
-                                          (naccho_v2_23$ltc_service28___8 == 1 & naccho_v2_23$naccho_contact_day28 == 5) |
-                                          (naccho_v2_23$ltc_service29___8 == 1 & naccho_v2_23$naccho_contact_day29 == 5) |
-                                          (naccho_v2_23$ltc_service30___8 == 1 & naccho_v2_23$naccho_contact_day30 == 5) |
-                                          (naccho_v2_23$ltc_service31___8 == 1 & naccho_v2_23$naccho_contact_day31 == 5) |
-                                          (naccho_v2_23$ltc_service32___8 == 1 & naccho_v2_23$naccho_contact_day32 == 5) |
-                                          (naccho_v2_23$ltc_service33___8 == 1 & naccho_v2_23$naccho_contact_day33 == 5) |
-                                          (naccho_v2_23$ltc_service34___8 == 1 & naccho_v2_23$naccho_contact_day34 == 5) |
-                                          (naccho_v2_23$ltc_service35___8 == 1 & naccho_v2_23$naccho_contact_day35 == 5) |
-                                          (naccho_v2_23$ltc_service36___8 == 1 & naccho_v2_23$naccho_contact_day36 == 5) |
-                                          (naccho_v2_23$ltc_service37___8 == 1 & naccho_v2_23$naccho_contact_day37 == 5) |
-                                          (naccho_v2_23$ltc_service38___8 == 1 & naccho_v2_23$naccho_contact_day38 == 5) |
-                                          (naccho_v2_23$ltc_service39___8 == 1 & naccho_v2_23$naccho_contact_day39 == 5) |
-                                          (naccho_v2_23$ltc_service40___8 == 1 & naccho_v2_23$naccho_contact_day40 == 5) |
-                                          (naccho_v2_23$ltc_service41___8 == 1 & naccho_v2_23$naccho_contact_day41 == 5) |
-                                          (naccho_v2_23$ltc_service42___8 == 1 & naccho_v2_23$naccho_contact_day42 == 5) |
-                                          (naccho_v2_23$ltc_service43___8 == 1 & naccho_v2_23$naccho_contact_day43 == 5) |
-                                          (naccho_v2_23$ltc_service44___8 == 1 & naccho_v2_23$naccho_contact_day44 == 5) |
-                                          (naccho_v2_23$ltc_service45___8 == 1 & naccho_v2_23$naccho_contact_day45 == 5) |
-                                          (naccho_v2_23$ltc_service46___8 == 1 & naccho_v2_23$naccho_contact_day46 == 5) |
-                                          (naccho_v2_23$ltc_service47___8 == 1 & naccho_v2_23$naccho_contact_day47 == 5) |
-                                          (naccho_v2_23$ltc_service48___8 == 1 & naccho_v2_23$naccho_contact_day48 == 5) |
-                                          (naccho_v2_23$ltc_service49___8 == 1 & naccho_v2_23$naccho_contact_day49 == 5) |
-                                          (naccho_v2_23$ltc_service50___8 == 1 & naccho_v2_23$naccho_contact_day50 == 5))] <- 1
+                                     (is.na(naccho_v2_23$contact_success_day14) & is.na(naccho_v2_23$contact_success_day15) &
+                                        is.na(naccho_v2_23$contact_success_day16) & is.na(naccho_v2_23$contact_success_day30)) &
+                                     ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 5) |
+                                        (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 5) |
+                                        (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 5) |
+                                        (naccho_v2_23$ltc_service4___8 == 1 & naccho_v2_23$naccho_contact_day4 == 5) |
+                                        (naccho_v2_23$ltc_service5___8 == 1 & naccho_v2_23$naccho_contact_day5 == 5) |
+                                        (naccho_v2_23$ltc_service6___8 == 1 & naccho_v2_23$naccho_contact_day6 == 5) |
+                                        (naccho_v2_23$ltc_service7___8 == 1 & naccho_v2_23$naccho_contact_day7 == 5) |
+                                        (naccho_v2_23$ltc_service8___8 == 1 & naccho_v2_23$naccho_contact_day8 == 5) |
+                                        (naccho_v2_23$ltc_service9___8 == 1 & naccho_v2_23$naccho_contact_day9 == 5) |
+                                        (naccho_v2_23$ltc_service10___8 == 1 & naccho_v2_23$naccho_contact_day10 == 5) |
+                                        (naccho_v2_23$ltc_service11___8 == 1 & naccho_v2_23$naccho_contact_day11 == 5) |
+                                        (naccho_v2_23$ltc_service12___8 == 1 & naccho_v2_23$naccho_contact_day12 == 5) |
+                                        (naccho_v2_23$ltc_service13___8 == 1 & naccho_v2_23$naccho_contact_day13 == 5) |
+                                        (naccho_v2_23$ltc_service14___8 == 1 & naccho_v2_23$naccho_contact_day14 == 5) |
+                                        (naccho_v2_23$ltc_service15___8 == 1 & naccho_v2_23$naccho_contact_day15 == 5) |
+                                        (naccho_v2_23$ltc_service16___8 == 1 & naccho_v2_23$naccho_contact_day16 == 5) |
+                                        (naccho_v2_23$ltc_service17___8 == 1 & naccho_v2_23$naccho_contact_day17 == 5) |
+                                        (naccho_v2_23$ltc_service18___8 == 1 & naccho_v2_23$naccho_contact_day18 == 5) |
+                                        (naccho_v2_23$ltc_service19___8 == 1 & naccho_v2_23$naccho_contact_day19 == 5) |
+                                        (naccho_v2_23$ltc_service20___8 == 1 & naccho_v2_23$naccho_contact_day20 == 5) |
+                                        (naccho_v2_23$ltc_service21___8 == 1 & naccho_v2_23$naccho_contact_day21 == 5) |
+                                        (naccho_v2_23$ltc_service22___8 == 1 & naccho_v2_23$naccho_contact_day22 == 5) |
+                                        (naccho_v2_23$ltc_service23___8 == 1 & naccho_v2_23$naccho_contact_day23 == 5) |
+                                        (naccho_v2_23$ltc_service24___8 == 1 & naccho_v2_23$naccho_contact_day24 == 5) |
+                                        (naccho_v2_23$ltc_service25___8 == 1 & naccho_v2_23$naccho_contact_day25 == 5) |
+                                        (naccho_v2_23$ltc_service26___8 == 1 & naccho_v2_23$naccho_contact_day26 == 5) |
+                                        (naccho_v2_23$ltc_service27___8 == 1 & naccho_v2_23$naccho_contact_day27 == 5) |
+                                        (naccho_v2_23$ltc_service28___8 == 1 & naccho_v2_23$naccho_contact_day28 == 5) |
+                                        (naccho_v2_23$ltc_service29___8 == 1 & naccho_v2_23$naccho_contact_day29 == 5) |
+                                        (naccho_v2_23$ltc_service30___8 == 1 & naccho_v2_23$naccho_contact_day30 == 5) |
+                                        (naccho_v2_23$ltc_service31___8 == 1 & naccho_v2_23$naccho_contact_day31 == 5) |
+                                        (naccho_v2_23$ltc_service32___8 == 1 & naccho_v2_23$naccho_contact_day32 == 5) |
+                                        (naccho_v2_23$ltc_service33___8 == 1 & naccho_v2_23$naccho_contact_day33 == 5) |
+                                        (naccho_v2_23$ltc_service34___8 == 1 & naccho_v2_23$naccho_contact_day34 == 5) |
+                                        (naccho_v2_23$ltc_service35___8 == 1 & naccho_v2_23$naccho_contact_day35 == 5) |
+                                        (naccho_v2_23$ltc_service36___8 == 1 & naccho_v2_23$naccho_contact_day36 == 5) |
+                                        (naccho_v2_23$ltc_service37___8 == 1 & naccho_v2_23$naccho_contact_day37 == 5) |
+                                        (naccho_v2_23$ltc_service38___8 == 1 & naccho_v2_23$naccho_contact_day38 == 5) |
+                                        (naccho_v2_23$ltc_service39___8 == 1 & naccho_v2_23$naccho_contact_day39 == 5) |
+                                        (naccho_v2_23$ltc_service40___8 == 1 & naccho_v2_23$naccho_contact_day40 == 5) |
+                                        (naccho_v2_23$ltc_service41___8 == 1 & naccho_v2_23$naccho_contact_day41 == 5) |
+                                        (naccho_v2_23$ltc_service42___8 == 1 & naccho_v2_23$naccho_contact_day42 == 5) |
+                                        (naccho_v2_23$ltc_service43___8 == 1 & naccho_v2_23$naccho_contact_day43 == 5) |
+                                        (naccho_v2_23$ltc_service44___8 == 1 & naccho_v2_23$naccho_contact_day44 == 5) |
+                                        (naccho_v2_23$ltc_service45___8 == 1 & naccho_v2_23$naccho_contact_day45 == 5) |
+                                        (naccho_v2_23$ltc_service46___8 == 1 & naccho_v2_23$naccho_contact_day46 == 5) |
+                                        (naccho_v2_23$ltc_service47___8 == 1 & naccho_v2_23$naccho_contact_day47 == 5) |
+                                        (naccho_v2_23$ltc_service48___8 == 1 & naccho_v2_23$naccho_contact_day48 == 5) |
+                                        (naccho_v2_23$ltc_service49___8 == 1 & naccho_v2_23$naccho_contact_day49 == 5) |
+                                        (naccho_v2_23$ltc_service50___8 == 1 & naccho_v2_23$naccho_contact_day50 == 5))] <- 1
 table(naccho_v2_23$contact_success_day31)
 naccho_v2_23_contact_success_day31 <- naccho_v2_23[which(naccho_v2_23$contact_success_day31 == 1), ]
 dim(naccho_v2_23_contact_success_day31)
@@ -3292,59 +3291,59 @@ naccho_v2_23_contact_success_day31_percent
 
 
 naccho_v2_23$contact_success_day32[naccho_v2_23$oud_pos == 1 & naccho_v2_23$contact_success == 1 &
-                                       (naccho_v2_23$contact_success_day14 != 1 & naccho_v2_23$contact_success_day15 != 1 &
-                                          naccho_v2_23$contact_success_day16 != 1 & naccho_v2_23$contact_success_day30 != 1 &
-                                          naccho_v2_23$contact_success_day31 != 1) &
-                                       ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 6) |
-                                          (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 6) |
-                                          (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 6) |
-                                          (naccho_v2_23$ltc_service4___8 == 1 & naccho_v2_23$naccho_contact_day4 == 6) |
-                                          (naccho_v2_23$ltc_service5___8 == 1 & naccho_v2_23$naccho_contact_day5 == 6) |
-                                          (naccho_v2_23$ltc_service6___8 == 1 & naccho_v2_23$naccho_contact_day6 == 6) |
-                                          (naccho_v2_23$ltc_service7___8 == 1 & naccho_v2_23$naccho_contact_day7 == 6) |
-                                          (naccho_v2_23$ltc_service8___8 == 1 & naccho_v2_23$naccho_contact_day8 == 6) |
-                                          (naccho_v2_23$ltc_service9___8 == 1 & naccho_v2_23$naccho_contact_day9 == 6) |
-                                          (naccho_v2_23$ltc_service10___8 == 1 & naccho_v2_23$naccho_contact_day10 == 6) |
-                                          (naccho_v2_23$ltc_service11___8 == 1 & naccho_v2_23$naccho_contact_day11 == 6) |
-                                          (naccho_v2_23$ltc_service12___8 == 1 & naccho_v2_23$naccho_contact_day12 == 6) |
-                                          (naccho_v2_23$ltc_service13___8 == 1 & naccho_v2_23$naccho_contact_day13 == 6) |
-                                          (naccho_v2_23$ltc_service14___8 == 1 & naccho_v2_23$naccho_contact_day14 == 6) |
-                                          (naccho_v2_23$ltc_service15___8 == 1 & naccho_v2_23$naccho_contact_day15 == 6) |
-                                          (naccho_v2_23$ltc_service16___8 == 1 & naccho_v2_23$naccho_contact_day16 == 6) |
-                                          (naccho_v2_23$ltc_service17___8 == 1 & naccho_v2_23$naccho_contact_day17 == 6) |
-                                          (naccho_v2_23$ltc_service18___8 == 1 & naccho_v2_23$naccho_contact_day18 == 6) |
-                                          (naccho_v2_23$ltc_service19___8 == 1 & naccho_v2_23$naccho_contact_day19 == 6) |
-                                          (naccho_v2_23$ltc_service20___8 == 1 & naccho_v2_23$naccho_contact_day20 == 6) |
-                                          (naccho_v2_23$ltc_service21___8 == 1 & naccho_v2_23$naccho_contact_day21 == 6) |
-                                          (naccho_v2_23$ltc_service22___8 == 1 & naccho_v2_23$naccho_contact_day22 == 6) |
-                                          (naccho_v2_23$ltc_service23___8 == 1 & naccho_v2_23$naccho_contact_day23 == 6) |
-                                          (naccho_v2_23$ltc_service24___8 == 1 & naccho_v2_23$naccho_contact_day24 == 6) |
-                                          (naccho_v2_23$ltc_service25___8 == 1 & naccho_v2_23$naccho_contact_day25 == 6) |
-                                          (naccho_v2_23$ltc_service26___8 == 1 & naccho_v2_23$naccho_contact_day26 == 6) |
-                                          (naccho_v2_23$ltc_service27___8 == 1 & naccho_v2_23$naccho_contact_day27 == 6) |
-                                          (naccho_v2_23$ltc_service28___8 == 1 & naccho_v2_23$naccho_contact_day28 == 6) |
-                                          (naccho_v2_23$ltc_service29___8 == 1 & naccho_v2_23$naccho_contact_day29 == 6) |
-                                          (naccho_v2_23$ltc_service30___8 == 1 & naccho_v2_23$naccho_contact_day30 == 6) |
-                                          (naccho_v2_23$ltc_service31___8 == 1 & naccho_v2_23$naccho_contact_day31 == 6) |
-                                          (naccho_v2_23$ltc_service32___8 == 1 & naccho_v2_23$naccho_contact_day32 == 6) |
-                                          (naccho_v2_23$ltc_service33___8 == 1 & naccho_v2_23$naccho_contact_day33 == 6) |
-                                          (naccho_v2_23$ltc_service34___8 == 1 & naccho_v2_23$naccho_contact_day34 == 6) |
-                                          (naccho_v2_23$ltc_service35___8 == 1 & naccho_v2_23$naccho_contact_day35 == 6) |
-                                          (naccho_v2_23$ltc_service36___8 == 1 & naccho_v2_23$naccho_contact_day36 == 6) |
-                                          (naccho_v2_23$ltc_service37___8 == 1 & naccho_v2_23$naccho_contact_day37 == 6) |
-                                          (naccho_v2_23$ltc_service38___8 == 1 & naccho_v2_23$naccho_contact_day38 == 6) |
-                                          (naccho_v2_23$ltc_service39___8 == 1 & naccho_v2_23$naccho_contact_day39 == 6) |
-                                          (naccho_v2_23$ltc_service40___8 == 1 & naccho_v2_23$naccho_contact_day40 == 6) |
-                                          (naccho_v2_23$ltc_service41___8 == 1 & naccho_v2_23$naccho_contact_day41 == 6) |
-                                          (naccho_v2_23$ltc_service42___8 == 1 & naccho_v2_23$naccho_contact_day42 == 6) |
-                                          (naccho_v2_23$ltc_service43___8 == 1 & naccho_v2_23$naccho_contact_day43 == 6) |
-                                          (naccho_v2_23$ltc_service44___8 == 1 & naccho_v2_23$naccho_contact_day44 == 6) |
-                                          (naccho_v2_23$ltc_service45___8 == 1 & naccho_v2_23$naccho_contact_day45 == 6) |
-                                          (naccho_v2_23$ltc_service46___8 == 1 & naccho_v2_23$naccho_contact_day46 == 6) |
-                                          (naccho_v2_23$ltc_service47___8 == 1 & naccho_v2_23$naccho_contact_day47 == 6) |
-                                          (naccho_v2_23$ltc_service48___8 == 1 & naccho_v2_23$naccho_contact_day48 == 6) |
-                                          (naccho_v2_23$ltc_service49___8 == 1 & naccho_v2_23$naccho_contact_day49 == 6) |
-                                          (naccho_v2_23$ltc_service50___8 == 1 & naccho_v2_23$naccho_contact_day50 == 6))] <- 1
+                                     (is.na(naccho_v2_23$contact_success_day14) & is.na(naccho_v2_23$contact_success_day15) &
+                                        is.na(naccho_v2_23$contact_success_day16) & is.na(naccho_v2_23$contact_success_day30) &
+                                        is.na(naccho_v2_23$contact_success_day31)) &
+                                     ((naccho_v2_23$ltc_service1___8 == 1 & naccho_v2_23$naccho_contact_day1 == 6) |
+                                        (naccho_v2_23$ltc_service2___8 == 1 & naccho_v2_23$naccho_contact_day2 == 6) |
+                                        (naccho_v2_23$ltc_service3___8 == 1 & naccho_v2_23$naccho_contact_day3 == 6) |
+                                        (naccho_v2_23$ltc_service4___8 == 1 & naccho_v2_23$naccho_contact_day4 == 6) |
+                                        (naccho_v2_23$ltc_service5___8 == 1 & naccho_v2_23$naccho_contact_day5 == 6) |
+                                        (naccho_v2_23$ltc_service6___8 == 1 & naccho_v2_23$naccho_contact_day6 == 6) |
+                                        (naccho_v2_23$ltc_service7___8 == 1 & naccho_v2_23$naccho_contact_day7 == 6) |
+                                        (naccho_v2_23$ltc_service8___8 == 1 & naccho_v2_23$naccho_contact_day8 == 6) |
+                                        (naccho_v2_23$ltc_service9___8 == 1 & naccho_v2_23$naccho_contact_day9 == 6) |
+                                        (naccho_v2_23$ltc_service10___8 == 1 & naccho_v2_23$naccho_contact_day10 == 6) |
+                                        (naccho_v2_23$ltc_service11___8 == 1 & naccho_v2_23$naccho_contact_day11 == 6) |
+                                        (naccho_v2_23$ltc_service12___8 == 1 & naccho_v2_23$naccho_contact_day12 == 6) |
+                                        (naccho_v2_23$ltc_service13___8 == 1 & naccho_v2_23$naccho_contact_day13 == 6) |
+                                        (naccho_v2_23$ltc_service14___8 == 1 & naccho_v2_23$naccho_contact_day14 == 6) |
+                                        (naccho_v2_23$ltc_service15___8 == 1 & naccho_v2_23$naccho_contact_day15 == 6) |
+                                        (naccho_v2_23$ltc_service16___8 == 1 & naccho_v2_23$naccho_contact_day16 == 6) |
+                                        (naccho_v2_23$ltc_service17___8 == 1 & naccho_v2_23$naccho_contact_day17 == 6) |
+                                        (naccho_v2_23$ltc_service18___8 == 1 & naccho_v2_23$naccho_contact_day18 == 6) |
+                                        (naccho_v2_23$ltc_service19___8 == 1 & naccho_v2_23$naccho_contact_day19 == 6) |
+                                        (naccho_v2_23$ltc_service20___8 == 1 & naccho_v2_23$naccho_contact_day20 == 6) |
+                                        (naccho_v2_23$ltc_service21___8 == 1 & naccho_v2_23$naccho_contact_day21 == 6) |
+                                        (naccho_v2_23$ltc_service22___8 == 1 & naccho_v2_23$naccho_contact_day22 == 6) |
+                                        (naccho_v2_23$ltc_service23___8 == 1 & naccho_v2_23$naccho_contact_day23 == 6) |
+                                        (naccho_v2_23$ltc_service24___8 == 1 & naccho_v2_23$naccho_contact_day24 == 6) |
+                                        (naccho_v2_23$ltc_service25___8 == 1 & naccho_v2_23$naccho_contact_day25 == 6) |
+                                        (naccho_v2_23$ltc_service26___8 == 1 & naccho_v2_23$naccho_contact_day26 == 6) |
+                                        (naccho_v2_23$ltc_service27___8 == 1 & naccho_v2_23$naccho_contact_day27 == 6) |
+                                        (naccho_v2_23$ltc_service28___8 == 1 & naccho_v2_23$naccho_contact_day28 == 6) |
+                                        (naccho_v2_23$ltc_service29___8 == 1 & naccho_v2_23$naccho_contact_day29 == 6) |
+                                        (naccho_v2_23$ltc_service30___8 == 1 & naccho_v2_23$naccho_contact_day30 == 6) |
+                                        (naccho_v2_23$ltc_service31___8 == 1 & naccho_v2_23$naccho_contact_day31 == 6) |
+                                        (naccho_v2_23$ltc_service32___8 == 1 & naccho_v2_23$naccho_contact_day32 == 6) |
+                                        (naccho_v2_23$ltc_service33___8 == 1 & naccho_v2_23$naccho_contact_day33 == 6) |
+                                        (naccho_v2_23$ltc_service34___8 == 1 & naccho_v2_23$naccho_contact_day34 == 6) |
+                                        (naccho_v2_23$ltc_service35___8 == 1 & naccho_v2_23$naccho_contact_day35 == 6) |
+                                        (naccho_v2_23$ltc_service36___8 == 1 & naccho_v2_23$naccho_contact_day36 == 6) |
+                                        (naccho_v2_23$ltc_service37___8 == 1 & naccho_v2_23$naccho_contact_day37 == 6) |
+                                        (naccho_v2_23$ltc_service38___8 == 1 & naccho_v2_23$naccho_contact_day38 == 6) |
+                                        (naccho_v2_23$ltc_service39___8 == 1 & naccho_v2_23$naccho_contact_day39 == 6) |
+                                        (naccho_v2_23$ltc_service40___8 == 1 & naccho_v2_23$naccho_contact_day40 == 6) |
+                                        (naccho_v2_23$ltc_service41___8 == 1 & naccho_v2_23$naccho_contact_day41 == 6) |
+                                        (naccho_v2_23$ltc_service42___8 == 1 & naccho_v2_23$naccho_contact_day42 == 6) |
+                                        (naccho_v2_23$ltc_service43___8 == 1 & naccho_v2_23$naccho_contact_day43 == 6) |
+                                        (naccho_v2_23$ltc_service44___8 == 1 & naccho_v2_23$naccho_contact_day44 == 6) |
+                                        (naccho_v2_23$ltc_service45___8 == 1 & naccho_v2_23$naccho_contact_day45 == 6) |
+                                        (naccho_v2_23$ltc_service46___8 == 1 & naccho_v2_23$naccho_contact_day46 == 6) |
+                                        (naccho_v2_23$ltc_service47___8 == 1 & naccho_v2_23$naccho_contact_day47 == 6) |
+                                        (naccho_v2_23$ltc_service48___8 == 1 & naccho_v2_23$naccho_contact_day48 == 6) |
+                                        (naccho_v2_23$ltc_service49___8 == 1 & naccho_v2_23$naccho_contact_day49 == 6) |
+                                        (naccho_v2_23$ltc_service50___8 == 1 & naccho_v2_23$naccho_contact_day50 == 6))] <- 1
 table(naccho_v2_23$contact_success_day32)
 naccho_v2_23_contact_success_day32 <- naccho_v2_23[which(naccho_v2_23$contact_success_day32 == 1), ]
 dim(naccho_v2_23_contact_success_day32)
@@ -3847,6 +3846,8 @@ naccho_v2_23_Appalachian_percent
 
 The National Association of County & City Health Officials (NACCHO) 2.0 project officially started in October 2023. The NACCHO 2.0 data that is presented in this section covers all EIP encounters at UCMC ED from **October 1st, 2023 through June 30th, 2024**. During this time, there were a total of `r naccho_v2_23_enc` encounters within EIP, with **`r naccho_v2_23_pts` unique patients**. The majority of this report will focus on the number of unique patients for several reasons, but will also include total encounter details to highlight the total number of screenings that occur within the ED during this time.
 
+The table below shows the metrics stated for each of the objectives for the NACCHO 2.0 grant. As stated earlier, there were a total of `r naccho_v2_23_enc` encounters at UCMC ED during the project period, with a total of `r naccho_v2_23_pts` unique patients. Substance use disorder (SUD) screening is defined as anyone who at least answered a question on the EIP assessment about their substance use history or experience. This includes the Alcohol Use Disorders Identification Test (AUDIT-C) for alcohol and the National Institute on Drug Abuse (NIDA) Modified Alcohol, Smoking and Substance Involvement Screening Test (ASSIST) measure for other substances. Additional questions used when determining substance use screening include tobacco use history and fentanyl test strip (FTS) and other harm reduction tool awareness. There were a total of **`r naccho_v2_23_sud_assessed` patients that were screened for SUD** (*`r naccho_v2_23_sud_assessed_percent` of all patients, `r naccho_v2_23_sud_assessed`/`r naccho_v2_23_pts`*). An individual is determined to be positive for a SUD if they meet criteria on either the AUDIT-C or the NM-ASSIST. There were a total of **`r naccho_v2_23_sud_pos` patients that screened positive for SUD** for at least one substance (*`r naccho_v2_23_sud_pos_percent` of all patients who were screened for SUD, `r naccho_v2_23_sud_pos`/`r naccho_v2_23_sud_assessed`*). The NACCHO 2.0 project is specifically looking at those individuals who screened positive for opioid use disorder (OUD), and there were a total of **`r naccho_v2_23_oud_pos` patients that screened positive specifically for an OUD** (*`r naccho_v2_23_oud_pos_pts_percent` of all patients, `r naccho_v2_23_oud_pos`/`r naccho_v2_23_pts`;  or `r naccho_v2_23_oud_pos_percent` of all those that screened positive for SUD, `r naccho_v2_23_oud_pos`/`r naccho_v2_23_sud_pos`*).
+
 ```{r, echo = FALSE, fig.align='center'}
 
 # NACCHO 2.0 Objective 1 Table
@@ -3888,13 +3889,15 @@ naccho_v2_tbl %>%
 
 The first objective on the 2023 NACCHO 2.0 workplan has both operational components and data that can be evaluated. **Objective 1 for the NACCHO 2.0 grant** was *Perform follow-up calls to patients with OUD that have been seen in the ED to determine rates of follow-up to treatment facilities*. Specifically, objective 1c encompasses the data component and states that we will "*Conduct follow-up calls for all people with OUD seen in the ED*." Therefore, we can look at the total number of individuals that screen positive at UCMC ED using the NIDA-Modified ASSIST tool used in the EIP assessment, and how many of those individuals are followed-up with after their encounter to determine engagement in treatment. Also, for Objective 1 under the sustainability component, it discusses the importance of peer involvement, so we can also analyze the number of these OUD screening encounters where a peer is involved.
 
-For screening for SUD/OUD within EIP, the NIDA-Modified ASSIST is used and is located within the overall EIP assessment. For this project, we also added the NM-ASSIST to the Linkage to Care page so that NACCHO staff involved with follow-ups can complete the screening tools for those who endorse opioid use but did not have a complete assessment to determine whether they meet criteria for OUD. Therefore, when providing numbers for screening and positivity, this includes both ASSIST tools. The total number of patients that received a SUD assessment was `r naccho_v2_23_sud_assessed` patients (*`r naccho_v2_23_sud_assessed_percent` of all patients, `r naccho_v2_23_sud_assessed`/`r naccho_v2_23_pts`*), with a total of `r naccho_v2_23_sud_pos` that screened positive for any type of SUD (*`r naccho_v2_23_sud_pos_percent` of all those assessed for SUD, `r naccho_v2_23_sud_pos`/`r naccho_v2_23_sud_assessed`*). The total number of patients that screened positive specifically for OUD (street/prescription opioids) was **`r naccho_v2_23_oud_pos`** (*`r naccho_v2_23_oud_pos_percent` of all those SUD positive, `r naccho_v2_23_oud_pos`/`r naccho_v2_23_sud_pos`*), which is **`r naccho_v2_23_oud_pos_pts_percent`** of all patients seen during this project (*`r naccho_v2_23_oud_pos`/`r naccho_v2_23_pts`*).
+For screening for SUD/OUD within EIP, the NM-ASSIST is used and is located within the overall EIP assessment. For this project, we also added the NM-ASSIST to the Linkage to Care page so that NACCHO staff involved with follow-ups can complete the screening tools for those who endorse opioid use but did not have a complete assessment to determine whether they meet criteria for OUD. Therefore, when providing numbers for screening and positivity, this includes both ASSIST tools. As mentioned above, the total number of patients that received a SUD assessment was `r naccho_v2_23_sud_assessed` patients (*`r naccho_v2_23_sud_assessed_percent` of all patients, `r naccho_v2_23_sud_assessed`/`r naccho_v2_23_pts`*), with a total of `r naccho_v2_23_sud_pos` that screened positive for any type of SUD (*`r naccho_v2_23_sud_pos_percent` of all those assessed for SUD, `r naccho_v2_23_sud_pos`/`r naccho_v2_23_sud_assessed`*). The total number of patients that screened positive specifically for OUD (street/prescription opioids) was **`r naccho_v2_23_oud_pos` patients** (*`r naccho_v2_23_oud_pos_percent` of all those SUD positive, `r naccho_v2_23_oud_pos`/`r naccho_v2_23_sud_pos`*), which is *`r naccho_v2_23_oud_pos_pts_percent`* of all patients seen during this project (*`r naccho_v2_23_oud_pos`/`r naccho_v2_23_pts`*) or *`r naccho_v2_23_oud_pos_percent`* of all patients who screened positive for SUD (*`r naccho_v2_23_oud_pos`/`r naccho_v2_23_sud_pos`*).
 
 Therefore, there are a total of `r naccho_v2_23_oud_pos` patients that are eligible for follow-up for this NACCHO 2.0 grant. The total number of patients where contact was attempted was **`r naccho_v2_23_contact_attempted`** (*`r naccho_v2_23_contact_attempted_percent` of all those OUD positive, `r naccho_v2_23_contact_attempted`/`r naccho_v2_23_oud_pos`*). The initial contact is 14 days after their ED encounter. The total number of contact attempts made at day 14 was **`r naccho_v2_23_contact_attempted_day14`** (*`r naccho_v2_23_contact_attempted_day14_percent` of all contact attempts, `r naccho_v2_23_contact_attempted_day14`/`r naccho_v2_23_contact_attempted`*). If contact at day 14 was unsuccessful, or not initiated, then contact was made at day 15, and the total number of patients who were attempted to contact at day 15 was **`r naccho_v2_23_contact_attempted_day15`** (*`r naccho_v2_23_contact_attempted_day15_percent` of all contact attempts, `r naccho_v2_23_contact_attempted_day15`/`r naccho_v2_23_contact_attempted`*). If contact at day 15 was unsuccessful, or not initiated, then contact was made at day 16, and the total number of patients who were attempted to contact at day 16 was **`r naccho_v2_23_contact_attempted_day16`** (*`r naccho_v2_23_contact_attempted_day16_percent` of all contact attempts, `r naccho_v2_23_contact_attempted_day16`/`r naccho_v2_23_contact_attempted`*). If contact at day 16 was unsuccessful, or not initiated, then contact was suspended until day 30, and the total number of patients who were attempted to contact at day 30 was **`r naccho_v2_23_contact_attempted_day30`** (*`r naccho_v2_23_contact_attempted_day30_percent` of all contact attempts, `r naccho_v2_23_contact_attempted_day30`/`r naccho_v2_23_contact_attempted`*). If contact at day 30 was unsuccessful, or not initiated, then contact was made at day 31, and the total number of patients who were attempted to contact at day 31 was **`r naccho_v2_23_contact_attempted_day31`** (*`r naccho_v2_23_contact_attempted_day31_percent` of all contact attempts, `r naccho_v2_23_contact_attempted_day31`/`r naccho_v2_23_contact_attempted`*). If contact at day 31 was unsuccessful, or not initiated, then contact was made at day 32, and the total number of patients who were attempted to contact at day 32 was **`r naccho_v2_23_contact_attempted_day32`** (*`r naccho_v2_23_contact_attempted_day32_percent` of all contact attempts, `r naccho_v2_23_contact_attempted_day32`/`r naccho_v2_23_contact_attempted`*).
 
 Out of the total number of patients that screened positive for OUD (`r naccho_v2_23_oud_pos` patients), there were a total of **`r naccho_v2_23_contact_success`** patients that were successfully contacted (*`r naccho_v2_23_contact_success_percent` of all those where contact was attempted, `r naccho_v2_23_contact_success`/`r naccho_v2_23_contact_attempted`*). The total number of successful contact attempts made at day 14 was **`r naccho_v2_23_contact_success_day14`** (*`r naccho_v2_23_contact_success_day14_percent` of all successful contact attempts, `r naccho_v2_23_contact_success_day14`/`r naccho_v2_23_contact_success`*). The total number of patients who were successfully contacted at day 15 was **`r naccho_v2_23_contact_success_day15`** (*`r naccho_v2_23_contact_success_day15_percent` of all successful contact attempts, `r naccho_v2_23_contact_success_day15`/`r naccho_v2_23_contact_success`*). The total number of patients who were successfully contacted at day 16 was **`r naccho_v2_23_contact_success_day16`** (*`r naccho_v2_23_contact_success_day16_percent` of all successful contact attempts, `r naccho_v2_23_contact_success_day16`/`r naccho_v2_23_contact_success`*). The total number of patients who were successfully contacted at day 30 was **`r naccho_v2_23_contact_success_day30`** (*`r naccho_v2_23_contact_success_day30_percent` of all successful contact attempts, `r naccho_v2_23_contact_success_day30`/`r naccho_v2_23_contact_success`*). The total number of patients who were successfully contacted at day 31 was **`r naccho_v2_23_contact_success_day31`** (*`r naccho_v2_23_contact_success_day31_percent` of all successful contact attempts, `r naccho_v2_23_contact_success_day31`/`r naccho_v2_23_contact_success`*). The total number of patients who were successfully contacted at day 32 was **`r naccho_v2_23_contact_success_day32`** (*`r naccho_v2_23_contact_success_day32_percent` of all successful contact attempts, `r naccho_v2_23_contact_success_day32`/`r naccho_v2_23_contact_success`*).
 
 Finally, NACCHO staff are meant to confirm whether the individual is established with treatment for OUD. For all of those individuals where our NACCHO staff was able to successfully make contact, they have been able to confirm that **`r naccho_v2_23_confirm_tx` patients** are established with treatment for OUD (*`r naccho_v2_23_confirm_tx_percent` of all successful contact attempts, `r naccho_v2_23_confirm_tx`/`r naccho_v2_23_contact_success`*), which is **`r naccho_v2_23_confirm_tx_all_percent`** of all patients that screened positive for an OUD.
+
+As for peer encounters, there were a total of `r naccho_v2_23_peer_pts` patients that had an encounter with one of the EIP Peer Support Staff at UCMC ED during this time (*`r naccho_v2_23_peer_pts_percent` of all patients, `r naccho_v2_23_peer_pts`/`r naccho_v2_23_pts`*). There was a total of **`r naccho_v2_23_oud_peer_pts` patients that screened positive for OUD that had an encounter with a peer** during their ED visit (*`r naccho_v2_23_oud_peer_pts_percent` of all patients, `r naccho_v2_23_oud_peer_pts`/`r naccho_v2_23_pts`; or `r naccho_v2_23_oud_pos_peer_pts_percent` of all those positive for OUD, `r naccho_v2_23_oud_peer_pts`/`r naccho_v2_23_oud_pos`*).
 
 <br>
 <br>
