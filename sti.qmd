@@ -32,10 +32,16 @@ library(zoo)
 # 2023
 eip23 <- read.csv('M:/EIP Data/EIP Database/REDCap Ver 5.0/EIP Database Data 20240512_2311.csv')
 dim(eip23)
+summary(eip23$record_id)
+eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
+summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240520_1003.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240527_1342.csv')
 dim(eip24)
+summary(eip24$record_id)
+eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
+summary(eip24$record_id)
 
 # CHI Lab Files
 labs1 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240102.csv')
@@ -80,9 +86,12 @@ labs20 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_lab
 dim(labs20)
 labs21 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240514.csv')
 dim(labs21)
+labs22 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240521.csv')
+dim(labs22)
 
 labs <- rbind(labs1,labs2,labs3,labs4,labs5,labs6,labs7,labs8,labs9,labs10,
-              labs11,labs12,labs13,labs14,labs15,labs16,labs17,labs18, labs19, labs20, labs21)
+              labs11,labs12,labs13,labs14,labs15,labs16,labs17,labs18,labs19,labs20,
+              labs21,labs22)
 dim(labs)
 head(labs)
 
@@ -2993,7 +3002,7 @@ monthly_syph_tests_plot
 The flowchart of the STI Linkage to Care efforts for EIP are shown below. This flow diagram shows linkage to care efforts for all STI linkage cases initiated within EIP.
 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning = FALSE}
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 

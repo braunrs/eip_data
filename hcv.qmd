@@ -32,7 +32,7 @@ library(forcats)
 
 
 # EIP Database Data
-eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240520_1003.csv')
+eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240527_1342.csv')
 dim(eip)
 
 # HCV Epic Dashboard Data
@@ -68,8 +68,10 @@ hcv15 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV
 dim(hcv15)
 hcv16 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240519_1227.csv')
 dim(hcv16)
+hcv17 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240526_2359.csv')
+dim(hcv17)
 
-hcv <- rbind(hcv1,hcv2,hcv3,hcv4,hcv5,hcv6,hcv7,hcv8,hcv9,hcv10,hcv11,hcv12,hcv13,hcv14,hcv15,hcv16)
+hcv <- rbind(hcv1,hcv2,hcv3,hcv4,hcv5,hcv6,hcv7,hcv8,hcv9,hcv10,hcv11,hcv12,hcv13,hcv14,hcv15,hcv16,hcv17)
 dim(hcv)
 hcv <- distinct(hcv)
 dim(hcv)
