@@ -2204,13 +2204,7 @@ eip$datediff50 <- as.numeric(interval(eip$enc_date, eip$followup_date50)/ddays(1
 #########################################  Creating Encounter Dataset  ########################################
 ###############################################################################################################
 
-summary(eip$enc_date)
-enc <- eip[which(eip$enc_date >= '2023-01-01' & eip$enc_date <= '2023-12-31'), ]
-summary(enc$enc_date)
-
-
-
-
+enc <- eip
 
 
 ##########  CTR Testing  ##########

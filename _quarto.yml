@@ -10,6 +10,8 @@ website:
         text: Home
       - text: Clinical
         menu:
+          - href: hiv.qmd
+            text: HIV
           - href: hcv.qmd
             text: HCV
           - href: sud.qmd

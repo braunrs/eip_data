@@ -2203,7 +2203,7 @@ eip$datediff50 <- as.numeric(interval(eip$enc_date, eip$followup_date50)/ddays(1
 ###############################################################################################################
 
 summary(eip$enc_date)
-ctr <- eip[which(eip$enc_date >= '2023-01-01' & eip$enc_date <= '2024-05-31'), ]
+ctr <- eip[which(eip$enc_date >= '2023-01-01' & eip$enc_date <= '2024-06-30'), ]
 summary(ctr$enc_date)
 
 
