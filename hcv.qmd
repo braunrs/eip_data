@@ -29,10 +29,14 @@ library(shinydashboard)
 library(ggplot2)
 library(lubridate)
 library(forcats)
+library(htmltools)
+library(hrbrthemes)
+library(janitor)
+library(apyramid)
 
 
 # EIP Database Data
-eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240604_0831.csv')
+eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240610_0817.csv')
 dim(eip)
 
 # HCV Epic Dashboard Data
@@ -172,6 +176,14 @@ head(hcv)
 # Aggregate data by order_date
 daily_hcv_tests <- hcv %>%
   group_by(order_date) %>%
+  summarise(total_tests = sum(hcv_ab_tested),
+            total_positive = sum(hcv_ab_positive),
+            total_negative = sum(hcv_ab_negative))
+
+hcv <- hcv %>%
+  mutate(monthly_date = floor_date(order_date, "month"))
+monthly_hcv_tests <- hcv %>%
+  group_by(monthly_date) %>%
   summarise(total_tests = sum(hcv_ab_tested),
             total_positive = sum(hcv_ab_positive),
             total_negative = sum(hcv_ab_negative))
@@ -584,6 +596,425 @@ dim(eip_hcv_main)
 table(eip_hcv_main$hcv_linked_other)
 
 
+###  Reasons unable to follow-up
+
+# Ineligible HCV Linkage - Already Linked
+
+table(eip_hcv$ltc_hcv_declined_rsn___23)
+table(eip_hcv$ltc_hcv_prevented_rsn___16)
+eip_hcv$hcv_dash_already_linked[eip_hcv$ltc_hcv_declined_rsn___23 == 1 |
+                                  eip_hcv$ltc_hcv_prevented_rsn___16 == 1] <- 1
+table(eip_hcv$hcv_dash_already_linked)
+hcv_dash_already_linked <- eip_hcv[which(eip_hcv$hcv_dash_already_linked == 1), ]
+hcv_dash_already_linked <- select(hcv_dash_already_linked, mrn)
+head(hcv_dash_already_linked)
+dim(hcv_dash_already_linked)
+hcv_dash_already_linked <- distinct(hcv_dash_already_linked)
+dim(hcv_dash_already_linked)
+hcv_dash_already_linked$hcv_dash_already_linked <- 1
+
+dim(hcv_dash_already_linked)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_already_linked, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_already_linked)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_already_linked)
+hcv_dash_already_linked <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                                eip_hcv_main$hcv_dash_already_linked == 1), ]
+dim(hcv_dash_already_linked)
+hcv_dash_already_linked <- nrow(hcv_dash_already_linked)
+hcv_dash_already_linked
+
+
+# Ineligible HCV Linkage - Deceased
+
+table(eip_hcv$ltc_hcv_declined_rsn___35)
+table(eip_hcv$ltc_hcv_prevented_rsn___17)
+eip_hcv$hcv_dash_deceased[eip_hcv$ltc_hcv_declined_rsn___35 == 1 |
+                            eip_hcv$ltc_hcv_prevented_rsn___17 == 1] <- 1
+table(eip_hcv$hcv_dash_deceased)
+hcv_dash_deceased <- eip_hcv[which(eip_hcv$hcv_dash_deceased == 1), ]
+hcv_dash_deceased <- select(hcv_dash_deceased, mrn)
+head(hcv_dash_deceased)
+dim(hcv_dash_deceased)
+hcv_dash_deceased <- distinct(hcv_dash_deceased)
+dim(hcv_dash_deceased)
+hcv_dash_deceased$hcv_dash_deceased <- 1
+
+dim(hcv_dash_deceased)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_deceased, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_deceased)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_deceased)
+hcv_dash_deceased <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                                eip_hcv_main$hcv_dash_deceased == 1), ]
+dim(hcv_dash_deceased)
+hcv_dash_deceased <- nrow(hcv_dash_deceased)
+hcv_dash_deceased
+
+
+# Ineligible HCV Linkage - Incarcerated
+
+table(eip_hcv$ltc_hcv_prevented_rsn___12)
+eip_hcv$hcv_dash_incarcerated[eip_hcv$ltc_hcv_prevented_rsn___12 == 1] <- 1
+table(eip_hcv$hcv_dash_incarcerated)
+hcv_dash_incarcerated <- eip_hcv[which(eip_hcv$hcv_dash_incarcerated == 1), ]
+hcv_dash_incarcerated <- select(hcv_dash_incarcerated, mrn)
+head(hcv_dash_incarcerated)
+dim(hcv_dash_incarcerated)
+hcv_dash_incarcerated <- distinct(hcv_dash_incarcerated)
+dim(hcv_dash_incarcerated)
+hcv_dash_incarcerated$hcv_dash_incarcerated <- 1
+
+dim(hcv_dash_incarcerated)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_incarcerated, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_incarcerated)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_incarcerated)
+hcv_dash_incarcerated <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                          eip_hcv_main$hcv_dash_incarcerated == 1), ]
+dim(hcv_dash_incarcerated)
+hcv_dash_incarcerated <- nrow(hcv_dash_incarcerated)
+hcv_dash_incarcerated
+
+
+# Ineligible HCV Linkage - Inability to Contact
+
+table(eip_hcv$ltc_hcv_prevented_rsn___19)
+eip_hcv$hcv_dash_inability_to_contact[eip_hcv$ltc_hcv_prevented_rsn___19 == 1] <- 1
+table(eip_hcv$hcv_dash_inability_to_contact)
+hcv_dash_inability_to_contact <- eip_hcv[which(eip_hcv$hcv_dash_inability_to_contact == 1), ]
+hcv_dash_inability_to_contact <- select(hcv_dash_inability_to_contact, mrn)
+head(hcv_dash_inability_to_contact)
+dim(hcv_dash_inability_to_contact)
+hcv_dash_inability_to_contact <- distinct(hcv_dash_inability_to_contact)
+dim(hcv_dash_inability_to_contact)
+hcv_dash_inability_to_contact$hcv_dash_inability_to_contact <- 1
+
+dim(hcv_dash_inability_to_contact)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_inability_to_contact, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_inability_to_contact)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_inability_to_contact)
+hcv_dash_inability_to_contact <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                          eip_hcv_main$hcv_dash_inability_to_contact == 1), ]
+dim(hcv_dash_inability_to_contact)
+hcv_dash_inability_to_contact <- nrow(hcv_dash_inability_to_contact)
+hcv_dash_inability_to_contact
+
+
+# Ineligible HCV Linkage - Declined Linkage Service
+
+eip_hcv$hcv_dash_linkage_declined[eip_hcv$ltc_hcv_final_ltc_status == 2 &
+                                    (is.na(eip_hcv$hcv_dash_already_linked) &
+                                       is.na(eip_hcv$hcv_dash_deceased) &
+                                       is.na(eip_hcv$hcv_dash_incarcerated) &
+                                       is.na(eip_hcv$hcv_dash_inability_to_contact))] <- 1
+table(eip_hcv$hcv_dash_linkage_declined)
+hcv_dash_linkage_declined <- eip_hcv[which(eip_hcv$hcv_dash_linkage_declined == 1), ]
+hcv_dash_linkage_declined <- select(hcv_dash_linkage_declined, mrn)
+head(hcv_dash_linkage_declined)
+dim(hcv_dash_linkage_declined)
+hcv_dash_linkage_declined <- distinct(hcv_dash_linkage_declined)
+dim(hcv_dash_linkage_declined)
+hcv_dash_linkage_declined$hcv_dash_linkage_declined <- 1
+
+dim(hcv_dash_linkage_declined)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_linkage_declined, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_linkage_declined)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_linkage_declined)
+hcv_dash_linkage_declined <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                          eip_hcv_main$hcv_dash_linkage_declined == 1), ]
+dim(hcv_dash_linkage_declined)
+hcv_dash_linkage_declined <- nrow(hcv_dash_linkage_declined)
+hcv_dash_linkage_declined
+
+
+# Ineligible HCV Linkage - Linkage in Progress
+
+table(eip_hcv$ltc_hcv_prevented_rsn___18)
+eip_hcv$hcv_dash_ongoing_linkage[eip_hcv$ltc_hcv_prevented_rsn___18 == 1] <- 1
+table(eip_hcv$hcv_dash_ongoing_linkage)
+hcv_dash_ongoing_linkage <- eip_hcv[which(eip_hcv$hcv_dash_ongoing_linkage == 1), ]
+hcv_dash_ongoing_linkage <- select(hcv_dash_ongoing_linkage, mrn)
+head(hcv_dash_ongoing_linkage)
+dim(hcv_dash_ongoing_linkage)
+hcv_dash_ongoing_linkage <- distinct(hcv_dash_ongoing_linkage)
+dim(hcv_dash_ongoing_linkage)
+hcv_dash_ongoing_linkage$hcv_dash_ongoing_linkage <- 1
+
+dim(hcv_dash_ongoing_linkage)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_ongoing_linkage, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_ongoing_linkage)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_ongoing_linkage)
+hcv_dash_ongoing_linkage <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                          eip_hcv_main$hcv_dash_ongoing_linkage == 1), ]
+dim(hcv_dash_ongoing_linkage)
+hcv_dash_ongoing_linkage <- nrow(hcv_dash_ongoing_linkage)
+hcv_dash_ongoing_linkage
+
+
+# HCV Open/Closed Cases
+
+table(eip_hcv$ltc_hcv_open_case_calc)
+eip_hcv$hcv_dash_in_progress[eip_hcv$ltc_hcv_open_case_calc == 1] <- 1
+table(eip_hcv$hcv_dash_in_progress)
+hcv_dash_in_progress <- eip_hcv[which(eip_hcv$hcv_dash_in_progress == 1), ]
+hcv_dash_in_progress <- select(hcv_dash_in_progress, mrn)
+head(hcv_dash_in_progress)
+dim(hcv_dash_in_progress)
+hcv_dash_in_progress <- distinct(hcv_dash_in_progress)
+dim(hcv_dash_in_progress)
+hcv_dash_in_progress$hcv_dash_in_progress <- 1
+
+dim(hcv_dash_in_progress)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_in_progress, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_in_progress)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_in_progress)
+hcv_dash_in_progress <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                          eip_hcv_main$hcv_dash_in_progress == 1), ]
+dim(hcv_dash_in_progress)
+hcv_dash_in_progress <- nrow(hcv_dash_in_progress)
+hcv_dash_in_progress
+
+
+# HCV Reasons Not Linked to Care
+
+eip_hcv$hcv_dash_not_linked_med_staff[eip_hcv$ltc_hcv_prevented_rsn___1 == 1 |
+                                        eip_hcv$ltc_hcv_prevented_rsn___2 == 1 |
+                                        eip_hcv$ltc_hcv_prevented_rsn___11 == 1] <- 1
+table(eip_hcv$hcv_dash_not_linked_med_staff)
+hcv_dash_not_linked_med_staff <- eip_hcv[which(eip_hcv$hcv_dash_not_linked_med_staff == 1), ]
+hcv_dash_not_linked_med_staff <- select(hcv_dash_not_linked_med_staff, mrn)
+head(hcv_dash_not_linked_med_staff)
+dim(hcv_dash_not_linked_med_staff)
+hcv_dash_not_linked_med_staff <- distinct(hcv_dash_not_linked_med_staff)
+dim(hcv_dash_not_linked_med_staff)
+hcv_dash_not_linked_med_staff$hcv_dash_not_linked_med_staff <- 1
+
+dim(hcv_dash_not_linked_med_staff)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_not_linked_med_staff, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_not_linked_med_staff)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_not_linked_med_staff)
+hcv_dash_not_linked_med_staff <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                          eip_hcv_main$hcv_dash_not_linked_med_staff == 1), ]
+dim(hcv_dash_not_linked_med_staff)
+hcv_dash_not_linked_med_staff <- nrow(hcv_dash_not_linked_med_staff)
+hcv_dash_not_linked_med_staff
+
+
+
+eip_hcv$hcv_dash_not_linked_family[eip_hcv$ltc_hcv_prevented_rsn___3 == 1] <- 1
+table(eip_hcv$hcv_dash_not_linked_family)
+hcv_dash_not_linked_family <- eip_hcv[which(eip_hcv$hcv_dash_not_linked_family == 1), ]
+hcv_dash_not_linked_family <- select(hcv_dash_not_linked_family, mrn)
+head(hcv_dash_not_linked_family)
+dim(hcv_dash_not_linked_family)
+hcv_dash_not_linked_family <- distinct(hcv_dash_not_linked_family)
+dim(hcv_dash_not_linked_family)
+hcv_dash_not_linked_family$hcv_dash_not_linked_family <- 1
+
+dim(hcv_dash_not_linked_family)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_not_linked_family, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_not_linked_family)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_not_linked_family)
+hcv_dash_not_linked_family <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                          eip_hcv_main$hcv_dash_not_linked_family == 1), ]
+dim(hcv_dash_not_linked_family)
+hcv_dash_not_linked_family <- nrow(hcv_dash_not_linked_family)
+hcv_dash_not_linked_family
+
+
+
+eip_hcv$hcv_dash_not_linked_not_talking[eip_hcv$ltc_hcv_prevented_rsn___4 == 1] <- 1
+table(eip_hcv$hcv_dash_not_linked_not_talking)
+hcv_dash_not_linked_not_talking <- eip_hcv[which(eip_hcv$hcv_dash_not_linked_not_talking == 1), ]
+hcv_dash_not_linked_not_talking <- select(hcv_dash_not_linked_not_talking, mrn)
+head(hcv_dash_not_linked_not_talking)
+dim(hcv_dash_not_linked_not_talking)
+hcv_dash_not_linked_not_talking <- distinct(hcv_dash_not_linked_not_talking)
+dim(hcv_dash_not_linked_not_talking)
+hcv_dash_not_linked_not_talking$hcv_dash_not_linked_not_talking <- 1
+
+dim(hcv_dash_not_linked_not_talking)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_not_linked_not_talking, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_not_linked_not_talking)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_not_linked_not_talking)
+hcv_dash_not_linked_not_talking <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                          eip_hcv_main$hcv_dash_not_linked_not_talking == 1), ]
+dim(hcv_dash_not_linked_not_talking)
+hcv_dash_not_linked_not_talking <- nrow(hcv_dash_not_linked_not_talking)
+hcv_dash_not_linked_not_talking
+
+
+
+#eip_hcv$hcv_dash_not_linked_safety[eip_hcv$ltc_hcv_prevented_rsn___5 == 1] <- 1
+#table(eip_hcv$hcv_dash_not_linked_safety)
+#hcv_dash_not_linked_safety <- eip_hcv[which(eip_hcv$hcv_dash_not_linked_safety == 1), ]
+#hcv_dash_not_linked_safety <- select(hcv_dash_not_linked_safety, mrn)
+#head(hcv_dash_not_linked_safety)
+#dim(hcv_dash_not_linked_safety)
+#hcv_dash_not_linked_safety <- distinct(hcv_dash_not_linked_safety)
+#dim(hcv_dash_not_linked_safety)
+#hcv_dash_not_linked_safety$hcv_dash_not_linked_safety <- 1
+
+#dim(hcv_dash_not_linked_safety)
+#dim(eip_hcv_main)
+#eip_hcv_main <- merge(eip_hcv_main, hcv_dash_not_linked_safety, by = 'mrn', all.x=T)
+#dim(eip_hcv_main)
+#eip_hcv_main <- distinct(eip_hcv_main)
+#dim(eip_hcv_main)
+#table(eip_hcv_main$hcv_dash_not_linked_safety)
+#table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_not_linked_safety)
+#hcv_dash_not_linked_safety <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+#                                          eip_hcv_main$hcv_dash_not_linked_safety == 1), ]
+#dim(hcv_dash_not_linked_safety)
+#hcv_dash_not_linked_safety <- nrow(hcv_dash_not_linked_safety)
+#hcv_dash_not_linked_safety
+hcv_dash_not_linked_safety <- 0
+
+
+
+eip_hcv$hcv_dash_not_linked_medical[eip_hcv$ltc_hcv_prevented_rsn___6 == 1 |
+                                      eip_hcv$ltc_hcv_prevented_rsn___8 == 1] <- 1
+table(eip_hcv$hcv_dash_not_linked_medical)
+hcv_dash_not_linked_medical <- eip_hcv[which(eip_hcv$hcv_dash_not_linked_medical == 1), ]
+hcv_dash_not_linked_medical <- select(hcv_dash_not_linked_medical, mrn)
+head(hcv_dash_not_linked_medical)
+dim(hcv_dash_not_linked_medical)
+hcv_dash_not_linked_medical <- distinct(hcv_dash_not_linked_medical)
+dim(hcv_dash_not_linked_medical)
+hcv_dash_not_linked_medical$hcv_dash_not_linked_medical <- 1
+
+dim(hcv_dash_not_linked_medical)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_not_linked_medical, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_not_linked_medical)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_not_linked_medical)
+hcv_dash_not_linked_medical <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                          eip_hcv_main$hcv_dash_not_linked_medical == 1), ]
+dim(hcv_dash_not_linked_medical)
+hcv_dash_not_linked_medical <- nrow(hcv_dash_not_linked_medical)
+hcv_dash_not_linked_medical
+
+
+
+eip_hcv$hcv_dash_not_linked_contact[eip_hcv$ltc_hcv_prevented_rsn___20 == 1] <- 1
+table(eip_hcv$hcv_dash_not_linked_contact)
+hcv_dash_not_linked_contact <- eip_hcv[which(eip_hcv$hcv_dash_not_linked_contact == 1), ]
+hcv_dash_not_linked_contact <- select(hcv_dash_not_linked_contact, mrn)
+head(hcv_dash_not_linked_contact)
+dim(hcv_dash_not_linked_contact)
+hcv_dash_not_linked_contact <- distinct(hcv_dash_not_linked_contact)
+dim(hcv_dash_not_linked_contact)
+hcv_dash_not_linked_contact$hcv_dash_not_linked_contact <- 1
+
+dim(hcv_dash_not_linked_contact)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_not_linked_contact, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_not_linked_contact)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_not_linked_contact)
+hcv_dash_not_linked_contact <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                          eip_hcv_main$hcv_dash_not_linked_contact == 1), ]
+dim(hcv_dash_not_linked_contact)
+hcv_dash_not_linked_contact <- nrow(hcv_dash_not_linked_contact)
+hcv_dash_not_linked_contact
+
+
+
+#eip_hcv$hcv_dash_not_linked_language[eip_hcv$ltc_hcv_prevented_rsn___9 == 1] <- 1
+#table(eip_hcv$hcv_dash_not_linked_language)
+#hcv_dash_not_linked_language <- eip_hcv[which(eip_hcv$hcv_dash_not_linked_language == 1), ]
+#hcv_dash_not_linked_language <- select(hcv_dash_not_linked_language, mrn)
+#head(hcv_dash_not_linked_language)
+#dim(hcv_dash_not_linked_language)
+#hcv_dash_not_linked_language <- distinct(hcv_dash_not_linked_language)
+#dim(hcv_dash_not_linked_language)
+#hcv_dash_not_linked_language$hcv_dash_not_linked_language <- 1
+
+#dim(hcv_dash_not_linked_language)
+#dim(eip_hcv_main)
+#eip_hcv_main <- merge(eip_hcv_main, hcv_dash_not_linked_language, by = 'mrn', all.x=T)
+#dim(eip_hcv_main)
+#eip_hcv_main <- distinct(eip_hcv_main)
+#dim(eip_hcv_main)
+#table(eip_hcv_main$hcv_dash_not_linked_language)
+#table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_not_linked_language)
+#hcv_dash_not_linked_language <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+#                                          eip_hcv_main$hcv_dash_not_linked_language == 1), ]
+#dim(hcv_dash_not_linked_language)
+#hcv_dash_not_linked_language <- nrow(hcv_dash_not_linked_language)
+#hcv_dash_not_linked_language
+hcv_dash_not_linked_language <- 0
+
+
+
+eip_hcv$hcv_dash_not_linked_other[eip_hcv$ltc_hcv_prevented_rsn___0 == 1] <- 1
+table(eip_hcv$hcv_dash_not_linked_other)
+hcv_dash_not_linked_other <- eip_hcv[which(eip_hcv$hcv_dash_not_linked_other == 1), ]
+hcv_dash_not_linked_other <- select(hcv_dash_not_linked_other, mrn)
+head(hcv_dash_not_linked_other)
+dim(hcv_dash_not_linked_other)
+hcv_dash_not_linked_other <- distinct(hcv_dash_not_linked_other)
+dim(hcv_dash_not_linked_other)
+hcv_dash_not_linked_other$hcv_dash_not_linked_other <- 1
+
+dim(hcv_dash_not_linked_other)
+dim(eip_hcv_main)
+eip_hcv_main <- merge(eip_hcv_main, hcv_dash_not_linked_other, by = 'mrn', all.x=T)
+dim(eip_hcv_main)
+eip_hcv_main <- distinct(eip_hcv_main)
+dim(eip_hcv_main)
+table(eip_hcv_main$hcv_dash_not_linked_other)
+table(eip_hcv_main$hcv_no_education, eip_hcv_main$hcv_dash_not_linked_other)
+hcv_dash_not_linked_other <- eip_hcv_main[which(eip_hcv_main$hcv_no_education == 1 &
+                                          eip_hcv_main$hcv_dash_not_linked_other == 1), ]
+dim(hcv_dash_not_linked_other)
+hcv_dash_not_linked_other <- nrow(hcv_dash_not_linked_other)
+hcv_dash_not_linked_other
+
+
 
 
 ######################################################################################################
@@ -776,6 +1207,55 @@ hcv_pts_no_education_percent
 
 
 
+
+hcv_dash_already_linked_percent <- percent(hcv_dash_already_linked/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_already_linked_percent
+
+hcv_dash_deceased_percent <- percent(hcv_dash_deceased/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_deceased_percent
+
+hcv_dash_incarcerated_percent <- percent(hcv_dash_incarcerated/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_incarcerated_percent
+
+hcv_dash_inability_to_contact_percent <- percent(hcv_dash_inability_to_contact/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_inability_to_contact_percent
+
+hcv_dash_linkage_declined_percent <- percent(hcv_dash_linkage_declined/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_linkage_declined_percent
+
+hcv_dash_ongoing_linkage_percent <- percent(hcv_dash_ongoing_linkage/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_ongoing_linkage_percent
+
+hcv_dash_in_progress_percent <- percent(hcv_dash_in_progress/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_in_progress_percent
+
+hcv_dash_not_linked_med_staff_percent <- percent(hcv_dash_not_linked_med_staff/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_not_linked_med_staff_percent
+
+hcv_dash_not_linked_family_percent <- percent(hcv_dash_not_linked_family/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_not_linked_family_percent
+
+hcv_dash_not_linked_not_talking_percent <- percent(hcv_dash_not_linked_not_talking/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_not_linked_not_talking_percent
+
+hcv_dash_not_linked_safety_percent <- percent(hcv_dash_not_linked_safety/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_not_linked_safety_percent
+
+hcv_dash_not_linked_medical_percent <- percent(hcv_dash_not_linked_medical/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_not_linked_medical_percent
+
+hcv_dash_not_linked_contact_percent <- percent(hcv_dash_not_linked_contact/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_not_linked_contact_percent
+
+hcv_dash_not_linked_language_percent <- percent(hcv_dash_not_linked_language/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_not_linked_language_percent
+
+hcv_dash_not_linked_other_percent <- percent(hcv_dash_not_linked_other/hcv_pts_no_education, accuracy = 0.1)
+hcv_dash_not_linked_other_percent
+
+
+
+
 hcv_pts$hcv_pts_educated_ed[hcv_pts$hcv_pts_educated == 1 & hcv_pts$hcv_education_ed == 1] <- 1
 hcv_pts_educated_ed <- hcv_pts[which(hcv_pts$hcv_pts_educated_ed == 1), ]
 dim(hcv_pts_educated_ed)
@@ -959,12 +1439,599 @@ hcv_ab_pos_without_coverage_percent
 
 ```
 
+``` {r EIP Encounter Data, include=FALSE}
+
+###############################################################################################################
+#########################################  Creating Encounter Dataset  ########################################
+###############################################################################################################
+
+enc <- eip
+summary(enc$enc_date)
+enc$enc_date <- as.Date(enc$enc_date, format = '%m/%d/%Y')
+summary(enc$enc_date)
+eip_encounters <- nrow(enc)
+eip_encounters
+
+
+################################################################################
+
+##########  HCV Linkage Data  ##########
+
+
+# HCV Status
+
+table(enc$ltc_services___2, enc$diagnosis_hcv)
+enc$hcv_status[enc$ltc_services___2 == 1 & enc$diagnosis_hcv == 1] <- 'New HCV Diagnosis'
+enc$hcv_status[enc$ltc_services___2 == 1 & enc$diagnosis_hcv == 2] <- 'Previous HCV Diagnosis'
+enc$hcv_status[enc$ltc_services___2 == 1 & is.na(enc$diagnosis_hcv)] <- 'Unknown HCV Status'
+table(enc$hcv_status)
+
+
+# HCV Linkage Data
+
+table(enc$ltc_services___2)
+enc$hcv_ltc[enc$ltc_services___2 == 1] <- 1
+table(enc$hcv_ltc)
+
+table(enc$hcv_ltc)
+hcv_ltc <- enc[which(enc$hcv_ltc == 1), ]
+dim(hcv_ltc)
+hcv_ltc <- nrow(hcv_ltc)
+hcv_ltc
+
+
+
+# Ineligible HCV Linkage - Already Linked
+
+table(enc$ltc_hcv_declined_rsn___23)
+table(enc$ltc_hcv_prevented_rsn___16)
+enc$hcv_already_linked[enc$hcv_ltc == 1 &
+                         (enc$ltc_hcv_declined_rsn___23 == 1 |
+                            enc$ltc_hcv_prevented_rsn___16 == 1)] <- 1
+table(enc$hcv_already_linked)
+
+table(enc$hcv_already_linked)
+hcv_already_linked <- enc[which(enc$hcv_already_linked == 1), ]
+dim(hcv_already_linked)
+hcv_already_linked <- nrow(hcv_already_linked)
+hcv_already_linked
+
+
+
+# Ineligible HCV Linkage - Deceased
+
+table(enc$ltc_hcv_declined_rsn___35)
+table(enc$ltc_hcv_prevented_rsn___17)
+enc$hcv_deceased[enc$hcv_ltc == 1 &
+                   (enc$ltc_hcv_declined_rsn___35 == 1 |
+                      enc$ltc_hcv_prevented_rsn___17 == 1)] <- 1
+table(enc$hcv_deceased)
+
+table(enc$hcv_deceased)
+hcv_deceased <- enc[which(enc$hcv_deceased == 1), ]
+dim(hcv_deceased)
+hcv_deceased <- nrow(hcv_deceased)
+hcv_deceased
+
+
+
+# Ineligible HCV Linkage - Incarcerated
+
+table(enc$ltc_hcv_prevented_rsn___12)
+enc$hcv_incarcerated[enc$hcv_ltc == 1 &
+                       enc$ltc_hcv_prevented_rsn___12 == 1] <- 1
+table(enc$hcv_incarcerated)
+
+table(enc$hcv_incarcerated)
+hcv_incarcerated <- enc[which(enc$hcv_incarcerated == 1), ]
+dim(hcv_incarcerated)
+hcv_incarcerated <- nrow(hcv_incarcerated)
+hcv_incarcerated
+
+
+
+# Ineligible HCV Linkage - Inability to Contact
+
+table(enc$ltc_hcv_final_ltc_status)
+enc$hcv_inability_to_contact[enc$hcv_ltc == 1 &
+                               enc$ltc_hiv_prevented_rsn___19 == 1] <- 1
+table(enc$hcv_inability_to_contact)
+
+table(enc$hcv_inability_to_contact)
+hcv_inability_to_contact <- enc[which(enc$hcv_inability_to_contact == 1), ]
+dim(hcv_inability_to_contact)
+hcv_inability_to_contact <- nrow(hcv_inability_to_contact)
+hcv_inability_to_contact
+
+
+
+# Ineligible HCV Linkage - Declined Linkage Service
+
+table(enc$ltc_hcv_final_ltc_status)
+enc$hcv_linkage_declined[(enc$hcv_ltc == 1 &
+                            enc$ltc_hcv_final_ltc_status == 2) &
+                           (is.na(enc$hcv_already_linked) &
+                              is.na(enc$hcv_deceased) &
+                              is.na(enc$hcv_incarcerated))] <- 1
+table(enc$hcv_linkage_declined)
+
+table(enc$hcv_linkage_declined)
+hcv_linkage_declined <- enc[which(enc$hcv_linkage_declined == 1), ]
+dim(hcv_linkage_declined)
+hcv_linkage_declined <- nrow(hcv_linkage_declined)
+hcv_linkage_declined
+
+
+
+
+# Ineligible HCV Linkage - Linkage in Progress
+
+table(enc$ltc_hcv_prevented_rsn___18)
+enc$hcv_ongoing_linkage[enc$hcv_ltc == 1 &
+                          enc$ltc_hcv_prevented_rsn___18 == 1] <- 1
+table(enc$hcv_ongoing_linkage)
+
+table(enc$hcv_ongoing_linkage)
+hcv_ongoing_linkage <- enc[which(enc$hcv_ongoing_linkage == 1), ]
+dim(hcv_ongoing_linkage)
+hcv_ongoing_linkage <- nrow(hcv_ongoing_linkage)
+hcv_ongoing_linkage
+
+
+
+
+# HCV Ineligible Cases
+
+enc$hcv_ineligible_ltc[enc$hcv_already_linked == 1 |
+                         enc$hcv_deceased == 1 |
+                         enc$hcv_incarcerated == 1 |
+                         enc$hcv_inability_to_contact == 1 |
+                         enc$hcv_linkage_declined == 1 |
+                         enc$hcv_ongoing_linkage == 1] <- 1
+table(enc$hcv_ineligible_ltc)
+
+table(enc$hcv_ineligible_ltc)
+hcv_ineligible_ltc <- enc[which(enc$hcv_ineligible_ltc == 1), ]
+dim(hcv_ineligible_ltc)
+hcv_ineligible_ltc <- nrow(hcv_ineligible_ltc)
+hcv_ineligible_ltc
+
+hcv_ineligible_ltc_percent <- percent(hcv_ineligible_ltc/hcv_ltc, accuracy = 0.1)
+hcv_ineligible_ltc_percent
+
+hcv_already_linked_percent <- percent(hcv_already_linked/hcv_ineligible_ltc, accuracy = 0.1)
+hcv_already_linked_percent
+
+hcv_deceased_percent <- percent(hcv_deceased/hcv_ineligible_ltc, accuracy = 0.1)
+hcv_deceased_percent
+
+hcv_incarcerated_percent <- percent(hcv_incarcerated/hcv_ineligible_ltc, accuracy = 0.1)
+hcv_incarcerated_percent
+
+hcv_inability_to_contact_percent <- percent(hcv_inability_to_contact/hcv_ineligible_ltc, accuracy = 0.1)
+hcv_inability_to_contact_percent
+
+hcv_linkage_declined_percent <- percent(hcv_linkage_declined/hcv_ineligible_ltc, accuracy = 0.1)
+hcv_linkage_declined_percent
+
+hcv_ongoing_linkage_percent <- percent(hcv_ongoing_linkage/hcv_ineligible_ltc, accuracy = 0.1)
+hcv_ongoing_linkage_percent
+
+
+
+
+# HCV Eligibility to be Linked
+
+enc$hcv_eligible_ltc[enc$hcv_ltc == 1 &
+                       (is.na(enc$hcv_already_linked) &
+                          is.na(enc$hcv_deceased) &
+                          is.na(enc$hcv_incarcerated) &
+                          is.na(enc$hcv_linkage_declined) &
+                          is.na(enc$hcv_ongoing_linkage))] <- 1
+table(enc$hcv_eligible_ltc)
+
+table(enc$hcv_eligible_ltc)
+hcv_eligible_ltc <- enc[which(enc$hcv_eligible_ltc == 1), ]
+dim(hcv_eligible_ltc)
+hcv_eligible_ltc <- nrow(hcv_eligible_ltc)
+hcv_eligible_ltc
+
+hcv_eligible_ltc_percent <- percent(hcv_eligible_ltc/hcv_ltc, accuracy = 0.1)
+hcv_eligible_ltc_percent
+
+
+
+table(enc$hcv_eligible_ltc, enc$hcv_status)
+enc$hcv_new_eligible_ltc[enc$hcv_eligible_ltc == 1 &
+                           enc$hcv_status == 'New HCV Diagnosis'] <- 1
+table(enc$hcv_new_eligible_ltc)
+
+table(enc$hcv_new_eligible_ltc)
+hcv_new_eligible_ltc <- enc[which(enc$hcv_new_eligible_ltc == 1), ]
+dim(hcv_new_eligible_ltc)
+hcv_new_eligible_ltc <- nrow(hcv_new_eligible_ltc)
+hcv_new_eligible_ltc
+
+hcv_new_eligible_ltc_percent <- percent(hcv_new_eligible_ltc/hcv_eligible_ltc, accuracy = 0.1)
+hcv_new_eligible_ltc_percent
+
+
+
+
+table(enc$hcv_eligible_ltc, enc$hcv_status)
+enc$hcv_prev_eligible_ltc[enc$hcv_eligible_ltc == 1 &
+                            enc$hcv_status == 'Previous HCV Diagnosis'] <- 1
+table(enc$hcv_prev_eligible_ltc)
+
+table(enc$hcv_prev_eligible_ltc)
+hcv_prev_eligible_ltc <- enc[which(enc$hcv_prev_eligible_ltc == 1), ]
+dim(hcv_prev_eligible_ltc)
+hcv_prev_eligible_ltc <- nrow(hcv_prev_eligible_ltc)
+hcv_prev_eligible_ltc
+
+hcv_prev_eligible_ltc_percent <- percent(hcv_prev_eligible_ltc/hcv_eligible_ltc, accuracy = 0.1)
+hcv_prev_eligible_ltc_percent
+
+
+
+table(enc$hcv_eligible_ltc, enc$hcv_status)
+enc$hcv_unk_eligible_ltc[(enc$hcv_eligible_ltc == 1 &
+                            (enc$hcv_status == 'Unknown HCV Status' |
+                               is.na(enc$hcv_status)))] <- 1
+table(enc$hcv_unk_eligible_ltc)
+
+table(enc$hcv_unk_eligible_ltc)
+hcv_unk_eligible_ltc <- enc[which(enc$hcv_unk_eligible_ltc == 1), ]
+dim(hcv_unk_eligible_ltc)
+hcv_unk_eligible_ltc <- nrow(hcv_unk_eligible_ltc)
+hcv_unk_eligible_ltc
+
+hcv_unk_eligible_ltc_percent <- percent(hcv_unk_eligible_ltc/hcv_eligible_ltc, accuracy = 0.1)
+hcv_unk_eligible_ltc_percent
+
+
+
+
+# hcv Open/Closed Cases
+
+table(enc$ltc_hcv_open_case_calc)
+enc$hcv_in_progress[enc$hcv_eligible_ltc == 1 &
+                      enc$ltc_hcv_open_case_calc == 1] <- 1
+table(enc$hcv_in_progress)
+
+table(enc$hcv_in_progress)
+hcv_in_progress <- enc[which(enc$hcv_in_progress == 1), ]
+dim(hcv_in_progress)
+hcv_in_progress <- nrow(hcv_in_progress)
+hcv_in_progress
+
+hcv_in_progress_percent <- percent(hcv_in_progress/hcv_eligible_ltc, accuracy = 0.1)
+hcv_in_progress_percent
+
+
+
+table(enc$hcv_in_progress, enc$hcv_status)
+enc$hcv_new_in_progress[enc$hcv_in_progress == 1 &
+                          enc$hcv_status == 'New HCV Diagnosis'] <- 1
+table(enc$hcv_new_in_progress)
+
+table(enc$hcv_new_in_progress)
+hcv_new_in_progress <- enc[which(enc$hcv_new_in_progress == 1), ]
+dim(hcv_new_in_progress)
+hcv_new_in_progress <- nrow(hcv_new_in_progress)
+hcv_new_in_progress
+
+hcv_new_in_progress_percent <- percent(hcv_new_in_progress/hcv_new_eligible_ltc, accuracy = 0.1)
+hcv_new_in_progress_percent
+
+
+
+table(enc$hcv_in_progress, enc$hcv_status)
+enc$hcv_prev_in_progress[enc$hcv_in_progress == 1 &
+                           enc$hcv_status == 'Previous HCV Diagnosis'] <- 1
+table(enc$hcv_prev_in_progress)
+
+table(enc$hcv_prev_in_progress)
+hcv_prev_in_progress <- enc[which(enc$hcv_prev_in_progress == 1), ]
+dim(hcv_prev_in_progress)
+hcv_prev_in_progress <- nrow(hcv_prev_in_progress)
+hcv_prev_in_progress
+
+hcv_prev_in_progress_percent <- percent(hcv_prev_in_progress/hcv_prev_eligible_ltc, accuracy = 0.1)
+hcv_prev_in_progress_percent
+
+
+
+table(enc$hcv_in_progress, enc$hcv_status)
+enc$hcv_unk_in_progress[enc$hcv_in_progress == 1 &
+                          (enc$hcv_status == 'Unknown HCV Status' |
+                             is.na(enc$hcv_status))] <- 1
+table(enc$hcv_unk_in_progress)
+
+table(enc$hcv_unk_in_progress)
+hcv_unk_in_progress <- enc[which(enc$hcv_unk_in_progress == 1), ]
+dim(hcv_unk_in_progress)
+hcv_unk_in_progress <- nrow(hcv_unk_in_progress)
+hcv_unk_in_progress
+
+hcv_unk_in_progress_percent <- percent(hcv_unk_in_progress/hcv_unk_eligible_ltc, accuracy = 0.1)
+hcv_unk_in_progress_percent
+
+
+
+table(enc$hcv_eligible_ltc, enc$hcv_in_progress)
+enc$hcv_closed_case[enc$hcv_eligible_ltc == 1 &
+                      is.na(enc$hcv_in_progress)] <- 1
+table(enc$hcv_closed_case)
+
+table(enc$hcv_closed_case)
+hcv_closed_case <- enc[which(enc$hcv_closed_case == 1), ]
+dim(hcv_closed_case)
+hcv_closed_case <- nrow(hcv_closed_case)
+hcv_closed_case
+
+hcv_closed_case_percent <- percent(hcv_closed_case/hcv_eligible_ltc, accuracy = 0.1)
+hcv_closed_case_percent
+
+
+
+table(enc$hcv_in_progress)
+enc$hcv_ltc_days_open <- difftime(Sys.Date(), enc$enc_date, units="days")
+table(enc$hcv_ltc_days_open)
+enc$hcv_in_progress_90days[enc$hcv_in_progress == 1 &
+                             (enc$hcv_ltc_days_open > 90)] <- 1
+table(enc$hcv_in_progress_90days)
+
+table(enc$hcv_in_progress_90days)
+hcv_in_progress_90days <- enc[which(enc$hcv_in_progress_90days == 1), ]
+dim(hcv_in_progress_90days)
+hcv_in_progress_90days <- nrow(hcv_in_progress_90days)
+hcv_in_progress_90days
+
+hcv_in_progress_90days_percent <- percent(hcv_in_progress_90days/hcv_in_progress, accuracy = 0.1)
+hcv_in_progress_90days_percent
+
+
+
+
+# HCV Cases Linked to Care
+
+table(enc$hcv_closed_case, enc$ltc_hcv_final_ltc_status)
+enc$hcv_linked[enc$hcv_closed_case == 1 &
+                 enc$ltc_hcv_final_ltc_status == 1] <- 1
+table(enc$hcv_linked)
+
+table(enc$hcv_linked)
+hcv_linked <- enc[which(enc$hcv_linked == 1), ]
+dim(hcv_linked)
+hcv_linked <- nrow(hcv_linked)
+hcv_linked
+
+hcv_linked_gauge <- (hcv_linked/hcv_closed_case)*100
+hcv_linked_gauge
+hcv_linked_percent <- percent(hcv_linked/hcv_closed_case, accuracy = 0.1)
+hcv_linked_percent
+
+
+
+table(enc$hcv_status, enc$hcv_eligible_ltc)
+table(enc$hcv_linked, enc$hcv_status)
+enc$hcv_new_linked[enc$hcv_linked == 1 &
+                     enc$hcv_status == 'New HCV Diagnosis'] <- 1
+table(enc$hcv_new_linked)
+
+table(enc$hcv_new_linked)
+hcv_new_linked <- enc[which(enc$hcv_new_linked == 1), ]
+dim(hcv_new_linked)
+hcv_new_linked <- nrow(hcv_new_linked)
+hcv_new_linked
+
+hcv_new_linked_percent <- percent(hcv_new_linked/hcv_new_eligible_ltc, accuracy = 0.1)
+hcv_new_linked_percent
+
+
+
+table(enc$hcv_status, enc$hcv_eligible_ltc)
+table(enc$hcv_linked, enc$hcv_status)
+enc$hcv_prev_linked[enc$hcv_linked == 1 &
+                      enc$hcv_status == 'Previous HCV Diagnosis'] <- 1
+table(enc$hcv_prev_linked)
+
+table(enc$hcv_prev_linked)
+hcv_prev_linked <- enc[which(enc$hcv_prev_linked == 1), ]
+dim(hcv_prev_linked)
+hcv_prev_linked <- nrow(hcv_prev_linked)
+hcv_prev_linked
+
+hcv_prev_linked_percent <- percent(hcv_prev_linked/hcv_prev_eligible_ltc, accuracy = 0.1)
+hcv_prev_linked_percent
+
+
+
+
+enc$hcv_not_linked[enc$hcv_eligible_ltc == 1 & is.na(enc$hcv_in_progress) & is.na(enc$hcv_linked)] <- 1
+table(enc$hcv_not_linked)
+
+table(enc$hcv_not_linked)
+hcv_not_linked <- enc[which(enc$hcv_not_linked == 1), ]
+dim(hcv_not_linked)
+hcv_not_linked <- nrow(hcv_not_linked)
+hcv_not_linked
+
+hcv_not_linked_percent <- percent(hcv_not_linked/hcv_closed_case, accuracy = 0.1)
+hcv_not_linked_percent
+
+
+
+table(enc$hcv_not_linked, enc$hcv_status)
+enc$hcv_new_not_linked[enc$hcv_not_linked == 1 &
+                         enc$hcv_status == 'New HCV Diagnosis'] <- 1
+table(enc$hcv_new_not_linked)
+
+table(enc$hcv_new_not_linked)
+hcv_new_not_linked <- enc[which(enc$hcv_new_not_linked == 1), ]
+dim(hcv_new_not_linked)
+hcv_new_not_linked <- nrow(hcv_new_not_linked)
+hcv_new_not_linked
+
+hcv_new_not_linked_percent <- percent(hcv_new_not_linked/hcv_new_eligible_ltc, accuracy = 0.1)
+hcv_new_not_linked_percent
+
+
+
+table(enc$hcv_not_linked, enc$hcv_status)
+enc$hcv_prev_not_linked[enc$hcv_not_linked == 1 &
+                          enc$hcv_status == 'Previous HCV Diagnosis'] <- 1
+table(enc$hcv_prev_not_linked)
+
+table(enc$hcv_prev_not_linked)
+hcv_prev_not_linked <- enc[which(enc$hcv_prev_not_linked == 1), ]
+dim(hcv_prev_not_linked)
+hcv_prev_not_linked <- nrow(hcv_prev_not_linked)
+hcv_prev_not_linked
+
+hcv_prev_not_linked_percent <- percent(hcv_prev_not_linked/hcv_prev_eligible_ltc, accuracy = 0.1)
+hcv_prev_not_linked_percent
+
+
+
+
+# HCV Reasons Not Linked to Care
+
+enc$hcv_not_linked_med_staff[(enc$hcv_closed_case == 1 & is.na(enc$hcv_linked)) &
+                               (enc$ltc_hcv_prevented_rsn___1 == 1 |
+                                  enc$ltc_hcv_prevented_rsn___2 == 1 |
+                                  enc$ltc_hcv_prevented_rsn___11 == 1)] <- 1
+table(enc$hcv_not_linked_med_staff)
+
+table(enc$hcv_not_linked_med_staff)
+hcv_not_linked_med_staff <- enc[which(enc$hcv_not_linked_med_staff == 1), ]
+dim(hcv_not_linked_med_staff)
+hcv_not_linked_med_staff <- nrow(hcv_not_linked_med_staff)
+hcv_not_linked_med_staff
+
+hcv_not_linked_med_staff_percent <- percent(hcv_not_linked_med_staff/hcv_not_linked, accuracy = 0.1)
+hcv_not_linked_med_staff_percent
+
+
+
+enc$hcv_not_linked_family[(enc$hcv_closed_case == 1 & is.na(enc$hcv_linked)) &
+                            (enc$ltc_hcv_prevented_rsn___3 == 1)] <- 1
+table(enc$hcv_not_linked_family)
+
+table(enc$hcv_not_linked_family)
+hcv_not_linked_family <- enc[which(enc$hcv_not_linked_family == 1), ]
+dim(hcv_not_linked_family)
+hcv_not_linked_family <- nrow(hcv_not_linked_family)
+hcv_not_linked_family
+
+hcv_not_linked_family_percent <- percent(hcv_not_linked_family/hcv_not_linked, accuracy = 0.1)
+hcv_not_linked_family_percent
+
+
+
+enc$hcv_not_linked_not_talking[(enc$hcv_closed_case == 1 & is.na(enc$hcv_linked)) &
+                                 (enc$ltc_hcv_prevented_rsn___4 == 1)] <- 1
+table(enc$hcv_not_linked_not_talking)
+
+table(enc$hcv_not_linked_not_talking)
+hcv_not_linked_not_talking <- enc[which(enc$hcv_not_linked_not_talking == 1), ]
+dim(hcv_not_linked_not_talking)
+hcv_not_linked_not_talking <- nrow(hcv_not_linked_not_talking)
+hcv_not_linked_not_talking
+
+hcv_not_linked_not_talking_percent <- percent(hcv_not_linked_not_talking/hcv_not_linked, accuracy = 0.1)
+hcv_not_linked_not_talking_percent
+
+
+
+enc$hcv_not_linked_safety[(enc$hcv_closed_case == 1 & is.na(enc$hcv_linked)) &
+                            (enc$ltc_hcv_prevented_rsn___5 == 1)] <- 1
+table(enc$hcv_not_linked_safety)
+
+table(enc$hcv_not_linked_safety)
+hcv_not_linked_safety <- enc[which(enc$hcv_not_linked_safety == 1), ]
+dim(hcv_not_linked_safety)
+hcv_not_linked_safety <- nrow(hcv_not_linked_safety)
+hcv_not_linked_safety
+
+hcv_not_linked_safety_percent <- percent(hcv_not_linked_safety/hcv_not_linked, accuracy = 0.1)
+hcv_not_linked_safety_percent
+
+
+
+enc$hcv_not_linked_medical[(enc$hcv_closed_case == 1 & is.na(enc$hcv_linked)) &
+                             (enc$ltc_hcv_prevented_rsn___6 == 1 |
+                                enc$ltc_hcv_prevented_rsn___8)] <- 1
+table(enc$hcv_not_linked_medical)
+
+table(enc$hcv_not_linked_medical)
+hcv_not_linked_medical <- enc[which(enc$hcv_not_linked_medical == 1), ]
+dim(hcv_not_linked_medical)
+hcv_not_linked_medical <- nrow(hcv_not_linked_medical)
+hcv_not_linked_medical
+
+hcv_not_linked_medical_percent <- percent(hcv_not_linked_medical/hcv_not_linked, accuracy = 0.1)
+hcv_not_linked_medical_percent
+
+
+
+enc$hcv_not_linked_contact[(enc$hcv_closed_case == 1 & is.na(enc$hcv_linked)) &
+                             (enc$ltc_hcv_prevented_rsn___20 == 1)] <- 1
+table(enc$hcv_not_linked_contact)
+
+table(enc$hcv_not_linked_contact)
+hcv_not_linked_contact <- enc[which(enc$hcv_not_linked_contact == 1), ]
+dim(hcv_not_linked_contact)
+hcv_not_linked_contact <- nrow(hcv_not_linked_contact)
+hcv_not_linked_contact
+
+hcv_not_linked_contact_percent <- percent(hcv_not_linked_contact/hcv_not_linked, accuracy = 0.1)
+hcv_not_linked_contact_percent
+
+
+
+enc$hcv_not_linked_language[(enc$hcv_closed_case == 1 & is.na(enc$hcv_linked)) &
+                              (enc$ltc_hcv_prevented_rsn___9 == 1)] <- 1
+table(enc$hcv_not_linked_language)
+
+table(enc$hcv_not_linked_language)
+hcv_not_linked_language <- enc[which(enc$hcv_not_linked_language == 1), ]
+dim(hcv_not_linked_language)
+hcv_not_linked_language <- nrow(hcv_not_linked_language)
+hcv_not_linked_language
+
+hcv_not_linked_language_percent <- percent(hcv_not_linked_language/hcv_not_linked, accuracy = 0.1)
+hcv_not_linked_language_percent
+
+
+
+enc$hcv_not_linked_other[(enc$hcv_closed_case == 1 & is.na(enc$hcv_linked)) &
+                           (enc$ltc_hcv_prevented_rsn___0 == 1)] <- 1
+table(enc$hcv_not_linked_other)
+
+table(enc$hcv_not_linked_other)
+hcv_not_linked_other <- enc[which(enc$hcv_not_linked_other == 1), ]
+dim(hcv_not_linked_other)
+hcv_not_linked_other <- nrow(hcv_not_linked_other)
+hcv_not_linked_other
+
+hcv_not_linked_other_percent <- percent(hcv_not_linked_other/hcv_not_linked, accuracy = 0.1)
+hcv_not_linked_other_percent
+
+
+```
+
 
 ## HCV Epic Dashboard
 
 The Epic dashboard for HCV testing went live on **January 2nd, 2024**. This Epic dashboard lists all University of Cincinnati Medical Center Emergency Department (UCMC ED) based HCV testing ordered, showing the results in real time. EIP staff monitors the HCV dashboard for positive results and approaches patients directly while they are still in the ED, or the hospital, to provide results, education and information for additional testing (if required), as well as linkage to care through UC's Clinical Pharmacy when appropriate.
 
 The total daily testing numbers for HCV Antibody tests (HCV Ab) are shown in the table below, as well as a plot showing the daily trend in testing numbers. The overall HCV Ab positivity rate for the tests included in the HCV Epic Dashboard is described below the plot. The unique number of tests is determined by the *Order ID* for the test. The test is only included if the *Order Status* is "Completed" and the *Lab Status* indicates that it is the "Final Result" and the lab result is provided. The data is manually exported from the Epic HCV Dashboard each week with the data from the prior week by the EIP Data Team, and merged into a single data file used in this analysis, excluding duplicate records.
+
+::: {.panel-tabset}
+
+## Daily
 
 <div align="center">
 ```{r, echo = FALSE}
@@ -988,13 +2055,10 @@ reactable(daily_hcv_tbl,
           searchable = TRUE,
           paginationType = "simple",
           defaultColDef = colDef(style = list(fontSize = "12px", maxWidth = 505)),
-          style = list(width = "63.5%"))
+          style = list(width = "50%"))
 
 ```
 </div>
-
-It is important to note that since the HCV Epic dashboard data is manually extracted from Epic at various times, the total number of tests for the most recent day may not all be counted. For example, if data is pulled in the afternoon, then the tests conducted in the morning are counted, but not tests conducted later in the evening for that day. The day that the data was pulled is noted by the date at the top of this report. Also, depending on when the data was pulled, not all test results are finalized, so the positivity rate and number of positive tests/patients may also be slightly different. However, this should only pertain to the day the data is pulled, and not prior days included in the analysis.
-
 <br>
 <div align="center">
 ``` {r, echo = FALSE, fig.frame="black"}
@@ -1018,6 +2082,68 @@ daily_hcv_test_plot
 <br>
 
 
+## Monthly
+
+<div align="center">
+```{r, echo = FALSE}
+
+# Table of monthly HCV testing
+monthly_hcv_tbl <- hcv %>%
+  group_by(monthly_date) %>%
+  summarise(total_tests = sum(hcv_ab_tested),
+            total_positive = sum(hcv_ab_positive),
+            percent_positive = round((total_positive / total_tests) * 100, 1)) %>%
+  arrange(desc(monthly_date))
+
+reactable(monthly_hcv_tbl,
+          columns = list(
+            monthly_date = colDef(name = "Month", align = "center", width = 125),
+            total_tests = colDef(name = "HCV Ab Tests", align = "center", width = 130),
+            total_positive = colDef(name = "HCV Ab +", align = "center", width = 125),
+            percent_positive = colDef(name = "Percent +", align = "center", width = 125)),
+          bordered = TRUE,
+          highlight = TRUE,
+          searchable = TRUE,
+          paginationType = "simple",
+          defaultColDef = colDef(style = list(fontSize = "12px", maxWidth = 505)),
+          style = list(width = "50%"))
+
+```
+</div>
+<br>
+<div align="center">
+``` {r, echo = FALSE, fig.frame="black"}
+
+tickvals <- monthly_hcv_tests$monthly_date
+ticktext <- format(monthly_hcv_tests$monthly_date, "%b %Y")
+
+# Line graph of monthly HCV testing
+monthly_hcv_test_plot <- monthly_hcv_tests %>%
+  plot_ly(x = ~monthly_date, y = ~total_tests, name = "HCV Ab Tests", type = 'scatter', mode = 'lines', line = list(color = '#DC9540')) %>%
+  add_trace(y = ~total_positive, name = "HCV Ab+", line = list(color = 'royalblue')) %>%
+  layout(
+    xaxis = list(
+      title = "Month",
+      tickvals = tickvals,
+      ticktext = ticktext,
+      tickmode = "array"
+    ),
+    yaxis = list(title = "Total HCV Tests", range = c(0, max(monthly_hcv_tests$total_tests) + 10)),
+    title = list(text = "HCV Dashboard Daily Ab Tests", font = list(size = 20)),
+    margin = list(l = 50, r = 50, b = 50, t = 50),
+    template = "plotly_dark"
+  ) %>%
+  config(displayModeBar = FALSE)
+monthly_hcv_test_plot
+
+```
+</div>
+<br>
+
+:::
+
+It is important to note that since the HCV Epic dashboard data is manually extracted from Epic at various times, the total number of tests for the most recent day/month may not all be counted. For example, if data is pulled in the afternoon, then the tests conducted in the morning are counted, but not tests conducted later in the evening for that day. The day that the data was pulled is noted by the date at the top of this report. Also, depending on when the data was pulled, not all test results are finalized, so the positivity rate and number of positive tests/patients may also be slightly different. However, this should only pertain to the day the data is pulled, and not prior days included in the analysis.
+
 The total number of HCV Ab tests since the initiation of the HCV Dashboard is **`r hcv_ab_tested` tests**. The total number of positive HCV Ab results is **`r hcv_ab_positive` Ab positive tests**, which is [**`r hcv_ab_positivity_rate`**]{style="color: red;"} of all HCV Ab tests conducted (*`r hcv_ab_positive`/`r hcv_ab_tested`*).
 
 Since EIP is meant to approach each individual that has a reactive HCV Ab test to provide education, the data provided in the remainder of this report will focus on the unique number of patients rather than number of tests, and those patients that were followed up with by our staff and referred to UC's Clinical Pharmacy. Since the start of the HCV Dashboard, there have been a total of **`r hcv_pts_ab_tested` unique patients** that have been tested for HCV Ab, with a total of **`r hcv_pts_ab_positive` unique patients** that were positive for HCV Ab (*`r hcv_pts_ab_positive_percent` of all patients tested, `r hcv_pts_ab_positive`/`r hcv_pts_ab_tested`*). The unique number of patients tested is determined by the medical record number (MRN) attached to the lab test. The MRN is the identifier used to match back with the EIP REDCap Database to link with the patient's record to determine follow-up efforts described in the next section.
@@ -1031,7 +2157,7 @@ As mentioned above, there were a total of `r hcv_ab_positive` HCV positive tests
 
 ```{r, echo = FALSE, warning = FALSE}
 #| label: HCV Epic Dashboard Follow-up Flow Diagram 
-#| fig-cap: "** *Unable to match records means that we are unable to match the EIP follow-up data with the data pulled from the Epic HCV Dashboard. The reason(s) for why these records are unable to be matched are: Tested under different MRN than patient record (n = 8).*"
+#| fig-cap: "** *Unable to match records means that we are unable to match the EIP follow-up data with the data pulled from the Epic HCV Dashboard. The reason(s) for why these records are unable to be matched are: Tested under different MRN than patient record (n = 7).*"
 
 
 grid_data <- tibble(x= 1:100, y= 1:100)
@@ -1103,16 +2229,62 @@ grid +
             fill = NA, size = 0.25) +
   annotate('text', x = 51.5, y = 48, label = hcv_pts_no_education, size = 2, color = 'black') +
   annotate('text', x = 60, y = 48, label = hcv_pts_no_education_percent, size = 2, color = 'goldenrod4') +
+
+
+# In Progress
+  geom_rect(xmin = 41, xmax = 44, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 50, y = 44, label = 'In Progress', size = 2) +
+  geom_rect(xmin = 41, xmax = 44, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 55.5, y = 44, label = hcv_dash_in_progress, size = 2, color = 'black') +
+  annotate('text', x = 60, y = 44, label = hcv_dash_in_progress_percent, size = 2, color = 'goldenrod4') +
   
   
   # Reasons for No Follow-up
   geom_rect(xmin = 83, xmax = 100, ymin = 45, ymax = 55, color = NA,
             fill = 'white', size = 0.25) +
-  annotate('text', x = 86, y = 50.25, label = 'Reason(s)', size = 2) +
+  annotate('text', x = 86, y = 65.25, label = 'Already Linked   ', size = 2) +
+annotate('text', x = 86, y = 62.25, label = 'Deceased    ', size = 2) +
+annotate('text', x = 86, y = 59.25, label = 'Incarcerated    ', size = 2) +
+annotate('text', x = 86, y = 56.25, label = 'Inability to contact ', size = 2) +
+annotate('text', x = 86, y = 53.25, label = 'Declined     ', size = 2) +
+annotate('text', x = 86, y = 50.25, label = 'Med staff interferes', size = 2) +
+annotate('text', x = 86, y = 47.25, label = 'Family interferes', size = 2) +
+annotate('text', x = 86, y = 44.25, label = 'Refuses to talk', size = 2) +
+annotate('text', x = 86, y = 41.25, label = 'Personal safety', size = 2) +
+annotate('text', x = 86, y = 38.25, label = 'Medical course', size = 2) +
+annotate('text', x = 86, y = 35.25, label = 'Unable to contact', size = 2) +
+annotate('text', x = 86, y = 32.25, label = 'Language barrier', size = 2) +
+annotate('text', x = 86, y = 29.25, label = 'Other', size = 2) +
   geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 92, y = 50.25, label = 'xx', size = 2, color = 'black') +
-  annotate('text', x = 96, y = 50.25, label = 'xx%', size = 2, color = 'goldenrod4') +
+annotate('text', x = 92, y = 65.25, label = hcv_dash_already_linked, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 65.25, label = hcv_dash_already_linked_percent, size = 2, color = 'goldenrod4') +
+annotate('text', x = 92, y = 62.25, label = hcv_dash_deceased, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 62.25, label = hcv_dash_deceased_percent, size = 2, color = 'goldenrod4') +
+annotate('text', x = 92, y = 59.25, label = hcv_dash_incarcerated, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 59.25, label = hcv_dash_incarcerated_percent, size = 2, color = 'goldenrod4') +
+annotate('text', x = 92, y = 56.25, label = hcv_dash_inability_to_contact, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 56.25, label = hcv_dash_inability_to_contact_percent, size = 2, color = 'goldenrod4') +
+annotate('text', x = 92, y = 53.25, label = hcv_dash_linkage_declined, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 53.25, label = hcv_dash_linkage_declined_percent, size = 2, color = 'goldenrod4') +
+  annotate('text', x = 92, y = 50.25, label = hcv_dash_not_linked_med_staff, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 50.25, label = hcv_dash_not_linked_med_staff_percent, size = 2, color = 'goldenrod4') +
+annotate('text', x = 92, y = 47.25, label = hcv_dash_not_linked_family, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 47.25, label = hcv_dash_not_linked_family_percent, size = 2, color = 'goldenrod4') +
+annotate('text', x = 92, y = 44.25, label = hcv_dash_not_linked_not_talking, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 44.25, label = hcv_dash_not_linked_not_talking_percent, size = 2, color = 'goldenrod4') +
+annotate('text', x = 92, y = 41.25, label = hcv_dash_not_linked_safety, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 41.25, label = hcv_dash_not_linked_safety_percent, size = 2, color = 'goldenrod4') +
+annotate('text', x = 92, y = 38.25, label = hcv_dash_not_linked_medical, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 38.25, label = hcv_dash_not_linked_medical_percent, size = 2, color = 'goldenrod4') +
+annotate('text', x = 92, y = 35.25, label = hcv_dash_not_linked_contact, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 35.25, label = hcv_dash_not_linked_contact_percent, size = 2, color = 'goldenrod4') +
+annotate('text', x = 92, y = 32.25, label = hcv_dash_not_linked_language, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 32.25, label = hcv_dash_not_linked_language_percent, size = 2, color = 'goldenrod4') +
+annotate('text', x = 92, y = 29.25, label = hcv_dash_not_linked_other, size = 2, color = 'black') +
+  annotate('text', x = 96, y = 29.25, label = hcv_dash_not_linked_other_percent, size = 2, color = 'goldenrod4') +
   
   
   # Follow-up Success
@@ -1324,5 +2496,272 @@ hcv_ab_pos_coverage_tbl %>%
 <br>
 
 ## Additional Items still to add to this report.
-Additional items still in development for this report include: Adding in a visualization for monthly testing/positivity numbers; Add reasons for no follow-up (rsns linkage declined/prevented)
+Additional items still in development for this report include: Add reasons for no follow-up (rsns linkage declined/prevented)
+
+<br>
+<br>
+<br>
+
+
+## EIP HCV Testing & Linkage
+
+The flow diagram below shows the total linkage to care efforts for EIP in regards to HCV.
+
+
+```{r, echo=FALSE, warning=FALSE}
+
+grid_data <- tibble(x= 1:100, y= 1:100)
+
+grid_data %>% 
+  ggplot(aes(x, y)) +
+  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
+  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
+  theme_linedraw() ->
+  grid
+
+
+grid +
+  # HCV Linkage Cases
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
+            fill = 'khaki1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 97, label = 'HCV Linkage Cases', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 93, label = hcv_ltc, size = 2, color = 'goldenrod3') +
+  
+  # Ineligible for Linkage
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 52.5, y = 82, label = 'Ineligible for Linkage', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 78, label = hcv_ineligible_ltc, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 60, y = 78, label = hcv_ineligible_ltc_percent, size = 2, color = 'yellow4') +
+  
+  
+  # Reasons Ineligible for Linkage
+  geom_rect(xmin = 83, xmax = 100, ymin = 75, ymax = 85, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 87, y = 85, label = 'Already Linked', size = 2) +
+  annotate('text', x = 87, y = 82, label = '        Deceased', size = 2) +
+  annotate('text', x = 87, y = 79, label = '    Incarcerated', size = 2) +
+  annotate('text', x = 87, y = 76, label = 'Inability to Contact', size = 2) +
+  annotate('text', x = 87, y = 73, label = '          Declined', size = 2) +
+  annotate('text', x = 87, y = 70, label = 'Ongoing linkage ', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 94, y = 85, label = hcv_already_linked, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 85, label = hcv_already_linked_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 94, y = 82, label = hcv_deceased, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 82, label = hcv_deceased_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 94, y = 79, label = hcv_incarcerated, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 79, label = hcv_incarcerated_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 94, y = 76, label = hcv_inability_to_contact, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 76, label = hcv_inability_to_contact_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 94, y = 73, label = hcv_linkage_declined, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 73, label = hcv_linkage_declined_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 94, y = 70, label = hcv_ongoing_linkage, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 70, label = hcv_ongoing_linkage_percent, size = 2, color = 'yellow4') +
+  
+  
+  # Eligible for Linkage
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
+            fill = 'khaki1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 67, label = 'Eligible for Linkage', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 63, label = hcv_eligible_ltc, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 19, y = 63, label = hcv_eligible_ltc_percent, size = 2, color = 'yellow4') +
+  
+  
+  # New vs. Prev vs. Unk Eligibility
+  geom_rect(xmin = 25, xmax = 35, ymin = 60, ymax = 70, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 26, y = 69, label = 'New Dx:', size = 2) +
+  annotate('text', x = 26, y = 65, label = 'Prev Dx:', size = 2) +
+  annotate('text', x = 26, y = 61, label = 'Unk Dx:', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 30, y = 69, label = hcv_new_eligible_ltc, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 34, y = 69, label = hcv_new_eligible_ltc_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 30, y = 65, label = hcv_prev_eligible_ltc, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 34, y = 65, label = hcv_prev_eligible_ltc_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 30, y = 61, label = hcv_unk_eligible_ltc, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 34, y = 61, label = hcv_unk_eligible_ltc_percent, size = 2, color = 'yellow4') +
+  
+  
+  # In Progress
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 52, label = 'In Progress', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 48, label = hcv_in_progress, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 60, y = 48, label = hcv_in_progress_percent, size = 2, color = 'yellow4') +
+  
+  
+  # In Progress over 90 days
+  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 52, y = 42, label = '>90 days:', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 56, y = 42, label = hcv_in_progress_90days, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 60, y = 42, label = hcv_in_progress_90days_percent, size = 2, color = 'yellow4') +
+  
+  
+  # New vs. Prev vs. Unk In Progress
+  geom_rect(xmin = 66, xmax = 88, ymin = 45, ymax = 55, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 67, y = 54, label = 'New Dx:', size = 2) +
+  annotate('text', x = 67, y = 50, label = 'Prev Dx:', size = 2) +
+  annotate('text', x = 67, y = 46, label = 'Unk Dx:', size = 2) +
+  geom_rect(xmin = 66, xmax = 88, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 71, y = 54, label = hcv_new_in_progress, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 75, y = 54, label = hcv_new_in_progress_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 71, y = 50, label = hcv_prev_in_progress, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 75, y = 50, label = hcv_prev_in_progress_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 71, y = 46, label = hcv_unk_in_progress, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 75, y = 46, label = hcv_unk_in_progress_percent, size = 2, color = 'yellow4') +
+  
+  
+  # Closed Cases
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
+            fill = 'khaki1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 37, label = 'Closed Cases', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 33, label = hcv_closed_case, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 19, y = 33, label = hcv_closed_case_percent, size = 2, color = 'yellow4') +
+  
+  
+  # Not Linked
+  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 22, label = 'Not Linked', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 18, label = hcv_not_linked, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 60, y = 18, label = hcv_not_linked_percent, size = 2, color = 'yellow4') +
+  
+  
+  # New vs. Prev Not Linked
+  geom_rect(xmin = 41, xmax = 63, ymin = 7, ymax = 14, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 52, y = 12, label = 'New Dx:', size = 2) +
+  annotate('text', x = 52, y = 8, label = 'Prev Dx:', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 7, ymax = 14, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 56, y = 12, label = hcv_new_not_linked, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 60, y = 12, label = hcv_new_not_linked_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 56, y = 8, label = hcv_prev_not_linked, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 60, y = 8, label = hcv_prev_not_linked_percent, size = 2, color = 'yellow4') +
+  
+  
+  # Reasons Not Linked
+  geom_rect(xmin = 83, xmax = 100, ymin = 0, ymax = 30, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 87, y = 26, label = 'Med Staff interferes    ', size = 2) +
+  annotate('text', x = 87, y = 23, label = '  Family interferes', size = 2) +
+  annotate('text', x = 87, y = 20, label = '    Refuses to talk', size = 2) +
+  annotate('text', x = 87, y = 17, label = '    Personal safety', size = 2) +
+  annotate('text', x = 87, y = 14, label = '    Medical course', size = 2) +
+  annotate('text', x = 87, y = 11, label = 'Inability to contact', size = 2) +
+  annotate('text', x = 87, y = 8, label = ' Language barrier', size = 2) +
+  annotate('text', x = 87, y = 5, label = '                   Other', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 30, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 94, y = 26, label = hcv_not_linked_med_staff, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 26, label = hcv_not_linked_med_staff_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 94, y = 23, label = hcv_not_linked_family, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 23, label = hcv_not_linked_family_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 94, y = 20, label = hcv_not_linked_not_talking, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 20, label = hcv_not_linked_not_talking_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 94, y = 17, label = hcv_not_linked_safety, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 17, label = hcv_not_linked_safety_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 94, y = 14, label = hcv_not_linked_medical, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 14, label = hcv_not_linked_medical_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 94, y = 11, label = hcv_not_linked_contact, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 11, label = hcv_not_linked_contact_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 94, y = 8, label = hcv_not_linked_language, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 8, label = hcv_not_linked_language_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 94, y = 5, label = hcv_not_linked_other, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 98, y = 5, label = hcv_not_linked_other_percent, size = 2, color = 'yellow4') +
+  
+  
+  # Linked to Care
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
+            fill = 'khaki1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 7, label = 'Linked to Care', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 3, label = hcv_linked, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 19, y = 3, label = hcv_linked_percent, size = 2, color = 'yellow4') +
+  
+  
+  # New vs. Prev Linked to Care
+  geom_rect(xmin = 25, xmax = 35, ymin = 0, ymax = 10, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 26, y = 7, label = 'New Dx:', size = 2) +
+  annotate('text', x = 26, y = 3, label = 'Prev Dx:', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 30, y = 7, label = hcv_new_linked, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 34, y = 7, label = hcv_new_linked_percent, size = 2, color = 'yellow4') +
+  annotate('text', x = 30, y = 3, label = hcv_prev_linked, size = 2, color = 'goldenrod3') +
+  annotate('text', x = 34, y = 3, label = hcv_prev_linked_percent, size = 2, color = 'yellow4') +
+  
+  
+  # Down Arrow 1
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 90, yend = 70, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 2
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 60, yend = 40, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 3
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 30, yend = 10, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Right Arrow 1
+  geom_segment(
+    x = 10.5, xend = 41, y = 80, yend = 80, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 2
+  geom_segment(
+    x = 10.5, xend = 41, y = 50, yend = 50, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 3
+  geom_segment(
+    x = 10.5, xend = 41, y = 20, yend = 20, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Line 1
+  geom_segment(
+    x = 63, xend = 81, y = 80, yend = 80, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
+  
+  # Right Line 2
+  geom_segment(
+    x = 63, xend = 80, y = 20, yend = 20, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted")->
+  grid
+
+grid + theme_void()
+
+
+```
 
