@@ -30,11 +30,11 @@ library(zoo)
 
 ### EIP Database Data
 # 2023
-eip23 <- read.csv('M:/EIP Data/EIP Database/REDCap Ver 5.0/EIP Database Data 20240512_2311.csv')
+eip23 <- read.csv('M:/EIP Data/EIP Database/REDCap 2023/EIP Database Data 20240705_1635.csv')
 dim(eip23)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240624_1012.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240705_1441.csv')
 dim(eip24)
 
 ```

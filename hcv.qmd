@@ -36,7 +36,7 @@ library(apyramid)
 
 
 # EIP Database Data
-eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240624_1012.csv')
+eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240705_1441.csv')
 dim(eip)
 
 # HCV Epic Dashboard Data
@@ -50,12 +50,12 @@ hcv_apr <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/M
 dim(hcv_apr)
 hcv_may <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/Monthly Data/HCV Dashboard Data 05_2024.csv')
 dim(hcv_may)
-hcv_jun1 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240601 to 20240615.csv')
-dim(hcv_jun1)
-hcv_jun2 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/HCV Dashboard Data 20240616 to 20240630.csv')
-dim(hcv_jun2)
+hcv_jun <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/Monthly Data/HCV Dashboard Data 06_2024.csv')
+dim(hcv_jun)
+hcv_jul <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/Monthly Data/HCV Dashboard Data 07_2024.csv')
+dim(hcv_jul)
 
-hcv <- rbind(hcv_jan, hcv_feb, hcv_mar, hcv_apr, hcv_may, hcv_jun1, hcv_jun2)
+hcv <- rbind(hcv_jan, hcv_feb, hcv_mar, hcv_apr, hcv_may, hcv_jun, hcv_jul)
 dim(hcv)
 hcv <- distinct(hcv)
 dim(hcv)
