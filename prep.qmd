@@ -29,12 +29,18 @@ library(zoo)
 
 ### EIP Database Data
 # 2023
-eip23 <- read.csv('M:/EIP Data/EIP Database/REDCap 2023/EIP Database Data 20240705_1635.csv')
+eip23 <- read.csv('M:/EIP Data/EIP Database/REDCap 2023/EIP Database Data 20240723_0942.csv')
 dim(eip23)
+summary(eip23$record_id)
+eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
+summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240715_1106.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240723_0945.csv')
 dim(eip24)
+summary(eip24$record_id)
+eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
+summary(eip24$record_id)
 
 ```
 
