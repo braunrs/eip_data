@@ -39,7 +39,7 @@ eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240723_0945.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240729_1157.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
@@ -1510,6 +1510,7 @@ eip23$sti_result_notification_fu <- ''
 eip23$result_notification_sti_fu <- ''
 eip23$testing_sti_complete <- ''
 eip23$enc_location_513_bus <- ''
+eip23$deshpande_ltc_open_calc <- ''
 
 
 # Adding variables removed from 2023 dataset to 2024 dataset as blank values
