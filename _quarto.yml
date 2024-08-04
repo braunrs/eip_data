@@ -22,12 +22,10 @@ website:
             text: STI
       - text: Deliverables
         menu:
-          - href: ctr_deliverables.qmd
-            text: CTR Deliverables
-          - href: ehe_deliverables.qmd
-            text: EHE Deliverables
-          - href: naccho2.qmd
-            text: NACCHO-2 Deliverables
+          - href: ctr_deliverables23.qmd
+            text: CTR Deliverables 2023/2024
+          - href: ehe_deliverables23.qmd
+            text: EHE Deliverables 2023/2024
       - text: Sites
         menu:
           - href: ucmc.qmd

@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2024-08-03">
+
+<title>EIP Data Website - CTR Deliverables (2024/2025)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">EIP Data Website</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./main.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-clinical" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Clinical</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-clinical">    
+        <li>
+    <a class="dropdown-item" href="./hiv.html" rel="" target="">
+ <span class="dropdown-text">HIV</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./hcv.html" rel="" target="">
+ <span class="dropdown-text">HCV</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sud.html" rel="" target="">
+ <span class="dropdown-text">SUD</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./human_trafficking.html" rel="" target="">
+ <span class="dropdown-text">Human Trafficking</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sti.html" rel="" target="">
+ <span class="dropdown-text">STI</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-deliverables" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Deliverables</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-deliverables">    
+        <li>
+    <a class="dropdown-item" href="./ctr_deliverables23.html" rel="" target="">
+ <span class="dropdown-text">CTR Deliverables 2023/2024</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ehe_deliverables23.html" rel="" target="">
+ <span class="dropdown-text">EHE Deliverables 2023/2024</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sites" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Sites</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-sites">    
+        <li>
+    <a class="dropdown-item" href="./ucmc.html" rel="" target="">
+ <span class="dropdown-text">UCMC</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-research" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Research</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-research">    
+        <li>
+    <a class="dropdown-item" href="./pgx.html" rel="" target="">
+ <span class="dropdown-text">PGx</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#ctr-program" id="toc-ctr-program" class="nav-link active" data-scroll-target="#ctr-program">CTR Program</a>
+  <ul class="collapse">
+  <li><a href="#plwha" id="toc-plwha" class="nav-link" data-scroll-target="#plwha">PLWHA</a></li>
+  <li><a href="#msm" id="toc-msm" class="nav-link" data-scroll-target="#msm">MSM</a></li>
+  <li><a href="#hrhs" id="toc-hrhs" class="nav-link" data-scroll-target="#hrhs">HRHS</a></li>
+  <li><a href="#additional-metrics" id="toc-additional-metrics" class="nav-link" data-scroll-target="#additional-metrics">Additional Metrics</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">CTR Deliverables (2024/2025)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 3, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="ctr-program" class="level1">
+<h1>CTR Program</h1>
+<p>The Counseling, Testing, and Referral to treatment (CTR) testing program…(plan to provide an overall description and background for CTR)</p>
+<div class="cell">
+<div class="cell-output-display">
+
+<table data-quarto-disable-processing="true" class=" lightable-paper table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; font-size: 16px; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:left;"> CTR </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Number of Tests </td>
+   <td style="text-align:left;"> 161 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Positives </td>
+   <td style="text-align:left;"> 2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> New Positives </td>
+   <td style="text-align:left;"> 2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Positivity Rate </td>
+   <td style="text-align:left;"> 1.24% </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>CTR testing is reported on a monthly basis. There are different reports required to the local health department, Hamilton County Public Health (HCPH), and to the state health department, Ohio Department of Health (ODH). The report for HCPH is due by the 5th of the month for the prior month’s testing data. This report includes the total number of CTR-funded tests performed, how many were reactive (and then confirmed positive), and whether those positive tests were for patients newly-diagnosed or for a person known to be living with HIV. Additionally, the total number of assessments conducted, and how many individuals were tested and assessed are reported to HCPH each month for CTR. The report sent to ODH each month consists of the total number of CTR-funded tests, and how many individuals were newly diagnosed with HIV from testing. Additionally, the ODH report consists of the assessment data for each negative test, only providing the ODH assessment questions. The ODH report is divided into three parts: 1) the number of tests and assessment data for all those testing negative, 2) the opscan data for all those testing negative, 3) the supplemental opscan data for those that were tested but did not have an assessment conducted at the time of the test. The table to the right shows the total number of CTR tests and the overall positivity rate. The figure below shows the monthly CTR testing numbers.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-f9bc059ff81122539bb3" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-f9bc059ff81122539bb3">{"x":{"visdat":{"59e43fcf773b":["function () ","plotlyVisDat"]},"cur_data":"59e43fcf773b","attrs":{"59e43fcf773b":{"x":{},"y":{},"text":{},"textposition":"auto","marker":{"color":"lightskyblue"},"name":"CTR Tests","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"yaxis":{"domain":[0,1],"automargin":true,"title":"CTR Tests"},"barmode":"stack","xaxis":{"domain":[0,1],"automargin":true,"tickangle":45,"title":"Date"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":["2024-07-01","2024-08-01"],"y":[156,5],"text":[156,5],"textposition":["auto","auto"],"marker":{"color":"lightskyblue","line":{"color":"rgba(31,119,180,1)"}},"name":"CTR Tests","type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p><br></p>
+<p>The deliverables highlighted below are the numbers that were noted on the 2023 CTR Workplan as what our program would accomplish within the year of funding awarded. The original workplan specified data that was collected starting <em>January 1st, 2023 through December 31, 2023</em>. However, an update with funding allocation for both the CTR and EHE programs allowed for a change to the deliverables for CTR and the timeframe for those deliverables. The data in the table to the right shows the deliervables that were updated based on this change. The changes in these deliverables were made based on the estimated possibility of reaching these goals based on the numbers we had reached at the time the changes were initiated. For example, some of the deliverables were already met, so those numbers were increased due to the likelihood of surpassing the original goal; some deliverables were close to being met, so they may have been increased slightly; and some deliverables were not close to being met, so they were not changed in the hopes that we would be able to meet those original goals by the new extended timeframe. The updates in these deliverable goals were made on <em>December 18th, 2023</em>. The table to the right only shows those deliverables that were updated, and all other deliverables are the same as the original deliverables set in the 2023 workplan.</p>
+<p>The data shown in the table below covers the updated CTR program deliverables starting <strong>January 1st, 2023 through May 31, 2024</strong> in accordance with those workplan updates. A summary table of the CTR deliverables, the number of each deliverable achieved, and the percent of the deliverables met are shown below:</p>
+<div class="cell" data-layout-align="center" data-fig.asp="0.5">
+<div class="cell-output-display">
+
+<table data-quarto-disable-processing="true" class=" lightable-paper table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> CTR Deliverable </th>
+   <th style="text-align:center;"> Achieved </th>
+   <th style="text-align:center;"> Goal </th>
+   <th style="text-align:center;"> % </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr grouplength="9"><td colspan="4" style="background-color: #F0F0F0"><strong>PLWHA</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> PLWHA not in care </td>
+   <td style="text-align:center;"> 12 </td>
+   <td style="text-align:center;"> 125 </td>
+   <td style="text-align:center;"> 9.6% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> PLWHA at UCMC </td>
+   <td style="text-align:center;"> 8 </td>
+   <td style="text-align:center;"> 80 </td>
+   <td style="text-align:center;"> 10.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> PLWHA at WCH </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 10 </td>
+   <td style="text-align:center;"> 0.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> PLWHA at the Exchange </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 5 </td>
+   <td style="text-align:center;"> 20.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> PLWHA at Talbert </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 5 </td>
+   <td style="text-align:center;"> 0.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> PLWHA/WOC </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 10 </td>
+   <td style="text-align:center;"> 0.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> PLWHA/Youth </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 25 </td>
+   <td style="text-align:center;"> 8.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> PLWHA/IDU </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 30 </td>
+   <td style="text-align:center;"> 6.7% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> % PLWHA linked </td>
+   <td style="text-align:center;"> 16.7% </td>
+   <td style="text-align:center;"> 80% </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr grouplength="9"><td colspan="4" style="background-color: #F0F0F0"><strong>MSM</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> MSM assessed </td>
+   <td style="text-align:center;"> 12 </td>
+   <td style="text-align:center;"> 150 </td>
+   <td style="text-align:center;"> 8.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> MSM tested </td>
+   <td style="text-align:center;"> 8 </td>
+   <td style="text-align:center;"> 100 </td>
+   <td style="text-align:center;"> 8.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> MSM tested at UCMC </td>
+   <td style="text-align:center;"> 5 </td>
+   <td style="text-align:center;"> 75 </td>
+   <td style="text-align:center;"> 6.7% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> MSM tested at WCH </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 5 </td>
+   <td style="text-align:center;"> 0.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> MSM tested at the Exchange </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 10 </td>
+   <td style="text-align:center;"> 20.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> MSM tested at Talbert </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 5 </td>
+   <td style="text-align:center;"> 0.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> MSM/Youth tested </td>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 25 </td>
+   <td style="text-align:center;"> 12.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> MSM/IDU tested </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 25 </td>
+   <td style="text-align:center;"> 4.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> MSM new positive </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 0.0% </td>
+  </tr>
+  <tr grouplength="10"><td colspan="4" style="background-color: #F0F0F0"><strong>HRHS</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> HRHS assessed </td>
+   <td style="text-align:center;"> 30 </td>
+   <td style="text-align:center;"> 1150 </td>
+   <td style="text-align:center;"> 2.6% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> HRHS tested </td>
+   <td style="text-align:center;"> 24 </td>
+   <td style="text-align:center;"> 800 </td>
+   <td style="text-align:center;"> 3.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> HRHS tested at UC </td>
+   <td style="text-align:center;"> 16 </td>
+   <td style="text-align:center;"> 550 </td>
+   <td style="text-align:center;"> 2.9% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> HRHS tested at WCH </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 50 </td>
+   <td style="text-align:center;"> 0.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> HRHS tested at the Exchange </td>
+   <td style="text-align:center;"> 5 </td>
+   <td style="text-align:center;"> 150 </td>
+   <td style="text-align:center;"> 3.3% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> HRHS tested at Talbert </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 100 </td>
+   <td style="text-align:center;"> 0.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> HRHS/WOC tested </td>
+   <td style="text-align:center;"> 7 </td>
+   <td style="text-align:center;"> 130 </td>
+   <td style="text-align:center;"> 5.4% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> HRHS/Youth tested </td>
+   <td style="text-align:center;"> 11 </td>
+   <td style="text-align:center;"> 200 </td>
+   <td style="text-align:center;"> 5.5% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> HRHS/IDU tested </td>
+   <td style="text-align:center;"> 8 </td>
+   <td style="text-align:center;"> 300 </td>
+   <td style="text-align:center;"> 2.7% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> HRHS new positive </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 9 </td>
+   <td style="text-align:center;"> 11.1% </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p><br></p>
+<section id="plwha" class="level2">
+<h2 class="anchored" data-anchor-id="plwha">PLWHA</h2>
+<p>The first impact objective encompasses population-based objectives centered around people living with HIV/AIDS (PLWHA) that are identified not in care. This objective has EIP staff identify those either newly diagnosed or previously diagnosed with HIV and determine whether they are out of care, requiring linkage to care services. This objective is inclusive of those who are women of color (WOC), youth (15-29 years old), and injection drug users (IDU). The statement for the actual deliverables promised for this objective is noted below, with the original workplan deliverable crossed out in replace of the updated CTR deliverables:</p>
+<ul>
+<li><span style="color: lightgray;"><em>By December 31, 2023, EIP will perform 100 risk assessments on PLWHA not in care (newly and previously diagnosed) and provide Prevention with Positives and Linkage to Care services such that 80% are engaged in HIV medical care, inclusive of the following (75 at UCMC site, 15 WCH at site, 5 at Exchange site, 5 at Talbert House facility site; of which will be 20 WOC, 25 Youth (18-29), and 25 IDU) as prioritized by RFP workplan table</em></span></li>
+<li><em>By May 31, 2024, EIP will perform 125 risk assessments on PLWHA not in care (newly and previously diagnosed) and provide Prevention with Positives and Linkage to Care services such that 80% are engaged in HIV medical care, inclusive of the following (100 at UCMC site, 15 WCH at site, 5 at Exchange site, 5 at Talbert House facility site; of which will be 20 WOC, 25 Youth (18-29), and 35 IDU) as prioritized by RFP workplan table</em></li>
+</ul>
+<p>From this statement, we specifically state deliverables for how many PLWHA who are out of care that will be identified by our program, and successfully link 80% of those individuals to care. Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table under ‘Additional Metrics’.</p>
+<p>PLWHA are identified in several different ways within the program, including: <strong>self-report of a prior positive test during the assessment of HIV testing history, reason for offering an HIV test was due to a prior HIV positive result, declining an HIV test due to prior positive result, a final positive result through HIV testing, or having an HIV linkage case open with a new or previous HIV status</strong>. EIP staff are meant to identify all PLWHA encountered through the program, with further follow-up and discussion meant to determine who is currently out of care. The deliverable for all PLWHA identified out of care are those that are “eligible” to be linked to care wihtin the linkage flow process (<em>noted below</em>). They are considered “ineligible” based on the following criteria: <strong>they are already linked to care, they are deceased, they are currently incarcerated, we do not have accurate contact information for them, they already have an ongoing linke case for HIV, or they declined EIP linkage services</strong>. The numbers provided here are based on the total number of encounters, not unique number of patients, because EIP may encounter individuals frequently throughout the reporting period and identify them as being out of care during any of these encounters.</p>
+<p>The total number of HIV linkage to care (LTC) cases initiated for PLWHA during this time period is <strong>18</strong>, with the total number of “eligible” LTC cases for PLWHA being 12 (<em>66.7% of all HIV LTC cases initiated, 12/18</em>). <span style="color: lightskyblue;"><strong>Therefore, EIP has identified 12 PLWHA for the CTR deliverable, which is 9.6% of the total promise of 125</strong></span>. The total number of these “eligible” HIV LTC cases that have been successfully linked to care is 2, which is <span style="color: lightskyblue;"><strong>16.7%</strong></span> of those “eligible” (<em>2/12</em>).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-d1908cf2f763090b0bbe" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-d1908cf2f763090b0bbe">{"x":{"visdat":{"59e42fe06502":["function () ","plotlyVisDat"]},"cur_data":"59e42fe06502","attrs":{"59e42fe06502":{"domain":{"x":[0,0.5],"y":[0,1]},"value":12,"title":{"text":"PLWHA Identified Not in Care","font":{"size":14}},"mode":"gauge+number","gauge":{"axis":{"range":[0,125],"tickvals":[0,25,50,75,100,125],"ticktext":["0","25","50","75","100","125"]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":20,"l":50,"t":20,"r":20},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":12,"title":{"text":"PLWHA Identified Not in Care","font":{"size":14}},"mode":"gauge+number","gauge":{"axis":{"range":[0,125],"tickvals":[0,25,50,75,100,125],"ticktext":["0","25","50","75","100","125"]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-b38c71f10a39f5f3024b" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-b38c71f10a39f5f3024b">{"x":{"visdat":{"59e42bfc269c":["function () ","plotlyVisDat"]},"cur_data":"59e42bfc269c","attrs":{"59e42bfc269c":{"domain":{"x":[0,0.5],"y":[0,1]},"value":16.666666666666664,"number":{"suffix":"%"},"title":{"text":"% PLWHA Linked to Care","font":{"size":14}},"mode":"gauge+number","gauge":{"axis":{"range":[0,100]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray","threshold":{"line":{"color":"red","width":4},"thickness":0.75,"value":80}},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":20,"l":20,"t":20,"r":50},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":16.666666666666664,"number":{"suffix":"%"},"title":{"text":"% PLWHA Linked to Care","font":{"size":14}},"mode":"gauge+number","gauge":{"axis":{"range":[0,100]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray","threshold":{"line":{"color":"red","width":4},"thickness":0.75,"value":80}},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>We do not separate linkage numbers based on the HIV testing program (CTR/EHE), so these numbers are pulled the same as the numbers that are reported for the linkage deliverables shown for the EHE program. The difference in the reported numbers are due to the timeframe used for CTR deliverables. <span style="color: red;"><em>Current CTR deliverables are for data collected between 1/1/2023-5/31/2024 and current EHE deliverables are for data collected between 8/1/2023-5/31/2024</em></span>. The HIV Linkage flow diagram for the CTR deliverable timeframe is shown below to provide an understanding of where the linkage numbers are coming from.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="ctr_deliverables24_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><br></p>
+<div class="cell" data-fig.asp="0.45">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-069bc1c9c7d7cfee430c" style="width:100%;height:292px;"></div>
+<script type="application/json" data-for="htmlwidget-069bc1c9c7d7cfee430c">{"x":{"visdat":{"59e46527585":["function () ","plotlyVisDat"]},"cur_data":"59e46527585","attrs":{"59e46527585":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":8,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.25,0.34999999999999998]},"title":{"text":"<b><span style='font-size:0.75em'>UCMC<\/b><\/span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 75<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,100]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":100},"bar":{"color":"lightskyblue"}},"inherit":true},"59e46527585.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":0,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.45000000000000001,0.55000000000000004]},"title":{"text":"<b><span style='font-size:0.75em'>WCH<\/b><\/span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 15<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,100]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":15},"bar":{"color":"lightskyblue"}},"inherit":true},"59e46527585.2":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":1,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.65000000000000002,0.75]},"title":{"text":"<b><span style='font-size:0.75em'>Exchange<\/b><\/span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 5<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,100]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":5},"bar":{"color":"lightskyblue"}},"inherit":true},"59e46527585.3":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":0,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.84999999999999998,0.94999999999999996]},"title":{"text":"<b><span style='font-size:0.75em'>Talbert<\/b><\/span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 5<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,100]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":5},"bar":{"color":"lightskyblue"}},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"type":"indicator","mode":"number+gauge","value":8,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.25,0.34999999999999998]},"title":{"text":"<b><span style='font-size:0.75em'>UCMC<\/b><\/span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 75<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,100]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":100},"bar":{"color":"lightskyblue"}},"frame":null},{"type":"indicator","mode":"number+gauge","value":0,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.45000000000000001,0.55000000000000004]},"title":{"text":"<b><span style='font-size:0.75em'>WCH<\/b><\/span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 15<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,100]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":15},"bar":{"color":"lightskyblue"}},"frame":null},{"type":"indicator","mode":"number+gauge","value":1,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.65000000000000002,0.75]},"title":{"text":"<b><span style='font-size:0.75em'>Exchange<\/b><\/span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 5<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,100]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":5},"bar":{"color":"lightskyblue"}},"frame":null},{"type":"indicator","mode":"number+gauge","value":0,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.84999999999999998,0.94999999999999996]},"title":{"text":"<b><span style='font-size:0.75em'>Talbert<\/b><\/span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 5<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,100]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":5},"bar":{"color":"lightskyblue"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Additional deliverables were made for identifying PLWHA at specific sites where EIP operates. For the University of Cincinnati Medical Center (UCMC), this includes only those CTR tests that were conducted within the emergency department (UCMC ED) or with admitted patients within the hospital. <span style="color: lightskyblue;"><strong>There were a total number of 8 PLWHA identified at UCMC, which is 10.0% of the total promise of 80</strong></span>. For West Chester Hospital (WCH), this includes only those CTR tests that were conducted within the emergency department (WCH ED) or with admitted patients within the hospital. <span style="color: lightskyblue;"><strong>There were a total number of 0 PLWHA identified at at WCH, which is 0.0% of the total promise of 10</strong></span>. For the community-based tests, there are only deliverables for those CTR tests conducted at the Exchange locations and Talbert locations. For the Exchange locations, this includes only those CTR tests that were conducted at any location where the Syringe Service Program (SSP) operates. <span style="color: lightskyblue;"><strong>There were a total number of 1 PLWHA identified at Exchange locations, which is 20.0% of the total promise of 5</strong></span>. For the Talbert locations, this includes only those CTR tests that were conducted at any Talbert based community site. <span style="color: lightskyblue;"><strong>There were a total number of 0 PLWHA identified at Talbert locations, which is 0.0% of the total promise of 5</strong></span>.</p>
+<p>Finally, the CTR program addresses particular population groups for linkage to care. EIP additionally has deliverables for those who are HIV+ and are also WOC, youth and IDU. For those who are WOC, this is defined as any individual who identifies as female whose race/ethnicity is not ‘White/Caucasian’. <span style="color: lightskyblue;"><strong>There were a total number of 0 PLWHA who were also WOC, which is 0.0% of the total promise of 10</strong></span>. For those that are considered in the youth population, CTR defines those between the age of 15-19 years old. However, EIP often encounters individuals younger than the age of 15, so the definition used here are those below the age of 29. <span style="color: lightskyblue;"><strong>There were a total number of 2 PLWHA who were also Youth, which is 8.0% of the total promise of 25</strong></span>. For those that are considered in the IDU population, the individual needs to complete the necessary section within the EIP assessment. We define those who endorse injection drug use behavior ever in their lifetime on the NIDA-Modified ASSIST, or those who are HIV positive and their risk was injection drug use as a part of the IDU population. <span style="color: lightskyblue;"><strong>There were a total number of 2 PLWHA who were also IDU, which is 6.7% of the total promise of 30</strong></span>.</p>
+<div class="cell" data-fig.asp="0.5" data-fig.margin="[0,0,0,0]">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-6355460f103dfa1ac156" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-6355460f103dfa1ac156">{"x":{"visdat":{"59e414b7232":["function () ","plotlyVisDat"]},"cur_data":"59e414b7232","attrs":{"59e414b7232":{"domain":{"x":[0,0.5],"y":[0,1]},"value":0,"title":{"text":"PLWHA/WOC Identified","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,25]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":0,"title":{"text":"PLWHA/WOC Identified","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,25]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell" data-fig.asp="0.5" data-fig.margin="[0,0,0,0]">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-1fa1132993719c13206e" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-1fa1132993719c13206e">{"x":{"visdat":{"59e4c2a3709":["function () ","plotlyVisDat"]},"cur_data":"59e4c2a3709","attrs":{"59e4c2a3709":{"domain":{"x":[0,0.5],"y":[0,1]},"value":2,"title":{"text":"PLWHA/Youth Identified","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,25]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":2,"title":{"text":"PLWHA/Youth Identified","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,25]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell" data-fig.asp="0.5" data-fig.margin="[0,0,0,0]">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-320cb466cd9abb1c74a0" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-320cb466cd9abb1c74a0">{"x":{"visdat":{"59e4411cf12":["function () ","plotlyVisDat"]},"cur_data":"59e4411cf12","attrs":{"59e4411cf12":{"domain":{"x":[0,0.5],"y":[0,1]},"value":2,"title":{"text":"PLWHA/IDU Identified","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,35]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":2,"title":{"text":"PLWHA/IDU Identified","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,35]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="msm" class="level2">
+<h2 class="anchored" data-anchor-id="msm">MSM</h2>
+<p>There were additional deliverables made for population-based objectives, and the first focuses on those who identify as men who have sex with other men (MSM). Individuals are only identified as a part of this population group if they complete the necessary portions on the EIP assessment. The statement for the actual deliverables promised for this objective is noted below, with the original workplan deliverable crossed out in replace of the updated CTR deliverables:</p>
+<ul>
+<li><span style="color: lightgray;"><em>By December 31, 2023, EIP will identify 100 MSM for risk-assessment and prevention intervention including client-centered risk reduction counseling and PrEP education/referral. EIP will provide CTR testing to 100 MSM, inclusive of the following (75 at UCMC site, 10 at WCH site, 10 at Exchange site, 5 at Talbert House facility site ; of which will be 20 Youth (15-29) and 20 IDU). Of the 100 MSM tested, EIP will identify between 3-5 HIV(+) MSM for the PLWHA program (Workplan Form 4, Part 1).</em></span></li>
+<li><em>By May 31, 2024, EIP will identify 140 MSM for risk-assessment and prevention intervention including client-centered risk reduction counseling and PrEP education/referral. EIP will provide CTR testing to 100 MSM, inclusive of the following (75 at UCMC site, 10 at WCH site, 10 at Exchange site, 5 at Talbert House facility site ; of which will be 25 Youth (15-29) and 25 IDU). Of the 100 MSM tested, EIP will identify between 3-5 HIV(+) MSM for the PLWHA program (Workplan Form 4, Part 1).</em></li>
+</ul>
+<p>From this statement, we specifically state deliverables for how many MSM will be assessed for risk and/or need, and how many MSM will be tested using CTR-funded tests. Additionally, EIP states a specific number of tests at each site (UCMC, WCH, the Exchange, and Talbert). EIP also states how many MSM will be tested using CTR-funded tests who are also youth (15-29) and injection drug users (IDU), as well as a specific number of newly diagnosed individuals who identify as MSM. Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table under ‘Additional Metrics’.</p>
+<p>For those individuals who identify as a male, they are determined to be a MSM if they meet at least one of the following criteria: <em>they identify as Male and their sexual orientation is homosexual or bisexual, they report sex with a male or a transgender male within the past year, or they are a PLWHA and their reported risk was MSM</em>. <span style="color: lightskyblue;"><strong>The total number of individuals who are MSM that have been assessed during this time period is 12, which is 8.0% of the total promise of 150</strong></span>.</p>
+<div class="cell" data-fig.asp="0.5">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-d1da16c04dd0fae348f6" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-d1da16c04dd0fae348f6">{"x":{"visdat":{"59e4643c3013":["function () ","plotlyVisDat"]},"cur_data":"59e4643c3013","attrs":{"59e4643c3013":{"domain":{"x":[0,0.5],"y":[0,1]},"value":12,"title":{"text":"MSM CTR Assessed","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,140]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":12,"title":{"text":"MSM CTR Assessed","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,140]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p><span style="color: lightskyblue;"><strong>The total number of individuals who are MSM that have been tested through the CTR program is 8, which is 8.0% of the total promise of 100</strong></span>. In addition to the total number of tests, there were deliverables for the location where those tests were conducted. For the University of Cincinnati Medical Center (UCMC), this includes only those CTR tests that were conducted within the emergency department (UCMC ED) or with admitted patients within the hospital. <span style="color: lightskyblue;"><strong>There were a total number of 5 CTR tests that were conducted at UCMC, which is 6.7% of the total promise of 75</strong></span>. For West Chester Hospital (WCH), this includes only those CTR tests that were conducted within the emergency department (WCH ED) or with admitted patients within the hospital. <span style="color: lightskyblue;"><strong>There were a total number of 0 CTR tests that were conducted at WCH, which is 0.0% of the total promise of 5</strong></span>. For the community-based tests, there are only deliverables for those CTR tests conducted at the Exchange locations and Talbert locations. For the Exchange locations, this includes only those CTR tests that were conducted at any location where the Syringe Service Program (SSP) operates. <span style="color: lightskyblue;"><strong>There were a total number of 2 CTR tests that were conducted at Exchange locations, which is 20.0% of the total promise of 10</strong></span>. For the Talbert locations, this includes only those CTR tests that were conducted at any Talbert based community site. <span style="color: lightskyblue;"><strong>There were a total number of 0 CTR tests that were conducted at Talbert locations, which is 0.0% of the total promise of 5</strong></span>.</p>
+<div class="cell" data-fig.asp="0.5">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-a165ee1de0ac62a0cda7" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-a165ee1de0ac62a0cda7">{"x":{"visdat":{"59e422c6395e":["function () ","plotlyVisDat"]},"cur_data":"59e422c6395e","attrs":{"59e422c6395e":{"domain":{"x":[0,0.5],"y":[0,1]},"value":8,"title":{"text":"MSM CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,100]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":8,"title":{"text":"MSM CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,100]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell" data-fig.asp="0.45">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-ce75eeacee746e75f291" style="width:100%;height:292px;"></div>
+<script type="application/json" data-for="htmlwidget-ce75eeacee746e75f291">{"x":{"visdat":{"59e452c44ee":["function () ","plotlyVisDat"]},"cur_data":"59e452c44ee","attrs":{"59e452c44ee":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":5,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.25,0.34999999999999998]},"title":{"text":"<b><span style='font-size:0.75em'>UCMC<\/b><\/span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 75<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,75]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":75},"bar":{"color":"lightskyblue"}},"inherit":true},"59e452c44ee.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":0,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.45000000000000001,0.55000000000000004]},"title":{"text":"<b><span style='font-size:0.75em'>WCH<\/b><\/span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 10<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,75]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":10},"bar":{"color":"lightskyblue"}},"inherit":true},"59e452c44ee.2":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":2,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.65000000000000002,0.75]},"title":{"text":"<b><span style='font-size:0.75em'>Exchange<\/b><\/span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 10<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,75]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":10},"bar":{"color":"lightskyblue"}},"inherit":true},"59e452c44ee.3":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":0,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.84999999999999998,0.94999999999999996]},"title":{"text":"<b><span style='font-size:0.75em'>Talbert<\/b><\/span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 5<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,75]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":5},"bar":{"color":"lightskyblue"}},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"type":"indicator","mode":"number+gauge","value":5,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.25,0.34999999999999998]},"title":{"text":"<b><span style='font-size:0.75em'>UCMC<\/b><\/span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 75<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,75]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":75},"bar":{"color":"lightskyblue"}},"frame":null},{"type":"indicator","mode":"number+gauge","value":0,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.45000000000000001,0.55000000000000004]},"title":{"text":"<b><span style='font-size:0.75em'>WCH<\/b><\/span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 10<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,75]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":10},"bar":{"color":"lightskyblue"}},"frame":null},{"type":"indicator","mode":"number+gauge","value":2,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.65000000000000002,0.75]},"title":{"text":"<b><span style='font-size:0.75em'>Exchange<\/b><\/span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 10<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,75]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":10},"bar":{"color":"lightskyblue"}},"frame":null},{"type":"indicator","mode":"number+gauge","value":0,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.84999999999999998,0.94999999999999996]},"title":{"text":"<b><span style='font-size:0.75em'>Talbert<\/b><\/span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 5<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,75]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":5},"bar":{"color":"lightskyblue"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>While we do not separate the linkage data between the various testing programs, we can identify which testing programs identify new positive HIV diagnoses. According to the CTR workplan, EIP has promised to identify a certain number of individuals who identify as MSM who are newly diagnosed for HIV. <span style="color: lightskyblue;"><strong>There were a total number of 0 MSM CTR tests that resulted in a new positive diagnosis for the individual tested, which is 0.0% of the total promise of 3</strong></span>. This number of new positive diagnoses are only those that were tested through the CTR program, and this only considers <em>new</em> positive diagnoses, not those that were tested and later determined to be an individual known to be positive.</p>
+<div class="cell" data-fig.asp="0.5">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-b27e9556a3aafa014a5b" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-b27e9556a3aafa014a5b">{"x":{"visdat":{"59e455eaeb2":["function () ","plotlyVisDat"]},"cur_data":"59e455eaeb2","attrs":{"59e455eaeb2":{"domain":{"x":[0,0.45000000000000001],"y":[0,1]},"value":0,"title":{"text":"MSM CTR New Positive","font":{"size":18}},"mode":"gauge+number","gauge":{"axis":{"range":[0,5]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray","threshold":{"line":{"color":"red","width":4},"thickness":0.75,"value":3}},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.45000000000000001],"y":[0,1]},"value":0,"title":{"text":"MSM CTR New Positive","font":{"size":18}},"mode":"gauge+number","gauge":{"axis":{"range":[0,5]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray","threshold":{"line":{"color":"red","width":4},"thickness":0.75,"value":3}},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>This can be further broken down monthly to determine how frequently we test those who identify as MSM, and determine if program evaluation needs to occur based on how we can increase testing for this population or whether decreased testing numbers are due to staffing changes and program barriers. The monthly breakdown of MSM CTR testing by month is shown here.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-73f36ad07205761163f1" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-73f36ad07205761163f1">{"x":{"visdat":{"59e423be6629":["function () ","plotlyVisDat"]},"cur_data":"59e423be6629","attrs":{"59e423be6629":{"x":{},"y":{},"text":{},"textposition":"auto","marker":{"color":"lightskyblue"},"name":"MSM CTR Tested","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"yaxis":{"domain":[0,1],"automargin":true,"title":"MSM CTR Tested"},"barmode":"stack","xaxis":{"domain":[0,1],"automargin":true,"tickangle":45,"title":"Date"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["2024-07-01"],"y":[8],"text":8,"textposition":"auto","marker":{"color":"lightskyblue","line":{"color":"rgba(31,119,180,1)"}},"name":"MSM CTR Tested","type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Finally, the CTR program addresses particular population groups for testing. Within the population of MSM, we additionally have deliverables for youth and IDU. For those that are considered in the youth population, CTR defines those between the age of 15-19 years old. However, EIP often encounters individuals younger than the age of 15, so the definition used here are those below the age of 29. <span style="color: lightskyblue;"><strong>There were a total number of 3 CTR tests where the individual was both MSM/Youth, which is 12.0% of the total promise of 25</strong></span>. For those that are considered in the IDU population, the individual needs to complete the necessary section within the EIP assessment. We define those who endorse injection drug use behavior ever in their lifetime on the NIDA-Modified ASSIST, or those who are HIV positive and their risk was injection drug use as a part of the IDU population. <span style="color: lightskyblue;"><strong>There were a total number of 1 CTR tests where the individual was both MSM/IDU, which is 4.0% of the total promise of 25</strong></span>.</p>
+<div class="cell" data-fig.asp="0.5">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-4911b15915c43e8ab8b5" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-4911b15915c43e8ab8b5">{"x":{"visdat":{"59e43efc5e2f":["function () ","plotlyVisDat"]},"cur_data":"59e43efc5e2f","attrs":{"59e43efc5e2f":{"domain":{"x":[0,0.5],"y":[0,1]},"value":3,"title":{"text":"MSM/Youth CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,25]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":3,"title":{"text":"MSM/Youth CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,25]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell" data-fig.asp="0.5">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-9606f0f8e758e88e235a" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-9606f0f8e758e88e235a">{"x":{"visdat":{"59e41a386f17":["function () ","plotlyVisDat"]},"cur_data":"59e41a386f17","attrs":{"59e41a386f17":{"domain":{"x":[0,0.5],"y":[0,1]},"value":1,"title":{"text":"MSM/IDU CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,25]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":1,"title":{"text":"MSM/IDU CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,25]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p><br></p>
+</section>
+<section id="hrhs" class="level2">
+<h2 class="anchored" data-anchor-id="hrhs">HRHS</h2>
+<p>There were additional deliverables made for population-based objectives, and the second focuses on those who identify as heterosexual that are at high risk for contracting HIV by endorsing high-risk heterosexual sex (HRHS) behaviors. Individuals are only identified as a part of this population group if they complete the necessary portions on the EIP assessment. The statement for the actual deliverables promised for this objective is noted below:</p>
+<ul>
+<li><span style="color: lightgray;"><em>By December 31, 2023, EIP will identify 1000 HRHS for risk-assessment and prevention intervention including client-centered risk reduction counseling and PrEP education/referral. EIP will provide CTR testing to 900 HRHS, inclusive of the following (550 UCMC at site, 100 WCH at site, 150 at Exchange site, 100 Talbert at House facility site; of which will be 100 WOC, 200 Youth (15-29), and 300 IDU). Of the 900 HRHS tested, EIP will identify 9 HIV(+) HRHS for the PLWHA program (Workplan Form 4, Part 1).</em></span></li>
+<li><em>By May 31, 2024, EIP will identify 1150 HRHS for risk-assessment and prevention intervention including client-centered risk reduction counseling and PrEP education/referral. EIP will provide CTR testing to 900 HRHS, inclusive of the following (550 UCMC at site, 100 WCH at site, 150 at Exchange site, 100 Talbert at House facility site; of which will be 130 WOC, 200 Youth (15-29), and 300 IDU). Of the 900 HRHS tested, EIP will identify 9 HIV(+) HRHS for the PLWHA program (Workplan Form 4, Part 1).</em></li>
+</ul>
+<p>From this statement, we specifically state deliverables for how many HRHS will be assessed for risk and/or need, how many HRHS individuals will be tested through CTR-funded tests, and state a specific number of tests at each site (UCMC, WCH, the Exchange, and Talbert). Additionally, EIP stated specific populations within those who are HRHS, including WOC, youth (15-29), and IDU. EIP also stated a specific number of individuals newly diagnosed with HIV through CTR testing. Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table under ‘Additional Metrics’.</p>
+<p>For those individuals who identify as a heterosexual (men who have sex with women, or women who have sex with men), they are determined to be HRHS if they meet at least one of the following criteria: <em>heterosexual women that have unprotected sex with men or MSM, heterosexual men/women that have sex with an IDU, an HIV positive partner, a STD positive partner, more than three partners, or heterosexual men/women that exchange money/drugs for sex</em>. These behaviors are all within the past year.</p>
+<p><span style="color: lightskyblue;"><strong>The total number of encounters with individuals who are HRHS that have been assessed during this time period is 30, which is 2.6% of the total promise of 1150</strong></span>. In addition to the total number of assessments, there were deliverables for the number of CTR-funded tests performed. <span style="color: lightskyblue;"><strong>The total number of encounters where HRHS individuals were tested is 24, which is 3.0% of the total promise of 800</strong></span>. There were also deliverables for the number of tests performed at specific sites where EIP operates. For UCMC, this includes only those assessments that were accompanied by a CTR test that were conducted within the emergency department (UCMC ED) or with admitted patients within the hospital. <span style="color: lightskyblue;"><strong>There were a total number of 16 CTR HRHS tests that were conducted at UCMC, which is 2.9% of the total promise of 550</strong></span>. For WCH, this includes only those assessments that were accompanied by a CTR test that were conducted within the emergency department (WCH ED) or with admitted patients within the hospital. <span style="color: lightskyblue;"><strong>There were a total number of 0 CTR HRHS assessments that were conducted at WCH, which is 0.0% of the total promise of 50</strong></span>. For the community-based tests, this includes those CTR-funded tests that were conducted at either the Exchange or Talbert sites. For the Exchange, this includes any site where the SSP operates. <span style="color: lightskyblue;"><strong>There were a total number of 5 CTR HRHS tests that were conducted at the Exchange, which is 3.3% of the total promise of 150</strong></span>. For the Talbert locations, this includes only those CTR tests that were conducted at any Talbert based community site. <span style="color: lightskyblue;"><strong>There were a total number of 0 CTR HRHS tests that were conducted at Talbert, which is 0.0% of the total promise of 100</strong></span>.</p>
+<div class="cell" data-fig.asp="0.5">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-69c5feefb6c92e0bab30" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-69c5feefb6c92e0bab30">{"x":{"visdat":{"59e42fc57ef9":["function () ","plotlyVisDat"]},"cur_data":"59e42fc57ef9","attrs":{"59e42fc57ef9":{"domain":{"x":[0,0.5],"y":[0,1]},"value":30,"title":{"text":"HRHS CTR Assessed","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,1150]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":30,"title":{"text":"HRHS CTR Assessed","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,1150]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell" data-fig.asp="0.5">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-a71e4d5439dbc847b8ca" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-a71e4d5439dbc847b8ca">{"x":{"visdat":{"59e450d644d":["function () ","plotlyVisDat"]},"cur_data":"59e450d644d","attrs":{"59e450d644d":{"domain":{"x":[0,0.5],"y":[0,1]},"value":24,"title":{"text":"HRHS CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,900]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":24,"title":{"text":"HRHS CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,900]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell" data-fig.asp="0.45">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-b46fbdfc5e3ee5e1ff63" style="width:100%;height:292px;"></div>
+<script type="application/json" data-for="htmlwidget-b46fbdfc5e3ee5e1ff63">{"x":{"visdat":{"59e46fe336b9":["function () ","plotlyVisDat"]},"cur_data":"59e46fe336b9","attrs":{"59e46fe336b9":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":16,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.25,0.34999999999999998]},"title":{"text":"<b><span style='font-size:0.75em'>UCMC<\/b><\/span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 550<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,550]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":550},"bar":{"color":"lightskyblue"}},"inherit":true},"59e46fe336b9.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":0,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.45000000000000001,0.55000000000000004]},"title":{"text":"<b><span style='font-size:0.75em'>WCH<\/b><\/span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 100<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,550]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":100},"bar":{"color":"lightskyblue"}},"inherit":true},"59e46fe336b9.2":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":5,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.65000000000000002,0.75]},"title":{"text":"<b><span style='font-size:0.75em'>Exchange<\/b><\/span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 150<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,550]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":150},"bar":{"color":"lightskyblue"}},"inherit":true},"59e46fe336b9.3":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":0,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.84999999999999998,0.94999999999999996]},"title":{"text":"<b><span style='font-size:0.75em'>Talbert<\/b><\/span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 100<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,550]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":100},"bar":{"color":"lightskyblue"}},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"type":"indicator","mode":"number+gauge","value":16,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.25,0.34999999999999998]},"title":{"text":"<b><span style='font-size:0.75em'>UCMC<\/b><\/span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 550<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,550]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":550},"bar":{"color":"lightskyblue"}},"frame":null},{"type":"indicator","mode":"number+gauge","value":0,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.45000000000000001,0.55000000000000004]},"title":{"text":"<b><span style='font-size:0.75em'>WCH<\/b><\/span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 100<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,550]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":100},"bar":{"color":"lightskyblue"}},"frame":null},{"type":"indicator","mode":"number+gauge","value":5,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.65000000000000002,0.75]},"title":{"text":"<b><span style='font-size:0.75em'>Exchange<\/b><\/span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 150<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,550]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":150},"bar":{"color":"lightskyblue"}},"frame":null},{"type":"indicator","mode":"number+gauge","value":0,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.84999999999999998,0.94999999999999996]},"title":{"text":"<b><span style='font-size:0.75em'>Talbert<\/b><\/span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 100<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,550]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":100},"bar":{"color":"lightskyblue"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>While we do not separate the linkage data between the various testing programs, we can identify which testing programs identify new positive HIV diagnoses. According to the CTR workplan, EIP has promised to identify a certain number of individuals that are HRHS who are newly diagnosed for HIV. <span style="color: lightskyblue;"><strong>There were a total number of 1 HRHS CTR tests that resulted in a new positive diagnosis for the individual tested, which is 11.1% of the total promise of 9</strong></span>. This number of new positive diagnoses are only those that were tested through the CTR program, and this only considers <em>new</em> positive diagnoses, not those that were tested and later determined to be an individual known to be positive.</p>
+<div class="cell" data-fig.asp="0.5">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-d059bb472ec92753fd7b" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-d059bb472ec92753fd7b">{"x":{"visdat":{"59e46a4e4228":["function () ","plotlyVisDat"]},"cur_data":"59e46a4e4228","attrs":{"59e46a4e4228":{"domain":{"x":[0,0.45000000000000001],"y":[0,1]},"value":1,"title":{"text":"HRHS CTR New Positive","font":{"size":18}},"mode":"gauge+number","gauge":{"axis":{"range":[0,10]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray","threshold":{"line":{"color":"red","width":4},"thickness":0.75,"value":9}},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.45000000000000001],"y":[0,1]},"value":1,"title":{"text":"HRHS CTR New Positive","font":{"size":18}},"mode":"gauge+number","gauge":{"axis":{"range":[0,10]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray","threshold":{"line":{"color":"red","width":4},"thickness":0.75,"value":9}},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>This can be further broken down monthly to determine how frequently we test those who are HRHS, and determine if program evaluation needs to occur based on how we can increase testing for this population or whether decreased testing numbers are due to staffing changes and program barriers. The monthly breakdown of HRHS CTR testing by month is shown here.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-eab4419ff4df4b7e85d0" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-eab4419ff4df4b7e85d0">{"x":{"visdat":{"59e41547301c":["function () ","plotlyVisDat"]},"cur_data":"59e41547301c","attrs":{"59e41547301c":{"x":{},"y":{},"text":{},"textposition":"auto","marker":{"color":"lightskyblue"},"name":"HRHS CTR Tested","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"yaxis":{"domain":[0,1],"automargin":true,"title":"HRHS CTR Tested"},"barmode":"stack","xaxis":{"domain":[0,1],"automargin":true,"tickangle":45,"title":"Date"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["2024-07-01","2024-08-01"],"y":[23,1],"text":[23,1],"textposition":["auto","auto"],"marker":{"color":"lightskyblue","line":{"color":"rgba(31,119,180,1)"}},"name":"HRHS CTR Tested","type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Finally, the CTR program addresses particular population groups for testing. Within the population of HRHS, we additionally have deliverables for WOC, youth and IDU. For those who are WOC, this is defined as any individual who identifies as female whose race/ethnicity is not ‘White/Caucasian’. <span style="color: lightskyblue;"><strong>There were a total number of 7 CTR tests where the individual was both HRHS/WOC, which is 5.4% of the total promise of 130</strong></span>. For those that are considered in the youth population, CTR defines those between the age of 15-19 years old. However, EIP often encounters individuals younger than the age of 15, so the definition used here are those below the age of 29. <span style="color: lightskyblue;"><strong>There were a total number of 11 CTR tests where the individual was both HRHS/Youth, which is 5.5% of the total promise of 200</strong></span>. For those that are considered in the IDU population, the individual needs to complete the necessary section within the EIP assessment. We define those who endorse injection drug use behavior ever in their lifetime on the NIDA-Modified ASSIST, or those who are HIV positive and their risk was injection drug use as a part of the IDU population. <span style="color: lightskyblue;"><strong>There were a total number of 8 CTR tests where the individual was both HRHS/IDU, which is 2.7% of the total promise of 300</strong></span>.</p>
+<div class="cell" data-fig.asp="0.5">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-7fc6b20a4d8811782d8f" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-7fc6b20a4d8811782d8f">{"x":{"visdat":{"59e411ed7b45":["function () ","plotlyVisDat"]},"cur_data":"59e411ed7b45","attrs":{"59e411ed7b45":{"domain":{"x":[0,0.5],"y":[0,1]},"value":7,"title":{"text":"HRHS/WOC CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,300]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray","threshold":{"line":{"color":"red","width":4},"thickness":0.75,"value":130}},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":7,"title":{"text":"HRHS/WOC CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,300]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray","threshold":{"line":{"color":"red","width":4},"thickness":0.75,"value":130}},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell" data-fig.asp="0.5">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-8882ecf73435d6c4a72c" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-8882ecf73435d6c4a72c">{"x":{"visdat":{"59e42cb5152":["function () ","plotlyVisDat"]},"cur_data":"59e42cb5152","attrs":{"59e42cb5152":{"domain":{"x":[0,0.5],"y":[0,1]},"value":11,"title":{"text":"HRHS/Youth CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,300]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray","threshold":{"line":{"color":"red","width":4},"thickness":0.75,"value":200}},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":11,"title":{"text":"HRHS/Youth CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,300]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray","threshold":{"line":{"color":"red","width":4},"thickness":0.75,"value":200}},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell" data-fig.asp="0.5">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-e25108ce851def6d1166" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-e25108ce851def6d1166">{"x":{"visdat":{"59e44c104707":["function () ","plotlyVisDat"]},"cur_data":"59e44c104707","attrs":{"59e44c104707":{"domain":{"x":[0,0.5],"y":[0,1]},"value":8,"title":{"text":"HRHS/IDU CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,300]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":8,"title":{"text":"HRHS/IDU CTR Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,300]},"bar":{"color":"lightskyblue"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="additional-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="additional-metrics">Additional Metrics</h2>
+<p>Additional metrics still to code for:</p>
+<ul>
+<li>Number of PLWHA approached</li>
+<li>Number receiving intervention</li>
+<li>Number of interactions between EIP staff and site staff</li>
+<li>Number/% of PLWHA not in care (new and previous)</li>
+<li>Number/% of PLWHA linked to medical care and other services</li>
+<li>Number/% of PLWHA receiving risk assessment and counseling</li>
+<li>Number of MSM approached</li>
+<li>Number of MSM receiving intervention</li>
+<li>Number/% of HIV(-) MSM receiving risk reduction counseling and PrEP education/referral</li>
+<li>Number/% of MSM receiving HIV testing</li>
+<li>Number/% of MSM who test HIV+</li>
+<li>Number HRHS approached</li>
+<li>Number receiving intervention</li>
+<li>Number/% of HIV(-) HRHS receiving risk reduction counseling and PrEP education/referral</li>
+<li>Number/% of HRHS receiving HIV testing</li>
+<li>Number/% HRHS who test HIV+</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
