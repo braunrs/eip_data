@@ -43,7 +43,7 @@ eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240803_2337.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240812_0858.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
@@ -116,11 +116,13 @@ labs32 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_lab
 dim(labs32)
 labs33 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240802.csv')
 dim(labs33)
+labs34 <- read.csv('M:/EIP Data/External Data Sources/CHI Data/2024/DPI_1009_labs_hiv_hcv_hepc_complete_20240806.csv')
+dim(labs34)
 
 labs <- rbind(labs1,labs2,labs3,labs4,labs5,labs6,labs7,labs8,labs9,labs10,
               labs11,labs12,labs13,labs14,labs15,labs16,labs17,labs18,labs19,labs20,
               labs21,labs22,labs23,labs24,labs25,labs26,labs27,labs28,labs29,labs30,
-              labs31,labs32,labs33)
+              labs31,labs32,labs33,labs34)
 dim(labs)
 head(labs)
 

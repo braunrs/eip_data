@@ -36,7 +36,7 @@ library(apyramid)
 
 
 # EIP Database Data
-eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240803_2337.csv')
+eip <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240812_0858.csv')
 dim(eip)
 
 # HCV Epic Dashboard Data
