@@ -30,14 +30,14 @@ library(zoo)
 
 ### EIP Database Data
 # 2023
-eip23 <- read.csv('M:/EIP Data/EIP Database/REDCap 2023/EIP Database Data 20240723_0942.csv')
+eip23 <- read.csv('M:/EIP Data/EIP Database/REDCap 2023/EIP Database Data 20240813_1043.csv')
 dim(eip23)
 summary(eip23$record_id)
 eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240812_0858.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240813_1049.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
@@ -1233,16 +1233,6 @@ eip23$ltc_sud_referral_pods___1 <- ''
 eip23$ltc_sud_referral_pods___2 <- ''
 eip23$ltc_sud_referral_pods___3 <- ''
 eip23$ltc_sud_referral_pods_date <- ''
-
-
-
-
-
-
-
-
-
-
 eip23$counselor_sti_start <- ''
 eip23$datetime_sti_start <- ''
 eip23$referred_by_sti <- ''
@@ -1510,6 +1500,7 @@ eip23$testing_sti_complete <- ''
 eip23$enc_location_513_bus <- ''
 eip23$deshpande_ltc_open_calc <- ''
 eip23$peer_intern <- ''
+eip23$counselor_ref_sud_specific___59 <- ''
 
 
 # Adding variables removed from 2023 dataset to 2024 dataset as blank values
@@ -2206,7 +2197,7 @@ eip$datediff50 <- as.numeric(interval(eip$enc_date, eip$followup_date50)/ddays(1
 ###############################################################################################################
 
 summary(eip$enc_date)
-ehe <- eip[which(eip$enc_date >= '2023-08-01' & eip$enc_date <= '2024-06-30'), ]
+ehe <- eip[which(eip$enc_date >= '2023-08-01' & eip$enc_date <= '2024-07-31'), ]
 summary(ehe$enc_date)
 
 
@@ -2963,7 +2954,8 @@ ehe_hiv_not_linked_other_percent
 ```
 
 
-The Ending the HIV Epidemic (EHE) testing program...(plan to provide an overall description and background for EHE)
+The Ending the HIV Epidemic (EHE) testing program...(plan to provide an overall description and background for EHE).
+
 
 ```{r, echo = FALSE, fig.align='center'}
 
@@ -2974,9 +2966,9 @@ ehe_testing_tbl[nrow(ehe_testing_tbl) + 1,] <- list('Positives', ehe_positive)
 ehe_testing_tbl[nrow(ehe_testing_tbl) + 1,] <- list('New Positives', ehe_new_positive)
 ehe_testing_tbl[nrow(ehe_testing_tbl) + 1,] <- list('Positivity Rate', ehe_positivity_rate)
 ehe_testing_tbl %>%
-  kbl() %>%
+  kbl(table.attr = 'data-quarto-disable-processing="true"') %>%
   kable_paper(bootstrap_options = "striped", full_width = F) %>%
-  kable_styling(full_width = F, font_size = 12, position = "float_right")
+  kable_styling(full_width = F, font_size = 16, position = "float_right")
 
 ```
 
@@ -3004,7 +2996,7 @@ monthly_ehe_tests_plot
 
 ## EHE Deliverables Summary
 
-The deliverables highlighted below are the numbers that were noted on the 2023 EHE Workplan as what our program would accomplish within the year of funding awarded. The data shown below covers EHE program deliverables starting **August 1st, 2023 through May 31st, 2024**. A summary table of the EHE deliverables, the number of each deliverable achieved, and the percent of the deliverables met are shown below:
+The deliverables highlighted below are the numbers that were noted on the 2023 EHE Workplan as what our program would accomplish within the year of funding awarded. The data shown below covers EHE program deliverables starting **August 1st, 2023 through July 31st, 2024**. A summary table of the EHE deliverables, the number of each deliverable achieved, and the percent of the deliverables met are shown below:
 
 
 ```{r, echo = FALSE, fig.align='center', fig.asp=0.50}
@@ -3027,7 +3019,7 @@ ehe_deliverables_tbl[nrow(ehe_deliverables_tbl) + 1,] <- list('HRHS assessed at 
 ehe_deliverables_tbl[nrow(ehe_deliverables_tbl) + 1,] <- list('HRHS assessed at WCH', ehe_hrhs_wch_assessed, ehe_hrhs_wch_assessed_deliverable, ehe_hrhs_wch_assessed_deliverable_percent)
 ehe_deliverables_tbl[nrow(ehe_deliverables_tbl) + 1,] <- list('HRHS assessed in Community', ehe_hrhs_comm_assessed, ehe_hrhs_comm_assessed_deliverable, ehe_hrhs_comm_assessed_deliverable_percent)
 ehe_deliverables_tbl %>%
-  kbl(align = 'lccc') %>%
+  kbl(align = 'lccc', table.attr = 'data-quarto-disable-processing="true"') %>%
   kable_paper(bootstrap_options = "striped", full_width = F) %>%
   pack_rows("PLWHA", 1, 2, label_row_css = "background-color: #F0F0F0") %>%
   pack_rows("MSM", 3, 10, label_row_css = "background-color: #F0F0F0") %>%

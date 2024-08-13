@@ -30,14 +30,14 @@ library(zoo)
 
 ### EIP Database Data
 # 2023
-eip23 <- read.csv('M:/EIP Data/EIP Database/REDCap 2023/EIP Database Data 20240723_0942.csv')
+eip23 <- read.csv('M:/EIP Data/EIP Database/REDCap 2023/EIP Database Data 20240813_1043.csv')
 dim(eip23)
 summary(eip23$record_id)
 eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240812_0858.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240813_1049.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
@@ -1233,16 +1233,6 @@ eip23$ltc_sud_referral_pods___1 <- ''
 eip23$ltc_sud_referral_pods___2 <- ''
 eip23$ltc_sud_referral_pods___3 <- ''
 eip23$ltc_sud_referral_pods_date <- ''
-
-
-
-
-
-
-
-
-
-
 eip23$counselor_sti_start <- ''
 eip23$datetime_sti_start <- ''
 eip23$referred_by_sti <- ''
@@ -1510,6 +1500,7 @@ eip23$testing_sti_complete <- ''
 eip23$enc_location_513_bus <- ''
 eip23$deshpande_ltc_open_calc <- ''
 eip23$peer_intern <- ''
+eip23$counselor_ref_sud_specific___59 <- ''
 
 
 # Adding variables removed from 2023 dataset to 2024 dataset as blank values
@@ -2206,7 +2197,7 @@ eip$datediff50 <- as.numeric(interval(eip$enc_date, eip$followup_date50)/ddays(1
 ###############################################################################################################
 
 summary(eip$enc_date)
-ctr <- eip[which(eip$enc_date >= '2023-01-01' & eip$enc_date <= '2024-06-30'), ]
+ctr <- eip[which(eip$enc_date >= '2023-01-01' & eip$enc_date <= '2024-07-31'), ]
 summary(ctr$enc_date)
 
 
@@ -3254,7 +3245,7 @@ ctr_deliverables_update_tbl %>%
 
 The deliverables highlighted below are the numbers that were noted on the 2023 CTR Workplan as what our program would accomplish within the year of funding awarded. The original workplan specified data that was collected starting *January 1st, 2023 through December 31, 2023*. However, an update with funding allocation for both the CTR and EHE programs allowed for a change to the deliverables for CTR and the timeframe for those deliverables. The data in the table to the right shows the deliervables that were updated based on this change. The changes in these deliverables were made based on the estimated possibility of reaching these goals based on the numbers we had reached at the time the changes were initiated. For example, some of the deliverables were already met, so those numbers were increased due to the likelihood of surpassing the original goal; some deliverables were close to being met, so they may have been increased slightly; and some deliverables were not close to being met, so they were not changed in the hopes that we would be able to meet those original goals by the new extended timeframe. The updates in these deliverable goals were made on *December 18th, 2023*. The table to the right only shows those deliverables that were updated, and all other deliverables are the same as the original deliverables set in the 2023 workplan.
 
-The data shown in the table below covers the updated CTR program deliverables starting **January 1st, 2023 through May 31, 2024** in accordance with those workplan updates. A summary table of the CTR deliverables, the number of each deliverable achieved, and the percent of the deliverables met are shown below:
+The data shown in the table below covers the updated CTR program deliverables starting **January 1st, 2023 through July 31, 2024** in accordance with those workplan updates. A summary table of the CTR deliverables, the number of each deliverable achieved, and the percent of the deliverables met are shown below:
 
 ```{r, echo = FALSE, fig.align='center', fig.asp=0.50}
 
