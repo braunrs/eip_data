@@ -30,7 +30,7 @@ library(zoo)
 
 ### EIP Database Data
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240813_1049.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240814_1336.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
@@ -963,7 +963,7 @@ eip$datediff50 <- as.numeric(interval(eip$enc_date, eip$followup_date50)/ddays(1
 ###############################################################################################################
 
 summary(eip$enc_date)
-ctr <- eip[which(eip$enc_date >= '2024-07-01' & eip$enc_date <= '2025-05-31'), ]
+ctr <- eip[which(eip$enc_date >= '2024-08-01' & eip$enc_date <= '2025-05-31'), ]
 summary(ctr$enc_date)
 
 
@@ -1698,6 +1698,35 @@ ctr_hiv_closed_case_percent
 
 
 
+ctr$ctr_hiv_new_closed_case[ctr$ctr_hiv_closed_case == 1 &
+                         ctr$diagnosis_hiv == 1] <- 1
+table(ctr$ctr_hiv_new_closed_case)
+
+table(ctr$ctr_hiv_new_closed_case)
+ctr_hiv_new_closed_case <- ctr[which(ctr$ctr_hiv_new_closed_case == 1), ]
+dim(ctr_hiv_new_closed_case)
+ctr_hiv_new_closed_case <- nrow(ctr_hiv_new_closed_case)
+ctr_hiv_new_closed_case
+
+ctr_hiv_new_closed_case_percent <- percent(ctr_hiv_new_closed_case/ctr_hiv_closed_case, accuracy = 0.1)
+ctr_hiv_new_closed_case_percent
+
+
+
+ctr$ctr_hiv_prev_closed_case[ctr$ctr_hiv_closed_case == 1 &
+                         ctr$diagnosis_hiv == 2] <- 1
+table(ctr$ctr_hiv_prev_closed_case)
+
+table(ctr$ctr_hiv_prev_closed_case)
+ctr_hiv_prev_closed_case <- ctr[which(ctr$ctr_hiv_prev_closed_case == 1), ]
+dim(ctr_hiv_prev_closed_case)
+ctr_hiv_prev_closed_case <- nrow(ctr_hiv_prev_closed_case)
+ctr_hiv_prev_closed_case
+
+ctr_hiv_prev_closed_case_percent <- percent(ctr_hiv_prev_closed_case/ctr_hiv_closed_case, accuracy = 0.1)
+ctr_hiv_prev_closed_case_percent
+
+
 
 table(ctr$ctr_hiv_in_progress)
 ctr$ctr_hiv_ltc_days_open <- difftime(Sys.Date(), ctr$enc_date, units="days")
@@ -1965,7 +1994,7 @@ ctr_testing_tbl %>%
 ```
 
 
-CTR testing is reported on a monthly basis. There are different reports required to the local health department, Hamilton County Public Health (HCPH), and to the state health department, Ohio Department of Health (ODH). The report for HCPH is due by the 5th of the month for the prior month's testing data. This report includes the total number of CTR-funded tests performed, how many were reactive (and then confirmed positive), and whether those positive tests were for patients newly-diagnosed or for a person known to be living with HIV. Additionally, the total number of assessments conducted, and how many individuals were tested and assessed are reported to HCPH each month for CTR. The report sent to ODH each month consists of the total number of CTR-funded tests, and how many individuals were newly diagnosed with HIV from testing. Additionally, the ODH report consists of the assessment data for each negative test, only providing the ODH assessment questions. The ODH report is divided into three parts: 1) the number of tests and assessment data for all those testing negative, 2) the opscan data for all those testing negative, 3) the supplemental opscan data for those that were tested but did not have an assessment conducted at the time of the test. The table to the right shows the total number of CTR tests and the overall positivity rate. The figure below shows the monthly CTR testing numbers.
+CTR testing is reported on a monthly basis. There are different reports required to the local health department, Hamilton County Public Health (HCPH), and to the state health department, Ohio Department of Health (ODH). The report for HCPH is due by the 5th of the month for the prior month's testing data. This report includes the total number of CTR-funded tests performed, how many were reactive (and then confirmed positive), and whether those positive tests were for patients newly-diagnosed or for a person known to be living with HIV. Additionally, the total number of assessments conducted, and how many individuals were tested and assessed are reported to HCPH each month for CTR. The report sent to ODH each month consists of the total number of CTR-funded tests, and how many individuals were newly diagnosed with HIV from testing. Additionally, the ODH report consists of the record-level assessment data for each negative test, only providing the ODH assessment questions. The ODH report is divided into three parts: 1) the number of tests and assessment data for all those testing negative, 2) the opscan data for all those testing negative, and 3) the supplemental opscan data for those that were tested but did not have an assessment conducted at the time of the test. The table above shows the total number of CTR tests and the overall positivity rate for the current grant period. The figure below shows the monthly CTR testing numbers for the current grant period.
 
 
 ```{r, echo = FALSE, fig.align='center'}
@@ -1984,38 +2013,7 @@ monthly_ctr_tests_plot
 ```
 <br>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-The deliverables highlighted below are the numbers that were noted on the 2023 CTR Workplan as what our program would accomplish within the year of funding awarded. The original workplan specified data that was collected starting *January 1st, 2023 through December 31, 2023*. However, an update with funding allocation for both the CTR and EHE programs allowed for a change to the deliverables for CTR and the timeframe for those deliverables. The data in the table to the right shows the deliervables that were updated based on this change. The changes in these deliverables were made based on the estimated possibility of reaching these goals based on the numbers we had reached at the time the changes were initiated. For example, some of the deliverables were already met, so those numbers were increased due to the likelihood of surpassing the original goal; some deliverables were close to being met, so they may have been increased slightly; and some deliverables were not close to being met, so they were not changed in the hopes that we would be able to meet those original goals by the new extended timeframe. The updates in these deliverable goals were made on *December 18th, 2023*. The table to the right only shows those deliverables that were updated, and all other deliverables are the same as the original deliverables set in the 2023 workplan.
-
-The data shown in the table below covers the updated CTR program deliverables starting **January 1st, 2023 through May 31, 2024** in accordance with those workplan updates. A summary table of the CTR deliverables, the number of each deliverable achieved, and the percent of the deliverables met are shown below:
+The deliverables highlighted below are the numbers that were noted on the 2024 CTR Workplan as what our program would accomplish within the year of funding awarded. The data shown in the table below covers the CTR program deliverables starting **August 1st, 2024 through May 31, 2025**. A summary table of the CTR deliverables, the number of each deliverable achieved, and the percent of the deliverables met are shown below:
 
 ```{r, echo = FALSE, fig.align='center', fig.asp=0.50}
 
@@ -2065,14 +2063,13 @@ ctr_deliverables_tbl %>%
 
 ## PLWHA
 
-The first impact objective encompasses population-based objectives centered around people living with HIV/AIDS (PLWHA) that are identified not in care. This objective has EIP staff identify those either newly diagnosed or previously diagnosed with HIV and determine whether they are out of care, requiring linkage to care services. This objective is inclusive of those who are women of color (WOC), youth (15-29 years old), and injection drug users (IDU). The statement for the actual deliverables promised for this objective is noted below, with the original workplan deliverable crossed out in replace of the updated CTR deliverables:
+The first impact objective encompasses population-based objectives centered around people living with HIV/AIDS (PLWHA) that are identified not to be in care. This objective has EIP staff identify those either newly diagnosed or previously diagnosed with HIV and determine whether they are currently out of care, requiring linkage to care services. This objective is inclusive of those who are women of color (WOC), youth (15-29 years old), and injection drug users (IDU). The statement for the actual deliverables promised for this objective is noted below:
 
-- [*By December 31, 2023, EIP will perform 100 risk assessments on PLWHA not in care (newly and previously diagnosed) and provide Prevention with Positives and Linkage to Care services such that 80% are engaged in HIV medical care, inclusive of the following (75 at UCMC site, 15 WCH at site, 5 at Exchange site, 5 at Talbert House facility site; of which will be 20 WOC, 25 Youth (18-29), and 25 IDU) as prioritized by RFP workplan table*]{style="color: lightgray;"}
-- *By May 31, 2024, EIP will perform 125 risk assessments on PLWHA not in care (newly and previously diagnosed) and provide Prevention with Positives and Linkage to Care services such that 80% are engaged in HIV medical care, inclusive of the following (100 at UCMC site, 15 WCH at site, 5 at Exchange site, 5 at Talbert House facility site; of which will be 20 WOC, 25 Youth (18-29), and 35 IDU) as prioritized by RFP workplan table*
+- *By May 31, 2025, EIP will perform 125 risk assessments on PLWHA not in care (newly and previously diagnosed) and provide Prevention with Positives and Linkage to Care services such that 80% are engaged in HIV medical care, inclusive of the following (80 at UCMC site, 10 at WCH site, 5 at the Exchange site, 5 at the Talbert House facility site; of which will be 10 WOC, 25 Youth (18-29), and 30 IDU) as prioritized by RFP workplan table*
 
 From this statement, we specifically state deliverables for how many PLWHA who are out of care that will be identified by our program, and successfully link 80% of those individuals to care. Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table under 'Additional Metrics'.
 
-PLWHA are identified in several different ways within the program, including: **self-report of a prior positive test during the assessment of HIV testing history, reason for offering an HIV test was due to a prior HIV positive result, declining an HIV test due to prior positive result, a final positive result through HIV testing, or having an HIV linkage case open with a new or previous HIV status**. EIP staff are meant to identify all PLWHA encountered through the program, with further follow-up and discussion meant to determine who is currently out of care. The deliverable for all PLWHA identified out of care are those that are “eligible” to be linked to care wihtin the linkage flow process (*noted below*). They are considered “ineligible” based on the following criteria: **they are already linked to care, they are deceased, they are currently incarcerated, we do not have accurate contact information for them, they already have an ongoing linke case for HIV, or they declined EIP linkage services**. The numbers provided here are based on the total number of encounters, not unique number of patients, because EIP may encounter individuals frequently throughout the reporting period and identify them as being out of care during any of these encounters.
+PLWHA are identified in several different ways within the program, including: **self-report of a prior positive test during the assessment of HIV testing history, reason for offering an HIV test was due to a prior HIV positive result, declining an HIV test due to prior positive result, a final positive result through HIV testing, or having an HIV linkage case open with a new or previous HIV status**. EIP staff are meant to identify all PLWHA encountered through the program, with further follow-up and discussion meant to determine who is currently out of care. The deliverable for all PLWHA identified out of care are those that are “eligible” to be linked to care within the linkage flow process (*diagrammed below*). They are considered “ineligible” based on the following criteria: **they are already linked to care, they are deceased, they are currently incarcerated, we do not have accurate contact information to follow-up with them, they already have an ongoing linkage case for HIV within the program, or they declined EIP linkage services**. These situations are determined "ineligible" linkage cases because of the significant level of barriers our program faces in certain situations, or because they cannot be realistically linked through our linkage process. While it is possible for our team to link individuals to care in some of these cases, as a whole they are termed "ineligible" due to the complexity of their situation. The numbers provided here are based on the total number of encounters, not unique number of patients, because EIP may encounter individuals frequently throughout the reporting period and identify them as being out of care during any of these encounters.
 
 The total number of HIV linkage to care (LTC) cases initiated for PLWHA during this time period is **`r ctr_hiv_ltc`**, with the total number of "eligible" LTC cases for PLWHA being `r ctr_hiv_eligible_ltc` (*`r ctr_hiv_eligible_ltc_percent` of all HIV LTC cases initiated, `r ctr_hiv_eligible_ltc`/`r ctr_hiv_ltc`*). [**Therefore, EIP has identified `r ctr_hiv_eligible_ltc` PLWHA for the CTR deliverable, which is `r ctr_plwha_deliverable_percent` of the total promise of `r ctr_plwha_deliverable`**]{style="color: lightskyblue;"}. The total number of these "eligible" HIV LTC cases that have been successfully linked to care is `r ctr_hiv_linked`, which is [**`r ctr_hiv_linked_percent`**]{style="color: lightskyblue;"} of those "eligible" (*`r ctr_hiv_linked`/`r ctr_hiv_eligible_ltc`*).
 
@@ -2125,7 +2122,7 @@ config(ctr_linkage_gauge, displayModeBar = FALSE)
 ```
 
 
-We do not separate linkage numbers based on the HIV testing program (CTR/EHE), so these numbers are pulled the same as the numbers that are reported for the linkage deliverables shown for the EHE program. The difference in the reported numbers are due to the timeframe used for CTR deliverables. [*Current CTR deliverables are for data collected between 1/1/2023-5/31/2024 and current EHE deliverables are for data collected between 8/1/2023-5/31/2024*]{style="color: red;"}. The HIV Linkage flow diagram for the CTR deliverable timeframe is shown below to provide an understanding of where the linkage numbers are coming from.
+We do not separate linkage numbers based on the HIV testing program (CTR/EHE), so these numbers are pulled the same as the numbers that are reported for the linkage deliverables shown for the EHE program. If there are differences in the documented numbers for linkage between these two testing programs, it is likely due to the timeframe used for each program deliverable. The HIV Linkage flow diagram for the CTR deliverable timeframe is shown below to provide an understanding of where the linkage numbers are coming from.
 
 
 ```{r, echo=FALSE, warning=FALSE}
@@ -2386,6 +2383,10 @@ grid + theme_void()
 
 <br>
 
+Additional deliverables were made for identifying PLWHA at specific sites where EIP operates. For the University of Cincinnati Medical Center (UCMC), this includes only those CTR tests that were conducted within the emergency department (UCMC ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_hiv_eligible_ltc_ucmc` PLWHA identified at UCMC, which is `r ctr_plwha_ucmc_deliverable_percent` of the total promise of `r ctr_plwha_ucmc_deliverable`**]{style="color: lightskyblue;"}. For West Chester Hospital (WCH), this includes only those CTR tests that were conducted within the emergency department (WCH ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_hiv_eligible_ltc_wch` PLWHA identified at at WCH, which is `r ctr_plwha_wch_deliverable_percent` of the total promise of `r ctr_plwha_wch_deliverable`**]{style="color: lightskyblue;"}. For the community-based tests, there are only deliverables for those CTR tests conducted at the Exchange locations and Talbert locations. For the Exchange locations, this includes only those CTR tests that were conducted at any location where the Syringe Service Program (SSP) operates. [**There were a total number of `r ctr_hiv_eligible_ltc_exchange` PLWHA identified at Exchange locations, which is `r ctr_plwha_exchange_deliverable_percent` of the total promise of `r ctr_plwha_exchange_deliverable`**]{style="color: lightskyblue;"}. For the Talbert locations, this includes only those CTR tests that were conducted at any Talbert based community site. [**There were a total number of `r ctr_hiv_eligible_ltc_talbert` PLWHA identified at Talbert locations, which is `r ctr_plwha_talbert_deliverable_percent` of the total promise of `r ctr_plwha_talbert_deliverable`**]{style="color: lightskyblue;"}. Other community site testing is included in the total number of tests conducted, but not in these particular site-based deliverables. The bullet chart below shows the promised deliverables for each site and our current efforts toward those goals.
+
+<br>
+
 ```{r, echo=FALSE, fig.asp=0.45}
 
 # CTR PLWHA by Site Deliverables
@@ -2394,23 +2395,23 @@ ctr_plwha_site_bullet <- plot_ly() %>%
             mode = "number+gauge",
             value = ctr_hiv_eligible_ltc_ucmc,
             domain = list(x = c(0.20, 0.65), y = c(0.25, 0.35)),
-            title =list(text = "<b><span style='font-size:0.75em'>UCMC</b></span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 75</span>"),
+            title =list(text = "<b><span style='font-size:0.75em'>UCMC</b></span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 80</span>"),
             gauge = list(shape = "bullet",
                          axis = list(range = c(0, 100)),
                          threshold = list(line = list(color = "red", width = 2),
                                           thickness = 0.75,
-                                          value = 100),
+                                          value = 80),
                          bar = list(color = "lightskyblue"))) %>%
   add_trace(type = "indicator",
             mode = "number+gauge",
             value = ctr_hiv_eligible_ltc_wch,
             domain = list(x = c(0.20, 0.65), y = c(0.45, 0.55)),
-            title = list(text = "<b><span style='font-size:0.75em'>WCH</b></span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 15</span>"),
+            title = list(text = "<b><span style='font-size:0.75em'>WCH</b></span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 10</span>"),
             gauge = list(shape = "bullet",
                          axis = list(range = list(0, 100)),
                          threshold = list(line = list(color = "red", width = 2),
                                           thickness = 0.75,
-                                          value = 15),
+                                          value = 10),
                          bar = list(color = "lightskyblue"))) %>%
   add_trace(type =  "indicator",
             mode = "number+gauge",
@@ -2434,15 +2435,13 @@ ctr_plwha_site_bullet <- plot_ly() %>%
                                           thickness = 0.75,
                                           value = 5),
                          bar = list(color = "lightskyblue")))
-ctr_plwha_site_bullet
+config(ctr_plwha_site_bullet, displayModeBar = FALSE)
 
 ```
 
+<br>
 
-Additional deliverables were made for identifying PLWHA at specific sites where EIP operates. For the University of Cincinnati Medical Center (UCMC), this includes only those CTR tests that were conducted within the emergency department (UCMC ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_hiv_eligible_ltc_ucmc` PLWHA identified at UCMC, which is `r ctr_plwha_ucmc_deliverable_percent` of the total promise of `r ctr_plwha_ucmc_deliverable`**]{style="color: lightskyblue;"}. For West Chester Hospital (WCH), this includes only those CTR tests that were conducted within the emergency department (WCH ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_hiv_eligible_ltc_wch` PLWHA identified at at WCH, which is `r ctr_plwha_wch_deliverable_percent` of the total promise of `r ctr_plwha_wch_deliverable`**]{style="color: lightskyblue;"}. For the community-based tests, there are only deliverables for those CTR tests conducted at the Exchange locations and Talbert locations. For the Exchange locations, this includes only those CTR tests that were conducted at any location where the Syringe Service Program (SSP) operates. [**There were a total number of `r ctr_hiv_eligible_ltc_exchange` PLWHA identified at Exchange locations, which is `r ctr_plwha_exchange_deliverable_percent` of the total promise of `r ctr_plwha_exchange_deliverable`**]{style="color: lightskyblue;"}. For the Talbert locations, this includes only those CTR tests that were conducted at any Talbert based community site. [**There were a total number of `r ctr_hiv_eligible_ltc_talbert` PLWHA identified at Talbert locations, which is `r ctr_plwha_talbert_deliverable_percent` of the total promise of `r ctr_plwha_talbert_deliverable`**]{style="color: lightskyblue;"}.
-
-
-Finally, the CTR program addresses particular population groups for linkage to care. EIP additionally has deliverables for those who are HIV+ and are also WOC, youth and IDU. For those who are WOC, this is defined as any individual who identifies as female whose race/ethnicity is not 'White/Caucasian'. [**There were a total number of `r ctr_hiv_eligible_ltc_woc` PLWHA who were also WOC, which is `r ctr_plwha_woc_deliverable_percent` of the total promise of `r ctr_plwha_woc_deliverable`**]{style="color: lightskyblue;"}. For those that are considered in the youth population, CTR defines those between the age of 15-19 years old. However, EIP often encounters individuals younger than the age of 15, so the definition used here are those below the age of 29. [**There were a total number of `r ctr_hiv_eligible_ltc_youth` PLWHA who were also Youth, which is `r ctr_plwha_youth_deliverable_percent` of the total promise of `r ctr_plwha_youth_deliverable`**]{style="color: lightskyblue;"}. For those that are considered in the IDU population, the individual needs to complete the necessary section within the EIP assessment. We define those who endorse injection drug use behavior ever in their lifetime on the NIDA-Modified ASSIST, or those who are HIV positive and their risk was injection drug use as a part of the IDU population. [**There were a total number of `r ctr_hiv_eligible_ltc_idu` PLWHA who were also IDU, which is `r ctr_plwha_idu_deliverable_percent` of the total promise of `r ctr_plwha_idu_deliverable`**]{style="color: lightskyblue;"}.
+Finally, for this objective regarding PLWHA, the CTR program addresses particular population groups for linkage to care. EIP additionally has deliverables for those who are HIV+ and are also WOC, youth and IDU. For those who are WOC, this is defined as any individual who identifies as female whose race/ethnicity is not 'White/Caucasian'. [**There were a total number of `r ctr_hiv_eligible_ltc_woc` PLWHA who were also WOC, which is `r ctr_plwha_woc_deliverable_percent` of the total promise of `r ctr_plwha_woc_deliverable`**]{style="color: lightskyblue;"}. For those that are considered in the youth population, CTR defines those between the age of 15-19 years old. However, EIP can encounter individuals younger than the age of 15 (although rarely), so the definition used here are those below the age of 29. [**There were a total number of `r ctr_hiv_eligible_ltc_youth` PLWHA who were also Youth, which is `r ctr_plwha_youth_deliverable_percent` of the total promise of `r ctr_plwha_youth_deliverable`**]{style="color: lightskyblue;"}. For those that are considered in the IDU population, the individual needs to complete the necessary section within the EIP assessment. We define those who endorse injection drug use behavior ever in their lifetime on the NIDA-Modified ASSIST, or those who are HIV positive and their associated risk was injection drug use as a part of the IDU population. [**There were a total number of `r ctr_hiv_eligible_ltc_idu` PLWHA who were also IDU, which is `r ctr_plwha_idu_deliverable_percent` of the total promise of `r ctr_plwha_idu_deliverable`**]{style="color: lightskyblue;"}.
 
 
 ```{r, echo=FALSE, fig.asp=0.50, fig.margin = rep(0, 4)}
@@ -2455,14 +2454,14 @@ ctr_plwha_woc_gauge <- plot_ly(
   type = "indicator",
   mode = "gauge+number",
   gauge = list(
-    axis =list(range = list(0, 25)),
+    axis =list(range = list(0, 10)),
     bar = list(color = "lightskyblue"),
     bgcolor = "white",
     borderwidth = 2,
     bordercolor = "gray")) 
 ctr_plwha_woc_gauge <- ctr_plwha_woc_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_plwha_woc_gauge
+config(ctr_plwha_woc_gauge, displayModeBar = FALSE)
 
 ```
 
@@ -2484,7 +2483,7 @@ ctr_plwha_youth_gauge <- plot_ly(
     bordercolor = "gray")) 
 ctr_plwha_youth_gauge <- ctr_plwha_youth_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_plwha_youth_gauge
+config(ctr_plwha_youth_gauge, displayModeBar = FALSE)
 
 ```
 
@@ -2499,24 +2498,47 @@ ctr_plwha_idu_gauge <- plot_ly(
   type = "indicator",
   mode = "gauge+number",
   gauge = list(
-    axis =list(range = list(0, 35)),
+    axis =list(range = list(0, 30)),
     bar = list(color = "lightskyblue"),
     bgcolor = "white",
     borderwidth = 2,
     bordercolor = "gray")) 
 ctr_plwha_idu_gauge <- ctr_plwha_idu_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_plwha_idu_gauge
+config(ctr_plwha_idu_gauge, displayModeBar = FALSE)
 
 ```
 
 
+For the mid-year and end-of-year reports to HCPH for linkage numbers, we report the total number of PLWHA that were out of care, whether newly diagnosed or previously known to be positive. The report independently notes the total number of PLWHA who were new diagnoses or previous diagnoses, and the total. This report also determines the number of cases currently in progress (broken down by new/previous/total), and the number of cases successfully closed (broken down by new/previous/total). For those cases that were closed, we report the total number that were successfully linked to care (broken down by new/previous/total) and the number that were not linked to care (broken down by new/previous/total). The table belows shows how these numbers are reported to HCPH at the mid-year and end-of-year reports.
+
+
+```{r, echo = FALSE, fig.align='center', fig.asp=0.50}
+
+# CTR Deliverable Summary Table
+ctr_link_report_tbl <- data.frame(matrix(ncol = 7, nrow = 0))
+colnames(ctr_link_report_tbl) <- c('', 'New Dx #', 'New Dx %', 'Previous Dx #', 'Previous Dx %', 'Total #', 'Total %')
+ctr_link_report_tbl[nrow(ctr_link_report_tbl) + 1,] <- list('# PLWHA Out of Care', ctr_hiv_new_eligible_ltc, '', ctr_hiv_prev_eligible_ltc, '', ctr_hiv_eligible_ltc, '')
+ctr_link_report_tbl[nrow(ctr_link_report_tbl) + 1,] <- list('Cases in Progress', ctr_hiv_new_in_progress, ctr_hiv_new_in_progress_percent, ctr_hiv_prev_in_progress, ctr_hiv_prev_in_progress_percent, ctr_hiv_in_progress, ctr_hiv_in_progress_percent)
+ctr_link_report_tbl[nrow(ctr_link_report_tbl) + 1,] <- list('Cases Closed', ctr_hiv_new_closed_case, ctr_hiv_new_closed_case_percent, ctr_hiv_prev_closed_case, ctr_hiv_prev_closed_case_percent, ctr_hiv_closed_case, ctr_hiv_closed_case_percent)
+ctr_link_report_tbl[nrow(ctr_link_report_tbl) + 1,] <- list('Linked to Care', ctr_hiv_new_linked, ctr_hiv_new_linked_percent, ctr_hiv_prev_linked, ctr_hiv_prev_linked_percent, ctr_hiv_linked, ctr_hiv_linked_percent)
+ctr_link_report_tbl[nrow(ctr_link_report_tbl) + 1,] <- list('Not Linked to Care', ctr_hiv_new_not_linked, ctr_hiv_new_not_linked_percent, ctr_hiv_prev_not_linked, ctr_hiv_prev_not_linked_percent, ctr_hiv_not_linked, ctr_hiv_not_linked_percent)
+ctr_link_report_tbl %>%
+  kbl(align = 'lcccccc', table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  kable_styling(full_width = F, font_size = 12)
+
+```
+
+
+Any discrepancies in the total numbers compared to the individual new/previous numbers is likely due to the situation when the HIV status in a linkage case has not yet been determined as a new diagnosis or a previous diagnosis.
+
+
 ## MSM
 
-There were additional deliverables made for population-based objectives, and the first focuses on those who identify as men who have sex with other men (MSM). Individuals are only identified as a part of this population group if they complete the necessary portions on the EIP assessment. The statement for the actual deliverables promised for this objective is noted below, with the original workplan deliverable crossed out in replace of the updated CTR deliverables:
+There were additional deliverables made for population-based objectives, and the first focuses on those who identify as men who have sex with other men (MSM). Individuals are only identified as a part of this population group if they complete the necessary portions on the EIP assessment. The statement for the actual deliverables promised for this objective is noted below:
 
-- [*By December 31, 2023, EIP will identify 100 MSM for risk-assessment and prevention intervention including client-centered risk reduction counseling and PrEP education/referral. EIP will provide CTR testing to 100 MSM, inclusive of the following (75 at UCMC site, 10 at WCH site, 10 at Exchange site, 5 at Talbert House facility site ; of which will be 20 Youth (15-29) and 20 IDU). Of the 100 MSM tested, EIP will identify between 3-5 HIV(+) MSM for the PLWHA program (Workplan Form 4, Part 1).*]{style="color: lightgray;"}
-- *By May 31, 2024, EIP will identify 140 MSM for risk-assessment and prevention intervention including client-centered risk reduction counseling and PrEP education/referral. EIP will provide CTR testing to 100 MSM, inclusive of the following (75 at UCMC site, 10 at WCH site, 10 at Exchange site, 5 at Talbert House facility site ; of which will be 25 Youth (15-29) and 25 IDU). Of the 100 MSM tested, EIP will identify between 3-5 HIV(+) MSM for the PLWHA program (Workplan Form 4, Part 1).*
+- *By May 31, 2025, EIP will identify 150 MSM for risk-assessment and prevention intervention including client-centered risk reduction counseling and PrEP education/referral. EIP will provide CTR testing to 100 MSM, inclusive of the following (75 at UCMC site, 5 at WCH site, 10 at the Exchange site, 5 at the Talbert House facility site; of which will be 25 Youth (15-29) and 25 IDU). Of the 150 MSM tested, EIP will identify between 3-5 HIV(+) MSM for the PLWHA program (Workplan Form 4, Part 1).*
 
 From this statement, we specifically state deliverables for how many MSM will be assessed for risk and/or need, and how many MSM will be tested using CTR-funded tests. Additionally, EIP states a specific number of tests at each site (UCMC, WCH, the Exchange, and Talbert). EIP also states how many MSM will be tested using CTR-funded tests who are also youth (15-29) and injection drug users (IDU), as well as a specific number of newly diagnosed individuals who identify as MSM. Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table under 'Additional Metrics'.
 
@@ -2533,20 +2555,16 @@ ctr_msm_assessed_gauge <- plot_ly(
   type = "indicator",
   mode = "gauge+number",
   gauge = list(
-    axis =list(range = list(0, 140)),
+    axis =list(range = list(0, 150)),
     bar = list(color = "lightskyblue"),
     bgcolor = "white",
     borderwidth = 2,
     bordercolor = "gray")) 
 ctr_msm_assessed_gauge <- ctr_msm_assessed_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_msm_assessed_gauge
+config(ctr_msm_assessed_gauge, displayModeBar = FALSE)
 
 ```
-
-
-[**The total number of individuals who are MSM that have been tested through the CTR program is `r ctr_msm_tested`, which is `r ctr_msm_tested_deliverable_percent` of the total promise of `r ctr_msm_tested_deliverable`**]{style="color: lightskyblue;"}. In addition to the total number of tests, there were deliverables for the location where those tests were conducted. For the University of Cincinnati Medical Center (UCMC), this includes only those CTR tests that were conducted within the emergency department (UCMC ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_msm_ucmc_test` CTR tests that were conducted at UCMC, which is `r ctr_msm_ucmc_test_deliverable_percent` of the total promise of `r ctr_msm_ucmc_test_deliverable`**]{style="color: lightskyblue;"}. For West Chester Hospital (WCH), this includes only those CTR tests that were conducted within the emergency department (WCH ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_msm_wch_test` CTR tests that were conducted at WCH, which is `r ctr_msm_wch_test_deliverable_percent` of the total promise of `r ctr_msm_wch_test_deliverable`**]{style="color: lightskyblue;"}. For the community-based tests, there are only deliverables for those CTR tests conducted at the Exchange locations and Talbert locations. For the Exchange locations, this includes only those CTR tests that were conducted at any location where the Syringe Service Program (SSP) operates. [**There were a total number of `r ctr_msm_exchange_test` CTR tests that were conducted at Exchange locations, which is `r ctr_msm_exchange_test_deliverable_percent` of the total promise of `r ctr_msm_exchange_test_deliverable`**]{style="color: lightskyblue;"}. For the Talbert locations, this includes only those CTR tests that were conducted at any Talbert based community site. [**There were a total number of `r ctr_msm_talbert_test` CTR tests that were conducted at Talbert locations, which is `r ctr_msm_talbert_test_deliverable_percent` of the total promise of `r ctr_msm_talbert_test_deliverable`**]{style="color: lightskyblue;"}.
-
 
 ```{r echo=FALSE, fig.asp=0.50}
 
@@ -2558,16 +2576,19 @@ ctr_msm_tested_gauge <- plot_ly(
   type = "indicator",
   mode = "gauge+number",
   gauge = list(
-    axis =list(range = list(0, 100)),
+    axis =list(range = list(0, 150)),
     bar = list(color = "lightskyblue"),
     bgcolor = "white",
     borderwidth = 2,
     bordercolor = "gray")) 
 ctr_msm_tested_gauge <- ctr_msm_tested_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_msm_tested_gauge
+config(ctr_msm_tested_gauge, displayModeBar = FALSE)
 
 ```
+
+
+[**The total number of individuals who are MSM that have been tested through the CTR program is `r ctr_msm_tested`, which is `r ctr_msm_tested_deliverable_percent` of the total promise of `r ctr_msm_tested_deliverable`**]{style="color: lightskyblue;"}. In addition to the total number of tests, there were deliverables for the location where those tests were conducted. For the University of Cincinnati Medical Center (UCMC), this includes only those CTR tests that were conducted within the emergency department (UCMC ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_msm_ucmc_test` CTR tests that were conducted at UCMC, which is `r ctr_msm_ucmc_test_deliverable_percent` of the total promise of `r ctr_msm_ucmc_test_deliverable`**]{style="color: lightskyblue;"}. For West Chester Hospital (WCH), this includes only those CTR tests that were conducted within the emergency department (WCH ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_msm_wch_test` CTR tests that were conducted at WCH, which is `r ctr_msm_wch_test_deliverable_percent` of the total promise of `r ctr_msm_wch_test_deliverable`**]{style="color: lightskyblue;"}. For the community-based tests, there are only deliverables for those CTR tests conducted at the Exchange locations and Talbert locations. For the Exchange locations, this includes only those CTR tests that were conducted at any location where the Syringe Service Program (SSP) operates. [**There were a total number of `r ctr_msm_exchange_test` CTR tests that were conducted at Exchange locations, which is `r ctr_msm_exchange_test_deliverable_percent` of the total promise of `r ctr_msm_exchange_test_deliverable`**]{style="color: lightskyblue;"}. For the Talbert locations, this includes only those CTR tests that were conducted at any Talbert based community site. [**There were a total number of `r ctr_msm_talbert_test` CTR tests that were conducted at Talbert locations, which is `r ctr_msm_talbert_test_deliverable_percent` of the total promise of `r ctr_msm_talbert_test_deliverable`**]{style="color: lightskyblue;"}. Other community site testing is included in the total number of tests conducted, but not in these particular site-based deliverables. The bullet chart below shows the promised deliverables for each site and our current efforts toward those goals.
 
 
 ```{r echo=FALSE, fig.asp=0.45}
@@ -2589,12 +2610,12 @@ ctr_msm_tested_site_bullet <- plot_ly() %>%
             mode = "number+gauge",
             value = ctr_msm_wch_test,
             domain = list(x = c(0.20, 0.65), y = c(0.45, 0.55)),
-            title = list(text = "<b><span style='font-size:0.75em'>WCH</b></span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 10</span>"),
+            title = list(text = "<b><span style='font-size:0.75em'>WCH</b></span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 5</span>"),
             gauge = list(shape = "bullet",
                          axis = list(range = list(0, 75)),
                          threshold = list(line = list(color = "red", width = 2),
                                           thickness = 0.75,
-                                          value = 10),
+                                          value = 5),
                          bar = list(color = "lightskyblue"))) %>%
   add_trace(type =  "indicator",
             mode = "number+gauge",
@@ -2618,7 +2639,7 @@ ctr_msm_tested_site_bullet <- plot_ly() %>%
                                           thickness = 0.75,
                                           value = 5),
                          bar = list(color = "lightskyblue")))
-ctr_msm_tested_site_bullet
+config(ctr_msm_tested_site_bullet, displayModeBar = FALSE)
 
 ```
 
@@ -2647,7 +2668,7 @@ ctr_msm_new_dx_gauge <- plot_ly(
       value = 3))) 
 ctr_msm_new_dx_gauge <- ctr_msm_new_dx_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_msm_new_dx_gauge
+config(ctr_msm_new_dx_gauge, displayModeBar = FALSE)
 
 ```
 
@@ -2659,12 +2680,18 @@ This can be further broken down monthly to determine how frequently we test thos
 
 # CTR Monthly MSM Testing
 monthly_msm_tests <- monthly_msm_tests[order(monthly_msm_tests$Date), ]
-monthly_msm_tests_plot <- plot_ly(data = monthly_msm_tests, x = ~Date, y = ~ctr_tests, type = 'bar', name = 'MSM CTR Tested',
-                                  text = ~ctr_tests, textposition = 'auto',
-                                  marker = list(color = 'lightskyblue')) %>%
-  layout(yaxis = list(title = 'MSM CTR Tested'), barmode = 'stack',
-         xaxis = list(tickangle = 45))
-monthly_msm_tests_plot
+monthly_msm_tests_plot <- plot_ly(data = monthly_msm_tests, 
+                                   x = ~Date, 
+                                   y = ~ctr_tests, 
+                                   type = 'scatter', 
+                                   mode = 'lines+markers', 
+                                   name = 'MSM CTR Tested',
+                                   text = ~ctr_tests, 
+                                   textposition = 'auto',
+                                   line = list(color = 'lightskyblue')) %>%
+  layout(yaxis = list(title = 'MSM CTR Tested'), 
+         xaxis = list(title = 'Date', tickangle = 45))
+config(monthly_msm_tests_plot, displayModeBar = FALSE)
 
 ```
 
@@ -2689,7 +2716,7 @@ ctr_msm_youth_tested_gauge <- plot_ly(
     bordercolor = "gray")) 
 ctr_msm_youth_tested_gauge <- ctr_msm_youth_tested_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_msm_youth_tested_gauge
+config(ctr_msm_youth_tested_gauge, displayModeBar = FALSE)
 
 ```
 
@@ -2711,7 +2738,7 @@ ctr_msm_idu_tested_gauge <- plot_ly(
     bordercolor = "gray")) 
 ctr_msm_idu_tested_gauge <- ctr_msm_idu_tested_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_msm_idu_tested_gauge
+config(ctr_msm_idu_tested_gauge, displayModeBar = FALSE)
 
 ```
 
@@ -2722,14 +2749,13 @@ ctr_msm_idu_tested_gauge
 
 There were additional deliverables made for population-based objectives, and the second focuses on those who identify as heterosexual that are at high risk for contracting HIV by endorsing high-risk heterosexual sex (HRHS) behaviors. Individuals are only identified as a part of this population group if they complete the necessary portions on the EIP assessment. The statement for the actual deliverables promised for this objective is noted below:
 
-- [*By December 31, 2023, EIP will identify 1000 HRHS for risk-assessment and prevention intervention including client-centered risk reduction counseling and PrEP education/referral. EIP will provide CTR testing to 900 HRHS, inclusive of the following (550 UCMC at site, 100 WCH at site, 150 at Exchange site, 100 Talbert at House facility site; of which will be 100 WOC, 200 Youth (15-29), and 300 IDU). Of the 900 HRHS tested, EIP will identify 9 HIV(+) HRHS for the PLWHA program (Workplan Form 4, Part 1).*]{style="color: lightgray;"}
-- *By May 31, 2024, EIP will identify 1150 HRHS for risk-assessment and prevention intervention including client-centered risk reduction counseling and PrEP education/referral. EIP will provide CTR testing to 900 HRHS, inclusive of the following (550 UCMC at site, 100 WCH at site, 150 at Exchange site, 100 Talbert at House facility site; of which will be 130 WOC, 200 Youth (15-29), and 300 IDU). Of the 900 HRHS tested, EIP will identify 9 HIV(+) HRHS for the PLWHA program (Workplan Form 4, Part 1).*
+- *By May 31, 2025, EIP will identify 1150 HRHS for risk-assessment and prevention intervention including client-centered risk reduction counseling and PrEP education/referral. EIP will provide CTR testing to 800 HRHS, inclusive of the following (550 at UCMC site, 50 at WCH site, 150 at the Exchange site, 100 at the Talbert House facility site; of which will be 130 WOC, 200 Youth (15-29), and 300 IDU). Of the 800 HRHS tested, EIP will identify 9 HIV(+) HRHS for the PLWHA program (Workplan Form 4, Part 1).*
 
 From this statement, we specifically state deliverables for how many HRHS will be assessed for risk and/or need, how many HRHS individuals will be tested through CTR-funded tests, and state a specific number of tests at each site (UCMC, WCH, the Exchange, and Talbert). Additionally, EIP stated specific populations within those who are HRHS, including WOC, youth (15-29), and IDU. EIP also stated a specific number of individuals newly diagnosed with HIV through CTR testing. Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table under 'Additional Metrics'.
 
 For those individuals who identify as a heterosexual (men who have sex with women, or women who have sex with men), they are determined to be HRHS if they meet at least one of the following criteria: *heterosexual women that have unprotected sex with men or MSM, heterosexual men/women that have sex with an IDU, an HIV positive partner, a STD positive partner, more than three partners, or heterosexual men/women that exchange money/drugs for sex*. These behaviors are all within the past year.
 
-[**The total number of encounters with individuals who are HRHS that have been assessed during this time period is `r ctr_hrhs_assessed`, which is `r ctr_hrhs_assessed_deliverable_percent` of the total promise of `r ctr_hrhs_assessed_deliverable`**]{style="color: lightskyblue;"}. In addition to the total number of assessments, there were deliverables for the number of CTR-funded tests performed. [**The total number of encounters where HRHS individuals were tested is `r ctr_hrhs_tested`, which is `r ctr_hrhs_tested_deliverable_percent` of the total promise of `r ctr_hrhs_tested_deliverable`**]{style="color: lightskyblue;"}. There were also deliverables for the number of tests performed at specific sites where EIP operates. For UCMC, this includes only those assessments that were accompanied by a CTR test that were conducted within the emergency department (UCMC ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_hrhs_ucmc_tested` CTR HRHS tests that were conducted at UCMC, which is `r ctr_hrhs_ucmc_tested_deliverable_percent` of the total promise of `r ctr_hrhs_ucmc_tested_deliverable`**]{style="color: lightskyblue;"}. For WCH, this includes only those assessments that were accompanied by a CTR test that were conducted within the emergency department (WCH ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_hrhs_wch_tested` CTR HRHS assessments that were conducted at WCH, which is `r ctr_hrhs_wch_tested_deliverable_percent` of the total promise of `r ctr_hrhs_wch_tested_deliverable`**]{style="color: lightskyblue;"}. For the community-based tests, this includes those CTR-funded tests that were conducted at either the Exchange or Talbert sites. For the Exchange, this includes any site where the SSP operates. [**There were a total number of `r ctr_hrhs_exchange_tested` CTR HRHS tests that were conducted at the Exchange, which is `r ctr_hrhs_exchange_tested_deliverable_percent` of the total promise of `r ctr_hrhs_exchange_tested_deliverable`**]{style="color: lightskyblue;"}. For the Talbert locations, this includes only those CTR tests that were conducted at any Talbert based community site. [**There were a total number of `r ctr_hrhs_talbert_tested` CTR HRHS tests that were conducted at Talbert, which is `r ctr_hrhs_talbert_tested_deliverable_percent` of the total promise of `r ctr_hrhs_talbert_tested_deliverable`**]{style="color: lightskyblue;"}.
+[**The total number of encounters with individuals who are HRHS that have been assessed during this time period is `r ctr_hrhs_assessed`, which is `r ctr_hrhs_assessed_deliverable_percent` of the total promise of `r ctr_hrhs_assessed_deliverable`**]{style="color: lightskyblue;"}. In addition to the total number of assessments, there were deliverables for the number of CTR-funded tests performed. [**The total number of encounters where HRHS individuals were tested is `r ctr_hrhs_tested`, which is `r ctr_hrhs_tested_deliverable_percent` of the total promise of `r ctr_hrhs_tested_deliverable`**]{style="color: lightskyblue;"}.
 
 
 ```{r, echo = FALSE, fig.asp=0.50}
@@ -2749,7 +2775,7 @@ ctr_hrhs_assessed_gauge <- plot_ly(
     bordercolor = "gray")) 
 ctr_hrhs_assessed_gauge <- ctr_hrhs_assessed_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_hrhs_assessed_gauge
+config(ctr_hrhs_assessed_gauge, displayModeBar = FALSE)
 
 ```
 
@@ -2764,16 +2790,19 @@ ctr_hrhs_test_gauge <- plot_ly(
   type = "indicator",
   mode = "gauge+number",
   gauge = list(
-    axis =list(range = list(0, 900)),
+    axis =list(range = list(0, 800)),
     bar = list(color = "lightskyblue"),
     bgcolor = "white",
     borderwidth = 2,
     bordercolor = "gray")) 
 ctr_hrhs_test_gauge <- ctr_hrhs_test_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_hrhs_test_gauge
+config(ctr_hrhs_test_gauge, displayModeBar = FALSE)
 
 ```
+
+
+There were also deliverables for the number of tests performed at specific sites where EIP operates. For UCMC, this includes only those assessments that were accompanied by a CTR test that were conducted within the emergency department (UCMC ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_hrhs_ucmc_tested` CTR HRHS tests that were conducted at UCMC, which is `r ctr_hrhs_ucmc_tested_deliverable_percent` of the total promise of `r ctr_hrhs_ucmc_tested_deliverable`**]{style="color: lightskyblue;"}. For WCH, this includes only those assessments that were accompanied by a CTR test that were conducted within the emergency department (WCH ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_hrhs_wch_tested` CTR HRHS assessments that were conducted at WCH, which is `r ctr_hrhs_wch_tested_deliverable_percent` of the total promise of `r ctr_hrhs_wch_tested_deliverable`**]{style="color: lightskyblue;"}. For the community-based tests, this includes those CTR-funded tests that were conducted at either the Exchange or Talbert sites. For the Exchange, this includes any site where the SSP operates. [**There were a total number of `r ctr_hrhs_exchange_tested` CTR HRHS tests that were conducted at the Exchange, which is `r ctr_hrhs_exchange_tested_deliverable_percent` of the total promise of `r ctr_hrhs_exchange_tested_deliverable`**]{style="color: lightskyblue;"}. For the Talbert locations, this includes only those CTR tests that were conducted at any Talbert based community site. [**There were a total number of `r ctr_hrhs_talbert_tested` CTR HRHS tests that were conducted at Talbert, which is `r ctr_hrhs_talbert_tested_deliverable_percent` of the total promise of `r ctr_hrhs_talbert_tested_deliverable`**]{style="color: lightskyblue;"}. Other community site testing is included in the total number of tests conducted, but not in these particular site-based deliverables. The bullet chart below shows the promised deliverables for each site and our current efforts toward those goals.
 
 
 ```{r echo=FALSE, fig.asp=0.45}
@@ -2795,12 +2824,12 @@ ctr_hrhs_tested_site_bullet <- plot_ly() %>%
             mode = "number+gauge",
             value = ctr_hrhs_wch_tested,
             domain = list(x = c(0.20, 0.65), y = c(0.45, 0.55)),
-            title = list(text = "<b><span style='font-size:0.75em'>WCH</b></span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 100</span>"),
+            title = list(text = "<b><span style='font-size:0.75em'>WCH</b></span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 50</span>"),
             gauge = list(shape = "bullet",
                          axis = list(range = list(0, 550)),
                          threshold = list(line = list(color = "red", width = 2),
                                           thickness = 0.75,
-                                          value = 100),
+                                          value = 50),
                          bar = list(color = "lightskyblue"))) %>%
   add_trace(type =  "indicator",
             mode = "number+gauge",
@@ -2824,8 +2853,7 @@ ctr_hrhs_tested_site_bullet <- plot_ly() %>%
                                           thickness = 0.75,
                                           value = 100),
                          bar = list(color = "lightskyblue")))
-ctr_hrhs_tested_site_bullet
-
+config(ctr_hrhs_tested_site_bullet, displayModeBar = FALSE)
 
 ```
 
@@ -2854,7 +2882,7 @@ ctr_hrhs_new_dx_gauge <- plot_ly(
       value = 9))) 
 ctr_hrhs_new_dx_gauge <- ctr_hrhs_new_dx_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_hrhs_new_dx_gauge
+config(ctr_hrhs_new_dx_gauge, displayModeBar = FALSE)
 
 ```
 
@@ -2866,12 +2894,18 @@ This can be further broken down monthly to determine how frequently we test thos
 
 # CTR Monthly HRHS Testing
 monthly_hrhs_tests <- monthly_hrhs_tests[order(monthly_hrhs_tests$Date), ]
-monthly_hrhs_tests_plot <- plot_ly(data = monthly_hrhs_tests, x = ~Date, y = ~ctr_tests, type = 'bar', name = 'HRHS CTR Tested',
-                                  text = ~ctr_tests, textposition = 'auto',
-                                  marker = list(color = 'lightskyblue')) %>%
-  layout(yaxis = list(title = 'HRHS CTR Tested'), barmode = 'stack',
-         xaxis = list(tickangle = 45))
-monthly_hrhs_tests_plot
+monthly_hrhs_tests_plot <- plot_ly(data = monthly_hrhs_tests,
+                                   x = ~Date,
+                                   y = ~ctr_tests,
+                                   type = 'scatter',
+                                   name = 'HRHS CTR Tested',
+                                   mode = 'lines+markers',
+                                   text = ~ctr_tests,
+                                   textposition = 'auto',
+                                   line = list(color = 'lightskyblue')) %>%
+  layout(yaxis = list(title = 'HRHS CTR Tested'),
+         xaxis = list(title = 'Date', tickangle = 45))
+config(monthly_hrhs_tests_plot, displayModeBar = FALSE)
 
 ```
 
@@ -2900,7 +2934,7 @@ ctr_hrhs_woc_tested_gauge <- plot_ly(
       value = 130))) 
 ctr_hrhs_woc_tested_gauge <- ctr_hrhs_woc_tested_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_hrhs_woc_tested_gauge
+config(ctr_hrhs_woc_tested_gauge, displayModeBar = FALSE)
 
 ```
 
@@ -2926,7 +2960,7 @@ ctr_hrhs_youth_tested_gauge <- plot_ly(
       value = 200))) 
 ctr_hrhs_youth_tested_gauge <- ctr_hrhs_youth_tested_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_hrhs_youth_tested_gauge
+config(ctr_hrhs_youth_tested_gauge, displayModeBar = FALSE)
 
 ```
 
@@ -2948,7 +2982,7 @@ ctr_hrhs_idu_tested_gauge <- plot_ly(
     bordercolor = "gray")) 
 ctr_hrhs_idu_tested_gauge <- ctr_hrhs_idu_tested_gauge %>%
   layout(margin = list(l=100,r=150))
-ctr_hrhs_idu_tested_gauge
+config(ctr_hrhs_idu_tested_gauge, displayModeBar = FALSE)
 
 ```
 

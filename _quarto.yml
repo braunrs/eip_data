@@ -26,6 +26,8 @@ website:
             text: CTR Deliverables 2023/2024
           - href: ehe_deliverables23.qmd
             text: EHE Deliverables 2023/2024
+          - href: ctr_deliverables24.qmd
+            text: CTR Deliverables 2024/2025
       - text: Sites
         menu:
           - href: ucmc.qmd

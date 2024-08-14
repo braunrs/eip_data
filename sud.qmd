@@ -37,7 +37,7 @@ eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240813_1049.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240814_1336.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
@@ -2289,8 +2289,8 @@ monthly_nalox_distribution$Date <- as.Date(monthly_nalox_distribution$date, form
 head(monthly_nalox_distribution)
 
 monthly_nalox_distribution <- aggregate(number_kits ~ as.yearmon(Date) + site,
-                                      data = monthly_nalox_distribution,
-                                      FUN = sum)
+                                        data = monthly_nalox_distribution,
+                                        FUN = sum)
 monthly_nalox_distribution$Date <- as.Date(as.yearmon(monthly_nalox_distribution$`as.yearmon(Date)`))
 head(monthly_nalox_distribution)
 
@@ -2623,7 +2623,9 @@ eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 44 |
                                     eip_fts_distribution$enc_location == 46 |
                                     eip_fts_distribution$enc_location == 47 |
                                     eip_fts_distribution$enc_location == 48] <- 'Treatment/Recovery'
+eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 23] <- 'Street/Outreach'
 eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 40] <- 'Other'
+table(eip_fts_distribution$enc_location)
 head(eip_fts_distribution)
 dim(eip_fts_distribution)
 
@@ -3049,6 +3051,188 @@ sud_not_linked_other
 sud_not_linked_other_percent <- percent(sud_not_linked_other/sud_not_linked, accuracy = 0.1)
 sud_not_linked_other_percent
 
+
+
+
+# Tobacco Screening
+
+table(enc$tobacco)
+enc$tobacco_assessed[enc$enc_date >= '2024-08-13' & !is.na(enc$tobacco)] <- 1
+table(enc$tobacco_assessed)
+
+table(enc$tobacco_assessed)
+tobacco_assessed <- enc[which(enc$tobacco_assessed == 1), ]
+dim(tobacco_assessed)
+tobacco_assessed <- nrow(tobacco_assessed)
+tobacco_assessed
+
+
+
+enc$tobacco_current[enc$tobacco_assessed == 1 & (enc$tobacco == 1 | enc$tobacco == 2)] <- 1
+table(enc$tobacco_current)
+
+table(enc$tobacco_current)
+tobacco_current <- enc[which(enc$tobacco_current == 1), ]
+dim(tobacco_current)
+tobacco_current <- nrow(tobacco_current)
+tobacco_current
+
+tobacco_current_percent <- percent(tobacco_current/tobacco_assessed, accuracy = 0.1)
+tobacco_current_percent
+
+
+
+enc$tobacco_referred[enc$tobacco_current == 1 & enc$counselor_ref_sud_specific___59 == 1] <- 1
+table(enc$tobacco_referred)
+
+table(enc$tobacco_referred)
+tobacco_referred <- enc[which(enc$tobacco_referred == 1), ]
+dim(tobacco_referred)
+tobacco_referred <- nrow(tobacco_referred)
+tobacco_referred
+
+tobacco_referred_percent <- percent(tobacco_referred/tobacco_current, accuracy = 0.1)
+tobacco_referred_percent
+
+
+# Monthly Tobacco Screening
+monthly_tobacco <- select(enc, enc_date, tobacco_assessed, tobacco_current, tobacco_referred)
+monthly_tobacco <- monthly_tobacco[which(monthly_tobacco$enc_date >= '2024-08-13'), ]
+monthly_tobacco <- monthly_tobacco[which(monthly_tobacco$tobacco_assessed == 1), ]
+head(monthly_tobacco)
+colnames(monthly_tobacco)[2] <- 'tobacco_assessed'
+colnames(monthly_tobacco)[3] <- 'tobacco_current'
+colnames(monthly_tobacco)[4] <- 'tobacco_referred'
+monthly_tobacco$tobacco_assessed[is.na(monthly_tobacco$tobacco_assessed)] <- 0
+head(monthly_tobacco)
+monthly_tobacco$tobacco_current[is.na(monthly_tobacco$tobacco_current)] <- 0
+head(monthly_tobacco)
+monthly_tobacco$tobacco_referred[is.na(monthly_tobacco$tobacco_referred)] <- 0
+head(monthly_tobacco)
+
+monthly_tobacco$Date <- as.Date(monthly_tobacco$enc_date, format="%d/%m/%Y")
+head(monthly_tobacco)
+
+monthly_tobacco <- aggregate(cbind(tobacco_assessed, tobacco_current, tobacco_referred) ~ as.yearmon(Date),
+                             monthly_tobacco,
+                             FUN = sum)
+monthly_tobacco$Date <- as.Date(as.yearmon(monthly_tobacco$`as.yearmon(Date)`))
+head(monthly_tobacco)
+monthly_tobacco
+
+
+
+
+# HCPH SUD Data
+
+enc$substance_use[enc$enc_date >= '2024-08-01' &
+                    (enc$audit_c1 > 0 |
+                    (enc$marijuana_use > 0 & enc$marijuana_use < 4) |
+                      (enc$cocaine_use > 0 & enc$cocaine_use < 4) |
+                      (enc$rx_amphetamine_use > 0 & enc$rx_amphetamine_use < 4) |
+                      (enc$meth_use > 0 & enc$meth_use < 4) |
+                      (enc$inhalants_use > 0 & enc$inhalants_use < 4) |
+                      (enc$sedatives_use > 0 & enc$sedatives_use < 4) |
+                      (enc$ruffies_use > 0 & enc$ruffies_use < 4) |
+                      (enc$hallucinogen_use > 0 & enc$hallucinogen_use < 4) |
+                      (enc$street_opioid_use > 0 & enc$street_opioid_use < 4) |
+                      (enc$rx_opioid_use > 0 & enc$rx_opioid_use < 4) |
+                      (enc$injection_drug_use > 0 & enc$injection_drug_use < 4) |
+                      (enc$other_drug_use > 0 & enc$other_drug_use < 4))] <- 1
+table(enc$substance_use)
+
+table(enc$substance_use)
+substance_use <- enc[which(enc$substance_use == 1), ]
+dim(substance_use)
+substance_use <- nrow(substance_use)
+substance_use
+
+
+
+enc$sud_linkage_need[enc$substance_use == 1 & enc$ltc_services___3 == 1] <- 1
+table(enc$sud_linkage_need)
+
+table(enc$sud_linkage_need)
+sud_linkage_need <- enc[which(enc$sud_linkage_need == 1), ]
+dim(sud_linkage_need)
+sud_linkage_need <- nrow(sud_linkage_need)
+sud_linkage_need
+
+sud_linkage_need_percent <- percent(sud_linkage_need/substance_use, accuracy = 0.1)
+sud_linkage_need_percent
+
+
+
+# Monthly HCPH SUD Data
+monthly_hcph_sud <- select(enc, enc_date, substance_use, sud_linkage_need)
+monthly_hcph_sud <- monthly_hcph_sud[which(monthly_hcph_sud$enc_date >= '2024-08-01'), ]
+monthly_hcph_sud <- monthly_hcph_sud[which(monthly_hcph_sud$substance_use == 1), ]
+head(monthly_hcph_sud)
+colnames(monthly_hcph_sud)[2] <- 'substance_use'
+colnames(monthly_hcph_sud)[3] <- 'sud_linkage_need'
+monthly_hcph_sud$substance_use[is.na(monthly_hcph_sud$substance_use)] <- 0
+head(monthly_hcph_sud)
+monthly_hcph_sud$sud_linkage_need[is.na(monthly_hcph_sud$sud_linkage_need)] <- 0
+head(monthly_hcph_sud)
+
+monthly_hcph_sud$Date <- as.Date(monthly_hcph_sud$enc_date, format="%d/%m/%Y")
+head(monthly_hcph_sud)
+
+monthly_hcph_sud <- aggregate(cbind(substance_use, sud_linkage_need) ~ as.yearmon(Date),
+                              monthly_hcph_sud,
+                              FUN = sum)
+monthly_hcph_sud$Date <- as.Date(as.yearmon(monthly_hcph_sud$`as.yearmon(Date)`))
+head(monthly_hcph_sud)
+monthly_hcph_sud
+
+```
+
+
+# HCPH SUD Data
+
+The Hamilton County Public Health (HCPH) substance use disorder (SUD) data agreement was initiated in July 2024 and the agreement was for data collected from August 1, 2024 through July 31, 2025. This agreement is for EIP to provide HCPH with data regarding SUD screening and follow-up at periodic intervals to determine retention in care. The agreement was to provide data for any patient that endorses any type of substance use, the demographic information of these individuals, as well as their treatment need and follow-up for retention in care. This agreement is for patients seen at UC Medical Center only.
+
+This program is still in the process of finalizing operations and data collection. In the meantime, we can provide data regarding the number of patients that endorse any type of substance use, and who was determined to need linkage to care.
+
+EIP SUD assessments are determined based on the AUDIT-C for alcohol or  NIDA-Modified ASSIST for all other substances. Patients are included in this program if they endorse any type of substance use within the past year. As of the start of this program, there have been a total of **`r substance_use` encounters where an individual endorsed any type of substance use**. After discussion with our HPA or additional EIP coordinators, there have been a total of **`r sud_linkage_need` linkage follow-up cases initiated** (*`r sud_linkage_need_percent` of all those endorsing any substance use, `r sud_linkage_need`/`r substance_use`*). This information is summarized in the table below.
+
+
+```{r, echo=FALSE, warning=FALSE}
+
+monthly_hcph_sud_table <- select(monthly_hcph_sud, Date, substance_use, sud_linkage_need)
+colnames(monthly_hcph_sud_table)[2] <- 'Endorse Substance Use'
+colnames(monthly_hcph_sud_table)[3] <- 'SUD Linkage Need'
+monthly_hcph_sud_table %>%
+  kbl(align = 'lcc', table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  kable_styling(full_width = F, font_size = 10)
+
+```
+
+
+Any further analysis is depending on final operations decisions still in process.
+
+
+# Ask, Advise, Refer (AAR)
+
+The HCPH Ask, Advise, Refer partnership was signed on *April 26, 2024*. This partnership was a pledge from EIP to HCPH that we would increase education and awareness of tobacco cessation and cessation-related services. Through this pledge, EIP promised to participate in tobacco use screening and referral to cessation resources, namely the Ohio Tobacco Quit Line. The program officially started documenting referrals for tobacco cessation referrals on **August 13, 2024**.
+
+EIP staff screen for tobacco use by asking about current tobacco use on the risk assessment. If the patient endorses current tobacco use (either daily or less than daily), they are instructed to provide tobacco cessation referrals to the Ohio Tobacco Quit Line, and document that the referral was provided in their REDCap record.
+
+Since the start of this program in August, there have been a total of **`r tobacco_assessed` encounters where an individual was screened for their tobacco use history**, with a total of **`r tobacco_current` that endorse current tobacco use** (*`r tobacco_current_percent` of all those screened, `r tobacco_current`/`r tobacco_assessed`*). For all those who have endorsed current tobacco use, EIP has provided **`r tobacco_referred` referrals** to the Ohio Tobacco Quit Line (*`r tobacco_referred_percent` of all those who endorse current tobacco use, `r tobacco_referred`/`r tobacco_current`*). The table below summarizes the monthly tobacco assessments, the number who endorse current tobacco use, and the number that were referred for tobacco cessation through the Ohio Tobacco Quit Line.
+
+
+```{r, echo=FALSE, warning=FALSE}
+
+monthly_tobacco_table <- select(monthly_tobacco, Date, tobacco_assessed, tobacco_current, tobacco_referred)
+colnames(monthly_tobacco_table)[2] <- 'Tobacco Assessments'
+colnames(monthly_tobacco_table)[3] <- 'Current Tobacco Use'
+colnames(monthly_tobacco_table)[4] <- 'Referred for Tobacco Cessation'
+monthly_tobacco_table %>%
+  kbl(align = 'lccc', table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  kable_styling(full_width = F, font_size = 10)
+
 ```
 
 
@@ -3071,7 +3255,7 @@ The total number of FTS distributed is reported on a monthly basis required for 
 
 fts_enc_location_colors <- c("ED" = "coral2", "SSP" = "aquamarine3", "Other" = "cornflowerblue",
                              "Treatment/Recovery" = "darkseagreen3", "Mobile Unit" = "mediumpurple1",
-                             "CAP" = "khaki1")
+                             "CAP" = "khaki1", "Street/Outreach" = "firebrick1")
 
 monthly_fts_distribution_plot <- plot_ly(
   data = monthly_fts_distribution,
