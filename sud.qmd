@@ -3205,7 +3205,7 @@ colnames(monthly_hcph_sud_table)[3] <- 'SUD Linkage Need'
 monthly_hcph_sud_table %>%
   kbl(align = 'lcc', table.attr = 'data-quarto-disable-processing="true"') %>%
   kable_paper(bootstrap_options = "striped", full_width = F) %>%
-  kable_styling(full_width = F, font_size = 10)
+  kable_styling(full_width = F, font_size = 12)
 
 ```
 
@@ -3231,7 +3231,7 @@ colnames(monthly_tobacco_table)[4] <- 'Referred for Tobacco Cessation'
 monthly_tobacco_table %>%
   kbl(align = 'lccc', table.attr = 'data-quarto-disable-processing="true"') %>%
   kable_paper(bootstrap_options = "striped", full_width = F) %>%
-  kable_styling(full_width = F, font_size = 10)
+  kable_styling(full_width = F, font_size = 12)
 
 ```
 
@@ -3255,7 +3255,7 @@ The total number of FTS distributed is reported on a monthly basis required for 
 
 fts_enc_location_colors <- c("ED" = "coral2", "SSP" = "aquamarine3", "Other" = "cornflowerblue",
                              "Treatment/Recovery" = "darkseagreen3", "Mobile Unit" = "mediumpurple1",
-                             "CAP" = "khaki1", "Street/Outreach" = "firebrick1")
+                             "CAP" = "khaki1", "Street/Outreach" = "cadetblue1")
 
 monthly_fts_distribution_plot <- plot_ly(
   data = monthly_fts_distribution,

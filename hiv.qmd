@@ -29,6 +29,7 @@ library(apyramid)
 library(kableExtra)
 library(knitr)
 library(zoo)
+library(DT)
 
 ### EIP Database Data
 # 2023
@@ -3079,26 +3080,22 @@ The following table shows an overview of the total number of tests within each t
 ```{r, echo = FALSE}
 
 hiv_testing_tbl <- data.frame(matrix(ncol = 3, nrow = 0))
-colnames(hiv_testing_tbl) <- c('.', 'CTR', 'EHE')
+colnames(hiv_testing_tbl) <- c('', 'CTR', 'EHE')
 hiv_testing_tbl[nrow(hiv_testing_tbl) + 1,] <- list('Number of Tests', ctr_tests, ehe_tests)
 hiv_testing_tbl[nrow(hiv_testing_tbl) + 1,] <- list('Positives', ctr_positive, ehe_positive)
 hiv_testing_tbl[nrow(hiv_testing_tbl) + 1,] <- list('New Positives', ctr_new_positive, ehe_new_positive)
 hiv_testing_tbl[nrow(hiv_testing_tbl) + 1,] <- list('Positivity Rate', ctr_positivity_rate, ehe_positivity_rate)
-reactable(hiv_testing_tbl,
-          theme = reactableTheme(
-            color = "hsl(233, 9%, 87%)",
-            backgroundColor = "hsl(233, 9%, 19%)",
-            borderColor = "hsl(233, 9%, 22%)",
-            stripedColor = "hsl(233, 12%, 22%)",
-            highlightColor = "hsl(233, 12%, 24%)",
-            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
-          resizable = TRUE)
+hiv_testing_tbl %>%
+  kbl(align = 'lcc', table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  kable_styling(full_width = F, font_size = 16)
 
 
 ```
+
+::: {.panel-tabset}
+
+## Daily
 
 Daily HIV testing is tracked for each independent program and is shown in the chart below. The subsequent table also shows the number of tests for each HIV testing method on a daily basis.
 
@@ -3109,436 +3106,68 @@ daily_hiv_testing_plot <- ggplot(daily_hiv_tests, aes(x = Date)) +
   geom_line(aes(y = ehe_tests), color = "darkgreen") +
   ylab("Count") +
   ggtitle("Daily HIV Testing")
-
 ggplotly(daily_hiv_testing_plot)
 
 
 daily_hiv_testing_table <- select(daily_hiv_tests, Date, ctr_tests, ehe_tests)
 colnames(daily_hiv_testing_table)[2] <- 'CTR Tests'
 colnames(daily_hiv_testing_table)[3] <- 'EHE Tests'
-reactable(daily_hiv_testing_table,
-          showPageSizeOptions = TRUE,
-          pageSizeOptions = c(10, 15, 31),
-          defaultPageSize = 10,
-          theme = reactableTheme(
-            color = "hsl(233, 9%, 87%)",
-            backgroundColor = "hsl(233, 9%, 19%)",
-            borderColor = "hsl(233, 9%, 22%)",
-            stripedColor = "hsl(233, 12%, 22%)",
-            highlightColor = "hsl(233, 12%, 24%)",
-            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
-          resizable = TRUE)
+datatable(daily_hiv_testing_table,
+          options = list(
+            pageLength = 10,
+            lengthMenu = c(10, 25, 50, 100)),
+          class = "display",
+          colnames = colnames(daily_hiv_testing_table)) %>%
+  formatStyle(
+    columns = names(daily_hiv_testing_table),
+    fontSize = '12px')
+
+
+
 
 ```
+
+
+## Monthly
 
 However, since the reporting for each of these programs is done on a monthly basis, it is easier to look at the total number of tests that are conducted for each program within a monthly structure. The figure below shows the monthly testing numbers for each of the programs, as well as in the subsequent table.
 
 ```{r, echo = FALSE}
 
-monthly_hiv_testing_plot <- plot_ly(data = monthly_hiv_tests, x = ~Date, y = ~ctr_tests, type = 'bar', name = 'CTR Tests',
-             text = ~ctr_tests, textposition = 'auto',
-             marker = list(color = 'lightskyblue')) %>%
-  add_trace(y = ~ehe_tests, name = 'EHE Tests',
-            text = ~ehe_tests, textposition = 'auto',
+monthly_hiv_tests <- monthly_hiv_tests[order(monthly_hiv_tests$Date), ]
+monthly_hiv_testing_plot <- plot_ly(data = monthly_hiv_tests,
+                                    x = ~Date,
+                                    y = ~ctr_tests,
+                                    type = 'bar',
+                                    name = 'CTR Tests',
+                                    text = ~ctr_tests, textposition = 'auto',
+                                    marker = list(color = 'lightskyblue')) %>%
+  add_trace(y = ~ehe_tests,
+            name = 'EHE Tests',
+            text = ~ehe_tests,
+            textposition = 'auto',
             marker = list(color = 'darkgreen')) %>%
   layout(yaxis = list(title = 'Total HIV Tests'), barmode = 'stack')
-monthly_hiv_testing_plot
+config(monthly_hiv_testing_plot, displayModeBar = FALSE)
 
 
 
 monthly_hiv_testing_table <- select(monthly_hiv_tests, Date, ctr_tests, ehe_tests)
 colnames(monthly_hiv_testing_table)[2] <- 'CTR Tests'
 colnames(monthly_hiv_testing_table)[3] <- 'EHE Tests'
-reactable(monthly_hiv_testing_table,
-          showPageSizeOptions = TRUE,
-          pageSizeOptions = c(12, 24),
-          defaultPageSize = 12,
-          theme = reactableTheme(
-            color = "hsl(233, 9%, 87%)",
-            backgroundColor = "hsl(233, 9%, 19%)",
-            borderColor = "hsl(233, 9%, 22%)",
-            stripedColor = "hsl(233, 12%, 22%)",
-            highlightColor = "hsl(233, 12%, 24%)",
-            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
-          resizable = TRUE)
+datatable(monthly_hiv_testing_table,
+          options = list(
+            pageLength = 10,
+            lengthMenu = c(10, 25, 50, 100)),
+          class = "display",
+          colnames = colnames(monthly_hiv_testing_table)) %>%
+  formatStyle(
+    columns = names(monthly_hiv_testing_table),
+    fontSize = '12px')
 
 ```
 
-# CTR Testing
-
-The Counseling, Testing, and Referral to treatment (CTR) testing program...
-
-```{r, echo = FALSE}
-
-ctr_hrhs_tested_gauge <- plot_ly(
-  domain = list(x = c(0, 0.45), y = c(0, 1)),
-  value = ctr_hrhs_tested,
-  title = list(text = "HRHS CTR Tested", font = list(size = 18)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 900)),
-    bar = list(color = "lightskyblue"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray")) 
-ctr_hrhs_tested_gauge <- ctr_hrhs_tested_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-
-
-ctr_hrhs_woc_tested_gauge <- plot_ly(
-  domain = list(x = c(0.55, 1), y = c(0, 1)),
-  value = ctr_hrhs_woc_tested,
-  title = list(text = "HRHS/WOC CTR Tested", font = list(size = 18)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 100)),
-    bar = list(color = "lightskyblue"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray")) 
-ctr_hrhs_woc_tested_gauge <- ctr_hrhs_woc_tested_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-
-
-
-
-ctr_hrhs_youth_tested_gauge <- plot_ly(
-  domain = list(x = c(0, 0.45), y = c(0, 1)),
-  value = ctr_hrhs_youth_tested,
-  title = list(text = "HRHS/Youth CTR Tested", font = list(size = 18)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 200)),
-    bar = list(color = "lightskyblue"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray")) 
-ctr_hrhs_youth_tested_gauge <- ctr_hrhs_youth_tested_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-
-
-
-
-ctr_hrhs_idu_tested_gauge <- plot_ly(
-  domain = list(x = c(0.55, 1), y = c(0, 1)),
-  value = ctr_hrhs_idu_tested,
-  title = list(text = "HRHS/IDU CTR Tested", font = list(size = 18)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 300)),
-    bar = list(color = "lightskyblue"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray")) 
-ctr_hrhs_idu_tested_gauge <- ctr_hrhs_idu_tested_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-
-
-
-
-ctr_msm_tested_gauge <- plot_ly(
-  domain = list(x = c(0, 0.45), y = c(0, 1)),
-  value = ctr_msm_tested,
-  title = list(text = "MSM CTR Tested", font = list(size = 18)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 100)),
-    bar = list(color = "lightskyblue"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray")) 
-ctr_msm_tested_gauge <- ctr_msm_tested_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-
-
-
-
-ctr_msm_youth_tested_gauge <- plot_ly(
-  domain = list(x = c(0.55, 1), y = c(0, 1)),
-  value = ctr_msm_youth_tested,
-  title = list(text = "MSM/Youth CTR Tested", font = list(size = 18)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 20)),
-    bar = list(color = "lightskyblue"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray")) 
-ctr_msm_youth_tested_gauge <- ctr_msm_youth_tested_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-
-
-
-
-ctr_msm_idu_tested_gauge <- plot_ly(
-  domain = list(x = c(0, 0.45), y = c(0, 1)),
-  value = ctr_msm_idu_tested,
-  title = list(text = "MSM/IDU CTR Tested", font = list(size = 18)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 20)),
-    bar = list(color = "lightskyblue"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray")) 
-ctr_msm_idu_tested_gauge <- ctr_msm_idu_tested_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-
-
-
-
-ctr_msm_new_dx_gauge <- plot_ly(
-  domain = list(x = c(0, 0.45), y = c(0, 1)),
-  value = ctr_msm_new_dx,
-  title = list(text = "MSM CTR New Positive", font = list(size = 18)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 5)),
-    bar = list(color = "lightskyblue"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray",
-    threshold = list(
-      line = list(color = "red", width = 4),
-      thickness = 0.75,
-      value = 3))) 
-ctr_msm_new_dx_gauge <- ctr_msm_new_dx_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-
-
-
-
-ctr_hrhs_new_dx_gauge <- plot_ly(
-  domain = list(x = c(0.55, 1), y = c(0, 1)),
-  value = ctr_hrhs_new_dx,
-  title = list(text = "HRHS CTR New Positive", font = list(size = 18)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 9)),
-    bar = list(color = "lightskyblue"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray")) 
-ctr_hrhs_new_dx_gauge <- ctr_hrhs_new_dx_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-```
-
-
-The deliverables for the CTR testing program are shown in the gauge charts below. All deliverables are based on the program funding year, and are counted between January 1st and December 31st to determine whether we meet these goals for the program.
-
-
-```{r, echo = FALSE}
-
-hiv_gauge_subplot1 <- subplot(ctr_hrhs_tested_gauge, ctr_hrhs_woc_tested_gauge)
-hiv_gauge_subplot1
-
-hiv_gauge_subplot2 <- subplot(ctr_hrhs_youth_tested_gauge, ctr_hrhs_idu_tested_gauge)
-hiv_gauge_subplot2
-
-hiv_gauge_subplot3 <- subplot(ctr_msm_tested_gauge, ctr_msm_youth_tested_gauge)
-hiv_gauge_subplot3
-
-hiv_gauge_subplot4 <- subplot(ctr_msm_idu_tested_gauge)
-hiv_gauge_subplot4
-
-hiv_gauge_subplot5 <- subplot(ctr_msm_new_dx_gauge, ctr_hrhs_new_dx_gauge)
-hiv_gauge_subplot5
-
-```
-
-```{r, echo = FALSE}
-
-ctr_deliverables_tbl <- data.frame(matrix(ncol = 3, nrow = 0))
-colnames(ctr_deliverables_tbl) <- c('CTR Deliverable', 'Goal', 'Achieved')
-ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS tested', 900, ctr_hrhs_tested)
-ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS WOC tested', 100, ctr_hrhs_woc_tested)
-ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS Youth tested', 200, ctr_hrhs_youth_tested)
-ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS IDU tested', 300, ctr_hrhs_idu_tested)
-ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM tested', 100, ctr_msm_tested)
-ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM Youth tested', 20, ctr_msm_youth_tested)
-ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM IDU tested', 20, ctr_msm_idu_tested)
-ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM New CTR positive', '3-5', ctr_msm_new_dx)
-ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS New CTR positive', 9, ctr_hrhs_new_dx)
-reactable(ctr_deliverables_tbl,
-          theme = reactableTheme(
-            color = "hsl(233, 9%, 87%)",
-            backgroundColor = "hsl(233, 9%, 19%)",
-            borderColor = "hsl(233, 9%, 22%)",
-            stripedColor = "hsl(233, 12%, 22%)",
-            highlightColor = "hsl(233, 12%, 24%)",
-            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
-          resizable = TRUE)
-
-```
-
-
-The CTR program also has site and population-specific deliverables that need to be met.
-
-
--- At UCMC: 75 MSM tested, 550 HRHS tested
--- At WCH: 10 MSM tested, 100 HRHS tested
--- At Exchange: 10 MSM tested, 150 HRHS tested
--- At Talbert: 5 MSM tested, 100 HRHS tested
-
-
-
-# EHE Testing
-
-The Ending the HIV Epidemic (EHE) testing program...
-
-
-```{r, echo = FALSE}
-
-ehe_hrhs_tested_gauge <- plot_ly(
-  domain = list(x = c(0, 1), y = c(0, 1)),
-  value = ehe_hrhs_tested,
-  title = list(text = "HRHS EHE Tested", font = list(size = 24)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 875)),
-    bar = list(color = "darkgreen"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray")) 
-ehe_hrhs_tested_gauge <- ehe_hrhs_tested_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-ehe_hrhs_tested_gauge
-
-
-
-ehe_msm_tested_gauge <- plot_ly(
-  domain = list(x = c(0, 1), y = c(0, 1)),
-  value = ehe_msm_tested,
-  title = list(text = "MSM EHE Tested", font = list(size = 24)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 75)),
-    bar = list(color = "darkgreen"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray")) 
-ehe_msm_tested_gauge <- ehe_msm_tested_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-ehe_msm_tested_gauge
-
-
-
-ehe_msm_youth_tested_gauge <- plot_ly(
-  domain = list(x = c(0, 1), y = c(0, 1)),
-  value = ehe_msm_youth_tested,
-  title = list(text = "MSM EHE Tested", font = list(size = 24)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 40)),
-    bar = list(color = "darkgreen"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray")) 
-ehe_msm_youth_tested_gauge <- ehe_msm_youth_tested_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-ehe_msm_youth_tested_gauge
-
-
-
-ehe_msm_idu_tested_gauge <- plot_ly(
-  domain = list(x = c(0, 1), y = c(0, 1)),
-  value = ehe_msm_idu_tested,
-  title = list(text = "MSM EHE Tested", font = list(size = 24)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis =list(range = list(0, 12)),
-    bar = list(color = "darkgreen"),
-    bgcolor = "white",
-    borderwidth = 2,
-    bordercolor = "gray")) 
-ehe_msm_idu_tested_gauge <- ehe_msm_idu_tested_gauge %>%
-  layout(margin = list(l=100,r=150))
-
-ehe_msm_idu_tested_gauge
-
-```
-
-```{r, echo = FALSE}
-
-ehe_hrhs_tested_gauge
-
-```
-
-```{r, echo = FALSE}
-
-ehe_msm_tested_gauge
-
-```
-
-```{r, echo = FALSE}
-
-ehe_msm_youth_tested_gauge
-
-```
-
-```{r, echo = FALSE}
-
-ehe_msm_idu_tested_gauge
-
-```
-
-
-```{r, echo = FALSE}
-
-ehe_deliverables_tbl <- data.frame(matrix(ncol = 3, nrow = 0))
-colnames(ehe_deliverables_tbl) <- c('EHE Deliverable', 'Goal', 'Achieved')
-ehe_deliverables_tbl[nrow(ehe_deliverables_tbl) + 1,] <- list('HRHS tested', 875, ehe_hrhs_tested)
-ehe_deliverables_tbl[nrow(ehe_deliverables_tbl) + 1,] <- list('MSM tested', 75, ehe_msm_tested)
-ehe_deliverables_tbl[nrow(ehe_deliverables_tbl) + 1,] <- list('MSM Youth tested', 40, ehe_msm_youth_tested)
-ehe_deliverables_tbl[nrow(ehe_deliverables_tbl) + 1,] <- list('MSM IDU tested', 12, ehe_msm_idu_tested)
-reactable(ehe_deliverables_tbl,
-          theme = reactableTheme(
-            color = "hsl(233, 9%, 87%)",
-            backgroundColor = "hsl(233, 9%, 19%)",
-            borderColor = "hsl(233, 9%, 22%)",
-            stripedColor = "hsl(233, 12%, 22%)",
-            highlightColor = "hsl(233, 12%, 24%)",
-            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
-          resizable = TRUE)
-
-```
+:::
 
 
 # HIV Linkage to Care
@@ -3568,7 +3197,7 @@ For those situations where the individual was unable to be linked to care, there
 The consort or flow diagram below represents all of the linkage data described above visually. All numbers are represented as total (n, [blue]{style="color: blue;"}) and percent (%, [steel blue]{style="color: steelblue;"}). To know the denominator of each percent represented in the consort diagram below, please refer to the description of the data points in the text above.
 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning = FALSE}
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
@@ -3820,7 +3449,6 @@ grid +
 grid + theme_void()
 
 
-
 ```
 
 
@@ -3848,28 +3476,9 @@ ctr_linkage_gauge <- plot_ly(
       value = 80))) 
 ctr_linkage_gauge <- ctr_linkage_gauge %>%
   layout(margin = list(l=100,r=150))
-
-ctr_linkage_gauge
+config(ctr_linkage_gauge, displayModeBar = FALSE)
 
 ```
-
-
-In addition to a particular percentage that needs to be met for the CTR linkage deliverables, there are also site-specific and population-specific deliverables that are required to meet throughout the funding year. Those deliverables are described and presented below.
-
-
-
-- Site deliverables:
--- 75 PLWHA linked at UCMC
--- 15 PLWHA linked at WCH
--- 5 PLWHA linked at Exchange
--- 5 PLWHA linked at Talbert
-
-
-- Population deliverables:
--- 20 PLWHA/WOC linked
--- 25 PLWHA/Youth linked
--- 25 PLWHA/IDU linked
-
 
 
 # Additonal things still to include

@@ -2001,7 +2001,11 @@ CTR testing is reported on a monthly basis. There are different reports required
 
 # CTR Monthly Testing
 monthly_ctr_tests <- monthly_ctr_tests[order(monthly_ctr_tests$Date), ]
-monthly_ctr_tests_plot <- plot_ly(data = monthly_ctr_tests, x = ~Date, y = ~ctr_tests, type = 'bar', name = 'CTR Tests',
+monthly_ctr_tests_plot <- plot_ly(data = monthly_ctr_tests,
+                                  x = ~Date,
+                                  y = ~ctr_tests,
+                                  type = 'bar',
+                                  name = 'CTR Tests',
                                   text = ~ctr_tests, textposition = 'auto',
                                   marker = list(color = 'lightskyblue')) %>%
   layout(yaxis = list(title = 'CTR Tests'), barmode = 'stack',
