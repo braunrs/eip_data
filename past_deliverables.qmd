@@ -1,0 +1,30 @@
+---
+title: "Past Deliverables"
+lightbox:
+  match: auto
+format:
+  html: 
+    grid:
+      sidebar-width: 200px
+      body-width: 1050px
+      margin-width: 250px
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+This page contains prior grant and project deliverables to provide a history of each program.
+
+
+# Past CTR Deliverables
+
+[2023-2024 CTR Deliverables](ctr_deliverables23.html)
+
+
+# Past EHE Deliverables
+
+[2023-2024 EHE Deliverables](ehe_deliverables23.html)
+
+
