@@ -37,14 +37,14 @@ eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240818_0834.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240826_0930.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
 summary(eip24$record_id)
 
 # Resource Database
-resources <- read.csv('M:/EIP Data/EIP Database/EIP Resource Database/Original Data/EIP Resource Database 20240812_0937.csv')
+resources <- read.csv('M:/EIP Data/EIP Database/EIP Resource Database/Original Data/EIP Resource Database 20240822_1036.csv')
 dim(resources)
 
 ```
@@ -3132,21 +3132,10 @@ ht_pulvino_tbl[nrow(ht_pulvino_tbl) + 1,] <- list('Have you ever worked, or done
 ht_pulvino_tbl[nrow(ht_pulvino_tbl) + 1,] <- list('In thinking back over your past experience, have you ever been tricked or forced into doing any kind of work that you did not want to do?', ht_forced_work_assessed, ht_forced_work_yes, ht_forced_work_ypercent, ht_forced_work_no, ht_forced_work_na, ht_forced_work_declined)
 ht_pulvino_tbl[nrow(ht_pulvino_tbl) + 1,] <- list('Have you ever been afraid to leave or quit a work situation due to fears of violence or threats of harm to yourself or your family?', ht_fear_work_assessed, ht_fear_work_yes, ht_fear_work_ypercent, ht_fear_work_no, ht_fear_work_na, ht_fear_work_declined)
 ht_pulvino_tbl[nrow(ht_pulvino_tbl) + 1,] <- list('Have you ever received anything in exchange for sex (for example, a place to stay, gifts, or food)?', ht_exchange_sex_assessed, ht_exchange_sex_yes, ht_exchange_sex_ypercent, ht_exchange_sex_no, ht_exchange_sex_na, ht_exchange_sex_declined)
-reactable(ht_pulvino_tbl,
-          columns = list(
-            Question = colDef(name = "",
-                              minWidth = 300)),
-          theme = reactableTheme(
-            color = "hsl(233, 9%, 87%)",
-            backgroundColor = "hsl(233, 9%, 19%)",
-            borderColor = "hsl(233, 9%, 22%)",
-            stripedColor = "hsl(233, 12%, 22%)",
-            highlightColor = "hsl(233, 12%, 24%)",
-            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
-          resizable = TRUE)
+ht_pulvino_tbl %>%
+  kbl(table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  kable_styling(full_width = F, font_size = 16)
 
 ```
 
@@ -3417,18 +3406,10 @@ resource_summary_tbl[nrow(resource_summary_tbl) + 1,] <- list('Survivors of Abus
 resource_summary_tbl[nrow(resource_summary_tbl) + 1,] <- list('Food Services', food, food_only_percent, food + all_services, food_total_percent)
 resource_summary_tbl[nrow(resource_summary_tbl) + 1,] <- list('General Health', general, general_only_percent, general + all_services, general_total_percent)
 resource_summary_tbl[nrow(resource_summary_tbl) + 1,] <- list('Transportation', transportation, transportation_only_percent, transportation + all_services, transportation_total_percent)
-reactable(resource_summary_tbl,
-          theme = reactableTheme(
-            color = "hsl(233, 9%, 87%)",
-            backgroundColor = "hsl(233, 9%, 19%)",
-            borderColor = "hsl(233, 9%, 22%)",
-            stripedColor = "hsl(233, 12%, 22%)",
-            highlightColor = "hsl(233, 12%, 24%)",
-            inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
-            pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")),
-          resizable = TRUE)
+resource_summary_tbl %>%
+  kbl(table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  kable_styling(full_width = F, font_size = 16)
 
 
 ```
