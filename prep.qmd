@@ -36,7 +36,7 @@ eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240904_1243.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240908_2112.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
@@ -1500,6 +1500,23 @@ eip23$enc_location_513_bus <- ''
 eip23$deshpande_ltc_open_calc <- ''
 eip23$peer_intern <- ''
 eip23$counselor_ref_sud_specific___59 <- ''
+eip23$hcph_sud_day30_contact_date <- ''
+eip23$hcph_sud_day60_contact_date <- ''
+eip23$hcph_sud_day90_contact_date <- ''
+eip23$ltc_sud_hcph_fu <- ''
+eip23$ltc_sud_hcph_fu_completion___1 <- ''
+eip23$ltc_sud_hcph_fu_completion___2 <- ''
+eip23$ltc_sud_hcph_fu_completion___3 <- ''
+eip23$hcph_followup1 <- ''
+eip23$hcph_contact_day1 <- ''
+eip23$hcph_services1___1 <- ''
+eip23$hcph_services1___2 <- ''
+eip23$hcph_services1___3 <- ''
+eip23$hcph_services1___4 <- ''
+eip23$hcph_tx1 <- ''
+eip23$hcph_tx_date1 <- ''
+eip23$hcph_tx_status1 <- ''
+eip23$hcph_tx_last_date1 <- ''
 
 
 # Adding variables removed from 2023 dataset to 2024 dataset as blank values
