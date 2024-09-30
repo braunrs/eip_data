@@ -37,14 +37,14 @@ eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240923_0807.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20240930_0839.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
 summary(eip24$record_id)
 
 # Resource Database
-resources <- read.csv('M:/EIP Data/EIP Database/EIP Resource Database/Original Data/EIP Resource Database 20240923_0811.csv')
+resources <- read.csv('M:/EIP Data/EIP Database/EIP Resource Database/Original Data/EIP Resource Database 20240930_0849.csv')
 dim(resources)
 
 ```
