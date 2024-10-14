@@ -37,14 +37,14 @@ eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20241007_0929.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20241014_0857.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
 summary(eip24$record_id)
 
 # Naloxone Distribution Data
-nalox <- read.csv('M:/EIP Data/EIP Database/EIP Naloxone Distribution Database/EIP Naloxone Distribution/EIP Naloxone Distribution Data 20241007_1216.csv')
+nalox <- read.csv('M:/EIP Data/EIP Database/EIP Naloxone Distribution Database/EIP Naloxone Distribution/EIP Naloxone Distribution Data 20241014_0902.csv')
 dim(nalox)
 
 ```
@@ -3705,9 +3705,24 @@ monthly_hcph_sud
 
 The Hamilton County Public Health (HCPH) substance use disorder (SUD) data agreement was initiated in July 2024 and the agreement was for data collected from August 1, 2024 through July 31, 2025. This agreement is for EIP to provide HCPH with data regarding SUD screening and follow-up at periodic intervals to determine retention in care. The agreement was to provide data for any patient that endorses any type of substance use, the demographic information of these individuals, as well as their treatment need and follow-up for retention in care. This agreement is for patients seen at UC Medical Center only.
 
-This program is still in the process of finalizing operations and data collection. In the meantime, we can provide data regarding the number of patients that endorse any type of substance use, and who was determined to need linkage to care.
+Since the data that HCPH requested for follow-up centered around those that were linked to care, it was decided that aggregate data would be collected for all those individuals screened for SUD, those that endorse substance use within the past year, those that are engaged with the EIP Linkage to Care process, and those that are successfully linked to care. Then, record-level data would be provided for those that agree to follow-up questionnaires at 30, 60, and 90 day time points, with the follow-up questions from HCPH documented.
 
-EIP SUD assessments are determined based on the AUDIT-C for alcohol or  NIDA-Modified ASSIST for all other substances. Patients are included in this program if they endorse any type of substance use within the past year. As of the start of this program, there have been a total of **`r substance_use` encounters where an individual endorsed any type of substance use**. After discussion with our HPA or additional EIP coordinators, there have been a total of **`r sud_linkage_need` linkage follow-up cases initiated** (*`r sud_linkage_need_percent` of all those endorsing any substance use, `r sud_linkage_need`/`r substance_use`*). This information is summarized in the table below.
+EIP SUD assessments are determined based on the AUDIT-C for alcohol or NIDA-Modified ASSIST for all other substances. Aggregate-level data is presented here for the following: number screened for SUD, number endorsing current substance use (within the past year), number engaged in SUD linkage, and number successfully linked to care. As of the start of the data sharing agreement for this program, there have been a total of xx encounters where an individual was screened for SUD (xx%, xx/xx). The number of encounters where an individual has endorsed current substance use (within the past year) for any substance is xx (xx%, xx/xx). After a conversation with the EIP HPA and/or LTC Coordinator, there was a total of xx encounters where the individual engaged in our linkage process specifically for SUD (xx%, xx/xx). For those that engaged within our SUD LTC process, there were a total of xx encounters where the individual was successfully linked to care for SUD (xx%, xx/xx). A total of xx agreed to the HCPH 30/60/90 day follow-ups after successful linkage (xx%, xx/xx).
+
+30 day follow-up details
+60 day follow-up details
+90 day follow-up details
+
+
+
+
+
+
+
+
+
+
+Patients are included in this program if they endorse any type of substance use within the past year. As of the start of this program, there have been a total of **`r substance_use` encounters where an individual endorsed any type of substance use**. After discussion with our HPA or additional EIP coordinators, there have been a total of **`r sud_linkage_need` linkage follow-up cases initiated** (*`r sud_linkage_need_percent` of all those endorsing any substance use, `r sud_linkage_need`/`r substance_use`*). This information is summarized in the table below.
 
 
 ```{r, echo=FALSE, warning=FALSE}
