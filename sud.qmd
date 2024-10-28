@@ -37,15 +37,16 @@ eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20241021_0938.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20241028_0940.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
 summary(eip24$record_id)
 
 # Naloxone Distribution Data
-nalox <- read.csv('M:/EIP Data/EIP Database/EIP Naloxone Distribution Database/EIP Naloxone Distribution/EIP Naloxone Distribution Data 20241021_0947.csv')
+nalox <- read.csv('M:/EIP Data/EIP Database/EIP Naloxone Distribution Database/EIP Naloxone Distribution/EIP Naloxone Distribution Data 20241028_0946.csv')
 dim(nalox)
+
 
 ```
 
@@ -191,136 +192,136 @@ person <- select(person, record_id, mrn, dob,
 dim(person)
 
 eip23 <- select(eip23, -mrn, -dob, 
-               -race___1, -race___2, -race___3, -race___4, -race___5, 
-               -race___6, -ethnicity,
-               -sex_raised, -sex_selfdefined, -insurance, -address_county,
-               -address_zip_code,
-               -followup_date1, -followup_date2, -followup_date3, -followup_date4,
-               -followup_date5, -followup_date6, -followup_date7, -followup_date8,
-               -followup_date9, -followup_date10, -followup_date11, -followup_date12,
-               -followup_date13, -followup_date14, -followup_date15, -followup_date16,
-               -followup_date17, -followup_date18, -followup_date19, -followup_date20,
-               -followup_date21, -followup_date22, -followup_date23, -followup_date24,
-               -followup_date25, -followup_date26, -followup_date27, -followup_date28,
-               -followup_date29, -followup_date30, -followup_date31, -followup_date32,
-               -followup_date33, -followup_date34, -followup_date35, -followup_date36,
-               -followup_date37, -followup_date38, -followup_date39, -followup_date40,
-               -followup_date41, -followup_date42, -followup_date43, -followup_date44,
-               -followup_date45, -followup_date46, -followup_date47, -followup_date48,
-               -followup_date49, -followup_date50, -followup_counselor1, -followup_counselor2,
-               -followup_counselor3, -followup_counselor4, -followup_counselor5,
-               -followup_counselor6, -followup_counselor7, -followup_counselor8,
-               -followup_counselor9, -followup_counselor10, -followup_counselor11,
-               -followup_counselor12, -followup_counselor13, -followup_counselor14,
-               -followup_counselor15, -followup_counselor16, -followup_counselor17,
-               -followup_counselor18, -followup_counselor19, -followup_counselor20,
-               -followup_counselor21, -followup_counselor22, -followup_counselor23,
-               -followup_counselor24, -followup_counselor25, -followup_counselor26,
-               -followup_counselor27, -followup_counselor28, -followup_counselor29,
-               -followup_counselor30, -followup_counselor31, -followup_counselor32,
-               -followup_counselor33, -followup_counselor34, -followup_counselor35,
-               -followup_counselor36, -followup_counselor37, -followup_counselor38,
-               -followup_counselor39, -followup_counselor40, -followup_counselor41,
-               -followup_counselor42, -followup_counselor43, -followup_counselor44,
-               -followup_counselor45, -followup_counselor46, -followup_counselor47,
-               -followup_counselor48, -followup_counselor49, -followup_counselor50,
-               -ltc_service1___8, -ltc_service2___8,
-               -ltc_service3___8, -ltc_service4___8, -ltc_service5___8,
-               -ltc_service6___8, -ltc_service7___8, -ltc_service8___8,
-               -ltc_service9___8, -ltc_service10___8, -ltc_service11___8,
-               -ltc_service12___8, -ltc_service13___8, -ltc_service14___8,
-               -ltc_service15___8, -ltc_service16___8, -ltc_service17___8,
-               -ltc_service18___8, -ltc_service19___8, -ltc_service20___8,
-               -ltc_service21___8, -ltc_service22___8, -ltc_service23___8,
-               -ltc_service24___8, -ltc_service25___8, -ltc_service26___8,
-               -ltc_service27___8, -ltc_service28___8, -ltc_service29___8,
-               -ltc_service30___8, -ltc_service31___8, -ltc_service32___8,
-               -ltc_service33___8, -ltc_service34___8, -ltc_service35___8,
-               -ltc_service36___8, -ltc_service37___8, -ltc_service38___8,
-               -ltc_service39___8, -ltc_service40___8, -ltc_service41___8,
-               -ltc_service42___8, -ltc_service43___8, -ltc_service44___8,
-               -ltc_service45___8, -ltc_service46___8, -ltc_service47___8,
-               -ltc_service48___8, -ltc_service49___8, -ltc_service50___8,
-               -naccho_contact_day1, -naccho_contact_day2,
-               -naccho_contact_day3, -naccho_contact_day4, -naccho_contact_day5,
-               -naccho_contact_day6, -naccho_contact_day7, -naccho_contact_day8,
-               -naccho_contact_day9, -naccho_contact_day10, -naccho_contact_day11,
-               -naccho_contact_day12, -naccho_contact_day13, -naccho_contact_day14,
-               -naccho_contact_day15, -naccho_contact_day16, -naccho_contact_day17,
-               -naccho_contact_day18, -naccho_contact_day19, -naccho_contact_day20,
-               -naccho_contact_day21, -naccho_contact_day22, -naccho_contact_day23,
-               -naccho_contact_day24, -naccho_contact_day25, -naccho_contact_day26,
-               -naccho_contact_day27, -naccho_contact_day28, -naccho_contact_day29,
-               -naccho_contact_day30, -naccho_contact_day31, -naccho_contact_day32,
-               -naccho_contact_day33, -naccho_contact_day34, -naccho_contact_day35,
-               -naccho_contact_day36, -naccho_contact_day37, -naccho_contact_day38,
-               -naccho_contact_day39, -naccho_contact_day40, -naccho_contact_day41,
-               -naccho_contact_day42, -naccho_contact_day43, -naccho_contact_day44,
-               -naccho_contact_day45, -naccho_contact_day46, -naccho_contact_day47,
-               -naccho_contact_day48, -naccho_contact_day49, -naccho_contact_day50,
-               -naccho_contact_confirm_tx1, -naccho_contact_confirm_tx2,
-               -naccho_contact_confirm_tx3, -naccho_contact_confirm_tx4, -naccho_contact_confirm_tx5,
-               -naccho_contact_confirm_tx6, -naccho_contact_confirm_tx7, -naccho_contact_confirm_tx8,
-               -naccho_contact_confirm_tx9, -naccho_contact_confirm_tx10, -naccho_contact_confirm_tx11,
-               -naccho_contact_confirm_tx12, -naccho_contact_confirm_tx13, -naccho_contact_confirm_tx14,
-               -naccho_contact_confirm_tx15, -naccho_contact_confirm_tx16, -naccho_contact_confirm_tx17,
-               -naccho_contact_confirm_tx18, -naccho_contact_confirm_tx19, -naccho_contact_confirm_tx20,
-               -naccho_contact_confirm_tx21, -naccho_contact_confirm_tx22, -naccho_contact_confirm_tx23,
-               -naccho_contact_confirm_tx24, -naccho_contact_confirm_tx25, -naccho_contact_confirm_tx26,
-               -naccho_contact_confirm_tx27, -naccho_contact_confirm_tx28, -naccho_contact_confirm_tx29,
-               -naccho_contact_confirm_tx30, -naccho_contact_confirm_tx31, -naccho_contact_confirm_tx32,
-               -naccho_contact_confirm_tx33, -naccho_contact_confirm_tx34, -naccho_contact_confirm_tx35,
-               -naccho_contact_confirm_tx36, -naccho_contact_confirm_tx37, -naccho_contact_confirm_tx38,
-               -naccho_contact_confirm_tx39, -naccho_contact_confirm_tx40, -naccho_contact_confirm_tx41,
-               -naccho_contact_confirm_tx42, -naccho_contact_confirm_tx43, -naccho_contact_confirm_tx44,
-               -naccho_contact_confirm_tx45, -naccho_contact_confirm_tx46, -naccho_contact_confirm_tx47,
-               -naccho_contact_confirm_tx48, -naccho_contact_confirm_tx49, -naccho_contact_confirm_tx50,
-               -who_initiated_contact1, -who_initiated_contact2, -who_initiated_contact3, -who_initiated_contact4, -who_initiated_contact5,
-               -who_initiated_contact6, -who_initiated_contact7, -who_initiated_contact8, -who_initiated_contact9, -who_initiated_contact10,
-               -who_initiated_contact11, -who_initiated_contact12, -who_initiated_contact13, -who_initiated_contact14,
-               -who_initiated_contact15, -who_initiated_contact16, -who_initiated_contact17, -who_initiated_contact18,
-               -who_initiated_contact19, -who_initiated_contact20, -who_initiated_contact21, -who_initiated_contact22,
-               -who_initiated_contact23, -who_initiated_contact24, -who_initiated_contact25, -who_initiated_contact26,
-               -who_initiated_contact27, -who_initiated_contact28, -who_initiated_contact29, -who_initiated_contact30,
-               -who_initiated_contact31, -who_initiated_contact32, -who_initiated_contact33, -who_initiated_contact34,
-               -who_initiated_contact35, -who_initiated_contact36, -who_initiated_contact37, -who_initiated_contact38,
-               -who_initiated_contact39, -who_initiated_contact40, -who_initiated_contact41, -who_initiated_contact42,
-               -who_initiated_contact43, -who_initiated_contact44, -who_initiated_contact45, -who_initiated_contact46,
-               -who_initiated_contact47, -who_initiated_contact48, -who_initiated_contact49, -who_initiated_contact50,
-               -contact_with1, -contact_with2, -contact_with3, -contact_with4, -contact_with5,
-               -contact_with6, -contact_with7, -contact_with8, -contact_with9, -contact_with10,
-               -contact_with11, -contact_with12, -contact_with13, -contact_with14,
-               -contact_with15, -contact_with16, -contact_with17, -contact_with18,
-               -contact_with19, -contact_with20, -contact_with21, -contact_with22,
-               -contact_with23, -contact_with24, -contact_with25, -contact_with26,
-               -contact_with27, -contact_with28, -contact_with29, -contact_with30,
-               -contact_with31, -contact_with32, -contact_with33, -contact_with34,
-               -contact_with35, -contact_with36, -contact_with37, -contact_with38,
-               -contact_with39, -contact_with40, -contact_with41, -contact_with42,
-               -contact_with43, -contact_with44, -contact_with45, -contact_with46,
-               -contact_with47, -contact_with48, -contact_with49, -contact_with50,
-               -ltc_contact1, -ltc_contact2, -ltc_contact3, -ltc_contact4, -ltc_contact5,
-               -ltc_contact6, -ltc_contact7, -ltc_contact8, -ltc_contact9, -ltc_contact10,
-               -ltc_contact11, -ltc_contact12, -ltc_contact13, -ltc_contact14, -ltc_contact15,
-               -ltc_contact16, -ltc_contact17, -ltc_contact18, -ltc_contact19, -ltc_contact20,
-               -ltc_contact21, -ltc_contact22, -ltc_contact23, -ltc_contact24, -ltc_contact25,
-               -ltc_contact26, -ltc_contact27, -ltc_contact28, -ltc_contact29, -ltc_contact30,
-               -ltc_contact31, -ltc_contact32, -ltc_contact33, -ltc_contact34, -ltc_contact35,
-               -ltc_contact36, -ltc_contact37, -ltc_contact38, -ltc_contact39, -ltc_contact40,
-               -ltc_contact41, -ltc_contact42, -ltc_contact43, -ltc_contact44, -ltc_contact45,
-               -ltc_contact46, -ltc_contact47, -ltc_contact48, -ltc_contact49, -ltc_contact50,
-               -no_contact_reason1, -no_contact_reason2, -no_contact_reason3, -no_contact_reason4, -no_contact_reason5,
-               -no_contact_reason6, -no_contact_reason7, -no_contact_reason8, -no_contact_reason9, -no_contact_reason10,
-               -no_contact_reason11, -no_contact_reason12, -no_contact_reason13, -no_contact_reason14,
-               -no_contact_reason15, -no_contact_reason16, -no_contact_reason17, -no_contact_reason18,
-               -no_contact_reason19, -no_contact_reason20, -no_contact_reason21, -no_contact_reason22,
-               -no_contact_reason23, -no_contact_reason24, -no_contact_reason25, -no_contact_reason26,
-               -no_contact_reason27, -no_contact_reason28, -no_contact_reason29, -no_contact_reason30,
-               -no_contact_reason31, -no_contact_reason32, -no_contact_reason33, -no_contact_reason34,
-               -no_contact_reason35, -no_contact_reason36, -no_contact_reason37, -no_contact_reason38,
-               -no_contact_reason39, -no_contact_reason40, -no_contact_reason41, -no_contact_reason42,
-               -no_contact_reason43, -no_contact_reason44, -no_contact_reason45, -no_contact_reason46,
-               -no_contact_reason47, -no_contact_reason48, -no_contact_reason49, -no_contact_reason50)
+                -race___1, -race___2, -race___3, -race___4, -race___5, 
+                -race___6, -ethnicity,
+                -sex_raised, -sex_selfdefined, -insurance, -address_county,
+                -address_zip_code,
+                -followup_date1, -followup_date2, -followup_date3, -followup_date4,
+                -followup_date5, -followup_date6, -followup_date7, -followup_date8,
+                -followup_date9, -followup_date10, -followup_date11, -followup_date12,
+                -followup_date13, -followup_date14, -followup_date15, -followup_date16,
+                -followup_date17, -followup_date18, -followup_date19, -followup_date20,
+                -followup_date21, -followup_date22, -followup_date23, -followup_date24,
+                -followup_date25, -followup_date26, -followup_date27, -followup_date28,
+                -followup_date29, -followup_date30, -followup_date31, -followup_date32,
+                -followup_date33, -followup_date34, -followup_date35, -followup_date36,
+                -followup_date37, -followup_date38, -followup_date39, -followup_date40,
+                -followup_date41, -followup_date42, -followup_date43, -followup_date44,
+                -followup_date45, -followup_date46, -followup_date47, -followup_date48,
+                -followup_date49, -followup_date50, -followup_counselor1, -followup_counselor2,
+                -followup_counselor3, -followup_counselor4, -followup_counselor5,
+                -followup_counselor6, -followup_counselor7, -followup_counselor8,
+                -followup_counselor9, -followup_counselor10, -followup_counselor11,
+                -followup_counselor12, -followup_counselor13, -followup_counselor14,
+                -followup_counselor15, -followup_counselor16, -followup_counselor17,
+                -followup_counselor18, -followup_counselor19, -followup_counselor20,
+                -followup_counselor21, -followup_counselor22, -followup_counselor23,
+                -followup_counselor24, -followup_counselor25, -followup_counselor26,
+                -followup_counselor27, -followup_counselor28, -followup_counselor29,
+                -followup_counselor30, -followup_counselor31, -followup_counselor32,
+                -followup_counselor33, -followup_counselor34, -followup_counselor35,
+                -followup_counselor36, -followup_counselor37, -followup_counselor38,
+                -followup_counselor39, -followup_counselor40, -followup_counselor41,
+                -followup_counselor42, -followup_counselor43, -followup_counselor44,
+                -followup_counselor45, -followup_counselor46, -followup_counselor47,
+                -followup_counselor48, -followup_counselor49, -followup_counselor50,
+                -ltc_service1___8, -ltc_service2___8,
+                -ltc_service3___8, -ltc_service4___8, -ltc_service5___8,
+                -ltc_service6___8, -ltc_service7___8, -ltc_service8___8,
+                -ltc_service9___8, -ltc_service10___8, -ltc_service11___8,
+                -ltc_service12___8, -ltc_service13___8, -ltc_service14___8,
+                -ltc_service15___8, -ltc_service16___8, -ltc_service17___8,
+                -ltc_service18___8, -ltc_service19___8, -ltc_service20___8,
+                -ltc_service21___8, -ltc_service22___8, -ltc_service23___8,
+                -ltc_service24___8, -ltc_service25___8, -ltc_service26___8,
+                -ltc_service27___8, -ltc_service28___8, -ltc_service29___8,
+                -ltc_service30___8, -ltc_service31___8, -ltc_service32___8,
+                -ltc_service33___8, -ltc_service34___8, -ltc_service35___8,
+                -ltc_service36___8, -ltc_service37___8, -ltc_service38___8,
+                -ltc_service39___8, -ltc_service40___8, -ltc_service41___8,
+                -ltc_service42___8, -ltc_service43___8, -ltc_service44___8,
+                -ltc_service45___8, -ltc_service46___8, -ltc_service47___8,
+                -ltc_service48___8, -ltc_service49___8, -ltc_service50___8,
+                -naccho_contact_day1, -naccho_contact_day2,
+                -naccho_contact_day3, -naccho_contact_day4, -naccho_contact_day5,
+                -naccho_contact_day6, -naccho_contact_day7, -naccho_contact_day8,
+                -naccho_contact_day9, -naccho_contact_day10, -naccho_contact_day11,
+                -naccho_contact_day12, -naccho_contact_day13, -naccho_contact_day14,
+                -naccho_contact_day15, -naccho_contact_day16, -naccho_contact_day17,
+                -naccho_contact_day18, -naccho_contact_day19, -naccho_contact_day20,
+                -naccho_contact_day21, -naccho_contact_day22, -naccho_contact_day23,
+                -naccho_contact_day24, -naccho_contact_day25, -naccho_contact_day26,
+                -naccho_contact_day27, -naccho_contact_day28, -naccho_contact_day29,
+                -naccho_contact_day30, -naccho_contact_day31, -naccho_contact_day32,
+                -naccho_contact_day33, -naccho_contact_day34, -naccho_contact_day35,
+                -naccho_contact_day36, -naccho_contact_day37, -naccho_contact_day38,
+                -naccho_contact_day39, -naccho_contact_day40, -naccho_contact_day41,
+                -naccho_contact_day42, -naccho_contact_day43, -naccho_contact_day44,
+                -naccho_contact_day45, -naccho_contact_day46, -naccho_contact_day47,
+                -naccho_contact_day48, -naccho_contact_day49, -naccho_contact_day50,
+                -naccho_contact_confirm_tx1, -naccho_contact_confirm_tx2,
+                -naccho_contact_confirm_tx3, -naccho_contact_confirm_tx4, -naccho_contact_confirm_tx5,
+                -naccho_contact_confirm_tx6, -naccho_contact_confirm_tx7, -naccho_contact_confirm_tx8,
+                -naccho_contact_confirm_tx9, -naccho_contact_confirm_tx10, -naccho_contact_confirm_tx11,
+                -naccho_contact_confirm_tx12, -naccho_contact_confirm_tx13, -naccho_contact_confirm_tx14,
+                -naccho_contact_confirm_tx15, -naccho_contact_confirm_tx16, -naccho_contact_confirm_tx17,
+                -naccho_contact_confirm_tx18, -naccho_contact_confirm_tx19, -naccho_contact_confirm_tx20,
+                -naccho_contact_confirm_tx21, -naccho_contact_confirm_tx22, -naccho_contact_confirm_tx23,
+                -naccho_contact_confirm_tx24, -naccho_contact_confirm_tx25, -naccho_contact_confirm_tx26,
+                -naccho_contact_confirm_tx27, -naccho_contact_confirm_tx28, -naccho_contact_confirm_tx29,
+                -naccho_contact_confirm_tx30, -naccho_contact_confirm_tx31, -naccho_contact_confirm_tx32,
+                -naccho_contact_confirm_tx33, -naccho_contact_confirm_tx34, -naccho_contact_confirm_tx35,
+                -naccho_contact_confirm_tx36, -naccho_contact_confirm_tx37, -naccho_contact_confirm_tx38,
+                -naccho_contact_confirm_tx39, -naccho_contact_confirm_tx40, -naccho_contact_confirm_tx41,
+                -naccho_contact_confirm_tx42, -naccho_contact_confirm_tx43, -naccho_contact_confirm_tx44,
+                -naccho_contact_confirm_tx45, -naccho_contact_confirm_tx46, -naccho_contact_confirm_tx47,
+                -naccho_contact_confirm_tx48, -naccho_contact_confirm_tx49, -naccho_contact_confirm_tx50,
+                -who_initiated_contact1, -who_initiated_contact2, -who_initiated_contact3, -who_initiated_contact4, -who_initiated_contact5,
+                -who_initiated_contact6, -who_initiated_contact7, -who_initiated_contact8, -who_initiated_contact9, -who_initiated_contact10,
+                -who_initiated_contact11, -who_initiated_contact12, -who_initiated_contact13, -who_initiated_contact14,
+                -who_initiated_contact15, -who_initiated_contact16, -who_initiated_contact17, -who_initiated_contact18,
+                -who_initiated_contact19, -who_initiated_contact20, -who_initiated_contact21, -who_initiated_contact22,
+                -who_initiated_contact23, -who_initiated_contact24, -who_initiated_contact25, -who_initiated_contact26,
+                -who_initiated_contact27, -who_initiated_contact28, -who_initiated_contact29, -who_initiated_contact30,
+                -who_initiated_contact31, -who_initiated_contact32, -who_initiated_contact33, -who_initiated_contact34,
+                -who_initiated_contact35, -who_initiated_contact36, -who_initiated_contact37, -who_initiated_contact38,
+                -who_initiated_contact39, -who_initiated_contact40, -who_initiated_contact41, -who_initiated_contact42,
+                -who_initiated_contact43, -who_initiated_contact44, -who_initiated_contact45, -who_initiated_contact46,
+                -who_initiated_contact47, -who_initiated_contact48, -who_initiated_contact49, -who_initiated_contact50,
+                -contact_with1, -contact_with2, -contact_with3, -contact_with4, -contact_with5,
+                -contact_with6, -contact_with7, -contact_with8, -contact_with9, -contact_with10,
+                -contact_with11, -contact_with12, -contact_with13, -contact_with14,
+                -contact_with15, -contact_with16, -contact_with17, -contact_with18,
+                -contact_with19, -contact_with20, -contact_with21, -contact_with22,
+                -contact_with23, -contact_with24, -contact_with25, -contact_with26,
+                -contact_with27, -contact_with28, -contact_with29, -contact_with30,
+                -contact_with31, -contact_with32, -contact_with33, -contact_with34,
+                -contact_with35, -contact_with36, -contact_with37, -contact_with38,
+                -contact_with39, -contact_with40, -contact_with41, -contact_with42,
+                -contact_with43, -contact_with44, -contact_with45, -contact_with46,
+                -contact_with47, -contact_with48, -contact_with49, -contact_with50,
+                -ltc_contact1, -ltc_contact2, -ltc_contact3, -ltc_contact4, -ltc_contact5,
+                -ltc_contact6, -ltc_contact7, -ltc_contact8, -ltc_contact9, -ltc_contact10,
+                -ltc_contact11, -ltc_contact12, -ltc_contact13, -ltc_contact14, -ltc_contact15,
+                -ltc_contact16, -ltc_contact17, -ltc_contact18, -ltc_contact19, -ltc_contact20,
+                -ltc_contact21, -ltc_contact22, -ltc_contact23, -ltc_contact24, -ltc_contact25,
+                -ltc_contact26, -ltc_contact27, -ltc_contact28, -ltc_contact29, -ltc_contact30,
+                -ltc_contact31, -ltc_contact32, -ltc_contact33, -ltc_contact34, -ltc_contact35,
+                -ltc_contact36, -ltc_contact37, -ltc_contact38, -ltc_contact39, -ltc_contact40,
+                -ltc_contact41, -ltc_contact42, -ltc_contact43, -ltc_contact44, -ltc_contact45,
+                -ltc_contact46, -ltc_contact47, -ltc_contact48, -ltc_contact49, -ltc_contact50,
+                -no_contact_reason1, -no_contact_reason2, -no_contact_reason3, -no_contact_reason4, -no_contact_reason5,
+                -no_contact_reason6, -no_contact_reason7, -no_contact_reason8, -no_contact_reason9, -no_contact_reason10,
+                -no_contact_reason11, -no_contact_reason12, -no_contact_reason13, -no_contact_reason14,
+                -no_contact_reason15, -no_contact_reason16, -no_contact_reason17, -no_contact_reason18,
+                -no_contact_reason19, -no_contact_reason20, -no_contact_reason21, -no_contact_reason22,
+                -no_contact_reason23, -no_contact_reason24, -no_contact_reason25, -no_contact_reason26,
+                -no_contact_reason27, -no_contact_reason28, -no_contact_reason29, -no_contact_reason30,
+                -no_contact_reason31, -no_contact_reason32, -no_contact_reason33, -no_contact_reason34,
+                -no_contact_reason35, -no_contact_reason36, -no_contact_reason37, -no_contact_reason38,
+                -no_contact_reason39, -no_contact_reason40, -no_contact_reason41, -no_contact_reason42,
+                -no_contact_reason43, -no_contact_reason44, -no_contact_reason45, -no_contact_reason46,
+                -no_contact_reason47, -no_contact_reason48, -no_contact_reason49, -no_contact_reason50)
 
 # Merge person dataset with full eip dataset
 
@@ -470,136 +471,136 @@ person <- select(person, record_id, mrn, dob,
 dim(person)
 
 eip24 <- select(eip24, -mrn, -dob, 
-               -race___1, -race___2, -race___3, -race___4, -race___5, 
-               -race___6, -ethnicity,
-               -sex_raised, -sex_selfdefined, -insurance, -address_county,
-               -address_zip_code,
-               -followup_date1, -followup_date2, -followup_date3, -followup_date4,
-               -followup_date5, -followup_date6, -followup_date7, -followup_date8,
-               -followup_date9, -followup_date10, -followup_date11, -followup_date12,
-               -followup_date13, -followup_date14, -followup_date15, -followup_date16,
-               -followup_date17, -followup_date18, -followup_date19, -followup_date20,
-               -followup_date21, -followup_date22, -followup_date23, -followup_date24,
-               -followup_date25, -followup_date26, -followup_date27, -followup_date28,
-               -followup_date29, -followup_date30, -followup_date31, -followup_date32,
-               -followup_date33, -followup_date34, -followup_date35, -followup_date36,
-               -followup_date37, -followup_date38, -followup_date39, -followup_date40,
-               -followup_date41, -followup_date42, -followup_date43, -followup_date44,
-               -followup_date45, -followup_date46, -followup_date47, -followup_date48,
-               -followup_date49, -followup_date50, -followup_counselor1, -followup_counselor2,
-               -followup_counselor3, -followup_counselor4, -followup_counselor5,
-               -followup_counselor6, -followup_counselor7, -followup_counselor8,
-               -followup_counselor9, -followup_counselor10, -followup_counselor11,
-               -followup_counselor12, -followup_counselor13, -followup_counselor14,
-               -followup_counselor15, -followup_counselor16, -followup_counselor17,
-               -followup_counselor18, -followup_counselor19, -followup_counselor20,
-               -followup_counselor21, -followup_counselor22, -followup_counselor23,
-               -followup_counselor24, -followup_counselor25, -followup_counselor26,
-               -followup_counselor27, -followup_counselor28, -followup_counselor29,
-               -followup_counselor30, -followup_counselor31, -followup_counselor32,
-               -followup_counselor33, -followup_counselor34, -followup_counselor35,
-               -followup_counselor36, -followup_counselor37, -followup_counselor38,
-               -followup_counselor39, -followup_counselor40, -followup_counselor41,
-               -followup_counselor42, -followup_counselor43, -followup_counselor44,
-               -followup_counselor45, -followup_counselor46, -followup_counselor47,
-               -followup_counselor48, -followup_counselor49, -followup_counselor50,
-               -ltc_service1___8, -ltc_service2___8,
-               -ltc_service3___8, -ltc_service4___8, -ltc_service5___8,
-               -ltc_service6___8, -ltc_service7___8, -ltc_service8___8,
-               -ltc_service9___8, -ltc_service10___8, -ltc_service11___8,
-               -ltc_service12___8, -ltc_service13___8, -ltc_service14___8,
-               -ltc_service15___8, -ltc_service16___8, -ltc_service17___8,
-               -ltc_service18___8, -ltc_service19___8, -ltc_service20___8,
-               -ltc_service21___8, -ltc_service22___8, -ltc_service23___8,
-               -ltc_service24___8, -ltc_service25___8, -ltc_service26___8,
-               -ltc_service27___8, -ltc_service28___8, -ltc_service29___8,
-               -ltc_service30___8, -ltc_service31___8, -ltc_service32___8,
-               -ltc_service33___8, -ltc_service34___8, -ltc_service35___8,
-               -ltc_service36___8, -ltc_service37___8, -ltc_service38___8,
-               -ltc_service39___8, -ltc_service40___8, -ltc_service41___8,
-               -ltc_service42___8, -ltc_service43___8, -ltc_service44___8,
-               -ltc_service45___8, -ltc_service46___8, -ltc_service47___8,
-               -ltc_service48___8, -ltc_service49___8, -ltc_service50___8,
-               -naccho_contact_day1, -naccho_contact_day2,
-               -naccho_contact_day3, -naccho_contact_day4, -naccho_contact_day5,
-               -naccho_contact_day6, -naccho_contact_day7, -naccho_contact_day8,
-               -naccho_contact_day9, -naccho_contact_day10, -naccho_contact_day11,
-               -naccho_contact_day12, -naccho_contact_day13, -naccho_contact_day14,
-               -naccho_contact_day15, -naccho_contact_day16, -naccho_contact_day17,
-               -naccho_contact_day18, -naccho_contact_day19, -naccho_contact_day20,
-               -naccho_contact_day21, -naccho_contact_day22, -naccho_contact_day23,
-               -naccho_contact_day24, -naccho_contact_day25, -naccho_contact_day26,
-               -naccho_contact_day27, -naccho_contact_day28, -naccho_contact_day29,
-               -naccho_contact_day30, -naccho_contact_day31, -naccho_contact_day32,
-               -naccho_contact_day33, -naccho_contact_day34, -naccho_contact_day35,
-               -naccho_contact_day36, -naccho_contact_day37, -naccho_contact_day38,
-               -naccho_contact_day39, -naccho_contact_day40, -naccho_contact_day41,
-               -naccho_contact_day42, -naccho_contact_day43, -naccho_contact_day44,
-               -naccho_contact_day45, -naccho_contact_day46, -naccho_contact_day47,
-               -naccho_contact_day48, -naccho_contact_day49, -naccho_contact_day50,
-               -naccho_contact_confirm_tx1, -naccho_contact_confirm_tx2,
-               -naccho_contact_confirm_tx3, -naccho_contact_confirm_tx4, -naccho_contact_confirm_tx5,
-               -naccho_contact_confirm_tx6, -naccho_contact_confirm_tx7, -naccho_contact_confirm_tx8,
-               -naccho_contact_confirm_tx9, -naccho_contact_confirm_tx10, -naccho_contact_confirm_tx11,
-               -naccho_contact_confirm_tx12, -naccho_contact_confirm_tx13, -naccho_contact_confirm_tx14,
-               -naccho_contact_confirm_tx15, -naccho_contact_confirm_tx16, -naccho_contact_confirm_tx17,
-               -naccho_contact_confirm_tx18, -naccho_contact_confirm_tx19, -naccho_contact_confirm_tx20,
-               -naccho_contact_confirm_tx21, -naccho_contact_confirm_tx22, -naccho_contact_confirm_tx23,
-               -naccho_contact_confirm_tx24, -naccho_contact_confirm_tx25, -naccho_contact_confirm_tx26,
-               -naccho_contact_confirm_tx27, -naccho_contact_confirm_tx28, -naccho_contact_confirm_tx29,
-               -naccho_contact_confirm_tx30, -naccho_contact_confirm_tx31, -naccho_contact_confirm_tx32,
-               -naccho_contact_confirm_tx33, -naccho_contact_confirm_tx34, -naccho_contact_confirm_tx35,
-               -naccho_contact_confirm_tx36, -naccho_contact_confirm_tx37, -naccho_contact_confirm_tx38,
-               -naccho_contact_confirm_tx39, -naccho_contact_confirm_tx40, -naccho_contact_confirm_tx41,
-               -naccho_contact_confirm_tx42, -naccho_contact_confirm_tx43, -naccho_contact_confirm_tx44,
-               -naccho_contact_confirm_tx45, -naccho_contact_confirm_tx46, -naccho_contact_confirm_tx47,
-               -naccho_contact_confirm_tx48, -naccho_contact_confirm_tx49, -naccho_contact_confirm_tx50,
-               -who_initiated_contact1, -who_initiated_contact2, -who_initiated_contact3, -who_initiated_contact4, -who_initiated_contact5,
-               -who_initiated_contact6, -who_initiated_contact7, -who_initiated_contact8, -who_initiated_contact9, -who_initiated_contact10,
-               -who_initiated_contact11, -who_initiated_contact12, -who_initiated_contact13, -who_initiated_contact14,
-               -who_initiated_contact15, -who_initiated_contact16, -who_initiated_contact17, -who_initiated_contact18,
-               -who_initiated_contact19, -who_initiated_contact20, -who_initiated_contact21, -who_initiated_contact22,
-               -who_initiated_contact23, -who_initiated_contact24, -who_initiated_contact25, -who_initiated_contact26,
-               -who_initiated_contact27, -who_initiated_contact28, -who_initiated_contact29, -who_initiated_contact30,
-               -who_initiated_contact31, -who_initiated_contact32, -who_initiated_contact33, -who_initiated_contact34,
-               -who_initiated_contact35, -who_initiated_contact36, -who_initiated_contact37, -who_initiated_contact38,
-               -who_initiated_contact39, -who_initiated_contact40, -who_initiated_contact41, -who_initiated_contact42,
-               -who_initiated_contact43, -who_initiated_contact44, -who_initiated_contact45, -who_initiated_contact46,
-               -who_initiated_contact47, -who_initiated_contact48, -who_initiated_contact49, -who_initiated_contact50,
-               -contact_with1, -contact_with2, -contact_with3, -contact_with4, -contact_with5,
-               -contact_with6, -contact_with7, -contact_with8, -contact_with9, -contact_with10,
-               -contact_with11, -contact_with12, -contact_with13, -contact_with14,
-               -contact_with15, -contact_with16, -contact_with17, -contact_with18,
-               -contact_with19, -contact_with20, -contact_with21, -contact_with22,
-               -contact_with23, -contact_with24, -contact_with25, -contact_with26,
-               -contact_with27, -contact_with28, -contact_with29, -contact_with30,
-               -contact_with31, -contact_with32, -contact_with33, -contact_with34,
-               -contact_with35, -contact_with36, -contact_with37, -contact_with38,
-               -contact_with39, -contact_with40, -contact_with41, -contact_with42,
-               -contact_with43, -contact_with44, -contact_with45, -contact_with46,
-               -contact_with47, -contact_with48, -contact_with49, -contact_with50,
-               -ltc_contact1, -ltc_contact2, -ltc_contact3, -ltc_contact4, -ltc_contact5,
-               -ltc_contact6, -ltc_contact7, -ltc_contact8, -ltc_contact9, -ltc_contact10,
-               -ltc_contact11, -ltc_contact12, -ltc_contact13, -ltc_contact14, -ltc_contact15,
-               -ltc_contact16, -ltc_contact17, -ltc_contact18, -ltc_contact19, -ltc_contact20,
-               -ltc_contact21, -ltc_contact22, -ltc_contact23, -ltc_contact24, -ltc_contact25,
-               -ltc_contact26, -ltc_contact27, -ltc_contact28, -ltc_contact29, -ltc_contact30,
-               -ltc_contact31, -ltc_contact32, -ltc_contact33, -ltc_contact34, -ltc_contact35,
-               -ltc_contact36, -ltc_contact37, -ltc_contact38, -ltc_contact39, -ltc_contact40,
-               -ltc_contact41, -ltc_contact42, -ltc_contact43, -ltc_contact44, -ltc_contact45,
-               -ltc_contact46, -ltc_contact47, -ltc_contact48, -ltc_contact49, -ltc_contact50,
-               -no_contact_reason1, -no_contact_reason2, -no_contact_reason3, -no_contact_reason4, -no_contact_reason5,
-               -no_contact_reason6, -no_contact_reason7, -no_contact_reason8, -no_contact_reason9, -no_contact_reason10,
-               -no_contact_reason11, -no_contact_reason12, -no_contact_reason13, -no_contact_reason14,
-               -no_contact_reason15, -no_contact_reason16, -no_contact_reason17, -no_contact_reason18,
-               -no_contact_reason19, -no_contact_reason20, -no_contact_reason21, -no_contact_reason22,
-               -no_contact_reason23, -no_contact_reason24, -no_contact_reason25, -no_contact_reason26,
-               -no_contact_reason27, -no_contact_reason28, -no_contact_reason29, -no_contact_reason30,
-               -no_contact_reason31, -no_contact_reason32, -no_contact_reason33, -no_contact_reason34,
-               -no_contact_reason35, -no_contact_reason36, -no_contact_reason37, -no_contact_reason38,
-               -no_contact_reason39, -no_contact_reason40, -no_contact_reason41, -no_contact_reason42,
-               -no_contact_reason43, -no_contact_reason44, -no_contact_reason45, -no_contact_reason46,
-               -no_contact_reason47, -no_contact_reason48, -no_contact_reason49, -no_contact_reason50)
+                -race___1, -race___2, -race___3, -race___4, -race___5, 
+                -race___6, -ethnicity,
+                -sex_raised, -sex_selfdefined, -insurance, -address_county,
+                -address_zip_code,
+                -followup_date1, -followup_date2, -followup_date3, -followup_date4,
+                -followup_date5, -followup_date6, -followup_date7, -followup_date8,
+                -followup_date9, -followup_date10, -followup_date11, -followup_date12,
+                -followup_date13, -followup_date14, -followup_date15, -followup_date16,
+                -followup_date17, -followup_date18, -followup_date19, -followup_date20,
+                -followup_date21, -followup_date22, -followup_date23, -followup_date24,
+                -followup_date25, -followup_date26, -followup_date27, -followup_date28,
+                -followup_date29, -followup_date30, -followup_date31, -followup_date32,
+                -followup_date33, -followup_date34, -followup_date35, -followup_date36,
+                -followup_date37, -followup_date38, -followup_date39, -followup_date40,
+                -followup_date41, -followup_date42, -followup_date43, -followup_date44,
+                -followup_date45, -followup_date46, -followup_date47, -followup_date48,
+                -followup_date49, -followup_date50, -followup_counselor1, -followup_counselor2,
+                -followup_counselor3, -followup_counselor4, -followup_counselor5,
+                -followup_counselor6, -followup_counselor7, -followup_counselor8,
+                -followup_counselor9, -followup_counselor10, -followup_counselor11,
+                -followup_counselor12, -followup_counselor13, -followup_counselor14,
+                -followup_counselor15, -followup_counselor16, -followup_counselor17,
+                -followup_counselor18, -followup_counselor19, -followup_counselor20,
+                -followup_counselor21, -followup_counselor22, -followup_counselor23,
+                -followup_counselor24, -followup_counselor25, -followup_counselor26,
+                -followup_counselor27, -followup_counselor28, -followup_counselor29,
+                -followup_counselor30, -followup_counselor31, -followup_counselor32,
+                -followup_counselor33, -followup_counselor34, -followup_counselor35,
+                -followup_counselor36, -followup_counselor37, -followup_counselor38,
+                -followup_counselor39, -followup_counselor40, -followup_counselor41,
+                -followup_counselor42, -followup_counselor43, -followup_counselor44,
+                -followup_counselor45, -followup_counselor46, -followup_counselor47,
+                -followup_counselor48, -followup_counselor49, -followup_counselor50,
+                -ltc_service1___8, -ltc_service2___8,
+                -ltc_service3___8, -ltc_service4___8, -ltc_service5___8,
+                -ltc_service6___8, -ltc_service7___8, -ltc_service8___8,
+                -ltc_service9___8, -ltc_service10___8, -ltc_service11___8,
+                -ltc_service12___8, -ltc_service13___8, -ltc_service14___8,
+                -ltc_service15___8, -ltc_service16___8, -ltc_service17___8,
+                -ltc_service18___8, -ltc_service19___8, -ltc_service20___8,
+                -ltc_service21___8, -ltc_service22___8, -ltc_service23___8,
+                -ltc_service24___8, -ltc_service25___8, -ltc_service26___8,
+                -ltc_service27___8, -ltc_service28___8, -ltc_service29___8,
+                -ltc_service30___8, -ltc_service31___8, -ltc_service32___8,
+                -ltc_service33___8, -ltc_service34___8, -ltc_service35___8,
+                -ltc_service36___8, -ltc_service37___8, -ltc_service38___8,
+                -ltc_service39___8, -ltc_service40___8, -ltc_service41___8,
+                -ltc_service42___8, -ltc_service43___8, -ltc_service44___8,
+                -ltc_service45___8, -ltc_service46___8, -ltc_service47___8,
+                -ltc_service48___8, -ltc_service49___8, -ltc_service50___8,
+                -naccho_contact_day1, -naccho_contact_day2,
+                -naccho_contact_day3, -naccho_contact_day4, -naccho_contact_day5,
+                -naccho_contact_day6, -naccho_contact_day7, -naccho_contact_day8,
+                -naccho_contact_day9, -naccho_contact_day10, -naccho_contact_day11,
+                -naccho_contact_day12, -naccho_contact_day13, -naccho_contact_day14,
+                -naccho_contact_day15, -naccho_contact_day16, -naccho_contact_day17,
+                -naccho_contact_day18, -naccho_contact_day19, -naccho_contact_day20,
+                -naccho_contact_day21, -naccho_contact_day22, -naccho_contact_day23,
+                -naccho_contact_day24, -naccho_contact_day25, -naccho_contact_day26,
+                -naccho_contact_day27, -naccho_contact_day28, -naccho_contact_day29,
+                -naccho_contact_day30, -naccho_contact_day31, -naccho_contact_day32,
+                -naccho_contact_day33, -naccho_contact_day34, -naccho_contact_day35,
+                -naccho_contact_day36, -naccho_contact_day37, -naccho_contact_day38,
+                -naccho_contact_day39, -naccho_contact_day40, -naccho_contact_day41,
+                -naccho_contact_day42, -naccho_contact_day43, -naccho_contact_day44,
+                -naccho_contact_day45, -naccho_contact_day46, -naccho_contact_day47,
+                -naccho_contact_day48, -naccho_contact_day49, -naccho_contact_day50,
+                -naccho_contact_confirm_tx1, -naccho_contact_confirm_tx2,
+                -naccho_contact_confirm_tx3, -naccho_contact_confirm_tx4, -naccho_contact_confirm_tx5,
+                -naccho_contact_confirm_tx6, -naccho_contact_confirm_tx7, -naccho_contact_confirm_tx8,
+                -naccho_contact_confirm_tx9, -naccho_contact_confirm_tx10, -naccho_contact_confirm_tx11,
+                -naccho_contact_confirm_tx12, -naccho_contact_confirm_tx13, -naccho_contact_confirm_tx14,
+                -naccho_contact_confirm_tx15, -naccho_contact_confirm_tx16, -naccho_contact_confirm_tx17,
+                -naccho_contact_confirm_tx18, -naccho_contact_confirm_tx19, -naccho_contact_confirm_tx20,
+                -naccho_contact_confirm_tx21, -naccho_contact_confirm_tx22, -naccho_contact_confirm_tx23,
+                -naccho_contact_confirm_tx24, -naccho_contact_confirm_tx25, -naccho_contact_confirm_tx26,
+                -naccho_contact_confirm_tx27, -naccho_contact_confirm_tx28, -naccho_contact_confirm_tx29,
+                -naccho_contact_confirm_tx30, -naccho_contact_confirm_tx31, -naccho_contact_confirm_tx32,
+                -naccho_contact_confirm_tx33, -naccho_contact_confirm_tx34, -naccho_contact_confirm_tx35,
+                -naccho_contact_confirm_tx36, -naccho_contact_confirm_tx37, -naccho_contact_confirm_tx38,
+                -naccho_contact_confirm_tx39, -naccho_contact_confirm_tx40, -naccho_contact_confirm_tx41,
+                -naccho_contact_confirm_tx42, -naccho_contact_confirm_tx43, -naccho_contact_confirm_tx44,
+                -naccho_contact_confirm_tx45, -naccho_contact_confirm_tx46, -naccho_contact_confirm_tx47,
+                -naccho_contact_confirm_tx48, -naccho_contact_confirm_tx49, -naccho_contact_confirm_tx50,
+                -who_initiated_contact1, -who_initiated_contact2, -who_initiated_contact3, -who_initiated_contact4, -who_initiated_contact5,
+                -who_initiated_contact6, -who_initiated_contact7, -who_initiated_contact8, -who_initiated_contact9, -who_initiated_contact10,
+                -who_initiated_contact11, -who_initiated_contact12, -who_initiated_contact13, -who_initiated_contact14,
+                -who_initiated_contact15, -who_initiated_contact16, -who_initiated_contact17, -who_initiated_contact18,
+                -who_initiated_contact19, -who_initiated_contact20, -who_initiated_contact21, -who_initiated_contact22,
+                -who_initiated_contact23, -who_initiated_contact24, -who_initiated_contact25, -who_initiated_contact26,
+                -who_initiated_contact27, -who_initiated_contact28, -who_initiated_contact29, -who_initiated_contact30,
+                -who_initiated_contact31, -who_initiated_contact32, -who_initiated_contact33, -who_initiated_contact34,
+                -who_initiated_contact35, -who_initiated_contact36, -who_initiated_contact37, -who_initiated_contact38,
+                -who_initiated_contact39, -who_initiated_contact40, -who_initiated_contact41, -who_initiated_contact42,
+                -who_initiated_contact43, -who_initiated_contact44, -who_initiated_contact45, -who_initiated_contact46,
+                -who_initiated_contact47, -who_initiated_contact48, -who_initiated_contact49, -who_initiated_contact50,
+                -contact_with1, -contact_with2, -contact_with3, -contact_with4, -contact_with5,
+                -contact_with6, -contact_with7, -contact_with8, -contact_with9, -contact_with10,
+                -contact_with11, -contact_with12, -contact_with13, -contact_with14,
+                -contact_with15, -contact_with16, -contact_with17, -contact_with18,
+                -contact_with19, -contact_with20, -contact_with21, -contact_with22,
+                -contact_with23, -contact_with24, -contact_with25, -contact_with26,
+                -contact_with27, -contact_with28, -contact_with29, -contact_with30,
+                -contact_with31, -contact_with32, -contact_with33, -contact_with34,
+                -contact_with35, -contact_with36, -contact_with37, -contact_with38,
+                -contact_with39, -contact_with40, -contact_with41, -contact_with42,
+                -contact_with43, -contact_with44, -contact_with45, -contact_with46,
+                -contact_with47, -contact_with48, -contact_with49, -contact_with50,
+                -ltc_contact1, -ltc_contact2, -ltc_contact3, -ltc_contact4, -ltc_contact5,
+                -ltc_contact6, -ltc_contact7, -ltc_contact8, -ltc_contact9, -ltc_contact10,
+                -ltc_contact11, -ltc_contact12, -ltc_contact13, -ltc_contact14, -ltc_contact15,
+                -ltc_contact16, -ltc_contact17, -ltc_contact18, -ltc_contact19, -ltc_contact20,
+                -ltc_contact21, -ltc_contact22, -ltc_contact23, -ltc_contact24, -ltc_contact25,
+                -ltc_contact26, -ltc_contact27, -ltc_contact28, -ltc_contact29, -ltc_contact30,
+                -ltc_contact31, -ltc_contact32, -ltc_contact33, -ltc_contact34, -ltc_contact35,
+                -ltc_contact36, -ltc_contact37, -ltc_contact38, -ltc_contact39, -ltc_contact40,
+                -ltc_contact41, -ltc_contact42, -ltc_contact43, -ltc_contact44, -ltc_contact45,
+                -ltc_contact46, -ltc_contact47, -ltc_contact48, -ltc_contact49, -ltc_contact50,
+                -no_contact_reason1, -no_contact_reason2, -no_contact_reason3, -no_contact_reason4, -no_contact_reason5,
+                -no_contact_reason6, -no_contact_reason7, -no_contact_reason8, -no_contact_reason9, -no_contact_reason10,
+                -no_contact_reason11, -no_contact_reason12, -no_contact_reason13, -no_contact_reason14,
+                -no_contact_reason15, -no_contact_reason16, -no_contact_reason17, -no_contact_reason18,
+                -no_contact_reason19, -no_contact_reason20, -no_contact_reason21, -no_contact_reason22,
+                -no_contact_reason23, -no_contact_reason24, -no_contact_reason25, -no_contact_reason26,
+                -no_contact_reason27, -no_contact_reason28, -no_contact_reason29, -no_contact_reason30,
+                -no_contact_reason31, -no_contact_reason32, -no_contact_reason33, -no_contact_reason34,
+                -no_contact_reason35, -no_contact_reason36, -no_contact_reason37, -no_contact_reason38,
+                -no_contact_reason39, -no_contact_reason40, -no_contact_reason41, -no_contact_reason42,
+                -no_contact_reason43, -no_contact_reason44, -no_contact_reason45, -no_contact_reason46,
+                -no_contact_reason47, -no_contact_reason48, -no_contact_reason49, -no_contact_reason50)
 
 # Merge person dataset with full eip24 dataset
 
@@ -2832,21 +2833,86 @@ eip_assessments
 
 
 
+# SUD Screening
 
-###########################################################
+enc$sud_assess[((enc$audit_c1 == 0 | enc$audit_c1 == 1 | enc$audit_c1 == 2 |
+                          enc$audit_c1 == 3 | enc$audit_c1 == 4) |
+                         (enc$audit_c2 == 0 | enc$audit_c2 == 1 | enc$audit_c2 == 3 | enc$audit_c2 == 4 |
+                            enc$audit_c2 == 5) |
+                         (enc$audit_c3 == 0 | enc$audit_c3 == 1 | enc$audit_c3 == 2 | enc$audit_c3 == 3 |
+                            enc$audit_c3 == 4) |
+                         (enc$binge_drinking == 0 | enc$binge_drinking == 1 | enc$binge_drinking == 2 |
+                            enc$binge_drinking == 3) |
+                         (enc$marijuana_use == 0 | enc$marijuana_use == 1 | enc$marijuana_use == 2 |
+                            enc$marijuana_use == 3 | enc$marijuana_use == 4) |
+                         (enc$cocaine_use == 0 | enc$cocaine_use == 1 | enc$cocaine_use == 2 |
+                            enc$cocaine_use == 3 | enc$cocaine_use == 4) |
+                         (enc$rx_amphetamine_use == 0 | enc$rx_amphetamine_use == 1 | enc$rx_amphetamine_use == 2 |
+                            enc$rx_amphetamine_use == 3 | enc$rx_amphetamine_use == 4) |
+                         (enc$meth_use == 0 | enc$meth_use == 1 | enc$meth_use == 2 |
+                            enc$meth_use == 3 | enc$meth_use == 4) |
+                         (enc$inhalants_use == 0 | enc$inhalants_use == 1 | enc$inhalants_use == 2 |
+                            enc$inhalants_use == 3 | enc$inhalants_use == 4) |
+                         (enc$sedatives_use == 0 | enc$sedatives_use == 1 | enc$sedatives_use == 2 |
+                            enc$sedatives_use == 3 | enc$sedatives_use == 4) |
+                         (enc$ruffies_use == 0 | enc$ruffies_use == 1 | enc$ruffies_use == 2 |
+                            enc$ruffies_use == 3 | enc$ruffies_use == 4) |
+                         (enc$hallucinogen_use == 0 | enc$hallucinogen_use == 1 | enc$hallucinogen_use == 2 |
+                            enc$hallucinogen_use == 3 | enc$hallucinogen_use == 4) |
+                         (enc$street_opioid_use == 0 | enc$street_opioid_use == 1 | enc$street_opioid_use == 2 |
+                            enc$street_opioid_use == 3 | enc$street_opioid_use == 4) |
+                         (enc$rx_opioid_use == 0 | enc$rx_opioid_use == 1 | enc$rx_opioid_use == 2 |
+                            enc$rx_opioid_use == 3 | enc$rx_opioid_use == 4) |
+                         (enc$injection_drug_use == 0 | enc$injection_drug_use == 1 | enc$injection_drug_use == 2 |
+                            enc$injection_drug_use == 3 | enc$injection_drug_use == 4) |
+                         (enc$other_drug_use == 0 | enc$other_drug_use == 1 | enc$other_drug_use == 2 |
+                            enc$other_drug_use == 3 | enc$other_drug_use == 4) |
+                         (enc$marijuana_use_ltc == 0 | enc$marijuana_use_ltc == 1 | enc$marijuana_use_ltc == 2 |
+                            enc$marijuana_use_ltc == 3 | enc$marijuana_use_ltc == 4) |
+                         (enc$cocaine_use_ltc == 0 | enc$cocaine_use_ltc == 1 | enc$cocaine_use_ltc == 2 |
+                            enc$cocaine_use_ltc == 3 | enc$cocaine_use_ltc == 4) |
+                         (enc$rx_amphetamine_use_ltc == 0 | enc$rx_amphetamine_use_ltc == 1 | enc$rx_amphetamine_use_ltc == 2 |
+                            enc$rx_amphetamine_use_ltc == 3 | enc$rx_amphetamine_use_ltc == 4) |
+                         (enc$meth_use_ltc == 0 | enc$meth_use_ltc == 1 | enc$meth_use_ltc == 2 |
+                            enc$meth_use_ltc == 3 | enc$meth_use_ltc == 4) |
+                         (enc$inhalants_use_ltc == 0 | enc$inhalants_use_ltc == 1 | enc$inhalants_use_ltc == 2 |
+                            enc$inhalants_use_ltc == 3 | enc$inhalants_use_ltc == 4) |
+                         (enc$sedatives_use_ltc == 0 | enc$sedatives_use_ltc == 1 | enc$sedatives_use_ltc == 2 |
+                            enc$sedatives_use_ltc == 3 | enc$sedatives_use_ltc == 4) |
+                         (enc$ruffies_use_ltc == 0 | enc$ruffies_use_ltc == 1 | enc$ruffies_use_ltc == 2 |
+                            enc$ruffies_use_ltc == 3 | enc$ruffies_use_ltc == 4) |
+                         (enc$hallucinogen_use_ltc == 0 | enc$hallucinogen_use_ltc == 1 | enc$hallucinogen_use_ltc == 2 |
+                            enc$hallucinogen_use_ltc == 3 | enc$hallucinogen_use_ltc == 4) |
+                         (enc$street_opioid_use_ltc == 0 | enc$street_opioid_use_ltc == 1 | enc$street_opioid_use_ltc == 2 |
+                            enc$street_opioid_use_ltc == 3 | enc$street_opioid_use_ltc == 4) |
+                         (enc$rx_opioid_use_ltc == 0 | enc$rx_opioid_use_ltc == 1 | enc$rx_opioid_use_ltc == 2 |
+                            enc$rx_opioid_use_ltc == 3 | enc$rx_opioid_use_ltc == 4) |
+                         (enc$injection_drug_use_ltc == 0 | enc$injection_drug_use_ltc == 1 | enc$injection_drug_use_ltc == 2 |
+                            enc$injection_drug_use_ltc == 3 | enc$injection_drug_use_ltc == 4) |
+                         (enc$other_drug_use_ltc == 0 | enc$other_drug_use_ltc == 1 | enc$other_drug_use_ltc == 2 |
+                            enc$other_drug_use_ltc == 3 | enc$other_drug_use_ltc == 4))] <- 1
+table(enc$sud_assess)
+sud_assess <- enc[which(enc$sud_assess == 1), ]
+dim(sud_assess)
+sud_assess <- nrow(sud_assess)
+sud_assess
+
+
 
 table(enc$sud_screen_positive)
-sud_pos <- enc[which(enc$sud_screen_positive == 1), ]
+enc$sud_pos[enc$sud_assess == 1 &
+                   enc$sud_screen_positive == 1 | enc$sud_screen_positive_ltc == 1] <- 1
+table(enc$sud_pos)
+sud_pos <- enc[which(enc$sud_pos == 1), ]
 dim(sud_pos)
 sud_pos <- nrow(sud_pos)
 sud_pos
 
-sud_pos_percent <- percent(sud_pos/eip_assessments, accuracy = 0.1)
+sud_pos_percent <- percent(sud_pos/sud_assess, accuracy = 0.1)
 sud_pos_percent
 
 
 
-###########################################################
 
 # FTS Knowledge
 
@@ -3071,15 +3137,21 @@ sud_pos_fts_provided_percent
 # EIP Database
 
 table(enc$fts_provided)
-eip_fts_distribution <- enc[which(enc$fts_provided == 1), ]
-eip_fts_distribution <- select(eip_fts_distribution, enc_date, enc_location, fts_number, fts_number_other)
+table(enc$peer_fts_provided)
+eip_fts_distribution <- enc[which(enc$fts_provided == 1 | enc$peer_fts_provided == 1), ]
+eip_fts_distribution <- select(eip_fts_distribution, enc_date, enc_location, fts_number, fts_number_other,
+                               peer_fts_number, peer_fts_number_other)
 dim(eip_fts_distribution)
 head(eip_fts_distribution)
-eip_fts_distribution$fts_number_other[eip_fts_distribution$fts_number == 1] <- 5
+eip_fts_distribution$fts_number_other[eip_fts_distribution$fts_number == 1 |
+                                        eip_fts_distribution$peer_fts_number == 1] <- 5
 table(eip_fts_distribution$fts_number_other)
 eip_fts_distribution <- select(eip_fts_distribution, -fts_number)
 head(eip_fts_distribution)
-colnames(eip_fts_distribution)[3] <- 'fts_number'
+eip_fts_distribution$fts_number_other[is.na(eip_fts_distribution$fts_number_other)] <- 0
+eip_fts_distribution$peer_fts_number_other[is.na(eip_fts_distribution$peer_fts_number_other)] <- 0
+eip_fts_distribution$peer_fts_number_other <- as.numeric(eip_fts_distribution$peer_fts_number_other)
+eip_fts_distribution$fts_number <- eip_fts_distribution$fts_number_other + eip_fts_distribution$peer_fts_number_other
 eip_fts_distribution$fts_number[is.na(eip_fts_distribution$fts_number)] <- 0
 head(eip_fts_distribution)
 
@@ -3141,6 +3213,7 @@ eip_fts_distribution$enc_location[eip_fts_distribution$enc_location == 40] <- 'O
 table(eip_fts_distribution$enc_location)
 head(eip_fts_distribution)
 dim(eip_fts_distribution)
+eip_fts_distribution <- select(eip_fts_distribution, enc_date, enc_location, fts_number)
 
 
 
@@ -3636,109 +3709,520 @@ monthly_tobacco
 
 
 
-# HCPH SUD Data
+#####  HCPH SUD Data
 
-enc$substance_use[enc$enc_date >= '2024-08-01' &
-                    (enc$audit_c1 > 0 |
-                    (enc$marijuana_use > 0 & enc$marijuana_use < 4) |
-                      (enc$cocaine_use > 0 & enc$cocaine_use < 4) |
-                      (enc$rx_amphetamine_use > 0 & enc$rx_amphetamine_use < 4) |
-                      (enc$meth_use > 0 & enc$meth_use < 4) |
-                      (enc$inhalants_use > 0 & enc$inhalants_use < 4) |
-                      (enc$sedatives_use > 0 & enc$sedatives_use < 4) |
-                      (enc$ruffies_use > 0 & enc$ruffies_use < 4) |
-                      (enc$hallucinogen_use > 0 & enc$hallucinogen_use < 4) |
-                      (enc$street_opioid_use > 0 & enc$street_opioid_use < 4) |
-                      (enc$rx_opioid_use > 0 & enc$rx_opioid_use < 4) |
-                      (enc$injection_drug_use > 0 & enc$injection_drug_use < 4) |
-                      (enc$other_drug_use > 0 & enc$other_drug_use < 4))] <- 1
-table(enc$substance_use)
+enc$hcph_sud_assessed[enc$enc_date >= '2024-08-01' & enc$enc_location == 5 &
+                        ((enc$audit_c1 == 0 | enc$audit_c1 == 1 | enc$audit_c1 == 2 |
+                            enc$audit_c1 == 3 | enc$audit_c1 == 4) |
+                           (enc$audit_c2 == 0 | enc$audit_c2 == 1 | enc$audit_c2 == 3 | enc$audit_c2 == 4 |
+                              enc$audit_c2 == 5) |
+                           (enc$audit_c3 == 0 | enc$audit_c3 == 1 | enc$audit_c3 == 2 | enc$audit_c3 == 3 |
+                              enc$audit_c3 == 4) |
+                           (enc$binge_drinking == 0 | enc$binge_drinking == 1 | enc$binge_drinking == 2 |
+                              enc$binge_drinking == 3) |
+                           (enc$marijuana_use == 0 | enc$marijuana_use == 1 | enc$marijuana_use == 2 |
+                              enc$marijuana_use == 3 | enc$marijuana_use == 4) |
+                           (enc$cocaine_use == 0 | enc$cocaine_use == 1 | enc$cocaine_use == 2 |
+                              enc$cocaine_use == 3 | enc$cocaine_use == 4) |
+                           (enc$rx_amphetamine_use == 0 | enc$rx_amphetamine_use == 1 | enc$rx_amphetamine_use == 2 |
+                              enc$rx_amphetamine_use == 3 | enc$rx_amphetamine_use == 4) |
+                           (enc$meth_use == 0 | enc$meth_use == 1 | enc$meth_use == 2 |
+                              enc$meth_use == 3 | enc$meth_use == 4) |
+                           (enc$inhalants_use == 0 | enc$inhalants_use == 1 | enc$inhalants_use == 2 |
+                              enc$inhalants_use == 3 | enc$inhalants_use == 4) |
+                           (enc$sedatives_use == 0 | enc$sedatives_use == 1 | enc$sedatives_use == 2 |
+                              enc$sedatives_use == 3 | enc$sedatives_use == 4) |
+                           (enc$ruffies_use == 0 | enc$ruffies_use == 1 | enc$ruffies_use == 2 |
+                              enc$ruffies_use == 3 | enc$ruffies_use == 4) |
+                           (enc$hallucinogen_use == 0 | enc$hallucinogen_use == 1 | enc$hallucinogen_use == 2 |
+                              enc$hallucinogen_use == 3 | enc$hallucinogen_use == 4) |
+                           (enc$street_opioid_use == 0 | enc$street_opioid_use == 1 | enc$street_opioid_use == 2 |
+                              enc$street_opioid_use == 3 | enc$street_opioid_use == 4) |
+                           (enc$rx_opioid_use == 0 | enc$rx_opioid_use == 1 | enc$rx_opioid_use == 2 |
+                              enc$rx_opioid_use == 3 | enc$rx_opioid_use == 4) |
+                           (enc$injection_drug_use == 0 | enc$injection_drug_use == 1 | enc$injection_drug_use == 2 |
+                              enc$injection_drug_use == 3 | enc$injection_drug_use == 4) |
+                           (enc$other_drug_use == 0 | enc$other_drug_use == 1 | enc$other_drug_use == 2 |
+                              enc$other_drug_use == 3 | enc$other_drug_use == 4) |
+                           (enc$marijuana_use_ltc == 0 | enc$marijuana_use_ltc == 1 | enc$marijuana_use_ltc == 2 |
+                              enc$marijuana_use_ltc == 3 | enc$marijuana_use_ltc == 4) |
+                           (enc$cocaine_use_ltc == 0 | enc$cocaine_use_ltc == 1 | enc$cocaine_use_ltc == 2 |
+                              enc$cocaine_use_ltc == 3 | enc$cocaine_use_ltc == 4) |
+                           (enc$rx_amphetamine_use_ltc == 0 | enc$rx_amphetamine_use_ltc == 1 | enc$rx_amphetamine_use_ltc == 2 |
+                              enc$rx_amphetamine_use_ltc == 3 | enc$rx_amphetamine_use_ltc == 4) |
+                           (enc$meth_use_ltc == 0 | enc$meth_use_ltc == 1 | enc$meth_use_ltc == 2 |
+                              enc$meth_use_ltc == 3 | enc$meth_use_ltc == 4) |
+                           (enc$inhalants_use_ltc == 0 | enc$inhalants_use_ltc == 1 | enc$inhalants_use_ltc == 2 |
+                              enc$inhalants_use_ltc == 3 | enc$inhalants_use_ltc == 4) |
+                           (enc$sedatives_use_ltc == 0 | enc$sedatives_use_ltc == 1 | enc$sedatives_use_ltc == 2 |
+                              enc$sedatives_use_ltc == 3 | enc$sedatives_use_ltc == 4) |
+                           (enc$ruffies_use_ltc == 0 | enc$ruffies_use_ltc == 1 | enc$ruffies_use_ltc == 2 |
+                              enc$ruffies_use_ltc == 3 | enc$ruffies_use_ltc == 4) |
+                           (enc$hallucinogen_use_ltc == 0 | enc$hallucinogen_use_ltc == 1 | enc$hallucinogen_use_ltc == 2 |
+                              enc$hallucinogen_use_ltc == 3 | enc$hallucinogen_use_ltc == 4) |
+                           (enc$street_opioid_use_ltc == 0 | enc$street_opioid_use_ltc == 1 | enc$street_opioid_use_ltc == 2 |
+                              enc$street_opioid_use_ltc == 3 | enc$street_opioid_use_ltc == 4) |
+                           (enc$rx_opioid_use_ltc == 0 | enc$rx_opioid_use_ltc == 1 | enc$rx_opioid_use_ltc == 2 |
+                              enc$rx_opioid_use_ltc == 3 | enc$rx_opioid_use_ltc == 4) |
+                           (enc$injection_drug_use_ltc == 0 | enc$injection_drug_use_ltc == 1 | enc$injection_drug_use_ltc == 2 |
+                              enc$injection_drug_use_ltc == 3 | enc$injection_drug_use_ltc == 4) |
+                           (enc$other_drug_use_ltc == 0 | enc$other_drug_use_ltc == 1 | enc$other_drug_use_ltc == 2 |
+                              enc$other_drug_use_ltc == 3 | enc$other_drug_use_ltc == 4))] <- 1
+table(enc$hcph_sud_assessed)
+hcph_sud_assessed <- enc[which(enc$hcph_sud_assessed == 1), ]
+dim(hcph_sud_assessed)
+hcph_sud_assessed <- nrow(hcph_sud_assessed)
+hcph_sud_assessed
 
-table(enc$substance_use)
-substance_use <- enc[which(enc$substance_use == 1), ]
-dim(substance_use)
-substance_use <- nrow(substance_use)
-substance_use
+
+
+enc$hcph_opioid_stimulant_use[enc$hcph_sud_assessed == 1 &
+                                ((enc$cocaine_use > 0 & enc$cocaine_use < 4) |
+                                   (enc$rx_amphetamine_use > 0 & enc$rx_amphetamine_use < 4) |
+                                   (enc$meth_use > 0 & enc$meth_use < 4) |
+                                   (enc$street_opioid_use > 0 & enc$street_opioid_use < 4) |
+                                   (enc$rx_opioid_use > 0 & enc$rx_opioid_use < 4) |
+                                   (enc$cocaine_use_ltc > 0 & enc$cocaine_use_ltc < 4) |
+                                   (enc$rx_amphetamine_use_ltc > 0 & enc$rx_amphetamine_use_ltc < 4) |
+                                   (enc$meth_use_ltc > 0 & enc$meth_use_ltc < 4) |
+                                   (enc$street_opioid_use_ltc > 0 & enc$street_opioid_use_ltc < 4) |
+                                   (enc$rx_opioid_use_ltc > 0 & enc$rx_opioid_use_ltc < 4))] <- 1
+table(enc$hcph_opioid_stimulant_use)
+
+table(enc$hcph_opioid_stimulant_use)
+hcph_opioid_stimulant_use <- enc[which(enc$hcph_opioid_stimulant_use == 1), ]
+dim(hcph_opioid_stimulant_use)
+hcph_opioid_stimulant_use <- nrow(hcph_opioid_stimulant_use)
+hcph_opioid_stimulant_use
+
+hcph_opioid_stimulant_use_percent <- percent(hcph_opioid_stimulant_use/hcph_sud_assessed, accuracy = 0.1)
+hcph_opioid_stimulant_use_percent
 
 
 
-enc$sud_linkage_need[enc$substance_use == 1 & enc$ltc_services___3 == 1] <- 1
-table(enc$sud_linkage_need)
+table(enc$ltc_services___3, enc$hcph_opioid_stimulant_use)
+enc$hcph_sud_linkage_need[enc$ltc_services___3 == 1 & enc$hcph_opioid_stimulant_use == 1] <- 1
+table(enc$hcph_sud_linkage_need)
 
-table(enc$sud_linkage_need)
-sud_linkage_need <- enc[which(enc$sud_linkage_need == 1), ]
-dim(sud_linkage_need)
-sud_linkage_need <- nrow(sud_linkage_need)
-sud_linkage_need
+table(enc$hcph_sud_linkage_need)
+hcph_sud_linkage_need <- enc[which(enc$hcph_sud_linkage_need == 1), ]
+dim(hcph_sud_linkage_need)
+hcph_sud_linkage_need <- nrow(hcph_sud_linkage_need)
+hcph_sud_linkage_need
 
-sud_linkage_need_percent <- percent(sud_linkage_need/substance_use, accuracy = 0.1)
-sud_linkage_need_percent
+hcph_sud_linkage_need_percent <- percent(hcph_sud_linkage_need/hcph_opioid_stimulant_use, accuracy = 0.1)
+hcph_sud_linkage_need_percent
+
+
+
+enc$hcph_sud_linked[enc$hcph_sud_linkage_need == 1 & enc$ltc_sud_final_ltc_status == 1] <- 1
+table(enc$hcph_sud_linked)
+
+table(enc$hcph_sud_linked)
+hcph_sud_linked <- enc[which(enc$hcph_sud_linked == 1), ]
+dim(hcph_sud_linked)
+hcph_sud_linked <- nrow(hcph_sud_linked)
+hcph_sud_linked
+
+hcph_sud_linked_percent <- percent(hcph_sud_linked/hcph_sud_linkage_need, accuracy = 0.1)
+hcph_sud_linked_percent
+
+
+
+enc$hcph_sud_fu_consent[enc$hcph_sud_linked == 1 &
+                          (enc$ltc_sud_hcph_fu == 1 | is.na(enc$ltc_sud_hcph_fu) | enc$ltc_sud_hcph_fu == '')] <- 1
+table(enc$hcph_sud_fu_consent)
+
+hcph_sud_fu_consent <- enc[which(enc$hcph_sud_fu_consent == 1), ]
+dim(hcph_sud_fu_consent)
+hcph_sud_fu_consent <- nrow(hcph_sud_fu_consent)
+hcph_sud_fu_consent
+
+hcph_sud_fu_consent_percent <- percent(hcph_sud_fu_consent/hcph_sud_linked, accuracy = 0.1)
+hcph_sud_fu_consent_percent
 
 
 
 # Monthly HCPH SUD Data
-monthly_hcph_sud <- select(enc, enc_date, substance_use, sud_linkage_need)
+monthly_hcph_sud <- select(enc, enc_date, hcph_sud_assessed, hcph_opioid_stimulant_use, hcph_sud_linkage_need, hcph_sud_linked, hcph_sud_fu_consent)
 monthly_hcph_sud <- monthly_hcph_sud[which(monthly_hcph_sud$enc_date >= '2024-08-01'), ]
-monthly_hcph_sud <- monthly_hcph_sud[which(monthly_hcph_sud$substance_use == 1), ]
 head(monthly_hcph_sud)
-colnames(monthly_hcph_sud)[2] <- 'substance_use'
-colnames(monthly_hcph_sud)[3] <- 'sud_linkage_need'
-monthly_hcph_sud$substance_use[is.na(monthly_hcph_sud$substance_use)] <- 0
+colnames(monthly_hcph_sud)[2] <- 'hcph_sud_assessed'
+colnames(monthly_hcph_sud)[3] <- 'hcph_opioid_stimulant_use'
+colnames(monthly_hcph_sud)[4] <- 'hcph_sud_linkage_need'
+colnames(monthly_hcph_sud)[5] <- 'hcph_sud_linked'
+colnames(monthly_hcph_sud)[6] <- 'hcph_sud_fu_consent'
+monthly_hcph_sud$hcph_sud_assessed[is.na(monthly_hcph_sud$hcph_sud_assessed)] <- 0
 head(monthly_hcph_sud)
-monthly_hcph_sud$sud_linkage_need[is.na(monthly_hcph_sud$sud_linkage_need)] <- 0
+monthly_hcph_sud$hcph_opioid_stimulant_use[is.na(monthly_hcph_sud$hcph_opioid_stimulant_use)] <- 0
+head(monthly_hcph_sud)
+monthly_hcph_sud$hcph_sud_linkage_need[is.na(monthly_hcph_sud$hcph_sud_linkage_need)] <- 0
+head(monthly_hcph_sud)
+monthly_hcph_sud$hcph_sud_linked[is.na(monthly_hcph_sud$hcph_sud_linked)] <- 0
+head(monthly_hcph_sud)
+monthly_hcph_sud$hcph_sud_fu_consent[is.na(monthly_hcph_sud$hcph_sud_fu_consent)] <- 0
 head(monthly_hcph_sud)
 
 monthly_hcph_sud$Date <- as.Date(monthly_hcph_sud$enc_date, format="%d/%m/%Y")
 head(monthly_hcph_sud)
 
-monthly_hcph_sud <- aggregate(cbind(substance_use, sud_linkage_need) ~ as.yearmon(Date),
+monthly_hcph_sud <- aggregate(cbind(hcph_sud_assessed, hcph_opioid_stimulant_use,
+                                    hcph_sud_linkage_need,hcph_sud_linked, hcph_sud_fu_consent) ~ as.yearmon(Date),
                               monthly_hcph_sud,
                               FUN = sum)
 monthly_hcph_sud$Date <- as.Date(as.yearmon(monthly_hcph_sud$`as.yearmon(Date)`))
 head(monthly_hcph_sud)
 monthly_hcph_sud
 
+
+
+
+#####  HCPH SUD Follow-up Data
+
+todays_date <- Sys.Date()
+
+
+enc$hcph_sud_30day_eligible <- ifelse(((enc$hcph_sud_fu_consent == 1 |
+                                         is.na(enc$hcph_sud_fu_consent) | enc$hcph_sud_fu_consent == '') &
+                                        (enc$hcph_sud_linked == 1) &
+                                        ((enc$hcph_sud_day30_contact_date <= todays_date) |
+                                           enc$ltc_sud_hcph_30day_completion == 1)), 1, 0)
+table(enc$hcph_sud_30day_eligible)
+hcph_sud_30day_eligible <- enc[which(enc$hcph_sud_30day_eligible == 1), ]
+dim(hcph_sud_30day_eligible)
+hcph_sud_30day_eligible <- nrow(hcph_sud_30day_eligible)
+hcph_sud_30day_eligible
+
+hcph_sud_30day_eligible_percent <- percent(hcph_sud_30day_eligible/hcph_sud_fu_consent, accuracy = 0.1)
+hcph_sud_30day_eligible_percent
+
+
+
+enc$hcph_sud_30day_complete[enc$ltc_sud_hcph_30day_completion == 1] <- 1 
+table(enc$hcph_sud_30day_complete)
+hcph_sud_30day_complete <- enc[which(enc$hcph_sud_30day_complete == 1), ]
+dim(hcph_sud_30day_complete)
+hcph_sud_30day_complete <- nrow(hcph_sud_30day_complete)
+hcph_sud_30day_complete
+
+hcph_sud_30day_complete_percent <- percent(hcph_sud_30day_complete/hcph_sud_30day_eligible, accuracy = 0.1)
+hcph_sud_30day_complete_percent
+
+
+
+enc$hcph_sud_60day_eligible <- ifelse((enc$ltc_sud_hcph_30day_completion == 1 &
+                                        ((enc$hcph_sud_day60_contact_date <= todays_date) |
+                                           enc$ltc_sud_hcph_60day_completion == 1)), 1, 0)
+table(enc$hcph_sud_60day_eligible)
+hcph_sud_60day_eligible <- enc[which(enc$hcph_sud_60day_eligible == 1), ]
+dim(hcph_sud_60day_eligible)
+hcph_sud_60day_eligible <- nrow(hcph_sud_60day_eligible)
+hcph_sud_60day_eligible
+
+hcph_sud_60day_eligible_percent <- percent(hcph_sud_60day_eligible/hcph_sud_30day_complete, accuracy = 0.1)
+hcph_sud_60day_eligible_percent
+
+
+
+enc$hcph_sud_60day_complete[enc$ltc_sud_hcph_30day_completion == 1 &
+                              enc$ltc_sud_hcph_60day_completion == 1] <- 1 
+table(enc$hcph_sud_60day_complete)
+hcph_sud_60day_complete <- enc[which(enc$hcph_sud_60day_complete == 1), ]
+dim(hcph_sud_60day_complete)
+hcph_sud_60day_complete <- nrow(hcph_sud_60day_complete)
+hcph_sud_60day_complete
+
+hcph_sud_60day_complete_percent <- percent(hcph_sud_60day_complete/hcph_sud_60day_eligible, accuracy = 0.1)
+hcph_sud_60day_complete_percent
+
+
+
+enc$hcph_sud_180day_eligible <- ifelse((enc$ltc_sud_hcph_60day_completion == 1 &
+                                          ((enc$hcph_sud_day180_contact_date <= todays_date) |
+                                             enc$ltc_sud_hcph_180day_completion == 1)), 1, 0)
+table(enc$hcph_sud_180day_eligible)
+hcph_sud_180day_eligible <- enc[which(enc$hcph_sud_180day_eligible == 1), ]
+dim(hcph_sud_180day_eligible)
+hcph_sud_180day_eligible <- nrow(hcph_sud_180day_eligible)
+hcph_sud_180day_eligible
+
+hcph_sud_180day_eligible_percent <- percent(hcph_sud_180day_eligible/hcph_sud_60day_complete, accuracy = 0.1)
+hcph_sud_180day_eligible_percent
+
+
+
+enc$hcph_sud_180day_complete[enc$ltc_sud_hcph_60day_completion == 1 &
+                              enc$ltc_sud_hcph_180day_completion == 1] <- 1 
+table(enc$hcph_sud_180day_complete)
+hcph_sud_180day_complete <- enc[which(enc$hcph_sud_180day_complete == 1), ]
+dim(hcph_sud_180day_complete)
+hcph_sud_180day_complete <- nrow(hcph_sud_180day_complete)
+hcph_sud_180day_complete
+
+hcph_sud_180day_complete_percent <- percent(hcph_sud_180day_complete/hcph_sud_180day_eligible, accuracy = 0.1)
+hcph_sud_180day_complete_percent
 ```
 
 
 # HCPH SUD Data
 
-The Hamilton County Public Health (HCPH) substance use disorder (SUD) data agreement was initiated in July 2024 and the agreement was for data collected from August 1, 2024 through July 31, 2025. This agreement is for EIP to provide HCPH with data regarding SUD screening and follow-up at periodic intervals to determine retention in care. The agreement was to provide data for any patient that endorses any type of substance use, the demographic information of these individuals, as well as their treatment need and follow-up for retention in care. This agreement is for patients seen at UC Medical Center only.
+The Hamilton County Public Health (HCPH) substance use disorder (SUD) data agreement was initiated in July 2024 and the agreement was for data collected starting August 1, 2024 through July 31, 2025. This agreement is for EIP to provide HCPH with data regarding SUD screening and follow-up at periodic intervals to determine retention in care. The agreement was to provide data for any patient that endorses any opioid and/or stimulant use, the demographic information of these individuals, as well as their treatment need and follow-up for retention in care. This agreement is for patients seen at UC Medical Center only.
 
-Since the data that HCPH requested for follow-up centered around those that were linked to care, it was decided that aggregate data would be collected for all those individuals screened for SUD, those that endorse substance use within the past year, those that are engaged with the EIP Linkage to Care process, and those that are successfully linked to care. Then, record-level data would be provided for those that agree to follow-up questionnaires at 30, 60, and 90 day time points, with the follow-up questions from HCPH documented.
+Since the data that HCPH requested for follow-up centered around those that were linked to care, it was decided that aggregate data would be collected for all those individuals screened for SUD, those that endorse current opioid/stimulant use within the past year, those that are engaged with the EIP Linkage to Care process, and those that are successfully linked to care. Then, record-level data would be provided for those that agree to follow-up questionnaires at 30, 60, and 180 day time points, with the follow-up questions from HCPH documented.
 
-EIP SUD assessments are determined based on the AUDIT-C for alcohol or NIDA-Modified ASSIST for all other substances. Aggregate-level data is presented here for the following: number screened for SUD, number endorsing current substance use (within the past year), number engaged in SUD linkage, and number successfully linked to care. As of the start of the data sharing agreement for this program, there have been a total of xx encounters where an individual was screened for SUD (xx%, xx/xx). The number of encounters where an individual has endorsed current substance use (within the past year) for any substance is xx (xx%, xx/xx). After a conversation with the EIP HPA and/or LTC Coordinator, there was a total of xx encounters where the individual engaged in our linkage process specifically for SUD (xx%, xx/xx). For those that engaged within our SUD LTC process, there were a total of xx encounters where the individual was successfully linked to care for SUD (xx%, xx/xx). A total of xx agreed to the HCPH 30/60/90 day follow-ups after successful linkage (xx%, xx/xx).
-
-30 day follow-up details
-60 day follow-up details
-90 day follow-up details
-
-
-
-
-
-
-
-
-
-
-Patients are included in this program if they endorse any type of substance use within the past year. As of the start of this program, there have been a total of **`r substance_use` encounters where an individual endorsed any type of substance use**. After discussion with our HPA or additional EIP coordinators, there have been a total of **`r sud_linkage_need` linkage follow-up cases initiated** (*`r sud_linkage_need_percent` of all those endorsing any substance use, `r sud_linkage_need`/`r substance_use`*). This information is summarized in the table below.
+EIP SUD assessments are determined based on the AUDIT-C for alcohol or NIDA-Modified ASSIST for all other substances. Aggregate-level data is presented here for the following: number screened for SUD, number endorsing current opioid/stimulant use (within the past year), number engaged in SUD linkage, number successfully linked to care, and the number that agreed to follow-up beyond linkage success. As of the start of the data sharing agreement for this program, there have been a total of **`r hcph_sud_assessed` encounters where an individual was screened for SUD**. The number of encounters where an individual has endorsed current substance use (*within the past year*) for opioids and/or stimulants were **`r hcph_opioid_stimulant_use` encounters** (*`r hcph_opioid_stimulant_use_percent` of all those screened for SUD, `r hcph_opioid_stimulant_use`/`r hcph_sud_assessed`*). After a conversation with the EIP HPA and/or LTC Coordinator, there was a total of **`r hcph_sud_linkage_need` encounters** where the individual engaged in our linkage process specifically for SUD (*`r hcph_sud_linkage_need_percent` of all those who endorsed current opioid/stimulant use, `r hcph_sud_linkage_need`/`r hcph_opioid_stimulant_use`*). For those that engaged with our SUD LTC process, there were a total of **`r hcph_sud_linked` encounters where the individual was successfully linked to care for SUD** (*`r hcph_sud_linked_percent` of all those engaged in SUD LTC, `r hcph_sud_linked`/`r hcph_sud_linkage_need`*). There were then a total of **`r hcph_sud_fu_consent` encounters** where the individual agreed to additional follow-up beyond successful linkage for SUD (*`r hcph_sud_fu_consent_percent` of all those successfully linked to care for SUD, `r hcph_sud_fu_consent`/`r hcph_sud_linked`*). The table below summarizes this monthly aggregate-level data for SUD screening and linkage to care at UCMC ED since the start of this program.
 
 
 ```{r, echo=FALSE, warning=FALSE}
 
-monthly_hcph_sud_table <- select(monthly_hcph_sud, Date, substance_use, sud_linkage_need)
-colnames(monthly_hcph_sud_table)[2] <- 'Endorse Substance Use'
-colnames(monthly_hcph_sud_table)[3] <- 'SUD Linkage Need'
+monthly_hcph_sud_table <- select(monthly_hcph_sud, Date, hcph_sud_assessed, hcph_opioid_stimulant_use, hcph_sud_linkage_need, hcph_sud_linked, hcph_sud_fu_consent)
+colnames(monthly_hcph_sud_table)[2] <- 'SUD Assessed'
+colnames(monthly_hcph_sud_table)[3] <- 'Current Opioid/Stimulant Use'
+colnames(monthly_hcph_sud_table)[4] <- 'Engaged in SUD LTC'
+colnames(monthly_hcph_sud_table)[5] <- 'Linked for SUD'
+colnames(monthly_hcph_sud_table)[6] <- 'Agreed to Follow-up'
 monthly_hcph_sud_table %>%
-  kbl(align = 'lcc', table.attr = 'data-quarto-disable-processing="true"') %>%
+  kbl(align = 'lcccccc', table.attr = 'data-quarto-disable-processing="true"') %>%
   kable_paper(bootstrap_options = "striped", full_width = F) %>%
   kable_styling(full_width = F, font_size = 12)
 
 ```
 
+<br>
 
-Any further analysis is depending on final operations decisions still in process.
+The flow diagram below highlights the total aggregate-level data with numbers for each step in the process, with total numbers so far for the project. The numbers represented here are a visual representation of the numbers presented in the text and table above.
+
+
+```{r, echo=FALSE, warning=FALSE}
+
+grid_data <- tibble(x= 1:100, y= 1:100)
+
+grid_data %>% 
+  ggplot(aes(x, y)) +
+  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
+  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
+  theme_linedraw() ->
+  grid
+
+
+grid +
+  # HCPH Screened for SUD
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 97, label = 'SUD Assessed', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 93, label = hcph_sud_assessed, size = 2, color = 'forestgreen') +
+  
+  
+  # HCPH Endorse Opioid/Stimulant Use
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 67, label = 'Current Opioid/Stimulant Use', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 63, label = hcph_opioid_stimulant_use, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 63, label = hcph_opioid_stimulant_use_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # HCPH Engaged in SUD LTC
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 37, label = 'Engaged in SUD LTC', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 33, label = hcph_sud_linkage_need, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 33, label = hcph_sud_linkage_need_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # HCPH Linked for SUD
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 7, label = 'Linked for SUD', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 3, label = hcph_sud_linked, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 3, label = hcph_sud_linked_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # HCPH Agreed to Follow-up
+  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 10, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 7, label = 'Agreed to Follow-up', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 3, label = hcph_sud_fu_consent, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 3, label = hcph_sud_fu_consent_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Down Arrow 1
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 90, yend = 70, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 2
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 60, yend = 40, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 3
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 30, yend = 10, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Right Arrow 1
+  geom_segment(
+    x = 22, xend = 41, y = 5, yend = 5, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray')->
+  grid
+
+grid + theme_void()
+
+```
+
+
+<br>
+
+The remaining data covers the follow-up efforts towards this project, specifically the eligibility and completion of the 30/60/180 day time points. Everyone who agreed to the additional follow-up is eligible for the 30 day follow-up as long as their follow-up date is 30-days after their successful linkage to care date for SUD. Eligibility for 60-day follow-up requires the individual complete their 30-day follow-up and that we have reached 60-days post-linkage. Eligibility for the 180-day follow-up requires successful completion of their 60-day follow-up and that we have reached 180-day post-linkage. There were a total of **`r hcph_sud_fu_consent` encounters where the individual agreed to the HCPH 30/60/180 day follow-ups after successful linkage** (*`r hcph_sud_fu_consent_percent` of all those successfully linked to care for SUD, `r hcph_sud_fu_consent`/`r hcph_sud_linked`*). These are the individuals that are being followed-up with by our linkage team for responses to the HCPH 30/60/180 day follow-up surveys.
+
+There were a total of **`r hcph_sud_30day_eligible`** encounters (*`r hcph_sud_30day_eligible_percent` of all those successfully linked to care for SUD*) where the individual was eligible for their 30 day follow-up, and our linkage team was successfully able to **complete `r hcph_sud_30day_complete` of these 30 day follow-ups** (*`r hcph_sud_30day_complete_percent` of all those eligible for their 30 day follow-up, `r hcph_sud_30day_complete`/`r hcph_sud_30day_eligible`*).
+
+There were a total of **`r hcph_sud_60day_eligible`** encounters (*`r hcph_sud_60day_eligible_percent` of all those who successfully completed their 30 day follow-up*) where the individual was eligible for their 60 day follow-up, and our linkage team was successfully able to **complete `r hcph_sud_60day_complete` of these 60 day follow-ups** (*`r hcph_sud_60day_complete_percent` of all those eligible for their 60 day follow-up, `r hcph_sud_60day_complete`/`r hcph_sud_30day_complete`*).
+
+There were a total of **`r hcph_sud_180day_eligible`** encounters (*`r hcph_sud_180day_eligible_percent` of all those who successfully completed their 60 day follow-up*) where the individual was eligible for their 180 day follow-up, and our linkage team was successfully able to **complete `r hcph_sud_180day_complete` of these 180 day follow-ups** (*`r hcph_sud_180day_complete_percent` of all those eligible for their 180 day follow-up, `r hcph_sud_180day_complete`/`r hcph_sud_60day_complete`*).
+
+The flow diagram below summarizes all of the follow-up data for those individuals who were successfully linked to care for SUD and agreed to additional follow-up.
+
+
+```{r, echo=FALSE, warning=FALSE}
+
+grid_data <- tibble(x= 1:100, y= 1:100)
+
+grid_data %>% 
+  ggplot(aes(x, y)) +
+  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
+  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
+  theme_linedraw() ->
+  grid
+
+
+grid +
+  # HCPH Agreed to Follow-up
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 97, label = 'Agreed to Follow-up', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 93, label = hcph_sud_fu_consent, size = 2, color = 'forestgreen') +
+  
+  
+  # HCPH 30-day Eligible
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 67, label = 'Eligible for 30-day follow-up', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 63, label = hcph_sud_30day_eligible, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 63, label = hcph_sud_30day_eligible_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # HCPH 30-day Complete
+  geom_rect(xmin = 32, xmax = 54, ymin = 60, ymax = 70, color = 'black',
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 42.5, y = 67, label = '30-day follow-up complete', size = 2) +
+  geom_rect(xmin = 32, xmax = 54, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 42.5, y = 63, label = hcph_sud_30day_complete, size = 2, color = 'forestgreen') +
+  annotate('text', x = 50.5, y = 63, label = hcph_sud_30day_complete_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # HCPH 60-day Eligible
+  geom_rect(xmin = 32, xmax = 54, ymin = 30, ymax = 40, color = 'black',
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 42.5, y = 37, label = 'Eligible for 60-day follow-up', size = 2) +
+  geom_rect(xmin = 32, xmax = 54, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 42.5, y = 33, label = hcph_sud_60day_eligible, size = 2, color = 'forestgreen') +
+  annotate('text', x = 50.5, y = 33, label = hcph_sud_60day_eligible_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # HCPH 60-day Complete
+  geom_rect(xmin = 64, xmax = 86, ymin = 30, ymax = 40, color = 'black',
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 74.5, y = 37, label = '60-day follow-up complete', size = 2) +
+  geom_rect(xmin = 64, xmax = 86, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 74.5, y = 33, label = hcph_sud_60day_complete, size = 2, color = 'forestgreen') +
+  annotate('text', x = 84.5, y = 33, label = hcph_sud_60day_complete_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # HCPH 180-day Eligible
+  geom_rect(xmin = 64, xmax = 86, ymin = 0, ymax = 10, color = 'black',
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 74.5, y = 7, label = 'Eligible for 180-day follow-up', size = 2) +
+  geom_rect(xmin = 64, xmax = 86, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 74.5, y = 3, label = hcph_sud_180day_eligible, size = 2, color = 'forestgreen') +
+  annotate('text', x = 84.5, y = 3, label = hcph_sud_180day_eligible_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # HCPH 180-day Complete
+  geom_rect(xmin = 96, xmax = 118, ymin = 0, ymax = 10, color = 'black',
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 106.5, y = 7, label = '180-day follow-up complete', size = 2) +
+  geom_rect(xmin = 96, xmax = 118, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 106.5, y = 3, label = hcph_sud_180day_complete, size = 2, color = 'forestgreen') +
+  annotate('text', x = 116.5, y = 3, label = hcph_sud_180day_complete_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Down Arrow 1
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 90, yend = 70, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed"), color = 'black') +
+  
+  # Down Arrow 2
+  geom_segment(
+    x = 42.5, xend = 42.5, y = 60, yend = 40, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed"), color = 'black') +
+  
+  # Down Arrow 3
+  geom_segment(
+    x = 74.5, xend = 74.5, y = 30, yend = 10, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed"), color = 'black') +
+  
+  # Right Arrow 1
+  geom_segment(
+    x = 22, xend = 32, y = 65, yend = 65, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed"), color = 'black') +
+  
+  # Right Arrow 2
+  geom_segment(
+    x = 54, xend = 64, y = 35, yend = 35, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed"), color = 'black') +
+  
+  # Right Arrow 3
+  geom_segment(
+    x = 86, xend = 96, y = 5, yend = 5, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed"), color = 'black')->
+  grid
+
+grid + theme_void()
+
+```
+
+<br>
+<br>
 
 
 # Ask, Advise, Refer (AAR)
