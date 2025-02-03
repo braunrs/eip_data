@@ -38,14 +38,14 @@ library(DT)
 
 ### EIP Database Data
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20250112_1511.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20250203_0801.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
 summary(eip24$record_id)
 
 # 2025
-eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20250113_1015.csv')
+eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20250203_0805.csv')
 dim(eip25)
 summary(eip25$record_id)
 eip25$record_id <- paste(eip25$record_id, "_25", sep = "")
@@ -78,10 +78,12 @@ hcv_dec24 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard
 dim(hcv_dec24)
 hcv_jan25 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/Monthly Data/HCV Dashboard Data 2025_01.csv')
 dim(hcv_jan25)
+hcv_feb25 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/Monthly Data/HCV Dashboard Data 2025_02.csv')
+dim(hcv_feb25)
 
 hcv <- rbind(hcv_jan24, hcv_feb24, hcv_mar24, hcv_apr24, hcv_may24, hcv_jun24,
              hcv_jul24, hcv_aug24, hcv_sep24, hcv_oct24, hcv_nov24, hcv_dec24,
-             hcv_jan25)
+             hcv_jan25, hcv_feb25)
 dim(hcv)
 hcv <- distinct(hcv)
 dim(hcv)
@@ -548,14 +550,6 @@ dim(eip25)
 eip25 <- distinct(eip25)
 dim(eip25)
 
-
-# until all 2024 encounters are removed from 2025 database...
-summary(eip25$enc_date)
-eip25$enc_date <- as.Date(eip25$enc_date, format = '%m/%d/%Y')
-summary(eip25$enc_date)
-eip25 <- eip25[which(eip25$enc_date >= '2025-01-01'), ]
-summary(eip25$enc_date)
-
 ```
 
 ```{r Combining Datasets, include=FALSE}
@@ -585,15 +579,12 @@ eip24$ltc_coordinator_per_case___69 <- ''
 eip24$ltc_coordinator_per_case___30 <- ''
 
 
-# Changing 2024 variable names that were changed in 2025 dataset
-names(eip24)[names(eip24) == 'unsafe_work'] <- 'raft1'
-names(eip24)[names(eip24) == 'forced_work'] <- 'raft2'
-names(eip24)[names(eip24) == 'fear_leave_work'] <- 'raft3'
-names(eip24)[names(eip24) == 'exchange_for_sex'] <- 'raft4'
 
 
 # Adding variables introduced in 2025 database to 2024 dataset as blank values
 eip24$hcph_sud_day90_contact_date <- ''
+eip24$wound_care_kit <- ''
+eip24$wound_care_kit_number <- ''
 
 
 
@@ -2996,7 +2987,7 @@ As mentioned above, there were a total of `r hcv_ab_positive` HCV positive tests
 
 ```{r, echo = FALSE, warning = FALSE}
 #| label: HCV Epic Dashboard Follow-up Flow Diagram 
-#| fig-cap: "** *Unable to match records means that we are unable to match the EIP follow-up data with the data pulled from the Epic HCV Dashboard. The reason(s) for why these records are unable to be matched are: Tested under different MRN than patient record (n = 7).*"
+#| fig-cap: "** *Unable to match records means that we are unable to match the EIP follow-up data with the data pulled from the Epic HCV Dashboard. The reason(s) for why these records are unable to be matched are: Tested under different MRN than patient record.*"
 
 
 grid_data <- tibble(x= 1:100, y= 1:100)
@@ -3262,85 +3253,12 @@ The EIP REDCap Database allows for documentation regarding referral to UC Clinic
 
 As part of EIP's follow-up efforts, we try to ensure anyone who is HCV Ab+ has the necessary lab testing to know if they are currently infected with HCV by facilitating RNA testing when appropriate. The total number of patients that had a follow-up RNA test documented within their EIP REDCap record was **`r hcv_pts_rna_known` patients** (*`r hcv_pts_rna_known_percent` of all those HCV Ab+, `r hcv_pts_rna_known`/`r hcv_pts_ab_positive`*). As mentioned above, there were a total of `r hcv_pts_rna_neg` patients that were negative for HCV RNA, which is `r hcv_pts_rna_neg_percent` of all those with a known HCV RNA result (*`r hcv_pts_rna_neg`/`r hcv_pts_rna_known`*). For those patients that were tested for RNA, the total number of those that were found to be true positives for HCV was **`r hcv_pts_rna_pos` patients** (*`r hcv_pts_rna_pos_percent` of all those tested for HCV RNA, `r hcv_pts_rna_pos`/`r hcv_pts_rna_known`*).
 
-
-
-<br>
-
-### Staff Coverage
-
-In order to evaluate whether we have appropriate EIP staff coverage for this project, this section looks at the time that the HCV Ab test results are available and whether there is an EIP staff member dedicated for this project on staff. Therefore, we can know whether our staff is available to approach the patient in the ED/hospital when the lab results.
-
-::: {.callout-warning collapse="true"}
-## Lab Result times.
-HCV Epic Dashboard dataset does not include Lab Result times. The result times for the labs are estimated using the Order Date/Time of the test and the average resulting time for HCV antibody tests based on CHI lab data.
-:::
-
-The HCV Dashboard does not include result times for the labs. Therefore, an average HCV Ab lab result time was calculated from CHI HCV Ab lab data and used here (*CHI HCV Ab lab result times average is about [3 hours and 53 minutes]{.underline}*). The HCV Ab dashboard lab result times were estimated by adding this average lab result time from the CHI lab data onto the Order Date/Time values for the dashboard labs. Since these are estimated lab result times, there is some variability in this data. Also, since these are estimates, EIP staff coverage times are estimated since those can vary slightly week to week.
-
-Since these lab result times are estimates, they have been categorized into four categories to simplify the plot: [Overnight]{.underline} (12am-5:59am), [Morning]{.underline} (6am-11:59am), [Afternoon]{.underline} (12pm-5:59pm), and [Evening]{.underline} (6pm-11:59pm). Employee staff coverage is used an estimated based on these same parameters. Current staff coverage was used based on the staff shift schedule noted below:
-
-- *RK: Monday-Thursday (7am-5pm; morning-afternoon) or Tuesday-Friday (7am-5pm; morning-afternoon), alternating weeks*
-
-- *JF: Monday and Friday (10am-10pm; morning-evening) and Tuesday (9am-9pm; morning-evening)*
-
-- *KA: Wednesday-Sunday (3pm-11pm; afternoon-evening)*
-
-
-Therefore, it is estimated that EIP staff is available for this project during most day/times except for the overnight shifts for each day.
-
-The plot below shows the days and time periods of the estimated HCV Ab+ lab result times, as well as the times that there is EIP coverage. The frequency shows the total number of HCV Ab+ results for each day/time since the start of the project. The colored bars indicates that there is EIP staff scheduled during this time to respond to the HCV Dashboard and approach those patients who are HCV Ab+.
-
-<br>
-
-```{r, echo = FALSE, fig.frame="black"}
-
-hcv_staff_coverage <- ggplot(hcv_ab_pos_summary, aes(x = result_day_time, y = frequency, text = paste("Frequency:", frequency, "<br>Day and Time Period:", result_day_time))) +
-  geom_bar(aes(fill = has_coverage), stat = "identity", color = "black", show.legend = FALSE) +
-  labs(title = "Frequency of HCV Ab+ Results by Day/Time Period Estimates",
-       x = "Day and Time Period Estimates",
-       y = "Total Frequency") +
-  scale_fill_manual(values = c("FALSE" = "white", "TRUE" = "lightskyblue"), guide = FALSE) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position = "none") +
-  geom_vline(xintercept = seq(4.5, length(unique(hcv_ab_pos_summary$result_day_time)), by = 4), color = "gray", linetype = "dashed")
-hcv_staff_coverage <- ggplotly(hcv_staff_coverage, tooltip = "text") %>%
-  plotly::config(displayModeBar = FALSE)
-hcv_staff_coverage
-
-```
-
-<br>
-
-The table below summarizes the total number of HCV Ab+ results where an EIP staff member assigned for this project was on shift, and the percentage of the total HCV Ab+ results. This table indicates that **EIP staff was available during `r hcv_ab_pos_with_coverage_percent` of the HCV Ab+ labs** when they were estimated to have resulted and appear in the HCV Dashboard (*`r hcv_ab_pos_with_coverage`/`r hcv_ab_pos_total`*). Also, this table shows that **EIP staff was not on shift for this project during `r hcv_ab_pos_without_coverage_percent` of the HCV Ab+ labs** when they were estimated to have resulted (*`r hcv_ab_pos_without_coverage`/`r hcv_ab_pos_total`*). *Reminder: this is looking at the total number of HCV Ab positive tests (n = `r hcv_ab_pos_total`), rather than the unique number of patients positive for HCV Ab (n = `r hcv_pts_ab_positive`) as used in the EIP follow-up flow diagram.*
-
-<br>
-
-```{r, echo = FALSE}
-
-# Table of HCV Ab+ with EIP Coverage
-hcv_ab_pos_coverage_tbl <- data.frame(matrix(ncol = 3, nrow = 0))
-colnames(hcv_ab_pos_coverage_tbl) <- c('', 'Total Frequency', 'Percent')
-hcv_ab_pos_coverage_tbl[nrow(hcv_ab_pos_coverage_tbl) + 1,] <- list('With EIP Coverage', hcv_ab_pos_with_coverage, hcv_ab_pos_with_coverage_percent)
-hcv_ab_pos_coverage_tbl[nrow(hcv_ab_pos_coverage_tbl) + 1,] <- list('Without EIP Coverage', hcv_ab_pos_without_coverage, hcv_ab_pos_without_coverage_percent)
-hcv_ab_pos_coverage_tbl %>%
-  kbl(align = 'lcc') %>%
-  kable_styling(full_width = F, font_size = 12)
-
-```
-
-
-<br>
-<br>
 <br>
 
 ## Additional Items still to add to this report.
 Additional items still in development for this report include: Add reasons for no follow-up (rsns linkage declined/prevented)
 
 <br>
-<br>
-<br>
-
 
 ## EIP HCV Testing & Linkage
 
@@ -3600,7 +3518,6 @@ grid +
   grid
 
 grid + theme_void()
-
 
 ```
 

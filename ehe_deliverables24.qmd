@@ -31,14 +31,14 @@ library(DT)
 
 ### EIP Database Data
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20250112_1511.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20250203_0801.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
 summary(eip24$record_id)
 
 # 2025
-eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20250113_1015.csv')
+eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20250203_0805.csv')
 dim(eip25)
 summary(eip25$record_id)
 eip25$record_id <- paste(eip25$record_id, "_25", sep = "")
@@ -505,14 +505,6 @@ dim(eip25)
 eip25 <- distinct(eip25)
 dim(eip25)
 
-
-# until all 2024 encounters are removed from 2025 database...
-summary(eip25$enc_date)
-eip25$enc_date <- as.Date(eip25$enc_date, format = '%m/%d/%Y')
-summary(eip25$enc_date)
-eip25 <- eip25[which(eip25$enc_date >= '2025-01-01'), ]
-summary(eip25$enc_date)
-
 ```
 
 ```{r Combining Datasets, include=FALSE}
@@ -542,15 +534,12 @@ eip24$ltc_coordinator_per_case___69 <- ''
 eip24$ltc_coordinator_per_case___30 <- ''
 
 
-# Changing 2024 variable names that were changed in 2025 dataset
-names(eip24)[names(eip24) == 'unsafe_work'] <- 'raft1'
-names(eip24)[names(eip24) == 'forced_work'] <- 'raft2'
-names(eip24)[names(eip24) == 'fear_leave_work'] <- 'raft3'
-names(eip24)[names(eip24) == 'exchange_for_sex'] <- 'raft4'
 
 
 # Adding variables introduced in 2025 database to 2024 dataset as blank values
 eip24$hcph_sud_day90_contact_date <- ''
+eip24$wound_care_kit <- ''
+eip24$wound_care_kit_number <- ''
 
 
 
@@ -2287,7 +2276,7 @@ monthly_ehe_tests_plot <- plot_ly(data = monthly_ehe_tests,
                                   marker = list(color = 'darkgreen')) %>%
   layout(yaxis = list(title = 'EHE Tests'), barmode = 'stack',
          xaxis = list(tickangle = 45))
-monthly_ehe_tests_plot
+config(monthly_ehe_tests_plot, displayModeBar = FALSE)
 
 ```
 <br>
