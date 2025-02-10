@@ -40,14 +40,14 @@ eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20250208_1440.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20250210_0905.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
 summary(eip24$record_id)
 
 # 2025
-eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20250208_1445.csv')
+eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20250208_0908.csv')
 dim(eip25)
 summary(eip25$record_id)
 eip25$record_id <- paste(eip25$record_id, "_25", sep = "")
@@ -4855,23 +4855,6 @@ config(monthly_hiv_testing_plot, displayModeBar = FALSE)
 
 ```
 
-
-## Daily
-
-Daily HIV testing can also be tracked for each independent program and is shown in the chart below.
-
-
-```{r, echo = FALSE}
-
-daily_hiv_testing_plot <- ggplot(daily_hiv_tests, aes(x = Date)) +
-  geom_line(aes(y = ctr_tests), color = "lightskyblue") +
-  geom_line(aes(y = ehe_tests), color = "darkgreen") +
-  ylab("Count") +
-  ggtitle("Daily HIV Testing")
-ggplotly(daily_hiv_testing_plot)
-config(daily_hiv_testing_plot, displayModeBar = FALSE)
-
-```
 
 :::
 
