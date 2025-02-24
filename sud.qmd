@@ -38,21 +38,21 @@ eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20250217_0951.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20250224_0956.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
 summary(eip24$record_id)
 
 # 2025
-eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20250217_0954.csv')
+eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20250224_0959.csv')
 dim(eip25)
 summary(eip25$record_id)
 eip25$record_id <- paste(eip25$record_id, "_25", sep = "")
 summary(eip25$record_id)
 
 # Naloxone Distribution Data
-nalox <- read.csv('M:/EIP Data/EIP Database/EIP Naloxone Distribution Database/EIP Naloxone Distribution/EIP Naloxone Distribution Data 20250217_1000.csv')
+nalox <- read.csv('M:/EIP Data/EIP Database/EIP Naloxone Distribution Database/EIP Naloxone Distribution/EIP Naloxone Distribution Data 20250224_1004.csv')
 dim(nalox)
 
 ```
@@ -3551,7 +3551,7 @@ hcph_opioid_stimulant_use_percent
 
 
 table(enc$ltc_services___3, enc$hcph_opioid_stimulant_use)
-enc$hcph_sud_linkage_need[enc$ltc_services___3 == 1 & enc$hcph_opioid_stimulant_use == 1] <- 1
+enc$hcph_sud_linkage_need[enc$hcph_opioid_stimulant_use == 1 & enc$ltc_services___3 == 1] <- 1
 table(enc$hcph_sud_linkage_need)
 
 table(enc$hcph_sud_linkage_need)
@@ -3579,8 +3579,7 @@ hcph_sud_linked_percent
 
 
 
-enc$hcph_sud_fu_consent[enc$hcph_sud_linked == 1 &
-                          (enc$ltc_sud_hcph_fu == 1 | is.na(enc$ltc_sud_hcph_fu) | enc$ltc_sud_hcph_fu == '')] <- 1
+enc$hcph_sud_fu_consent[enc$hcph_sud_linked == 1 & enc$ltc_sud_hcph_fu == 1] <- 1
 table(enc$hcph_sud_fu_consent)
 
 hcph_sud_fu_consent <- enc[which(enc$hcph_sud_fu_consent == 1), ]
@@ -3632,8 +3631,7 @@ monthly_hcph_sud
 todays_date <- Sys.Date()
 
 enc$hcph_sud_day30_contact_date <- as.Date(enc$hcph_sud_day30_contact_date, format = '%m/%d/%Y')
-enc$hcph_sud_30day_eligible <- ifelse(((enc$hcph_sud_fu_consent == 1 |
-                                          is.na(enc$hcph_sud_fu_consent) | enc$hcph_sud_fu_consent == '') &
+enc$hcph_sud_30day_eligible <- ifelse(((enc$hcph_sud_fu_consent == 1) &
                                          (enc$hcph_sud_linked == 1) &
                                          ((enc$hcph_sud_day30_contact_date <= todays_date) |
                                             enc$ltc_sud_hcph_30day_completion == 1)), 1, 0)
@@ -3647,7 +3645,17 @@ hcph_sud_30day_eligible_percent <- percent(hcph_sud_30day_eligible/hcph_sud_fu_c
 hcph_sud_30day_eligible_percent
 
 
-enc$hcph_sud_30day_complete[enc$ltc_sud_hcph_30day_completion == 1] <- 1 
+hcph_sud_30day_out_of_window <- hcph_sud_fu_consent - hcph_sud_30day_eligible
+hcph_sud_30day_out_of_window
+
+hcph_sud_30day_out_of_window_percent <- percent(hcph_sud_30day_out_of_window/hcph_sud_fu_consent, accuracy = 0.1)
+hcph_sud_30day_out_of_window_percent
+
+
+
+
+enc$hcph_sud_30day_complete[enc$hcph_sud_30day_eligible == 1 &
+                              enc$ltc_sud_hcph_30day_completion == 1] <- 1 
 table(enc$hcph_sud_30day_complete)
 hcph_sud_30day_complete <- enc[which(enc$hcph_sud_30day_complete == 1), ]
 dim(hcph_sud_30day_complete)
@@ -3656,6 +3664,19 @@ hcph_sud_30day_complete
 
 hcph_sud_30day_complete_percent <- percent(hcph_sud_30day_complete/hcph_sud_30day_eligible, accuracy = 0.1)
 hcph_sud_30day_complete_percent
+
+
+enc$hcph_sud_30day_not_complete[enc$hcph_sud_30day_eligible == 1 &
+                                  (enc$ltc_sud_hcph_30day_completion == 0 |
+                                     is.na(enc$ltc_sud_hcph_30day_completion))] <- 1 
+table(enc$hcph_sud_30day_not_complete)
+hcph_sud_30day_not_complete <- enc[which(enc$hcph_sud_30day_not_complete == 1), ]
+dim(hcph_sud_30day_not_complete)
+hcph_sud_30day_not_complete <- nrow(hcph_sud_30day_not_complete)
+hcph_sud_30day_not_complete
+
+hcph_sud_30day_not_complete_percent <- percent(hcph_sud_30day_not_complete/hcph_sud_30day_eligible, accuracy = 0.1)
+hcph_sud_30day_not_complete_percent
 
 
 
@@ -3674,6 +3695,13 @@ hcph_sud_60day_eligible_percent <- percent(hcph_sud_60day_eligible/hcph_sud_30da
 hcph_sud_60day_eligible_percent
 
 
+hcph_sud_60day_out_of_window <- hcph_sud_30day_complete - hcph_sud_60day_eligible
+hcph_sud_60day_out_of_window
+
+hcph_sud_60day_out_of_window_percent <- percent(hcph_sud_60day_out_of_window/hcph_sud_30day_complete, accuracy = 0.1)
+hcph_sud_60day_out_of_window_percent
+
+
 enc$hcph_sud_60day_complete[enc$ltc_sud_hcph_30day_completion == 1 &
                               enc$ltc_sud_hcph_60day_completion == 1] <- 1 
 table(enc$hcph_sud_60day_complete)
@@ -3686,10 +3714,23 @@ hcph_sud_60day_complete_percent <- percent(hcph_sud_60day_complete/hcph_sud_60da
 hcph_sud_60day_complete_percent
 
 
+enc$hcph_sud_60day_not_complete[enc$hcph_sud_60day_eligible == 1 &
+                                  (enc$ltc_sud_hcph_60day_completion == 0 |
+                                     is.na(enc$ltc_sud_hcph_60day_completion))] <- 1 
+table(enc$hcph_sud_60day_not_complete)
+hcph_sud_60day_not_complete <- enc[which(enc$hcph_sud_60day_not_complete == 1), ]
+dim(hcph_sud_60day_not_complete)
+hcph_sud_60day_not_complete <- nrow(hcph_sud_60day_not_complete)
+hcph_sud_60day_not_complete
+
+hcph_sud_60day_not_complete_percent <- percent(hcph_sud_60day_not_complete/hcph_sud_60day_eligible, accuracy = 0.1)
+hcph_sud_60day_not_complete_percent
+
+
 
 
 enc$hcph_sud_day90_contact_date <- as.Date(enc$hcph_sud_day90_contact_date, format = '%m/%d/%Y')
-enc$hcph_sud_90day_eligible <- ifelse((enc$ltc_sud_hcph_30day_completion == 1 &
+enc$hcph_sud_90day_eligible <- ifelse((enc$ltc_sud_hcph_60day_completion == 1 &
                                          ((enc$hcph_sud_day90_contact_date <= todays_date) |
                                             enc$ltc_sud_hcph_90day_completion == 1)), 1, 0)
 table(enc$hcph_sud_90day_eligible)
@@ -3698,11 +3739,18 @@ dim(hcph_sud_90day_eligible)
 hcph_sud_90day_eligible <- nrow(hcph_sud_90day_eligible)
 hcph_sud_90day_eligible
 
-hcph_sud_90day_eligible_percent <- percent(hcph_sud_90day_eligible/hcph_sud_30day_complete, accuracy = 0.1)
+hcph_sud_90day_eligible_percent <- percent(hcph_sud_90day_eligible/hcph_sud_60day_complete, accuracy = 0.1)
 hcph_sud_90day_eligible_percent
 
 
-enc$hcph_sud_90day_complete[enc$ltc_sud_hcph_30day_completion == 1 &
+hcph_sud_90day_out_of_window <- hcph_sud_60day_complete - hcph_sud_90day_eligible
+hcph_sud_90day_out_of_window
+
+hcph_sud_90day_out_of_window_percent <- percent(hcph_sud_90day_out_of_window/hcph_sud_60day_complete, accuracy = 0.1)
+hcph_sud_90day_out_of_window_percent
+
+
+enc$hcph_sud_90day_complete[enc$ltc_sud_hcph_60day_completion == 1 &
                               enc$ltc_sud_hcph_90day_completion == 1] <- 1 
 table(enc$hcph_sud_90day_complete)
 hcph_sud_90day_complete <- enc[which(enc$hcph_sud_90day_complete == 1), ]
@@ -3712,6 +3760,19 @@ hcph_sud_90day_complete
 
 hcph_sud_90day_complete_percent <- percent(hcph_sud_90day_complete/hcph_sud_90day_eligible, accuracy = 0.1)
 hcph_sud_90day_complete_percent
+
+
+enc$hcph_sud_90day_not_complete[enc$hcph_sud_90day_eligible == 1 &
+                                  (enc$ltc_sud_hcph_90day_completion == 0 |
+                                     is.na(enc$ltc_sud_hcph_90day_completion))] <- 1 
+table(enc$hcph_sud_90day_not_complete)
+hcph_sud_90day_not_complete <- enc[which(enc$hcph_sud_90day_not_complete == 1), ]
+dim(hcph_sud_90day_not_complete)
+hcph_sud_90day_not_complete <- nrow(hcph_sud_90day_not_complete)
+hcph_sud_90day_not_complete
+
+hcph_sud_90day_not_complete_percent <- percent(hcph_sud_90day_not_complete/hcph_sud_90day_eligible, accuracy = 0.1)
+hcph_sud_90day_not_complete_percent
 
 
 
@@ -3730,6 +3791,13 @@ hcph_sud_180day_eligible_percent <- percent(hcph_sud_180day_eligible/hcph_sud_90
 hcph_sud_180day_eligible_percent
 
 
+hcph_sud_180day_out_of_window <- hcph_sud_90day_complete - hcph_sud_180day_eligible
+hcph_sud_180day_out_of_window
+
+hcph_sud_180day_out_of_window_percent <- percent(hcph_sud_180day_out_of_window/hcph_sud_90day_complete, accuracy = 0.1)
+hcph_sud_180day_out_of_window_percent
+
+
 
 enc$hcph_sud_180day_complete[enc$ltc_sud_hcph_90day_completion == 1 &
                                enc$ltc_sud_hcph_180day_completion == 1] <- 1 
@@ -3741,6 +3809,19 @@ hcph_sud_180day_complete
 
 hcph_sud_180day_complete_percent <- percent(hcph_sud_180day_complete/hcph_sud_180day_eligible, accuracy = 0.1)
 hcph_sud_180day_complete_percent
+
+
+enc$hcph_sud_180day_not_complete[enc$hcph_sud_180day_eligible == 1 &
+                                  (enc$ltc_sud_hcph_180day_completion == 0 |
+                                     is.na(enc$ltc_sud_hcph_180day_completion))] <- 1 
+table(enc$hcph_sud_180day_not_complete)
+hcph_sud_180day_not_complete <- enc[which(enc$hcph_sud_180day_not_complete == 1), ]
+dim(hcph_sud_180day_not_complete)
+hcph_sud_180day_not_complete <- nrow(hcph_sud_180day_not_complete)
+hcph_sud_180day_not_complete
+
+hcph_sud_180day_not_complete_percent <- percent(hcph_sud_180day_not_complete/hcph_sud_180day_eligible, accuracy = 0.1)
+hcph_sud_180day_not_complete_percent
 
 ```
 
@@ -3892,110 +3973,206 @@ grid_data %>%
 
 
 grid +
-  # HCPH Agreed to Follow-up
+  # Agreed to HCPH SUD Follow-up
   geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
-            fill = 'white', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 97, label = 'Agreed to Follow-up', size = 2) +
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 97, label = 'Agreed to HCPH SUD follow-up', size = 2) +
   geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
             fill = NA, size = 0.25) +
   annotate('text', x = 10.5, y = 93, label = hcph_sud_fu_consent, size = 2, color = 'forestgreen') +
   
   
-  # HCPH 30-day Eligible
-  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
-            fill = 'white', size = 0.25, size = 0.25) +
-  annotate('text', x = 10.5, y = 67, label = 'Eligible for 30-day follow-up', size = 2) +
-  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+  # Not in 30-day Follow-up Window
+  geom_rect(xmin = 24, xmax = 46, ymin = 78.75, ymax = 88.75,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 31.5, y = 85.75, label = 'Not in 30-day follow-up window', size = 2) +
+  geom_rect(xmin = 24, xmax = 46, ymin = 78.75, ymax = 88.75, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 10.5, y = 63, label = hcph_sud_30day_eligible, size = 2, color = 'forestgreen') +
-  annotate('text', x = 19, y = 63, label = hcph_sud_30day_eligible_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 29, y = 81.75, label = hcph_sud_30day_out_of_window, size = 2, color = 'forestgreen') +
+  annotate('text', x = 34.5, y = 81.75, label = hcph_sud_30day_out_of_window_percent, size = 2, color = 'darkseagreen4') +
   
   
-  # HCPH 30-day Complete
-  geom_rect(xmin = 32, xmax = 54, ymin = 60, ymax = 70, color = 'black',
-            fill = 'white', size = 0.25, size = 0.25) +
-  annotate('text', x = 42.5, y = 67, label = '30-day follow-up complete', size = 2) +
-  geom_rect(xmin = 32, xmax = 54, ymin = 60, ymax = 70, color = NA,
+  # 30-day follow-up Completed
+  geom_rect(xmin = 0, xmax = 22, ymin = 67.5, ymax = 77.5, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 74.5, label = '30-day follow-up Completed', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 67.5, ymax = 77.5, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 42.5, y = 63, label = hcph_sud_30day_complete, size = 2, color = 'forestgreen') +
-  annotate('text', x = 50.5, y = 63, label = hcph_sud_30day_complete_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 10.5, y = 70.5, label = hcph_sud_30day_complete, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 70.5, label = hcph_sud_30day_complete_percent, size = 2, color = 'darkseagreen4') +
   
   
-  # HCPH 60-day Eligible
-  geom_rect(xmin = 32, xmax = 54, ymin = 30, ymax = 40, color = 'black',
-            fill = 'white', size = 0.25, size = 0.25) +
-  annotate('text', x = 42.5, y = 37, label = 'Eligible for 60-day follow-up', size = 2) +
-  geom_rect(xmin = 32, xmax = 54, ymin = 30, ymax = 40, color = NA,
+  # 30-day Follow-up Not Complete
+  geom_rect(xmin = 41, xmax = 63, ymin = 67.5, ymax = 77.5, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 52, y = 74.5, label = '30-day follow-up Not Completed', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 67.5, ymax = 77.5, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 42.5, y = 33, label = hcph_sud_60day_eligible, size = 2, color = 'forestgreen') +
-  annotate('text', x = 50.5, y = 33, label = hcph_sud_60day_eligible_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 50.5, y = 70.5, label = hcph_sud_30day_not_complete, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 70.5, label = hcph_sud_30day_not_complete_percent, size = 2, color = 'darkseagreen4') +
   
   
-  # HCPH 60-day Complete
-  geom_rect(xmin = 64, xmax = 86, ymin = 30, ymax = 40, color = 'black',
-            fill = 'white', size = 0.25, size = 0.25) +
-  annotate('text', x = 74.5, y = 37, label = '60-day follow-up complete', size = 2) +
-  geom_rect(xmin = 64, xmax = 86, ymin = 30, ymax = 40, color = NA,
+  # Not in 60-day follow-up window
+  geom_rect(xmin = 24, xmax = 46, ymin = 56.25, ymax = 66.25,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 31.5, y = 63.25, label = 'Not in 60-day follow-up window', size = 2) +
+  geom_rect(xmin = 24, xmax = 46, ymin = 45, ymax = 55, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 74.5, y = 33, label = hcph_sud_60day_complete, size = 2, color = 'forestgreen') +
-  annotate('text', x = 84.5, y = 33, label = hcph_sud_60day_complete_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 29, y = 59.25, label = hcph_sud_60day_out_of_window, size = 2, color = 'forestgreen') +
+  annotate('text', x = 34.5, y = 59.25, label = hcph_sud_60day_out_of_window_percent, size = 2, color = 'darkseagreen4') +
   
   
-  # HCPH 180-day Eligible
-  geom_rect(xmin = 64, xmax = 86, ymin = 0, ymax = 10, color = 'black',
-            fill = 'white', size = 0.25, size = 0.25) +
-  annotate('text', x = 74.5, y = 7, label = 'Eligible for 180-day follow-up', size = 2) +
-  geom_rect(xmin = 64, xmax = 86, ymin = 0, ymax = 10, color = NA,
+  # 60-day Follow-up Completed
+  geom_rect(xmin = 0, xmax = 22, ymin = 45, ymax = 55, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 52, label = '60-day follow-up Completed', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 45, ymax = 55, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 74.5, y = 3, label = hcph_sud_180day_eligible, size = 2, color = 'forestgreen') +
-  annotate('text', x = 84.5, y = 3, label = hcph_sud_180day_eligible_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 10.5, y = 48, label = hcph_sud_60day_complete, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 48, label = hcph_sud_60day_complete_percent, size = 2, color = 'darkseagreen4') +
   
   
-  # HCPH 180-day Complete
-  geom_rect(xmin = 96, xmax = 118, ymin = 0, ymax = 10, color = 'black',
-            fill = 'white', size = 0.25, size = 0.25) +
-  annotate('text', x = 106.5, y = 7, label = '180-day follow-up complete', size = 2) +
-  geom_rect(xmin = 96, xmax = 118, ymin = 0, ymax = 10, color = NA,
+  # 60-day Follow-up Not Complete
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 52, y = 52, label = '60-day follow-up Not Completed', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
             fill = NA, size = 0.25) +
-  annotate('text', x = 106.5, y = 3, label = hcph_sud_180day_complete, size = 2, color = 'forestgreen') +
-  annotate('text', x = 116.5, y = 3, label = hcph_sud_180day_complete_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 50.5, y = 48, label = hcph_sud_60day_not_complete, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 48, label = hcph_sud_60day_not_complete_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Not in 90-day follow-up window
+  geom_rect(xmin = 24, xmax = 46, ymin = 33.75, ymax = 43.75,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 31.5, y = 40.75, label = 'Not in 90-day follow-up window', size = 2) +
+  geom_rect(xmin = 24, xmax = 46, ymin = 33.75, ymax = 43.75, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 29, y = 36.75, label = hcph_sud_90day_out_of_window, size = 2, color = 'forestgreen') +
+  annotate('text', x = 34.5, y = 36.75, label = hcph_sud_90day_out_of_window_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # 90-day Follow-up Completed
+  geom_rect(xmin = 0, xmax = 22, ymin = 22.5, ymax = 32.5, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 29.5, label = '90-day follow-up Completed', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 22.5, ymax = 32.5, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 25.5, label = hcph_sud_90day_complete, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 25.5, label = hcph_sud_90day_complete_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # 90-day Follow-up Not Complete
+  geom_rect(xmin = 41, xmax = 63, ymin = 22.5, ymax = 32.5, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 52, y = 29.5, label = '90-day follow-up Not Completed', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 22.5, ymax = 32.5, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 50.5, y = 25.5, label = hcph_sud_90day_not_complete, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 25.5, label = hcph_sud_90day_not_complete_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Not in 180-day follow-up window
+  geom_rect(xmin = 24, xmax = 46, ymin = 11.25, ymax = 21.25,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 31.5, y = 18.25, label = 'Not in 180-day follow-up window', size = 2) +
+  geom_rect(xmin = 24, xmax = 46, ymin = 11.25, ymax = 21.25, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 29, y = 14.25, label = hcph_sud_180day_out_of_window, size = 2, color = 'forestgreen') +
+  annotate('text', x = 34.5, y = 14.25, label = hcph_sud_180day_out_of_window_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # 180 Day Follow-up Completed
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 7, label = '180-day follow-up Completed', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 3, label = hcph_sud_180day_complete, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 3, label = hcph_sud_180day_complete_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # 180-day Follow-up Not Complete
+  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 10, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 52, y = 7, label = '180-day follow-up Not Completed', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 50.5, y = 3, label = hcph_sud_180day_not_complete, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 3, label = hcph_sud_180day_not_complete_percent, size = 2, color = 'darkseagreen4') +
   
   
   # Down Arrow 1
   geom_segment(
-    x = 10.5, xend = 10.5, y = 90, yend = 70, 
+    x = 10.5, xend = 10.5, y = 90, yend = 77.5, 
     size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed"), color = 'black') +
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
   
   # Down Arrow 2
   geom_segment(
-    x = 42.5, xend = 42.5, y = 60, yend = 40, 
+    x = 10.5, xend = 10.5, y = 67.5, yend = 55, 
     size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed"), color = 'black') +
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
   
   # Down Arrow 3
   geom_segment(
-    x = 74.5, xend = 74.5, y = 30, yend = 10, 
+    x = 10.5, xend = 10.5, y = 45, yend = 32.5, 
     size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed"), color = 'black') +
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 4
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 22.5, yend = 10, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
   
   # Right Arrow 1
   geom_segment(
-    x = 22, xend = 32, y = 65, yend = 65, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed"), color = 'black') +
+    x = 10.5, xend = 24, y = 83.75, yend = 83.75, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
   
   # Right Arrow 2
   geom_segment(
-    x = 54, xend = 64, y = 35, yend = 35, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed"), color = 'black') +
+    x = 22, xend = 41, y = 72.5, yend = 72.5, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
   
   # Right Arrow 3
   geom_segment(
-    x = 86, xend = 96, y = 5, yend = 5, 
-    size = 0.15, linejoin = "mitre", lineend = "butt",
-    arrow = arrow(length = unit(2,"mm"), type = "closed"), color = 'black')->
+    x = 10.5, xend = 24, y = 61.25, yend = 61.25, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 4
+  geom_segment(
+    x = 22, xend = 41, y = 50, yend = 50, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 5
+  geom_segment(
+    x = 10.5, xend = 24, y = 38.75, yend = 38.75, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 6
+  geom_segment(
+    x = 22, xend = 41, y = 27.5, yend = 27.5, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 7
+  geom_segment(
+    x = 10.5, xend = 24, y = 16.25, yend = 16.25, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 8
+  geom_segment(
+    x = 22, xend = 41, y = 5, yend = 5, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray')->
   grid
 
 grid + theme_void()

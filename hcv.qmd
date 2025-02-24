@@ -38,14 +38,14 @@ library(DT)
 
 ### EIP Database Data
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20250217_0951.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20250224_0956.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
 summary(eip24$record_id)
 
 # 2025
-eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20250217_0954.csv')
+eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20250224_0959.csv')
 dim(eip25)
 summary(eip25$record_id)
 eip25$record_id <- paste(eip25$record_id, "_25", sep = "")
@@ -3243,7 +3243,7 @@ grid + theme_void()
 ```
 <br>
 
-As already mentioned, there were a total of `r hcv_pts_ab_positive` HCV Ab+ patients from the Epic HCV Dashboard. There were a total of `r no_eip_record_hcv_ab_pos` patients (*`r no_eip_record_hcv_ab_pos_percent` of all HCV Ab+ patients, `r no_eip_record_hcv_ab_pos`/`r hcv_pts_ab_positive`*) that currently do not have an EIP record created for follow-up regarding their HCV Ab+ result, which are in the process of being added. Based on further HCH RNA testing or recent medical record review, it is known that **`r hcv_pts_rna_neg` patients** are currently HCV RNA negative (*`r hcv_pts_rna_neg_percent` of all those identified as HCV Ab+ through the HCV Dashboard, `r hcv_pts_rna_neg`/`r hcv_pts_ab_positive`*). While EIP is not calling all those identified as HCV RNA negative to discuss those results due to the additional effort that would be, we do try to notify these patients and provide additional education and interpretation of these results if we catch them while they are still in the ED/hospital. The total number of patients EIP has provided follow-up education after their HCV RNA results negative is **`r hcv_pts_rna_neg_fu` patients** (*`r hcv_pts_rna_neg_fu_percent` of all those identified as HCV RNA negative, `r hcv_pts_rna_neg_fu`/`r hcv_pts_rna_neg`*).
+As already mentioned, there were a total of `r hcv_pts_ab_positive` HCV Ab+ unique patients from the Epic HCV Dashboard. There were a total of `r no_eip_record_hcv_ab_pos` patients (*`r no_eip_record_hcv_ab_pos_percent` of all HCV Ab+ patients, `r no_eip_record_hcv_ab_pos`/`r hcv_pts_ab_positive`*) that currently do not have an EIP record created for follow-up regarding their HCV Ab+ result, which are in the process of being added. This may also be due to an individual being tested under one MRN, but found to have another MRN upon EIP follow-up, so these cases need to be cleaned and corrected. Based on further HCV RNA testing or recent medical record review, it is known that **`r hcv_pts_rna_neg` patients** are currently HCV RNA negative (*`r hcv_pts_rna_neg_percent` of all those identified as HCV Ab+ through the HCV Dashboard, `r hcv_pts_rna_neg`/`r hcv_pts_ab_positive`*). While EIP is not calling all those identified as HCV RNA negative to discuss those results due to the additional effort that would be, we do try to notify these patients and provide additional education and interpretation of these results if we catch them while they are still in the ED/hospital. The total number of patients EIP has provided follow-up education after their HCV RNA results negative is **`r hcv_pts_rna_neg_fu` patients** (*`r hcv_pts_rna_neg_fu_percent` of all those identified as HCV RNA negative, `r hcv_pts_rna_neg_fu`/`r hcv_pts_rna_neg`*).
 
 Therefore, the number of patients who were identified as HCV Ab+ but either are HCV RNA positive or do not have a RNA lab resulted was **`r hcv_pts_fu_needed` patients** needing follow-up education and referral (*`r hcv_pts_fu_needed_percent` of all those HCV Ab+ from the Epic HCV Dashboard, `r hcv_pts_fu_needed`/`r hcv_pts_ab_positive`*). This means that EIP has been unable to follow-up with **`r hcv_pts_no_education` patients** who were HCV Ab+ and need follow-up results/education (*`r hcv_pts_no_education_percent` of all those HCV Ab+ from the Epic HCV Dashboard needing follow-up, `r hcv_pts_no_education`/`r hcv_pts_fu_needed`*)
 
