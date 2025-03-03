@@ -2663,6 +2663,442 @@ sud_pos_percent
 
 
 
+#####  HCPH SUD Data
+
+enc$hcph_sud_assessed[enc$enc_date >= '2024-08-01' & enc$enc_location == 5 &
+                        ((enc$audit_c1 == 0 | enc$audit_c1 == 1 | enc$audit_c1 == 2 |
+                            enc$audit_c1 == 3 | enc$audit_c1 == 4) |
+                           (enc$audit_c2 == 0 | enc$audit_c2 == 1 | enc$audit_c2 == 3 | enc$audit_c2 == 4 |
+                              enc$audit_c2 == 5) |
+                           (enc$audit_c3 == 0 | enc$audit_c3 == 1 | enc$audit_c3 == 2 | enc$audit_c3 == 3 |
+                              enc$audit_c3 == 4) |
+                           (enc$binge_drinking == 0 | enc$binge_drinking == 1 | enc$binge_drinking == 2 |
+                              enc$binge_drinking == 3) |
+                           (enc$marijuana_use == 0 | enc$marijuana_use == 1 | enc$marijuana_use == 2 |
+                              enc$marijuana_use == 3 | enc$marijuana_use == 4) |
+                           (enc$cocaine_use == 0 | enc$cocaine_use == 1 | enc$cocaine_use == 2 |
+                              enc$cocaine_use == 3 | enc$cocaine_use == 4) |
+                           (enc$rx_amphetamine_use == 0 | enc$rx_amphetamine_use == 1 | enc$rx_amphetamine_use == 2 |
+                              enc$rx_amphetamine_use == 3 | enc$rx_amphetamine_use == 4) |
+                           (enc$meth_use == 0 | enc$meth_use == 1 | enc$meth_use == 2 |
+                              enc$meth_use == 3 | enc$meth_use == 4) |
+                           (enc$inhalants_use == 0 | enc$inhalants_use == 1 | enc$inhalants_use == 2 |
+                              enc$inhalants_use == 3 | enc$inhalants_use == 4) |
+                           (enc$sedatives_use == 0 | enc$sedatives_use == 1 | enc$sedatives_use == 2 |
+                              enc$sedatives_use == 3 | enc$sedatives_use == 4) |
+                           (enc$ruffies_use == 0 | enc$ruffies_use == 1 | enc$ruffies_use == 2 |
+                              enc$ruffies_use == 3 | enc$ruffies_use == 4) |
+                           (enc$hallucinogen_use == 0 | enc$hallucinogen_use == 1 | enc$hallucinogen_use == 2 |
+                              enc$hallucinogen_use == 3 | enc$hallucinogen_use == 4) |
+                           (enc$street_opioid_use == 0 | enc$street_opioid_use == 1 | enc$street_opioid_use == 2 |
+                              enc$street_opioid_use == 3 | enc$street_opioid_use == 4) |
+                           (enc$rx_opioid_use == 0 | enc$rx_opioid_use == 1 | enc$rx_opioid_use == 2 |
+                              enc$rx_opioid_use == 3 | enc$rx_opioid_use == 4) |
+                           (enc$injection_drug_use == 0 | enc$injection_drug_use == 1 | enc$injection_drug_use == 2 |
+                              enc$injection_drug_use == 3 | enc$injection_drug_use == 4) |
+                           (enc$other_drug_use == 0 | enc$other_drug_use == 1 | enc$other_drug_use == 2 |
+                              enc$other_drug_use == 3 | enc$other_drug_use == 4) |
+                           (enc$marijuana_use_ltc == 0 | enc$marijuana_use_ltc == 1 | enc$marijuana_use_ltc == 2 |
+                              enc$marijuana_use_ltc == 3 | enc$marijuana_use_ltc == 4) |
+                           (enc$cocaine_use_ltc == 0 | enc$cocaine_use_ltc == 1 | enc$cocaine_use_ltc == 2 |
+                              enc$cocaine_use_ltc == 3 | enc$cocaine_use_ltc == 4) |
+                           (enc$rx_amphetamine_use_ltc == 0 | enc$rx_amphetamine_use_ltc == 1 | enc$rx_amphetamine_use_ltc == 2 |
+                              enc$rx_amphetamine_use_ltc == 3 | enc$rx_amphetamine_use_ltc == 4) |
+                           (enc$meth_use_ltc == 0 | enc$meth_use_ltc == 1 | enc$meth_use_ltc == 2 |
+                              enc$meth_use_ltc == 3 | enc$meth_use_ltc == 4) |
+                           (enc$inhalants_use_ltc == 0 | enc$inhalants_use_ltc == 1 | enc$inhalants_use_ltc == 2 |
+                              enc$inhalants_use_ltc == 3 | enc$inhalants_use_ltc == 4) |
+                           (enc$sedatives_use_ltc == 0 | enc$sedatives_use_ltc == 1 | enc$sedatives_use_ltc == 2 |
+                              enc$sedatives_use_ltc == 3 | enc$sedatives_use_ltc == 4) |
+                           (enc$ruffies_use_ltc == 0 | enc$ruffies_use_ltc == 1 | enc$ruffies_use_ltc == 2 |
+                              enc$ruffies_use_ltc == 3 | enc$ruffies_use_ltc == 4) |
+                           (enc$hallucinogen_use_ltc == 0 | enc$hallucinogen_use_ltc == 1 | enc$hallucinogen_use_ltc == 2 |
+                              enc$hallucinogen_use_ltc == 3 | enc$hallucinogen_use_ltc == 4) |
+                           (enc$street_opioid_use_ltc == 0 | enc$street_opioid_use_ltc == 1 | enc$street_opioid_use_ltc == 2 |
+                              enc$street_opioid_use_ltc == 3 | enc$street_opioid_use_ltc == 4) |
+                           (enc$rx_opioid_use_ltc == 0 | enc$rx_opioid_use_ltc == 1 | enc$rx_opioid_use_ltc == 2 |
+                              enc$rx_opioid_use_ltc == 3 | enc$rx_opioid_use_ltc == 4) |
+                           (enc$injection_drug_use_ltc == 0 | enc$injection_drug_use_ltc == 1 | enc$injection_drug_use_ltc == 2 |
+                              enc$injection_drug_use_ltc == 3 | enc$injection_drug_use_ltc == 4) |
+                           (enc$other_drug_use_ltc == 0 | enc$other_drug_use_ltc == 1 | enc$other_drug_use_ltc == 2 |
+                              enc$other_drug_use_ltc == 3 | enc$other_drug_use_ltc == 4))] <- 1
+table(enc$hcph_sud_assessed)
+hcph_sud_assessed <- enc[which(enc$hcph_sud_assessed == 1), ]
+dim(hcph_sud_assessed)
+hcph_sud_assessed <- nrow(hcph_sud_assessed)
+hcph_sud_assessed
+
+
+
+enc$hcph_opioid_stimulant_use[enc$hcph_sud_assessed == 1 &
+                                ((enc$cocaine_use > 0 & enc$cocaine_use < 4) |
+                                   (enc$rx_amphetamine_use > 0 & enc$rx_amphetamine_use < 4) |
+                                   (enc$meth_use > 0 & enc$meth_use < 4) |
+                                   (enc$street_opioid_use > 0 & enc$street_opioid_use < 4) |
+                                   (enc$rx_opioid_use > 0 & enc$rx_opioid_use < 4) |
+                                   (enc$cocaine_use_ltc > 0 & enc$cocaine_use_ltc < 4) |
+                                   (enc$rx_amphetamine_use_ltc > 0 & enc$rx_amphetamine_use_ltc < 4) |
+                                   (enc$meth_use_ltc > 0 & enc$meth_use_ltc < 4) |
+                                   (enc$street_opioid_use_ltc > 0 & enc$street_opioid_use_ltc < 4) |
+                                   (enc$rx_opioid_use_ltc > 0 & enc$rx_opioid_use_ltc < 4))] <- 1
+table(enc$hcph_opioid_stimulant_use)
+
+table(enc$hcph_opioid_stimulant_use)
+hcph_opioid_stimulant_use <- enc[which(enc$hcph_opioid_stimulant_use == 1), ]
+dim(hcph_opioid_stimulant_use)
+hcph_opioid_stimulant_use <- nrow(hcph_opioid_stimulant_use)
+hcph_opioid_stimulant_use
+
+hcph_opioid_stimulant_use_percent <- percent(hcph_opioid_stimulant_use/hcph_sud_assessed, accuracy = 0.1)
+hcph_opioid_stimulant_use_percent
+
+
+
+table(enc$ltc_services___3, enc$hcph_opioid_stimulant_use)
+enc$hcph_sud_linkage_need[enc$hcph_opioid_stimulant_use == 1 & enc$ltc_services___3 == 1] <- 1
+table(enc$hcph_sud_linkage_need)
+
+table(enc$hcph_sud_linkage_need)
+hcph_sud_linkage_need <- enc[which(enc$hcph_sud_linkage_need == 1), ]
+dim(hcph_sud_linkage_need)
+hcph_sud_linkage_need <- nrow(hcph_sud_linkage_need)
+hcph_sud_linkage_need
+
+hcph_sud_linkage_need_percent <- percent(hcph_sud_linkage_need/hcph_opioid_stimulant_use, accuracy = 0.1)
+hcph_sud_linkage_need_percent
+
+
+
+enc$hcph_sud_linked[enc$hcph_sud_linkage_need == 1 & enc$ltc_sud_final_ltc_status == 1] <- 1
+table(enc$hcph_sud_linked)
+
+table(enc$hcph_sud_linked)
+hcph_sud_linked <- enc[which(enc$hcph_sud_linked == 1), ]
+dim(hcph_sud_linked)
+hcph_sud_linked <- nrow(hcph_sud_linked)
+hcph_sud_linked
+
+hcph_sud_linked_percent <- percent(hcph_sud_linked/hcph_sud_linkage_need, accuracy = 0.1)
+hcph_sud_linked_percent
+
+
+
+enc$hcph_sud_fu_consent[enc$hcph_sud_linked == 1 & enc$ltc_sud_hcph_fu == 1] <- 1
+table(enc$hcph_sud_fu_consent)
+
+hcph_sud_fu_consent <- enc[which(enc$hcph_sud_fu_consent == 1), ]
+dim(hcph_sud_fu_consent)
+hcph_sud_fu_consent <- nrow(hcph_sud_fu_consent)
+hcph_sud_fu_consent
+
+hcph_sud_fu_consent_percent <- percent(hcph_sud_fu_consent/hcph_sud_linked, accuracy = 0.1)
+hcph_sud_fu_consent_percent
+
+
+
+# Monthly HCPH SUD Data
+monthly_hcph_sud <- select(enc, enc_date, hcph_sud_assessed, hcph_opioid_stimulant_use, hcph_sud_linkage_need, hcph_sud_linked, hcph_sud_fu_consent)
+monthly_hcph_sud <- monthly_hcph_sud[which(monthly_hcph_sud$enc_date >= '2024-08-01'), ]
+head(monthly_hcph_sud)
+colnames(monthly_hcph_sud)[2] <- 'hcph_sud_assessed'
+colnames(monthly_hcph_sud)[3] <- 'hcph_opioid_stimulant_use'
+colnames(monthly_hcph_sud)[4] <- 'hcph_sud_linkage_need'
+colnames(monthly_hcph_sud)[5] <- 'hcph_sud_linked'
+colnames(monthly_hcph_sud)[6] <- 'hcph_sud_fu_consent'
+monthly_hcph_sud$hcph_sud_assessed[is.na(monthly_hcph_sud$hcph_sud_assessed)] <- 0
+head(monthly_hcph_sud)
+monthly_hcph_sud$hcph_opioid_stimulant_use[is.na(monthly_hcph_sud$hcph_opioid_stimulant_use)] <- 0
+head(monthly_hcph_sud)
+monthly_hcph_sud$hcph_sud_linkage_need[is.na(monthly_hcph_sud$hcph_sud_linkage_need)] <- 0
+head(monthly_hcph_sud)
+monthly_hcph_sud$hcph_sud_linked[is.na(monthly_hcph_sud$hcph_sud_linked)] <- 0
+head(monthly_hcph_sud)
+monthly_hcph_sud$hcph_sud_fu_consent[is.na(monthly_hcph_sud$hcph_sud_fu_consent)] <- 0
+head(monthly_hcph_sud)
+
+monthly_hcph_sud$Date <- as.Date(monthly_hcph_sud$enc_date, format="%d/%m/%Y")
+head(monthly_hcph_sud)
+
+monthly_hcph_sud <- aggregate(cbind(hcph_sud_assessed, hcph_opioid_stimulant_use,
+                                    hcph_sud_linkage_need,hcph_sud_linked, hcph_sud_fu_consent) ~ as.yearmon(Date),
+                              monthly_hcph_sud,
+                              FUN = sum)
+monthly_hcph_sud$Date <- as.Date(as.yearmon(monthly_hcph_sud$`as.yearmon(Date)`))
+head(monthly_hcph_sud)
+monthly_hcph_sud
+
+
+
+
+#####  HCPH SUD Follow-up Data
+
+todays_date <- Sys.Date()
+
+enc$hcph_sud_day30_contact_date <- as.Date(enc$hcph_sud_day30_contact_date, format = '%m/%d/%Y')
+enc$hcph_sud_30day_eligible <- ifelse(((enc$hcph_sud_fu_consent == 1) &
+                                         (enc$hcph_sud_linked == 1) &
+                                         ((enc$hcph_sud_day30_contact_date <= todays_date) |
+                                            enc$ltc_sud_hcph_30day_completion == 1)), 1, 0)
+table(enc$hcph_sud_30day_eligible)
+hcph_sud_30day_eligible <- enc[which(enc$hcph_sud_30day_eligible == 1), ]
+dim(hcph_sud_30day_eligible)
+hcph_sud_30day_eligible <- nrow(hcph_sud_30day_eligible)
+hcph_sud_30day_eligible
+
+hcph_sud_30day_eligible_percent <- percent(hcph_sud_30day_eligible/hcph_sud_fu_consent, accuracy = 0.1)
+hcph_sud_30day_eligible_percent
+
+
+hcph_sud_30day_out_of_window <- hcph_sud_fu_consent - hcph_sud_30day_eligible
+hcph_sud_30day_out_of_window
+
+hcph_sud_30day_out_of_window_percent <- percent(hcph_sud_30day_out_of_window/hcph_sud_fu_consent, accuracy = 0.1)
+hcph_sud_30day_out_of_window_percent
+
+
+
+
+enc$hcph_sud_30day_complete[enc$hcph_sud_30day_eligible == 1 &
+                              enc$ltc_sud_hcph_30day_completion == 1] <- 1 
+table(enc$hcph_sud_30day_complete)
+hcph_sud_30day_complete <- enc[which(enc$hcph_sud_30day_complete == 1), ]
+dim(hcph_sud_30day_complete)
+hcph_sud_30day_complete <- nrow(hcph_sud_30day_complete)
+hcph_sud_30day_complete
+
+hcph_sud_30day_complete_percent <- percent(hcph_sud_30day_complete/hcph_sud_30day_eligible, accuracy = 0.1)
+hcph_sud_30day_complete_percent
+
+
+enc$hcph_sud_30day_not_complete[enc$hcph_sud_30day_eligible == 1 &
+                                  (enc$ltc_sud_hcph_30day_completion == 0 |
+                                     is.na(enc$ltc_sud_hcph_30day_completion))] <- 1 
+table(enc$hcph_sud_30day_not_complete)
+hcph_sud_30day_not_complete <- enc[which(enc$hcph_sud_30day_not_complete == 1), ]
+dim(hcph_sud_30day_not_complete)
+hcph_sud_30day_not_complete <- nrow(hcph_sud_30day_not_complete)
+hcph_sud_30day_not_complete
+
+hcph_sud_30day_not_complete_percent <- percent(hcph_sud_30day_not_complete/hcph_sud_30day_eligible, accuracy = 0.1)
+hcph_sud_30day_not_complete_percent
+
+
+
+
+enc$hcph_sud_day60_contact_date <- as.Date(enc$hcph_sud_day60_contact_date, format = '%m/%d/%Y')
+enc$hcph_sud_60day_eligible <- ifelse((enc$ltc_sud_hcph_30day_completion == 1 &
+                                         ((enc$hcph_sud_day60_contact_date <= todays_date) |
+                                            enc$ltc_sud_hcph_60day_completion == 1)), 1, 0)
+table(enc$hcph_sud_60day_eligible)
+hcph_sud_60day_eligible <- enc[which(enc$hcph_sud_60day_eligible == 1), ]
+dim(hcph_sud_60day_eligible)
+hcph_sud_60day_eligible <- nrow(hcph_sud_60day_eligible)
+hcph_sud_60day_eligible
+
+hcph_sud_60day_eligible_percent <- percent(hcph_sud_60day_eligible/hcph_sud_30day_complete, accuracy = 0.1)
+hcph_sud_60day_eligible_percent
+
+
+hcph_sud_60day_out_of_window <- hcph_sud_30day_complete - hcph_sud_60day_eligible
+hcph_sud_60day_out_of_window
+
+hcph_sud_60day_out_of_window_percent <- percent(hcph_sud_60day_out_of_window/hcph_sud_30day_complete, accuracy = 0.1)
+hcph_sud_60day_out_of_window_percent
+
+
+enc$hcph_sud_60day_complete[enc$ltc_sud_hcph_30day_completion == 1 &
+                              enc$ltc_sud_hcph_60day_completion == 1] <- 1 
+table(enc$hcph_sud_60day_complete)
+hcph_sud_60day_complete <- enc[which(enc$hcph_sud_60day_complete == 1), ]
+dim(hcph_sud_60day_complete)
+hcph_sud_60day_complete <- nrow(hcph_sud_60day_complete)
+hcph_sud_60day_complete
+
+hcph_sud_60day_complete_percent <- percent(hcph_sud_60day_complete/hcph_sud_60day_eligible, accuracy = 0.1)
+hcph_sud_60day_complete_percent
+
+
+enc$hcph_sud_60day_not_complete[enc$hcph_sud_60day_eligible == 1 &
+                                  (enc$ltc_sud_hcph_60day_completion == 0 |
+                                     is.na(enc$ltc_sud_hcph_60day_completion))] <- 1 
+table(enc$hcph_sud_60day_not_complete)
+hcph_sud_60day_not_complete <- enc[which(enc$hcph_sud_60day_not_complete == 1), ]
+dim(hcph_sud_60day_not_complete)
+hcph_sud_60day_not_complete <- nrow(hcph_sud_60day_not_complete)
+hcph_sud_60day_not_complete
+
+hcph_sud_60day_not_complete_percent <- percent(hcph_sud_60day_not_complete/hcph_sud_60day_eligible, accuracy = 0.1)
+hcph_sud_60day_not_complete_percent
+
+
+
+
+enc$hcph_sud_day90_contact_date <- as.Date(enc$hcph_sud_day90_contact_date, format = '%m/%d/%Y')
+enc$hcph_sud_90day_eligible <- ifelse((enc$ltc_sud_hcph_60day_completion == 1 &
+                                         ((enc$hcph_sud_day90_contact_date <= todays_date) |
+                                            enc$ltc_sud_hcph_90day_completion == 1)), 1, 0)
+table(enc$hcph_sud_90day_eligible)
+hcph_sud_90day_eligible <- enc[which(enc$hcph_sud_90day_eligible == 1), ]
+dim(hcph_sud_90day_eligible)
+hcph_sud_90day_eligible <- nrow(hcph_sud_90day_eligible)
+hcph_sud_90day_eligible
+
+hcph_sud_90day_eligible_percent <- percent(hcph_sud_90day_eligible/hcph_sud_60day_complete, accuracy = 0.1)
+hcph_sud_90day_eligible_percent
+
+
+hcph_sud_90day_out_of_window <- hcph_sud_60day_complete - hcph_sud_90day_eligible
+hcph_sud_90day_out_of_window
+
+hcph_sud_90day_out_of_window_percent <- percent(hcph_sud_90day_out_of_window/hcph_sud_60day_complete, accuracy = 0.1)
+hcph_sud_90day_out_of_window_percent
+
+
+enc$hcph_sud_90day_complete[enc$ltc_sud_hcph_60day_completion == 1 &
+                              enc$ltc_sud_hcph_90day_completion == 1] <- 1 
+table(enc$hcph_sud_90day_complete)
+hcph_sud_90day_complete <- enc[which(enc$hcph_sud_90day_complete == 1), ]
+dim(hcph_sud_90day_complete)
+hcph_sud_90day_complete <- nrow(hcph_sud_90day_complete)
+hcph_sud_90day_complete
+
+hcph_sud_90day_complete_percent <- percent(hcph_sud_90day_complete/hcph_sud_90day_eligible, accuracy = 0.1)
+hcph_sud_90day_complete_percent
+
+
+enc$hcph_sud_90day_not_complete[enc$hcph_sud_90day_eligible == 1 &
+                                  (enc$ltc_sud_hcph_90day_completion == 0 |
+                                     is.na(enc$ltc_sud_hcph_90day_completion))] <- 1 
+table(enc$hcph_sud_90day_not_complete)
+hcph_sud_90day_not_complete <- enc[which(enc$hcph_sud_90day_not_complete == 1), ]
+dim(hcph_sud_90day_not_complete)
+hcph_sud_90day_not_complete <- nrow(hcph_sud_90day_not_complete)
+hcph_sud_90day_not_complete
+
+hcph_sud_90day_not_complete_percent <- percent(hcph_sud_90day_not_complete/hcph_sud_90day_eligible, accuracy = 0.1)
+hcph_sud_90day_not_complete_percent
+
+
+
+
+enc$hcph_sud_day180_contact_date <- as.Date(enc$hcph_sud_day180_contact_date, format = '%m/%d/%Y')
+enc$hcph_sud_180day_eligible <- ifelse((enc$ltc_sud_hcph_90day_completion == 1 &
+                                          ((enc$hcph_sud_day180_contact_date <= todays_date) |
+                                             enc$ltc_sud_hcph_180day_completion == 1)), 1, 0)
+table(enc$hcph_sud_180day_eligible)
+hcph_sud_180day_eligible <- enc[which(enc$hcph_sud_180day_eligible == 1), ]
+dim(hcph_sud_180day_eligible)
+hcph_sud_180day_eligible <- nrow(hcph_sud_180day_eligible)
+hcph_sud_180day_eligible
+
+hcph_sud_180day_eligible_percent <- percent(hcph_sud_180day_eligible/hcph_sud_90day_complete, accuracy = 0.1)
+hcph_sud_180day_eligible_percent
+
+
+hcph_sud_180day_out_of_window <- hcph_sud_90day_complete - hcph_sud_180day_eligible
+hcph_sud_180day_out_of_window
+
+hcph_sud_180day_out_of_window_percent <- percent(hcph_sud_180day_out_of_window/hcph_sud_90day_complete, accuracy = 0.1)
+hcph_sud_180day_out_of_window_percent
+
+
+
+enc$hcph_sud_180day_complete[enc$ltc_sud_hcph_90day_completion == 1 &
+                               enc$ltc_sud_hcph_180day_completion == 1] <- 1 
+table(enc$hcph_sud_180day_complete)
+hcph_sud_180day_complete <- enc[which(enc$hcph_sud_180day_complete == 1), ]
+dim(hcph_sud_180day_complete)
+hcph_sud_180day_complete <- nrow(hcph_sud_180day_complete)
+hcph_sud_180day_complete
+
+hcph_sud_180day_complete_percent <- percent(hcph_sud_180day_complete/hcph_sud_180day_eligible, accuracy = 0.1)
+hcph_sud_180day_complete_percent
+
+
+enc$hcph_sud_180day_not_complete[enc$hcph_sud_180day_eligible == 1 &
+                                   (enc$ltc_sud_hcph_180day_completion == 0 |
+                                      is.na(enc$ltc_sud_hcph_180day_completion))] <- 1 
+table(enc$hcph_sud_180day_not_complete)
+hcph_sud_180day_not_complete <- enc[which(enc$hcph_sud_180day_not_complete == 1), ]
+dim(hcph_sud_180day_not_complete)
+hcph_sud_180day_not_complete <- nrow(hcph_sud_180day_not_complete)
+hcph_sud_180day_not_complete
+
+hcph_sud_180day_not_complete_percent <- percent(hcph_sud_180day_not_complete/hcph_sud_180day_eligible, accuracy = 0.1)
+hcph_sud_180day_not_complete_percent
+
+
+
+
+# Tobacco Screening
+
+table(enc$tobacco)
+enc$tobacco_assessed[enc$enc_date >= '2024-08-13' & !is.na(enc$tobacco)] <- 1
+table(enc$tobacco_assessed)
+
+table(enc$tobacco_assessed)
+tobacco_assessed <- enc[which(enc$tobacco_assessed == 1), ]
+dim(tobacco_assessed)
+tobacco_assessed <- nrow(tobacco_assessed)
+tobacco_assessed
+
+
+
+enc$tobacco_current[enc$tobacco_assessed == 1 & (enc$tobacco == 1 | enc$tobacco == 2)] <- 1
+table(enc$tobacco_current)
+
+table(enc$tobacco_current)
+tobacco_current <- enc[which(enc$tobacco_current == 1), ]
+dim(tobacco_current)
+tobacco_current <- nrow(tobacco_current)
+tobacco_current
+
+tobacco_current_percent <- percent(tobacco_current/tobacco_assessed, accuracy = 0.1)
+tobacco_current_percent
+
+
+
+enc$tobacco_referred[enc$tobacco_current == 1 & enc$counselor_ref_sud_specific___59 == 1] <- 1
+table(enc$tobacco_referred)
+
+table(enc$tobacco_referred)
+tobacco_referred <- enc[which(enc$tobacco_referred == 1), ]
+dim(tobacco_referred)
+tobacco_referred <- nrow(tobacco_referred)
+tobacco_referred
+
+tobacco_referred_percent <- percent(tobacco_referred/tobacco_current, accuracy = 0.1)
+tobacco_referred_percent
+
+
+# Monthly Tobacco Screening
+monthly_tobacco <- select(enc, enc_date, tobacco_assessed, tobacco_current, tobacco_referred)
+monthly_tobacco <- monthly_tobacco[which(monthly_tobacco$enc_date >= '2024-08-13'), ]
+monthly_tobacco <- monthly_tobacco[which(monthly_tobacco$tobacco_assessed == 1), ]
+head(monthly_tobacco)
+colnames(monthly_tobacco)[2] <- 'tobacco_assessed'
+colnames(monthly_tobacco)[3] <- 'tobacco_current'
+colnames(monthly_tobacco)[4] <- 'tobacco_referred'
+monthly_tobacco$tobacco_assessed[is.na(monthly_tobacco$tobacco_assessed)] <- 0
+head(monthly_tobacco)
+monthly_tobacco$tobacco_current[is.na(monthly_tobacco$tobacco_current)] <- 0
+head(monthly_tobacco)
+monthly_tobacco$tobacco_referred[is.na(monthly_tobacco$tobacco_referred)] <- 0
+head(monthly_tobacco)
+
+monthly_tobacco$Date <- as.Date(monthly_tobacco$enc_date, format="%d/%m/%Y")
+head(monthly_tobacco)
+
+monthly_tobacco <- aggregate(cbind(tobacco_assessed, tobacco_current, tobacco_referred) ~ as.yearmon(Date),
+                             monthly_tobacco,
+                             FUN = sum)
+monthly_tobacco$Date <- as.Date(as.yearmon(monthly_tobacco$`as.yearmon(Date)`))
+head(monthly_tobacco)
+monthly_tobacco
+
+
+
+
 # FTS Knowledge
 
 table(enc$fts_knowledge)
@@ -3019,11 +3455,13 @@ head(monthly_fts_distribution)
 
 
 
-###########################################################
+###########################################################################################################
+#########################################  sud LTC Data  ##################################################
+###########################################################################################################
 
+####################  Total sud Linkage Data  ####################
 
-# SUD Linkage Data
-
+# sud Linkage Data
 table(enc$ltc_services___3)
 enc$sud_ltc[enc$ltc_services___3 == 1] <- 1
 table(enc$sud_ltc)
@@ -3036,8 +3474,8 @@ sud_ltc
 
 
 
-# Ineligible SUD Linkage - Already Linked
 
+# Ineligible sud Linkage - Already Linked
 table(enc$ltc_sud_declined_rsn___23)
 table(enc$ltc_sud_prevented_rsn___16)
 enc$sud_already_linked[enc$sud_ltc == 1 &
@@ -3053,8 +3491,7 @@ sud_already_linked
 
 
 
-# Ineligible SUD Linkage - Deceased
-
+# Ineligible sud Linkage - Deceased
 table(enc$ltc_sud_declined_rsn___35)
 table(enc$ltc_sud_prevented_rsn___17)
 enc$sud_deceased[enc$sud_ltc == 1 &
@@ -3070,8 +3507,7 @@ sud_deceased
 
 
 
-# Ineligible SUD Linkage - Incarcerated
-
+# Ineligible sud Linkage - Incarcerated
 table(enc$ltc_sud_prevented_rsn___12)
 enc$sud_incarcerated[enc$sud_ltc == 1 &
                        enc$ltc_sud_prevented_rsn___12 == 1] <- 1
@@ -3085,14 +3521,30 @@ sud_incarcerated
 
 
 
-# Ineligible SUD Linkage - Declined Linkage Service
 
+# Ineligible sud Linkage - Inability to Contact
+table(enc$ltc_sud_final_ltc_status)
+enc$sud_inability_to_contact[enc$sud_ltc == 1 &
+                               enc$ltc_sud_prevented_rsn___19 == 1] <- 1
+table(enc$sud_inability_to_contact)
+
+table(enc$sud_inability_to_contact)
+sud_inability_to_contact <- enc[which(enc$sud_inability_to_contact == 1), ]
+dim(sud_inability_to_contact)
+sud_inability_to_contact <- nrow(sud_inability_to_contact)
+sud_inability_to_contact
+
+
+
+
+# Ineligible sud Linkage - Declined Linkage Service
 table(enc$ltc_sud_final_ltc_status)
 enc$sud_linkage_declined[(enc$sud_ltc == 1 &
                             enc$ltc_sud_final_ltc_status == 2) &
                            (is.na(enc$sud_already_linked) &
                               is.na(enc$sud_deceased) &
-                              is.na(enc$sud_incarcerated))] <- 1
+                              is.na(enc$sud_incarcerated) &
+                              is.na(enc$sud_inability_to_contact))] <- 1
 table(enc$sud_linkage_declined)
 
 table(enc$sud_linkage_declined)
@@ -3103,8 +3555,8 @@ sud_linkage_declined
 
 
 
-# Ineligible SUD Linkage - Linkage in Progress
 
+# Ineligible sud Linkage - Linkage in Progress
 table(enc$ltc_sud_prevented_rsn___18)
 enc$sud_ongoing_linkage[enc$sud_ltc == 1 &
                           enc$ltc_sud_prevented_rsn___18 == 1] <- 1
@@ -3119,11 +3571,11 @@ sud_ongoing_linkage
 
 
 
-# SUD Ineligible Cases
-
+# sud Ineligible Cases
 enc$sud_ineligible_ltc[enc$sud_already_linked == 1 |
                          enc$sud_deceased == 1 |
                          enc$sud_incarcerated == 1 |
+                         enc$sud_inability_to_contact == 1 |
                          enc$sud_linkage_declined == 1 |
                          enc$sud_ongoing_linkage == 1] <- 1
 table(enc$sud_ineligible_ltc)
@@ -3146,6 +3598,9 @@ sud_deceased_percent
 sud_incarcerated_percent <- percent(sud_incarcerated/sud_ineligible_ltc, accuracy = 0.1)
 sud_incarcerated_percent
 
+sud_inability_to_contact_percent <- percent(sud_inability_to_contact/sud_ineligible_ltc, accuracy = 0.1)
+sud_inability_to_contact_percent
+
 sud_linkage_declined_percent <- percent(sud_linkage_declined/sud_ineligible_ltc, accuracy = 0.1)
 sud_linkage_declined_percent
 
@@ -3155,12 +3610,12 @@ sud_ongoing_linkage_percent
 
 
 
-# SUD Eligibility to be Linked
-
+# sud Eligibility to be Linked
 enc$sud_eligible_ltc[enc$sud_ltc == 1 &
                        (is.na(enc$sud_already_linked) &
                           is.na(enc$sud_deceased) &
                           is.na(enc$sud_incarcerated) &
+                          is.na(enc$sud_linkage_declined) &
                           is.na(enc$sud_linkage_declined) &
                           is.na(enc$sud_ongoing_linkage))] <- 1
 table(enc$sud_eligible_ltc)
@@ -3177,8 +3632,7 @@ sud_eligible_ltc_percent
 
 
 
-# SUD Open/Closed Cases
-
+# sud Open/Closed Cases
 table(enc$ltc_sud_open_case_calc)
 enc$sud_in_progress[enc$sud_eligible_ltc == 1 &
                       enc$ltc_sud_open_case_calc == 1] <- 1
@@ -3195,6 +3649,7 @@ sud_in_progress_percent
 
 
 
+
 table(enc$sud_eligible_ltc, enc$sud_in_progress)
 enc$sud_closed_case[enc$sud_eligible_ltc == 1 &
                       is.na(enc$sud_in_progress)] <- 1
@@ -3208,6 +3663,7 @@ sud_closed_case
 
 sud_closed_case_percent <- percent(sud_closed_case/sud_eligible_ltc, accuracy = 0.1)
 sud_closed_case_percent
+
 
 
 
@@ -3230,8 +3686,7 @@ sud_in_progress_90days_percent
 
 
 
-# SUD Cases Linked to Care
-
+# sud Cases Linked to Care
 table(enc$sud_closed_case, enc$ltc_sud_final_ltc_status)
 enc$sud_linked[enc$sud_closed_case == 1 &
                  enc$ltc_sud_final_ltc_status == 1] <- 1
@@ -3264,8 +3719,7 @@ sud_not_linked_percent
 
 
 
-# SUD Reasons Not Linked to Care
-
+# sud Reasons Not Linked to Care
 enc$sud_not_linked_med_staff[(enc$sud_closed_case == 1 & is.na(enc$sud_linked)) &
                                (enc$ltc_sud_prevented_rsn___1 == 1 |
                                   enc$ltc_sud_prevented_rsn___2 == 1 |
@@ -3390,438 +3844,1108 @@ sud_not_linked_other_percent
 
 
 
-# Tobacco Screening
-
-table(enc$tobacco)
-enc$tobacco_assessed[enc$enc_date >= '2024-08-13' & !is.na(enc$tobacco)] <- 1
-table(enc$tobacco_assessed)
-
-table(enc$tobacco_assessed)
-tobacco_assessed <- enc[which(enc$tobacco_assessed == 1), ]
-dim(tobacco_assessed)
-tobacco_assessed <- nrow(tobacco_assessed)
-tobacco_assessed
-
-
-
-enc$tobacco_current[enc$tobacco_assessed == 1 & (enc$tobacco == 1 | enc$tobacco == 2)] <- 1
-table(enc$tobacco_current)
-
-table(enc$tobacco_current)
-tobacco_current <- enc[which(enc$tobacco_current == 1), ]
-dim(tobacco_current)
-tobacco_current <- nrow(tobacco_current)
-tobacco_current
-
-tobacco_current_percent <- percent(tobacco_current/tobacco_assessed, accuracy = 0.1)
-tobacco_current_percent
-
-
-
-enc$tobacco_referred[enc$tobacco_current == 1 & enc$counselor_ref_sud_specific___59 == 1] <- 1
-table(enc$tobacco_referred)
-
-table(enc$tobacco_referred)
-tobacco_referred <- enc[which(enc$tobacco_referred == 1), ]
-dim(tobacco_referred)
-tobacco_referred <- nrow(tobacco_referred)
-tobacco_referred
-
-tobacco_referred_percent <- percent(tobacco_referred/tobacco_current, accuracy = 0.1)
-tobacco_referred_percent
-
-
-# Monthly Tobacco Screening
-monthly_tobacco <- select(enc, enc_date, tobacco_assessed, tobacco_current, tobacco_referred)
-monthly_tobacco <- monthly_tobacco[which(monthly_tobacco$enc_date >= '2024-08-13'), ]
-monthly_tobacco <- monthly_tobacco[which(monthly_tobacco$tobacco_assessed == 1), ]
-head(monthly_tobacco)
-colnames(monthly_tobacco)[2] <- 'tobacco_assessed'
-colnames(monthly_tobacco)[3] <- 'tobacco_current'
-colnames(monthly_tobacco)[4] <- 'tobacco_referred'
-monthly_tobacco$tobacco_assessed[is.na(monthly_tobacco$tobacco_assessed)] <- 0
-head(monthly_tobacco)
-monthly_tobacco$tobacco_current[is.na(monthly_tobacco$tobacco_current)] <- 0
-head(monthly_tobacco)
-monthly_tobacco$tobacco_referred[is.na(monthly_tobacco$tobacco_referred)] <- 0
-head(monthly_tobacco)
-
-monthly_tobacco$Date <- as.Date(monthly_tobacco$enc_date, format="%d/%m/%Y")
-head(monthly_tobacco)
-
-monthly_tobacco <- aggregate(cbind(tobacco_assessed, tobacco_current, tobacco_referred) ~ as.yearmon(Date),
-                             monthly_tobacco,
-                             FUN = sum)
-monthly_tobacco$Date <- as.Date(as.yearmon(monthly_tobacco$`as.yearmon(Date)`))
-head(monthly_tobacco)
-monthly_tobacco
-
-
-
-
-#####  HCPH SUD Data
-
-enc$hcph_sud_assessed[enc$enc_date >= '2024-08-01' & enc$enc_location == 5 &
-                        ((enc$audit_c1 == 0 | enc$audit_c1 == 1 | enc$audit_c1 == 2 |
-                            enc$audit_c1 == 3 | enc$audit_c1 == 4) |
-                           (enc$audit_c2 == 0 | enc$audit_c2 == 1 | enc$audit_c2 == 3 | enc$audit_c2 == 4 |
-                              enc$audit_c2 == 5) |
-                           (enc$audit_c3 == 0 | enc$audit_c3 == 1 | enc$audit_c3 == 2 | enc$audit_c3 == 3 |
-                              enc$audit_c3 == 4) |
-                           (enc$binge_drinking == 0 | enc$binge_drinking == 1 | enc$binge_drinking == 2 |
-                              enc$binge_drinking == 3) |
-                           (enc$marijuana_use == 0 | enc$marijuana_use == 1 | enc$marijuana_use == 2 |
-                              enc$marijuana_use == 3 | enc$marijuana_use == 4) |
-                           (enc$cocaine_use == 0 | enc$cocaine_use == 1 | enc$cocaine_use == 2 |
-                              enc$cocaine_use == 3 | enc$cocaine_use == 4) |
-                           (enc$rx_amphetamine_use == 0 | enc$rx_amphetamine_use == 1 | enc$rx_amphetamine_use == 2 |
-                              enc$rx_amphetamine_use == 3 | enc$rx_amphetamine_use == 4) |
-                           (enc$meth_use == 0 | enc$meth_use == 1 | enc$meth_use == 2 |
-                              enc$meth_use == 3 | enc$meth_use == 4) |
-                           (enc$inhalants_use == 0 | enc$inhalants_use == 1 | enc$inhalants_use == 2 |
-                              enc$inhalants_use == 3 | enc$inhalants_use == 4) |
-                           (enc$sedatives_use == 0 | enc$sedatives_use == 1 | enc$sedatives_use == 2 |
-                              enc$sedatives_use == 3 | enc$sedatives_use == 4) |
-                           (enc$ruffies_use == 0 | enc$ruffies_use == 1 | enc$ruffies_use == 2 |
-                              enc$ruffies_use == 3 | enc$ruffies_use == 4) |
-                           (enc$hallucinogen_use == 0 | enc$hallucinogen_use == 1 | enc$hallucinogen_use == 2 |
-                              enc$hallucinogen_use == 3 | enc$hallucinogen_use == 4) |
-                           (enc$street_opioid_use == 0 | enc$street_opioid_use == 1 | enc$street_opioid_use == 2 |
-                              enc$street_opioid_use == 3 | enc$street_opioid_use == 4) |
-                           (enc$rx_opioid_use == 0 | enc$rx_opioid_use == 1 | enc$rx_opioid_use == 2 |
-                              enc$rx_opioid_use == 3 | enc$rx_opioid_use == 4) |
-                           (enc$injection_drug_use == 0 | enc$injection_drug_use == 1 | enc$injection_drug_use == 2 |
-                              enc$injection_drug_use == 3 | enc$injection_drug_use == 4) |
-                           (enc$other_drug_use == 0 | enc$other_drug_use == 1 | enc$other_drug_use == 2 |
-                              enc$other_drug_use == 3 | enc$other_drug_use == 4) |
-                           (enc$marijuana_use_ltc == 0 | enc$marijuana_use_ltc == 1 | enc$marijuana_use_ltc == 2 |
-                              enc$marijuana_use_ltc == 3 | enc$marijuana_use_ltc == 4) |
-                           (enc$cocaine_use_ltc == 0 | enc$cocaine_use_ltc == 1 | enc$cocaine_use_ltc == 2 |
-                              enc$cocaine_use_ltc == 3 | enc$cocaine_use_ltc == 4) |
-                           (enc$rx_amphetamine_use_ltc == 0 | enc$rx_amphetamine_use_ltc == 1 | enc$rx_amphetamine_use_ltc == 2 |
-                              enc$rx_amphetamine_use_ltc == 3 | enc$rx_amphetamine_use_ltc == 4) |
-                           (enc$meth_use_ltc == 0 | enc$meth_use_ltc == 1 | enc$meth_use_ltc == 2 |
-                              enc$meth_use_ltc == 3 | enc$meth_use_ltc == 4) |
-                           (enc$inhalants_use_ltc == 0 | enc$inhalants_use_ltc == 1 | enc$inhalants_use_ltc == 2 |
-                              enc$inhalants_use_ltc == 3 | enc$inhalants_use_ltc == 4) |
-                           (enc$sedatives_use_ltc == 0 | enc$sedatives_use_ltc == 1 | enc$sedatives_use_ltc == 2 |
-                              enc$sedatives_use_ltc == 3 | enc$sedatives_use_ltc == 4) |
-                           (enc$ruffies_use_ltc == 0 | enc$ruffies_use_ltc == 1 | enc$ruffies_use_ltc == 2 |
-                              enc$ruffies_use_ltc == 3 | enc$ruffies_use_ltc == 4) |
-                           (enc$hallucinogen_use_ltc == 0 | enc$hallucinogen_use_ltc == 1 | enc$hallucinogen_use_ltc == 2 |
-                              enc$hallucinogen_use_ltc == 3 | enc$hallucinogen_use_ltc == 4) |
-                           (enc$street_opioid_use_ltc == 0 | enc$street_opioid_use_ltc == 1 | enc$street_opioid_use_ltc == 2 |
-                              enc$street_opioid_use_ltc == 3 | enc$street_opioid_use_ltc == 4) |
-                           (enc$rx_opioid_use_ltc == 0 | enc$rx_opioid_use_ltc == 1 | enc$rx_opioid_use_ltc == 2 |
-                              enc$rx_opioid_use_ltc == 3 | enc$rx_opioid_use_ltc == 4) |
-                           (enc$injection_drug_use_ltc == 0 | enc$injection_drug_use_ltc == 1 | enc$injection_drug_use_ltc == 2 |
-                              enc$injection_drug_use_ltc == 3 | enc$injection_drug_use_ltc == 4) |
-                           (enc$other_drug_use_ltc == 0 | enc$other_drug_use_ltc == 1 | enc$other_drug_use_ltc == 2 |
-                              enc$other_drug_use_ltc == 3 | enc$other_drug_use_ltc == 4))] <- 1
-table(enc$hcph_sud_assessed)
-hcph_sud_assessed <- enc[which(enc$hcph_sud_assessed == 1), ]
-dim(hcph_sud_assessed)
-hcph_sud_assessed <- nrow(hcph_sud_assessed)
-hcph_sud_assessed
-
-
-
-enc$hcph_opioid_stimulant_use[enc$hcph_sud_assessed == 1 &
-                                ((enc$cocaine_use > 0 & enc$cocaine_use < 4) |
-                                   (enc$rx_amphetamine_use > 0 & enc$rx_amphetamine_use < 4) |
-                                   (enc$meth_use > 0 & enc$meth_use < 4) |
-                                   (enc$street_opioid_use > 0 & enc$street_opioid_use < 4) |
-                                   (enc$rx_opioid_use > 0 & enc$rx_opioid_use < 4) |
-                                   (enc$cocaine_use_ltc > 0 & enc$cocaine_use_ltc < 4) |
-                                   (enc$rx_amphetamine_use_ltc > 0 & enc$rx_amphetamine_use_ltc < 4) |
-                                   (enc$meth_use_ltc > 0 & enc$meth_use_ltc < 4) |
-                                   (enc$street_opioid_use_ltc > 0 & enc$street_opioid_use_ltc < 4) |
-                                   (enc$rx_opioid_use_ltc > 0 & enc$rx_opioid_use_ltc < 4))] <- 1
-table(enc$hcph_opioid_stimulant_use)
-
-table(enc$hcph_opioid_stimulant_use)
-hcph_opioid_stimulant_use <- enc[which(enc$hcph_opioid_stimulant_use == 1), ]
-dim(hcph_opioid_stimulant_use)
-hcph_opioid_stimulant_use <- nrow(hcph_opioid_stimulant_use)
-hcph_opioid_stimulant_use
-
-hcph_opioid_stimulant_use_percent <- percent(hcph_opioid_stimulant_use/hcph_sud_assessed, accuracy = 0.1)
-hcph_opioid_stimulant_use_percent
-
-
-
-table(enc$ltc_services___3, enc$hcph_opioid_stimulant_use)
-enc$hcph_sud_linkage_need[enc$hcph_opioid_stimulant_use == 1 & enc$ltc_services___3 == 1] <- 1
-table(enc$hcph_sud_linkage_need)
-
-table(enc$hcph_sud_linkage_need)
-hcph_sud_linkage_need <- enc[which(enc$hcph_sud_linkage_need == 1), ]
-dim(hcph_sud_linkage_need)
-hcph_sud_linkage_need <- nrow(hcph_sud_linkage_need)
-hcph_sud_linkage_need
-
-hcph_sud_linkage_need_percent <- percent(hcph_sud_linkage_need/hcph_opioid_stimulant_use, accuracy = 0.1)
-hcph_sud_linkage_need_percent
-
-
-
-enc$hcph_sud_linked[enc$hcph_sud_linkage_need == 1 & enc$ltc_sud_final_ltc_status == 1] <- 1
-table(enc$hcph_sud_linked)
-
-table(enc$hcph_sud_linked)
-hcph_sud_linked <- enc[which(enc$hcph_sud_linked == 1), ]
-dim(hcph_sud_linked)
-hcph_sud_linked <- nrow(hcph_sud_linked)
-hcph_sud_linked
-
-hcph_sud_linked_percent <- percent(hcph_sud_linked/hcph_sud_linkage_need, accuracy = 0.1)
-hcph_sud_linked_percent
-
-
-
-enc$hcph_sud_fu_consent[enc$hcph_sud_linked == 1 & enc$ltc_sud_hcph_fu == 1] <- 1
-table(enc$hcph_sud_fu_consent)
-
-hcph_sud_fu_consent <- enc[which(enc$hcph_sud_fu_consent == 1), ]
-dim(hcph_sud_fu_consent)
-hcph_sud_fu_consent <- nrow(hcph_sud_fu_consent)
-hcph_sud_fu_consent
-
-hcph_sud_fu_consent_percent <- percent(hcph_sud_fu_consent/hcph_sud_linked, accuracy = 0.1)
-hcph_sud_fu_consent_percent
-
-
-
-# Monthly HCPH SUD Data
-monthly_hcph_sud <- select(enc, enc_date, hcph_sud_assessed, hcph_opioid_stimulant_use, hcph_sud_linkage_need, hcph_sud_linked, hcph_sud_fu_consent)
-monthly_hcph_sud <- monthly_hcph_sud[which(monthly_hcph_sud$enc_date >= '2024-08-01'), ]
-head(monthly_hcph_sud)
-colnames(monthly_hcph_sud)[2] <- 'hcph_sud_assessed'
-colnames(monthly_hcph_sud)[3] <- 'hcph_opioid_stimulant_use'
-colnames(monthly_hcph_sud)[4] <- 'hcph_sud_linkage_need'
-colnames(monthly_hcph_sud)[5] <- 'hcph_sud_linked'
-colnames(monthly_hcph_sud)[6] <- 'hcph_sud_fu_consent'
-monthly_hcph_sud$hcph_sud_assessed[is.na(monthly_hcph_sud$hcph_sud_assessed)] <- 0
-head(monthly_hcph_sud)
-monthly_hcph_sud$hcph_opioid_stimulant_use[is.na(monthly_hcph_sud$hcph_opioid_stimulant_use)] <- 0
-head(monthly_hcph_sud)
-monthly_hcph_sud$hcph_sud_linkage_need[is.na(monthly_hcph_sud$hcph_sud_linkage_need)] <- 0
-head(monthly_hcph_sud)
-monthly_hcph_sud$hcph_sud_linked[is.na(monthly_hcph_sud$hcph_sud_linked)] <- 0
-head(monthly_hcph_sud)
-monthly_hcph_sud$hcph_sud_fu_consent[is.na(monthly_hcph_sud$hcph_sud_fu_consent)] <- 0
-head(monthly_hcph_sud)
-
-monthly_hcph_sud$Date <- as.Date(monthly_hcph_sud$enc_date, format="%d/%m/%Y")
-head(monthly_hcph_sud)
+####################  2023 sud Linkage Data  ####################
+
+summary(enc$enc_date)
+eip_2023 <- enc[which(enc$enc_date >= '2023-01-01' & enc$enc_date <= '2023-12-31'), ]
+summary(eip_2023$enc_date)
+
+
+# sud Linkage Data
+table(eip_2023$ltc_services___3)
+eip_2023$sud_ltc_2023[eip_2023$ltc_services___3 == 1] <- 1
+table(eip_2023$sud_ltc_2023)
+
+table(eip_2023$sud_ltc_2023)
+sud_ltc_2023 <- eip_2023[which(eip_2023$sud_ltc_2023 == 1), ]
+dim(sud_ltc_2023)
+sud_ltc_2023 <- nrow(sud_ltc_2023)
+sud_ltc_2023
+
+
+# Ineligible sud Linkage - Already Linked
+table(eip_2023$ltc_sud_declined_rsn___23)
+table(eip_2023$ltc_sud_prevented_rsn___16)
+eip_2023$sud_already_linked_2023[eip_2023$sud_ltc_2023 == 1 &
+                                   (eip_2023$ltc_sud_declined_rsn___23 == 1 |
+                                      eip_2023$ltc_sud_prevented_rsn___16 == 1)] <- 1
+table(eip_2023$sud_already_linked_2023)
+
+table(eip_2023$sud_already_linked_2023)
+sud_already_linked_2023 <- eip_2023[which(eip_2023$sud_already_linked_2023 == 1), ]
+dim(sud_already_linked_2023)
+sud_already_linked_2023 <- nrow(sud_already_linked_2023)
+sud_already_linked_2023
+
+
+# Ineligible sud Linkage - Deceased
+table(eip_2023$ltc_sud_declined_rsn___35)
+table(eip_2023$ltc_sud_prevented_rsn___17)
+eip_2023$sud_deceased_2023[eip_2023$sud_ltc_2023 == 1 &
+                             (eip_2023$ltc_sud_declined_rsn___35 == 1 |
+                                eip_2023$ltc_sud_prevented_rsn___17 == 1)] <- 1
+table(eip_2023$sud_deceased_2023)
+
+table(eip_2023$sud_deceased_2023)
+sud_deceased_2023 <- eip_2023[which(eip_2023$sud_deceased_2023 == 1), ]
+dim(sud_deceased_2023)
+sud_deceased_2023 <- nrow(sud_deceased_2023)
+sud_deceased_2023
+
+
+# Ineligible sud Linkage - Incarcerated
+table(eip_2023$ltc_sud_prevented_rsn___12)
+eip_2023$sud_incarcerated_2023[eip_2023$sud_ltc_2023 == 1 &
+                                 eip_2023$ltc_sud_prevented_rsn___12 == 1] <- 1
+table(eip_2023$sud_incarcerated_2023)
+
+table(eip_2023$sud_incarcerated_2023)
+sud_incarcerated_2023 <- eip_2023[which(eip_2023$sud_incarcerated_2023 == 1), ]
+dim(sud_incarcerated_2023)
+sud_incarcerated_2023 <- nrow(sud_incarcerated_2023)
+sud_incarcerated_2023
+
+
+# Ineligible sud Linkage - Inability to Contact
+table(eip_2023$ltc_sud_final_ltc_status)
+eip_2023$sud_inability_to_contact_2023[eip_2023$sud_ltc_2023 == 1 &
+                                         eip_2023$ltc_sud_prevented_rsn___19 == 1] <- 1
+table(eip_2023$sud_inability_to_contact_2023)
+
+table(eip_2023$sud_inability_to_contact_2023)
+sud_inability_to_contact_2023 <- eip_2023[which(eip_2023$sud_inability_to_contact_2023 == 1), ]
+dim(sud_inability_to_contact_2023)
+sud_inability_to_contact_2023 <- nrow(sud_inability_to_contact_2023)
+sud_inability_to_contact_2023
+
+
+# Ineligible sud Linkage - Declined Linkage Service
+table(eip_2023$ltc_sud_final_ltc_status)
+eip_2023$sud_linkage_declined_2023[(eip_2023$sud_ltc_2023 == 1 &
+                                      eip_2023$ltc_sud_final_ltc_status == 2) &
+                                     (is.na(eip_2023$sud_already_linked_2023) &
+                                        is.na(eip_2023$sud_deceased_2023) &
+                                        is.na(eip_2023$sud_incarcerated_2023) &
+                                        is.na(eip_2023$sud_inability_to_contact_2023))] <- 1
+table(eip_2023$sud_linkage_declined_2023)
+
+table(eip_2023$sud_linkage_declined_2023)
+sud_linkage_declined_2023 <- eip_2023[which(eip_2023$sud_linkage_declined_2023 == 1), ]
+dim(sud_linkage_declined_2023)
+sud_linkage_declined_2023 <- nrow(sud_linkage_declined_2023)
+sud_linkage_declined_2023
+
+
+# Ineligible sud Linkage - Linkage in Progress
+table(eip_2023$ltc_sud_prevented_rsn___18)
+eip_2023$sud_ongoing_linkage_2023[eip_2023$sud_ltc_2023 == 1 &
+                                    eip_2023$ltc_sud_prevented_rsn___18 == 1] <- 1
+table(eip_2023$sud_ongoing_linkage_2023)
+
+table(eip_2023$sud_ongoing_linkage_2023)
+sud_ongoing_linkage_2023 <- eip_2023[which(eip_2023$sud_ongoing_linkage_2023 == 1), ]
+dim(sud_ongoing_linkage_2023)
+sud_ongoing_linkage_2023 <- nrow(sud_ongoing_linkage_2023)
+sud_ongoing_linkage_2023
 
-monthly_hcph_sud <- aggregate(cbind(hcph_sud_assessed, hcph_opioid_stimulant_use,
-                                    hcph_sud_linkage_need,hcph_sud_linked, hcph_sud_fu_consent) ~ as.yearmon(Date),
-                              monthly_hcph_sud,
-                              FUN = sum)
-monthly_hcph_sud$Date <- as.Date(as.yearmon(monthly_hcph_sud$`as.yearmon(Date)`))
-head(monthly_hcph_sud)
-monthly_hcph_sud
-
-
-
-
-#####  HCPH SUD Follow-up Data
-
-todays_date <- Sys.Date()
 
-enc$hcph_sud_day30_contact_date <- as.Date(enc$hcph_sud_day30_contact_date, format = '%m/%d/%Y')
-enc$hcph_sud_30day_eligible <- ifelse(((enc$hcph_sud_fu_consent == 1) &
-                                         (enc$hcph_sud_linked == 1) &
-                                         ((enc$hcph_sud_day30_contact_date <= todays_date) |
-                                            enc$ltc_sud_hcph_30day_completion == 1)), 1, 0)
-table(enc$hcph_sud_30day_eligible)
-hcph_sud_30day_eligible <- enc[which(enc$hcph_sud_30day_eligible == 1), ]
-dim(hcph_sud_30day_eligible)
-hcph_sud_30day_eligible <- nrow(hcph_sud_30day_eligible)
-hcph_sud_30day_eligible
-
-hcph_sud_30day_eligible_percent <- percent(hcph_sud_30day_eligible/hcph_sud_fu_consent, accuracy = 0.1)
-hcph_sud_30day_eligible_percent
+# sud Ineligible Cases
+eip_2023$sud_ineligible_ltc_2023[eip_2023$sud_already_linked_2023 == 1 |
+                                   eip_2023$sud_deceased_2023 == 1 |
+                                   eip_2023$sud_incarcerated_2023 == 1 |
+                                   eip_2023$sud_inability_to_contact_2023 == 1 |
+                                   eip_2023$sud_linkage_declined_2023 == 1 |
+                                   eip_2023$sud_ongoing_linkage_2023 == 1] <- 1
+table(eip_2023$sud_ineligible_ltc_2023)
 
+table(eip_2023$sud_ineligible_ltc_2023)
+sud_ineligible_ltc_2023 <- eip_2023[which(eip_2023$sud_ineligible_ltc_2023 == 1), ]
+dim(sud_ineligible_ltc_2023)
+sud_ineligible_ltc_2023 <- nrow(sud_ineligible_ltc_2023)
+sud_ineligible_ltc_2023
 
-hcph_sud_30day_out_of_window <- hcph_sud_fu_consent - hcph_sud_30day_eligible
-hcph_sud_30day_out_of_window
+sud_ineligible_ltc_2023_percent <- percent(sud_ineligible_ltc_2023/sud_ltc_2023, accuracy = 0.1)
+sud_ineligible_ltc_2023_percent
 
-hcph_sud_30day_out_of_window_percent <- percent(hcph_sud_30day_out_of_window/hcph_sud_fu_consent, accuracy = 0.1)
-hcph_sud_30day_out_of_window_percent
+sud_already_linked_2023_percent <- percent(sud_already_linked_2023/sud_ineligible_ltc_2023, accuracy = 0.1)
+sud_already_linked_2023_percent
 
+sud_deceased_2023_percent <- percent(sud_deceased_2023/sud_ineligible_ltc_2023, accuracy = 0.1)
+sud_deceased_2023_percent
 
+sud_incarcerated_2023_percent <- percent(sud_incarcerated_2023/sud_ineligible_ltc_2023, accuracy = 0.1)
+sud_incarcerated_2023_percent
 
+sud_inability_to_contact_2023_percent <- percent(sud_inability_to_contact_2023/sud_ineligible_ltc_2023, accuracy = 0.1)
+sud_inability_to_contact_2023_percent
 
-enc$hcph_sud_30day_complete[enc$hcph_sud_30day_eligible == 1 &
-                              enc$ltc_sud_hcph_30day_completion == 1] <- 1 
-table(enc$hcph_sud_30day_complete)
-hcph_sud_30day_complete <- enc[which(enc$hcph_sud_30day_complete == 1), ]
-dim(hcph_sud_30day_complete)
-hcph_sud_30day_complete <- nrow(hcph_sud_30day_complete)
-hcph_sud_30day_complete
+sud_linkage_declined_2023_percent <- percent(sud_linkage_declined_2023/sud_ineligible_ltc_2023, accuracy = 0.1)
+sud_linkage_declined_2023_percent
 
-hcph_sud_30day_complete_percent <- percent(hcph_sud_30day_complete/hcph_sud_30day_eligible, accuracy = 0.1)
-hcph_sud_30day_complete_percent
+sud_ongoing_linkage_2023_percent <- percent(sud_ongoing_linkage_2023/sud_ineligible_ltc_2023, accuracy = 0.1)
+sud_ongoing_linkage_2023_percent
 
 
-enc$hcph_sud_30day_not_complete[enc$hcph_sud_30day_eligible == 1 &
-                                  (enc$ltc_sud_hcph_30day_completion == 0 |
-                                     is.na(enc$ltc_sud_hcph_30day_completion))] <- 1 
-table(enc$hcph_sud_30day_not_complete)
-hcph_sud_30day_not_complete <- enc[which(enc$hcph_sud_30day_not_complete == 1), ]
-dim(hcph_sud_30day_not_complete)
-hcph_sud_30day_not_complete <- nrow(hcph_sud_30day_not_complete)
-hcph_sud_30day_not_complete
+# sud Eligibility to be Linked
+eip_2023$sud_eligible_ltc_2023[eip_2023$sud_ltc_2023 == 1 &
+                                 (is.na(eip_2023$sud_already_linked_2023) &
+                                    is.na(eip_2023$sud_deceased_2023) &
+                                    is.na(eip_2023$sud_incarcerated_2023) &
+                                    is.na(eip_2023$sud_inability_to_contact_2023) &
+                                    is.na(eip_2023$sud_linkage_declined_2023) &
+                                    is.na(eip_2023$sud_ongoing_linkage_2023))] <- 1
+table(eip_2023$sud_eligible_ltc_2023)
 
-hcph_sud_30day_not_complete_percent <- percent(hcph_sud_30day_not_complete/hcph_sud_30day_eligible, accuracy = 0.1)
-hcph_sud_30day_not_complete_percent
+table(eip_2023$sud_eligible_ltc_2023)
+sud_eligible_ltc_2023 <- eip_2023[which(eip_2023$sud_eligible_ltc_2023 == 1), ]
+dim(sud_eligible_ltc_2023)
+sud_eligible_ltc_2023 <- nrow(sud_eligible_ltc_2023)
+sud_eligible_ltc_2023
 
+sud_eligible_ltc_2023_percent <- percent(sud_eligible_ltc_2023/sud_ltc_2023, accuracy = 0.1)
+sud_eligible_ltc_2023_percent
 
 
+# sud Open/Closed Cases
+table(eip_2023$ltc_sud_open_case_calc)
+eip_2023$sud_in_progress_2023[eip_2023$sud_eligible_ltc_2023 == 1 &
+                                eip_2023$ltc_sud_open_case_calc == 1] <- 1
+table(eip_2023$sud_in_progress_2023)
 
-enc$hcph_sud_day60_contact_date <- as.Date(enc$hcph_sud_day60_contact_date, format = '%m/%d/%Y')
-enc$hcph_sud_60day_eligible <- ifelse((enc$ltc_sud_hcph_30day_completion == 1 &
-                                         ((enc$hcph_sud_day60_contact_date <= todays_date) |
-                                            enc$ltc_sud_hcph_60day_completion == 1)), 1, 0)
-table(enc$hcph_sud_60day_eligible)
-hcph_sud_60day_eligible <- enc[which(enc$hcph_sud_60day_eligible == 1), ]
-dim(hcph_sud_60day_eligible)
-hcph_sud_60day_eligible <- nrow(hcph_sud_60day_eligible)
-hcph_sud_60day_eligible
+table(eip_2023$sud_in_progress_2023)
+sud_in_progress_2023 <- eip_2023[which(eip_2023$sud_in_progress_2023 == 1), ]
+dim(sud_in_progress_2023)
+sud_in_progress_2023 <- nrow(sud_in_progress_2023)
+sud_in_progress_2023
 
-hcph_sud_60day_eligible_percent <- percent(hcph_sud_60day_eligible/hcph_sud_30day_complete, accuracy = 0.1)
-hcph_sud_60day_eligible_percent
+sud_in_progress_2023_percent <- percent(sud_in_progress_2023/sud_eligible_ltc_2023, accuracy = 0.1)
+sud_in_progress_2023_percent
 
 
-hcph_sud_60day_out_of_window <- hcph_sud_30day_complete - hcph_sud_60day_eligible
-hcph_sud_60day_out_of_window
 
-hcph_sud_60day_out_of_window_percent <- percent(hcph_sud_60day_out_of_window/hcph_sud_30day_complete, accuracy = 0.1)
-hcph_sud_60day_out_of_window_percent
+table(eip_2023$sud_eligible_ltc_2023, eip_2023$sud_in_progress_2023)
+eip_2023$sud_closed_case_2023[eip_2023$sud_eligible_ltc_2023 == 1 &
+                                is.na(eip_2023$sud_in_progress_2023)] <- 1
+table(eip_2023$sud_closed_case_2023)
 
+table(eip_2023$sud_closed_case_2023)
+sud_closed_case_2023 <- eip_2023[which(eip_2023$sud_closed_case_2023 == 1), ]
+dim(sud_closed_case_2023)
+sud_closed_case_2023 <- nrow(sud_closed_case_2023)
+sud_closed_case_2023
 
-enc$hcph_sud_60day_complete[enc$ltc_sud_hcph_30day_completion == 1 &
-                              enc$ltc_sud_hcph_60day_completion == 1] <- 1 
-table(enc$hcph_sud_60day_complete)
-hcph_sud_60day_complete <- enc[which(enc$hcph_sud_60day_complete == 1), ]
-dim(hcph_sud_60day_complete)
-hcph_sud_60day_complete <- nrow(hcph_sud_60day_complete)
-hcph_sud_60day_complete
+sud_closed_case_2023_percent <- percent(sud_closed_case_2023/sud_eligible_ltc_2023, accuracy = 0.1)
+sud_closed_case_2023_percent
 
-hcph_sud_60day_complete_percent <- percent(hcph_sud_60day_complete/hcph_sud_60day_eligible, accuracy = 0.1)
-hcph_sud_60day_complete_percent
 
 
-enc$hcph_sud_60day_not_complete[enc$hcph_sud_60day_eligible == 1 &
-                                  (enc$ltc_sud_hcph_60day_completion == 0 |
-                                     is.na(enc$ltc_sud_hcph_60day_completion))] <- 1 
-table(enc$hcph_sud_60day_not_complete)
-hcph_sud_60day_not_complete <- enc[which(enc$hcph_sud_60day_not_complete == 1), ]
-dim(hcph_sud_60day_not_complete)
-hcph_sud_60day_not_complete <- nrow(hcph_sud_60day_not_complete)
-hcph_sud_60day_not_complete
+table(eip_2023$sud_in_progress_2023)
+eip_2023$sud_ltc_days_open_2023 <- difftime(Sys.Date(), eip_2023$enc_date, units="days")
+table(eip_2023$sud_ltc_days_open_2023)
+eip_2023$sud_in_progress_90days_2023[eip_2023$sud_in_progress_2023 == 1 &
+                                       (eip_2023$sud_ltc_days_open_2023 > 90)] <- 1
+table(eip_2023$sud_in_progress_90days_2023)
 
-hcph_sud_60day_not_complete_percent <- percent(hcph_sud_60day_not_complete/hcph_sud_60day_eligible, accuracy = 0.1)
-hcph_sud_60day_not_complete_percent
+table(eip_2023$sud_in_progress_90days_2023)
+sud_in_progress_90days_2023 <- eip_2023[which(eip_2023$sud_in_progress_90days_2023 == 1), ]
+dim(sud_in_progress_90days_2023)
+sud_in_progress_90days_2023 <- nrow(sud_in_progress_90days_2023)
+sud_in_progress_90days_2023
 
+sud_in_progress_90days_2023_percent <- percent(sud_in_progress_90days_2023/sud_in_progress_2023, accuracy = 0.1)
+sud_in_progress_90days_2023_percent
 
 
+# sud Cases Linked to Care
+table(eip_2023$sud_closed_case_2023, eip_2023$ltc_sud_final_ltc_status)
+eip_2023$sud_linked_2023[eip_2023$sud_closed_case_2023 == 1 &
+                           eip_2023$ltc_sud_final_ltc_status == 1] <- 1
+table(eip_2023$sud_linked_2023)
 
-enc$hcph_sud_day90_contact_date <- as.Date(enc$hcph_sud_day90_contact_date, format = '%m/%d/%Y')
-enc$hcph_sud_90day_eligible <- ifelse((enc$ltc_sud_hcph_60day_completion == 1 &
-                                         ((enc$hcph_sud_day90_contact_date <= todays_date) |
-                                            enc$ltc_sud_hcph_90day_completion == 1)), 1, 0)
-table(enc$hcph_sud_90day_eligible)
-hcph_sud_90day_eligible <- enc[which(enc$hcph_sud_90day_eligible == 1), ]
-dim(hcph_sud_90day_eligible)
-hcph_sud_90day_eligible <- nrow(hcph_sud_90day_eligible)
-hcph_sud_90day_eligible
+table(eip_2023$sud_linked_2023)
+sud_linked_2023 <- eip_2023[which(eip_2023$sud_linked_2023 == 1), ]
+dim(sud_linked_2023)
+sud_linked_2023 <- nrow(sud_linked_2023)
+sud_linked_2023
 
-hcph_sud_90day_eligible_percent <- percent(hcph_sud_90day_eligible/hcph_sud_60day_complete, accuracy = 0.1)
-hcph_sud_90day_eligible_percent
+sud_linked_2023_percent <- percent(sud_linked_2023/sud_closed_case_2023, accuracy = 0.1)
+sud_linked_2023_percent
 
 
-hcph_sud_90day_out_of_window <- hcph_sud_60day_complete - hcph_sud_90day_eligible
-hcph_sud_90day_out_of_window
 
-hcph_sud_90day_out_of_window_percent <- percent(hcph_sud_90day_out_of_window/hcph_sud_60day_complete, accuracy = 0.1)
-hcph_sud_90day_out_of_window_percent
+eip_2023$sud_not_linked_2023[eip_2023$sud_eligible_ltc_2023 == 1 & is.na(eip_2023$sud_in_progress_2023) & is.na(eip_2023$sud_linked_2023)] <- 1
+table(eip_2023$sud_not_linked_2023)
 
+table(eip_2023$sud_not_linked_2023)
+sud_not_linked_2023 <- eip_2023[which(eip_2023$sud_not_linked_2023 == 1), ]
+dim(sud_not_linked_2023)
+sud_not_linked_2023 <- nrow(sud_not_linked_2023)
+sud_not_linked_2023
 
-enc$hcph_sud_90day_complete[enc$ltc_sud_hcph_60day_completion == 1 &
-                              enc$ltc_sud_hcph_90day_completion == 1] <- 1 
-table(enc$hcph_sud_90day_complete)
-hcph_sud_90day_complete <- enc[which(enc$hcph_sud_90day_complete == 1), ]
-dim(hcph_sud_90day_complete)
-hcph_sud_90day_complete <- nrow(hcph_sud_90day_complete)
-hcph_sud_90day_complete
+sud_not_linked_2023_percent <- percent(sud_not_linked_2023/sud_closed_case_2023, accuracy = 0.1)
+sud_not_linked_2023_percent
 
-hcph_sud_90day_complete_percent <- percent(hcph_sud_90day_complete/hcph_sud_90day_eligible, accuracy = 0.1)
-hcph_sud_90day_complete_percent
 
 
-enc$hcph_sud_90day_not_complete[enc$hcph_sud_90day_eligible == 1 &
-                                  (enc$ltc_sud_hcph_90day_completion == 0 |
-                                     is.na(enc$ltc_sud_hcph_90day_completion))] <- 1 
-table(enc$hcph_sud_90day_not_complete)
-hcph_sud_90day_not_complete <- enc[which(enc$hcph_sud_90day_not_complete == 1), ]
-dim(hcph_sud_90day_not_complete)
-hcph_sud_90day_not_complete <- nrow(hcph_sud_90day_not_complete)
-hcph_sud_90day_not_complete
+# sud Reasons Not Linked to Care
+eip_2023$sud_not_linked_med_staff_2023[(eip_2023$sud_closed_case_2023 == 1 & is.na(eip_2023$sud_linked_2023)) &
+                                         (eip_2023$ltc_sud_prevented_rsn___1 == 1 |
+                                            eip_2023$ltc_sud_prevented_rsn___2 == 1 |
+                                            eip_2023$ltc_sud_prevented_rsn___11 == 1)] <- 1
+table(eip_2023$sud_not_linked_med_staff_2023)
 
-hcph_sud_90day_not_complete_percent <- percent(hcph_sud_90day_not_complete/hcph_sud_90day_eligible, accuracy = 0.1)
-hcph_sud_90day_not_complete_percent
+table(eip_2023$sud_not_linked_med_staff_2023)
+sud_not_linked_med_staff_2023 <- eip_2023[which(eip_2023$sud_not_linked_med_staff_2023 == 1), ]
+dim(sud_not_linked_med_staff_2023)
+sud_not_linked_med_staff_2023 <- nrow(sud_not_linked_med_staff_2023)
+sud_not_linked_med_staff_2023
 
+sud_not_linked_med_staff_2023_percent <- percent(sud_not_linked_med_staff_2023/sud_not_linked_2023, accuracy = 0.1)
+sud_not_linked_med_staff_2023_percent
 
 
 
-enc$hcph_sud_day180_contact_date <- as.Date(enc$hcph_sud_day180_contact_date, format = '%m/%d/%Y')
-enc$hcph_sud_180day_eligible <- ifelse((enc$ltc_sud_hcph_90day_completion == 1 &
-                                          ((enc$hcph_sud_day180_contact_date <= todays_date) |
-                                             enc$ltc_sud_hcph_180day_completion == 1)), 1, 0)
-table(enc$hcph_sud_180day_eligible)
-hcph_sud_180day_eligible <- enc[which(enc$hcph_sud_180day_eligible == 1), ]
-dim(hcph_sud_180day_eligible)
-hcph_sud_180day_eligible <- nrow(hcph_sud_180day_eligible)
-hcph_sud_180day_eligible
+eip_2023$sud_not_linked_family_2023[(eip_2023$sud_closed_case_2023 == 1 & is.na(eip_2023$sud_linked_2023)) &
+                                      (eip_2023$ltc_sud_prevented_rsn___3 == 1)] <- 1
+table(eip_2023$sud_not_linked_family_2023)
 
-hcph_sud_180day_eligible_percent <- percent(hcph_sud_180day_eligible/hcph_sud_90day_complete, accuracy = 0.1)
-hcph_sud_180day_eligible_percent
+table(eip_2023$sud_not_linked_family_2023)
+sud_not_linked_family_2023 <- eip_2023[which(eip_2023$sud_not_linked_family_2023 == 1), ]
+dim(sud_not_linked_family_2023)
+sud_not_linked_family_2023 <- nrow(sud_not_linked_family_2023)
+sud_not_linked_family_2023
 
+sud_not_linked_family_2023_percent <- percent(sud_not_linked_family_2023/sud_not_linked_2023, accuracy = 0.1)
+sud_not_linked_family_2023_percent
 
-hcph_sud_180day_out_of_window <- hcph_sud_90day_complete - hcph_sud_180day_eligible
-hcph_sud_180day_out_of_window
 
-hcph_sud_180day_out_of_window_percent <- percent(hcph_sud_180day_out_of_window/hcph_sud_90day_complete, accuracy = 0.1)
-hcph_sud_180day_out_of_window_percent
 
+eip_2023$sud_not_linked_not_talking_2023[(eip_2023$sud_closed_case_2023 == 1 & is.na(eip_2023$sud_linked_2023)) &
+                                           (eip_2023$ltc_sud_prevented_rsn___4 == 1)] <- 1
+table(eip_2023$sud_not_linked_not_talking_2023)
 
+table(eip_2023$sud_not_linked_not_talking_2023)
+sud_not_linked_not_talking_2023 <- eip_2023[which(eip_2023$sud_not_linked_not_talking_2023 == 1), ]
+dim(sud_not_linked_not_talking_2023)
+sud_not_linked_not_talking_2023 <- nrow(sud_not_linked_not_talking_2023)
+sud_not_linked_not_talking_2023
 
-enc$hcph_sud_180day_complete[enc$ltc_sud_hcph_90day_completion == 1 &
-                               enc$ltc_sud_hcph_180day_completion == 1] <- 1 
-table(enc$hcph_sud_180day_complete)
-hcph_sud_180day_complete <- enc[which(enc$hcph_sud_180day_complete == 1), ]
-dim(hcph_sud_180day_complete)
-hcph_sud_180day_complete <- nrow(hcph_sud_180day_complete)
-hcph_sud_180day_complete
+sud_not_linked_not_talking_2023_percent <- percent(sud_not_linked_not_talking_2023/sud_not_linked_2023, accuracy = 0.1)
+sud_not_linked_not_talking_2023_percent
 
-hcph_sud_180day_complete_percent <- percent(hcph_sud_180day_complete/hcph_sud_180day_eligible, accuracy = 0.1)
-hcph_sud_180day_complete_percent
 
 
-enc$hcph_sud_180day_not_complete[enc$hcph_sud_180day_eligible == 1 &
-                                  (enc$ltc_sud_hcph_180day_completion == 0 |
-                                     is.na(enc$ltc_sud_hcph_180day_completion))] <- 1 
-table(enc$hcph_sud_180day_not_complete)
-hcph_sud_180day_not_complete <- enc[which(enc$hcph_sud_180day_not_complete == 1), ]
-dim(hcph_sud_180day_not_complete)
-hcph_sud_180day_not_complete <- nrow(hcph_sud_180day_not_complete)
-hcph_sud_180day_not_complete
+eip_2023$sud_not_linked_safety_2023[(eip_2023$sud_closed_case_2023 == 1 & is.na(eip_2023$sud_linked_2023)) &
+                                      (eip_2023$ltc_sud_prevented_rsn___5 == 1)] <- 1
+table(eip_2023$sud_not_linked_safety_2023)
 
-hcph_sud_180day_not_complete_percent <- percent(hcph_sud_180day_not_complete/hcph_sud_180day_eligible, accuracy = 0.1)
-hcph_sud_180day_not_complete_percent
+table(eip_2023$sud_not_linked_safety_2023)
+sud_not_linked_safety_2023 <- eip_2023[which(eip_2023$sud_not_linked_safety_2023 == 1), ]
+dim(sud_not_linked_safety_2023)
+sud_not_linked_safety_2023 <- nrow(sud_not_linked_safety_2023)
+sud_not_linked_safety_2023
+
+sud_not_linked_safety_2023_percent <- percent(sud_not_linked_safety_2023/sud_not_linked_2023, accuracy = 0.1)
+sud_not_linked_safety_2023_percent
+
+
+
+eip_2023$sud_not_linked_medical_2023[(eip_2023$sud_closed_case_2023 == 1 & is.na(eip_2023$sud_linked_2023)) &
+                                       (eip_2023$ltc_sud_prevented_rsn___6 == 1 |
+                                          eip_2023$ltc_sud_prevented_rsn___8)] <- 1
+table(eip_2023$sud_not_linked_medical_2023)
+
+table(eip_2023$sud_not_linked_medical_2023)
+sud_not_linked_medical_2023 <- eip_2023[which(eip_2023$sud_not_linked_medical_2023 == 1), ]
+dim(sud_not_linked_medical_2023)
+sud_not_linked_medical_2023 <- nrow(sud_not_linked_medical_2023)
+sud_not_linked_medical_2023
+
+sud_not_linked_medical_2023_percent <- percent(sud_not_linked_medical_2023/sud_not_linked_2023, accuracy = 0.1)
+sud_not_linked_medical_2023_percent
+
+
+
+eip_2023$sud_not_linked_contact_2023[(eip_2023$sud_closed_case_2023 == 1 & is.na(eip_2023$sud_linked_2023)) &
+                                       (eip_2023$ltc_sud_prevented_rsn___20 == 1)] <- 1
+table(eip_2023$sud_not_linked_contact_2023)
+
+table(eip_2023$sud_not_linked_contact_2023)
+sud_not_linked_contact_2023 <- eip_2023[which(eip_2023$sud_not_linked_contact_2023 == 1), ]
+dim(sud_not_linked_contact_2023)
+sud_not_linked_contact_2023 <- nrow(sud_not_linked_contact_2023)
+sud_not_linked_contact_2023
+
+sud_not_linked_contact_2023_percent <- percent(sud_not_linked_contact_2023/sud_not_linked_2023, accuracy = 0.1)
+sud_not_linked_contact_2023_percent
+
+
+
+eip_2023$sud_not_linked_language_2023[(eip_2023$sud_closed_case_2023 == 1 & is.na(eip_2023$sud_linked_2023)) &
+                                        (eip_2023$ltc_sud_prevented_rsn___9 == 1)] <- 1
+table(eip_2023$sud_not_linked_language_2023)
+
+table(eip_2023$sud_not_linked_language_2023)
+sud_not_linked_language_2023 <- eip_2023[which(eip_2023$sud_not_linked_language_2023 == 1), ]
+dim(sud_not_linked_language_2023)
+sud_not_linked_language_2023 <- nrow(sud_not_linked_language_2023)
+sud_not_linked_language_2023
+
+sud_not_linked_language_2023_percent <- percent(sud_not_linked_language_2023/sud_not_linked_2023, accuracy = 0.1)
+sud_not_linked_language_2023_percent
+
+
+
+eip_2023$sud_not_linked_other_2023[(eip_2023$sud_closed_case_2023 == 1 & is.na(eip_2023$sud_linked_2023)) &
+                                     (eip_2023$ltc_sud_prevented_rsn___0 == 1)] <- 1
+table(eip_2023$sud_not_linked_other_2023)
+
+table(eip_2023$sud_not_linked_other_2023)
+sud_not_linked_other_2023 <- eip_2023[which(eip_2023$sud_not_linked_other_2023 == 1), ]
+dim(sud_not_linked_other_2023)
+sud_not_linked_other_2023 <- nrow(sud_not_linked_other_2023)
+sud_not_linked_other_2023
+
+sud_not_linked_other_2023_percent <- percent(sud_not_linked_other_2023/sud_not_linked_2023, accuracy = 0.1)
+sud_not_linked_other_2023_percent
+
+
+
+
+####################  2024 sud Linkage Data  ####################
+
+summary(enc$enc_date)
+eip_2024 <- enc[which(enc$enc_date >= '2024-01-01' & enc$enc_date <= '2024-12-31'), ]
+summary(eip_2024$enc_date)
+
+
+# sud Linkage Data
+table(eip_2024$ltc_services___3)
+eip_2024$sud_ltc_2024[eip_2024$ltc_services___3 == 1] <- 1
+table(eip_2024$sud_ltc_2024)
+
+table(eip_2024$sud_ltc_2024)
+sud_ltc_2024 <- eip_2024[which(eip_2024$sud_ltc_2024 == 1), ]
+dim(sud_ltc_2024)
+sud_ltc_2024 <- nrow(sud_ltc_2024)
+sud_ltc_2024
+
+
+# Ineligible sud Linkage - Already Linked
+table(eip_2024$ltc_sud_declined_rsn___23)
+table(eip_2024$ltc_sud_prevented_rsn___16)
+eip_2024$sud_already_linked_2024[eip_2024$sud_ltc_2024 == 1 &
+                                   (eip_2024$ltc_sud_declined_rsn___23 == 1 |
+                                      eip_2024$ltc_sud_prevented_rsn___16 == 1)] <- 1
+table(eip_2024$sud_already_linked_2024)
+
+table(eip_2024$sud_already_linked_2024)
+sud_already_linked_2024 <- eip_2024[which(eip_2024$sud_already_linked_2024 == 1), ]
+dim(sud_already_linked_2024)
+sud_already_linked_2024 <- nrow(sud_already_linked_2024)
+sud_already_linked_2024
+
+
+# Ineligible sud Linkage - Deceased
+table(eip_2024$ltc_sud_declined_rsn___35)
+table(eip_2024$ltc_sud_prevented_rsn___17)
+eip_2024$sud_deceased_2024[eip_2024$sud_ltc_2024 == 1 &
+                             (eip_2024$ltc_sud_declined_rsn___35 == 1 |
+                                eip_2024$ltc_sud_prevented_rsn___17 == 1)] <- 1
+table(eip_2024$sud_deceased_2024)
+
+table(eip_2024$sud_deceased_2024)
+sud_deceased_2024 <- eip_2024[which(eip_2024$sud_deceased_2024 == 1), ]
+dim(sud_deceased_2024)
+sud_deceased_2024 <- nrow(sud_deceased_2024)
+sud_deceased_2024
+
+
+# Ineligible sud Linkage - Incarcerated
+table(eip_2024$ltc_sud_prevented_rsn___12)
+eip_2024$sud_incarcerated_2024[eip_2024$sud_ltc_2024 == 1 &
+                                 eip_2024$ltc_sud_prevented_rsn___12 == 1] <- 1
+table(eip_2024$sud_incarcerated_2024)
+
+table(eip_2024$sud_incarcerated_2024)
+sud_incarcerated_2024 <- eip_2024[which(eip_2024$sud_incarcerated_2024 == 1), ]
+dim(sud_incarcerated_2024)
+sud_incarcerated_2024 <- nrow(sud_incarcerated_2024)
+sud_incarcerated_2024
+
+
+# Ineligible sud Linkage - Inability to Contact
+table(eip_2024$ltc_sud_final_ltc_status)
+eip_2024$sud_inability_to_contact_2024[eip_2024$sud_ltc_2024 == 1 &
+                                         eip_2024$ltc_sud_prevented_rsn___19 == 1] <- 1
+table(eip_2024$sud_inability_to_contact_2024)
+
+table(eip_2024$sud_inability_to_contact_2024)
+sud_inability_to_contact_2024 <- eip_2024[which(eip_2024$sud_inability_to_contact_2024 == 1), ]
+dim(sud_inability_to_contact_2024)
+sud_inability_to_contact_2024 <- nrow(sud_inability_to_contact_2024)
+sud_inability_to_contact_2024
+
+
+# Ineligible sud Linkage - Declined Linkage Service
+table(eip_2024$ltc_sud_final_ltc_status)
+eip_2024$sud_linkage_declined_2024[(eip_2024$sud_ltc_2024 == 1 &
+                                      eip_2024$ltc_sud_final_ltc_status == 2) &
+                                     (is.na(eip_2024$sud_already_linked_2024) &
+                                        is.na(eip_2024$sud_deceased_2024) &
+                                        is.na(eip_2024$sud_incarcerated_2024) &
+                                        is.na(eip_2024$sud_inability_to_contact_2024))] <- 1
+table(eip_2024$sud_linkage_declined_2024)
+
+table(eip_2024$sud_linkage_declined_2024)
+sud_linkage_declined_2024 <- eip_2024[which(eip_2024$sud_linkage_declined_2024 == 1), ]
+dim(sud_linkage_declined_2024)
+sud_linkage_declined_2024 <- nrow(sud_linkage_declined_2024)
+sud_linkage_declined_2024
+
+
+# Ineligible sud Linkage - Linkage in Progress
+table(eip_2024$ltc_sud_prevented_rsn___18)
+eip_2024$sud_ongoing_linkage_2024[eip_2024$sud_ltc_2024 == 1 &
+                                    eip_2024$ltc_sud_prevented_rsn___18 == 1] <- 1
+table(eip_2024$sud_ongoing_linkage_2024)
+
+table(eip_2024$sud_ongoing_linkage_2024)
+sud_ongoing_linkage_2024 <- eip_2024[which(eip_2024$sud_ongoing_linkage_2024 == 1), ]
+dim(sud_ongoing_linkage_2024)
+sud_ongoing_linkage_2024 <- nrow(sud_ongoing_linkage_2024)
+sud_ongoing_linkage_2024
+
+
+# sud Ineligible Cases
+eip_2024$sud_ineligible_ltc_2024[eip_2024$sud_already_linked_2024 == 1 |
+                                   eip_2024$sud_deceased_2024 == 1 |
+                                   eip_2024$sud_incarcerated_2024 == 1 |
+                                   eip_2024$sud_inability_to_contact_2024 == 1 |
+                                   eip_2024$sud_linkage_declined_2024 == 1 |
+                                   eip_2024$sud_ongoing_linkage_2024 == 1] <- 1
+table(eip_2024$sud_ineligible_ltc_2024)
+
+table(eip_2024$sud_ineligible_ltc_2024)
+sud_ineligible_ltc_2024 <- eip_2024[which(eip_2024$sud_ineligible_ltc_2024 == 1), ]
+dim(sud_ineligible_ltc_2024)
+sud_ineligible_ltc_2024 <- nrow(sud_ineligible_ltc_2024)
+sud_ineligible_ltc_2024
+
+sud_ineligible_ltc_2024_percent <- percent(sud_ineligible_ltc_2024/sud_ltc_2024, accuracy = 0.1)
+sud_ineligible_ltc_2024_percent
+
+sud_already_linked_2024_percent <- percent(sud_already_linked_2024/sud_ineligible_ltc_2024, accuracy = 0.1)
+sud_already_linked_2024_percent
+
+sud_deceased_2024_percent <- percent(sud_deceased_2024/sud_ineligible_ltc_2024, accuracy = 0.1)
+sud_deceased_2024_percent
+
+sud_incarcerated_2024_percent <- percent(sud_incarcerated_2024/sud_ineligible_ltc_2024, accuracy = 0.1)
+sud_incarcerated_2024_percent
+
+sud_inability_to_contact_2024_percent <- percent(sud_inability_to_contact_2024/sud_ineligible_ltc_2024, accuracy = 0.1)
+sud_inability_to_contact_2024_percent
+
+sud_linkage_declined_2024_percent <- percent(sud_linkage_declined_2024/sud_ineligible_ltc_2024, accuracy = 0.1)
+sud_linkage_declined_2024_percent
+
+sud_ongoing_linkage_2024_percent <- percent(sud_ongoing_linkage_2024/sud_ineligible_ltc_2024, accuracy = 0.1)
+sud_ongoing_linkage_2024_percent
+
+
+# sud Eligibility to be Linked
+eip_2024$sud_eligible_ltc_2024[eip_2024$sud_ltc_2024 == 1 &
+                                 (is.na(eip_2024$sud_already_linked_2024) &
+                                    is.na(eip_2024$sud_deceased_2024) &
+                                    is.na(eip_2024$sud_incarcerated_2024) &
+                                    is.na(eip_2024$sud_inability_to_contact_2024) &
+                                    is.na(eip_2024$sud_linkage_declined_2024) &
+                                    is.na(eip_2024$sud_ongoing_linkage_2024))] <- 1
+table(eip_2024$sud_eligible_ltc_2024)
+
+table(eip_2024$sud_eligible_ltc_2024)
+sud_eligible_ltc_2024 <- eip_2024[which(eip_2024$sud_eligible_ltc_2024 == 1), ]
+dim(sud_eligible_ltc_2024)
+sud_eligible_ltc_2024 <- nrow(sud_eligible_ltc_2024)
+sud_eligible_ltc_2024
+
+sud_eligible_ltc_2024_percent <- percent(sud_eligible_ltc_2024/sud_ltc_2024, accuracy = 0.1)
+sud_eligible_ltc_2024_percent
+
+
+
+# sud Open/Closed Cases
+table(eip_2024$ltc_sud_open_case_calc)
+eip_2024$sud_in_progress_2024[eip_2024$sud_eligible_ltc_2024 == 1 &
+                                eip_2024$ltc_sud_open_case_calc == 1] <- 1
+table(eip_2024$sud_in_progress_2024)
+
+table(eip_2024$sud_in_progress_2024)
+sud_in_progress_2024 <- eip_2024[which(eip_2024$sud_in_progress_2024 == 1), ]
+dim(sud_in_progress_2024)
+sud_in_progress_2024 <- nrow(sud_in_progress_2024)
+sud_in_progress_2024
+
+sud_in_progress_2024_percent <- percent(sud_in_progress_2024/sud_eligible_ltc_2024, accuracy = 0.1)
+sud_in_progress_2024_percent
+
+
+
+table(eip_2024$sud_eligible_ltc_2024, eip_2024$sud_in_progress_2024)
+eip_2024$sud_closed_case_2024[eip_2024$sud_eligible_ltc_2024 == 1 &
+                                is.na(eip_2024$sud_in_progress_2024)] <- 1
+table(eip_2024$sud_closed_case_2024)
+
+table(eip_2024$sud_closed_case_2024)
+sud_closed_case_2024 <- eip_2024[which(eip_2024$sud_closed_case_2024 == 1), ]
+dim(sud_closed_case_2024)
+sud_closed_case_2024 <- nrow(sud_closed_case_2024)
+sud_closed_case_2024
+
+sud_closed_case_2024_percent <- percent(sud_closed_case_2024/sud_eligible_ltc_2024, accuracy = 0.1)
+sud_closed_case_2024_percent
+
+
+
+table(eip_2024$sud_in_progress_2024)
+eip_2024$sud_ltc_days_open_2024 <- difftime(Sys.Date(), eip_2024$enc_date, units="days")
+table(eip_2024$sud_ltc_days_open_2024)
+eip_2024$sud_in_progress_90days_2024[eip_2024$sud_in_progress_2024 == 1 &
+                                       (eip_2024$sud_ltc_days_open_2024 > 90)] <- 1
+table(eip_2024$sud_in_progress_90days_2024)
+
+table(eip_2024$sud_in_progress_90days_2024)
+sud_in_progress_90days_2024 <- eip_2024[which(eip_2024$sud_in_progress_90days_2024 == 1), ]
+dim(sud_in_progress_90days_2024)
+sud_in_progress_90days_2024 <- nrow(sud_in_progress_90days_2024)
+sud_in_progress_90days_2024
+
+sud_in_progress_90days_2024_percent <- percent(sud_in_progress_90days_2024/sud_in_progress_2024, accuracy = 0.1)
+sud_in_progress_90days_2024_percent
+
+
+# sud Cases Linked to Care
+table(eip_2024$sud_closed_case_2024, eip_2024$ltc_sud_final_ltc_status)
+eip_2024$sud_linked_2024[eip_2024$sud_closed_case_2024 == 1 &
+                           eip_2024$ltc_sud_final_ltc_status == 1] <- 1
+table(eip_2024$sud_linked_2024)
+
+table(eip_2024$sud_linked_2024)
+sud_linked_2024 <- eip_2024[which(eip_2024$sud_linked_2024 == 1), ]
+dim(sud_linked_2024)
+sud_linked_2024 <- nrow(sud_linked_2024)
+sud_linked_2024
+
+sud_linked_2024_percent <- percent(sud_linked_2024/sud_closed_case_2024, accuracy = 0.1)
+sud_linked_2024_percent
+
+
+
+eip_2024$sud_not_linked_2024[eip_2024$sud_eligible_ltc_2024 == 1 & is.na(eip_2024$sud_in_progress_2024) & is.na(eip_2024$sud_linked_2024)] <- 1
+table(eip_2024$sud_not_linked_2024)
+
+table(eip_2024$sud_not_linked_2024)
+sud_not_linked_2024 <- eip_2024[which(eip_2024$sud_not_linked_2024 == 1), ]
+dim(sud_not_linked_2024)
+sud_not_linked_2024 <- nrow(sud_not_linked_2024)
+sud_not_linked_2024
+
+sud_not_linked_2024_percent <- percent(sud_not_linked_2024/sud_closed_case_2024, accuracy = 0.1)
+sud_not_linked_2024_percent
+
+
+
+# sud Reasons Not Linked to Care
+eip_2024$sud_not_linked_med_staff_2024[(eip_2024$sud_closed_case_2024 == 1 & is.na(eip_2024$sud_linked_2024)) &
+                                         (eip_2024$ltc_sud_prevented_rsn___1 == 1 |
+                                            eip_2024$ltc_sud_prevented_rsn___2 == 1 |
+                                            eip_2024$ltc_sud_prevented_rsn___11 == 1)] <- 1
+table(eip_2024$sud_not_linked_med_staff_2024)
+
+table(eip_2024$sud_not_linked_med_staff_2024)
+sud_not_linked_med_staff_2024 <- eip_2024[which(eip_2024$sud_not_linked_med_staff_2024 == 1), ]
+dim(sud_not_linked_med_staff_2024)
+sud_not_linked_med_staff_2024 <- nrow(sud_not_linked_med_staff_2024)
+sud_not_linked_med_staff_2024
+
+sud_not_linked_med_staff_2024_percent <- percent(sud_not_linked_med_staff_2024/sud_not_linked_2024, accuracy = 0.1)
+sud_not_linked_med_staff_2024_percent
+
+
+
+eip_2024$sud_not_linked_family_2024[(eip_2024$sud_closed_case_2024 == 1 & is.na(eip_2024$sud_linked_2024)) &
+                                      (eip_2024$ltc_sud_prevented_rsn___3 == 1)] <- 1
+table(eip_2024$sud_not_linked_family_2024)
+
+table(eip_2024$sud_not_linked_family_2024)
+sud_not_linked_family_2024 <- eip_2024[which(eip_2024$sud_not_linked_family_2024 == 1), ]
+dim(sud_not_linked_family_2024)
+sud_not_linked_family_2024 <- nrow(sud_not_linked_family_2024)
+sud_not_linked_family_2024
+
+sud_not_linked_family_2024_percent <- percent(sud_not_linked_family_2024/sud_not_linked_2024, accuracy = 0.1)
+sud_not_linked_family_2024_percent
+
+
+
+eip_2024$sud_not_linked_not_talking_2024[(eip_2024$sud_closed_case_2024 == 1 & is.na(eip_2024$sud_linked_2024)) &
+                                           (eip_2024$ltc_sud_prevented_rsn___4 == 1)] <- 1
+table(eip_2024$sud_not_linked_not_talking_2024)
+
+table(eip_2024$sud_not_linked_not_talking_2024)
+sud_not_linked_not_talking_2024 <- eip_2024[which(eip_2024$sud_not_linked_not_talking_2024 == 1), ]
+dim(sud_not_linked_not_talking_2024)
+sud_not_linked_not_talking_2024 <- nrow(sud_not_linked_not_talking_2024)
+sud_not_linked_not_talking_2024
+
+sud_not_linked_not_talking_2024_percent <- percent(sud_not_linked_not_talking_2024/sud_not_linked_2024, accuracy = 0.1)
+sud_not_linked_not_talking_2024_percent
+
+
+
+eip_2024$sud_not_linked_safety_2024[(eip_2024$sud_closed_case_2024 == 1 & is.na(eip_2024$sud_linked_2024)) &
+                                      (eip_2024$ltc_sud_prevented_rsn___5 == 1)] <- 1
+table(eip_2024$sud_not_linked_safety_2024)
+
+table(eip_2024$sud_not_linked_safety_2024)
+sud_not_linked_safety_2024 <- eip_2024[which(eip_2024$sud_not_linked_safety_2024 == 1), ]
+dim(sud_not_linked_safety_2024)
+sud_not_linked_safety_2024 <- nrow(sud_not_linked_safety_2024)
+sud_not_linked_safety_2024
+
+sud_not_linked_safety_2024_percent <- percent(sud_not_linked_safety_2024/sud_not_linked_2024, accuracy = 0.1)
+sud_not_linked_safety_2024_percent
+
+
+
+eip_2024$sud_not_linked_medical_2024[(eip_2024$sud_closed_case_2024 == 1 & is.na(eip_2024$sud_linked_2024)) &
+                                       (eip_2024$ltc_sud_prevented_rsn___6 == 1 |
+                                          eip_2024$ltc_sud_prevented_rsn___8)] <- 1
+table(eip_2024$sud_not_linked_medical_2024)
+
+table(eip_2024$sud_not_linked_medical_2024)
+sud_not_linked_medical_2024 <- eip_2024[which(eip_2024$sud_not_linked_medical_2024 == 1), ]
+dim(sud_not_linked_medical_2024)
+sud_not_linked_medical_2024 <- nrow(sud_not_linked_medical_2024)
+sud_not_linked_medical_2024
+
+sud_not_linked_medical_2024_percent <- percent(sud_not_linked_medical_2024/sud_not_linked_2024, accuracy = 0.1)
+sud_not_linked_medical_2024_percent
+
+
+
+eip_2024$sud_not_linked_contact_2024[(eip_2024$sud_closed_case_2024 == 1 & is.na(eip_2024$sud_linked_2024)) &
+                                       (eip_2024$ltc_sud_prevented_rsn___20 == 1)] <- 1
+table(eip_2024$sud_not_linked_contact_2024)
+
+table(eip_2024$sud_not_linked_contact_2024)
+sud_not_linked_contact_2024 <- eip_2024[which(eip_2024$sud_not_linked_contact_2024 == 1), ]
+dim(sud_not_linked_contact_2024)
+sud_not_linked_contact_2024 <- nrow(sud_not_linked_contact_2024)
+sud_not_linked_contact_2024
+
+sud_not_linked_contact_2024_percent <- percent(sud_not_linked_contact_2024/sud_not_linked_2024, accuracy = 0.1)
+sud_not_linked_contact_2024_percent
+
+
+
+eip_2024$sud_not_linked_language_2024[(eip_2024$sud_closed_case_2024 == 1 & is.na(eip_2024$sud_linked_2024)) &
+                                        (eip_2024$ltc_sud_prevented_rsn___9 == 1)] <- 1
+table(eip_2024$sud_not_linked_language_2024)
+
+table(eip_2024$sud_not_linked_language_2024)
+sud_not_linked_language_2024 <- eip_2024[which(eip_2024$sud_not_linked_language_2024 == 1), ]
+dim(sud_not_linked_language_2024)
+sud_not_linked_language_2024 <- nrow(sud_not_linked_language_2024)
+sud_not_linked_language_2024
+
+sud_not_linked_language_2024_percent <- percent(sud_not_linked_language_2024/sud_not_linked_2024, accuracy = 0.1)
+sud_not_linked_language_2024_percent
+
+
+
+eip_2024$sud_not_linked_other_2024[(eip_2024$sud_closed_case_2024 == 1 & is.na(eip_2024$sud_linked_2024)) &
+                                     (eip_2024$ltc_sud_prevented_rsn___0 == 1)] <- 1
+table(eip_2024$sud_not_linked_other_2024)
+
+table(eip_2024$sud_not_linked_other_2024)
+sud_not_linked_other_2024 <- eip_2024[which(eip_2024$sud_not_linked_other_2024 == 1), ]
+dim(sud_not_linked_other_2024)
+sud_not_linked_other_2024 <- nrow(sud_not_linked_other_2024)
+sud_not_linked_other_2024
+
+sud_not_linked_other_2024_percent <- percent(sud_not_linked_other_2024/sud_not_linked_2024, accuracy = 0.1)
+sud_not_linked_other_2024_percent
+
+
+
+
+####################  2025 sud Linkage Data  ####################
+
+summary(enc$enc_date)
+eip_2025 <- enc[which(enc$enc_date >= '2025-01-01' & enc$enc_date <= '2025-12-31'), ]
+summary(eip_2025$enc_date)
+
+
+# sud Linkage Data
+table(eip_2025$ltc_services___3)
+eip_2025$sud_ltc_2025[eip_2025$ltc_services___3 == 1] <- 1
+table(eip_2025$sud_ltc_2025)
+
+table(eip_2025$sud_ltc_2025)
+sud_ltc_2025 <- eip_2025[which(eip_2025$sud_ltc_2025 == 1), ]
+dim(sud_ltc_2025)
+sud_ltc_2025 <- nrow(sud_ltc_2025)
+sud_ltc_2025
+
+
+# Ineligible sud Linkage - Already Linked
+table(eip_2025$ltc_sud_declined_rsn___23)
+table(eip_2025$ltc_sud_prevented_rsn___16)
+eip_2025$sud_already_linked_2025[eip_2025$sud_ltc_2025 == 1 &
+                                   (eip_2025$ltc_sud_declined_rsn___23 == 1 |
+                                      eip_2025$ltc_sud_prevented_rsn___16 == 1)] <- 1
+table(eip_2025$sud_already_linked_2025)
+
+table(eip_2025$sud_already_linked_2025)
+sud_already_linked_2025 <- eip_2025[which(eip_2025$sud_already_linked_2025 == 1), ]
+dim(sud_already_linked_2025)
+sud_already_linked_2025 <- nrow(sud_already_linked_2025)
+sud_already_linked_2025
+
+
+# Ineligible sud Linkage - Deceased
+table(eip_2025$ltc_sud_declined_rsn___35)
+table(eip_2025$ltc_sud_prevented_rsn___17)
+eip_2025$sud_deceased_2025[eip_2025$sud_ltc_2025 == 1 &
+                             (eip_2025$ltc_sud_declined_rsn___35 == 1 |
+                                eip_2025$ltc_sud_prevented_rsn___17 == 1)] <- 1
+table(eip_2025$sud_deceased_2025)
+
+table(eip_2025$sud_deceased_2025)
+sud_deceased_2025 <- eip_2025[which(eip_2025$sud_deceased_2025 == 1), ]
+dim(sud_deceased_2025)
+sud_deceased_2025 <- nrow(sud_deceased_2025)
+sud_deceased_2025
+
+
+# Ineligible sud Linkage - Incarcerated
+table(eip_2025$ltc_sud_prevented_rsn___12)
+eip_2025$sud_incarcerated_2025[eip_2025$sud_ltc_2025 == 1 &
+                                 eip_2025$ltc_sud_prevented_rsn___12 == 1] <- 1
+table(eip_2025$sud_incarcerated_2025)
+
+table(eip_2025$sud_incarcerated_2025)
+sud_incarcerated_2025 <- eip_2025[which(eip_2025$sud_incarcerated_2025 == 1), ]
+dim(sud_incarcerated_2025)
+sud_incarcerated_2025 <- nrow(sud_incarcerated_2025)
+sud_incarcerated_2025
+
+
+# Ineligible sud Linkage - Inability to Contact
+table(eip_2025$ltc_sud_final_ltc_status)
+eip_2025$sud_inability_to_contact_2025[eip_2025$sud_ltc_2025 == 1 &
+                                         eip_2025$ltc_sud_prevented_rsn___19 == 1] <- 1
+table(eip_2025$sud_inability_to_contact_2025)
+
+table(eip_2025$sud_inability_to_contact_2025)
+sud_inability_to_contact_2025 <- eip_2025[which(eip_2025$sud_inability_to_contact_2025 == 1), ]
+dim(sud_inability_to_contact_2025)
+sud_inability_to_contact_2025 <- nrow(sud_inability_to_contact_2025)
+sud_inability_to_contact_2025
+
+
+# Ineligible sud Linkage - Declined Linkage Service
+table(eip_2025$ltc_sud_final_ltc_status)
+eip_2025$sud_linkage_declined_2025[(eip_2025$sud_ltc_2025 == 1 &
+                                      eip_2025$ltc_sud_final_ltc_status == 2) &
+                                     (is.na(eip_2025$sud_already_linked_2025) &
+                                        is.na(eip_2025$sud_deceased_2025) &
+                                        is.na(eip_2025$sud_incarcerated_2025) &
+                                        is.na(eip_2025$sud_inability_to_contact_2025))] <- 1
+table(eip_2025$sud_linkage_declined_2025)
+
+table(eip_2025$sud_linkage_declined_2025)
+sud_linkage_declined_2025 <- eip_2025[which(eip_2025$sud_linkage_declined_2025 == 1), ]
+dim(sud_linkage_declined_2025)
+sud_linkage_declined_2025 <- nrow(sud_linkage_declined_2025)
+sud_linkage_declined_2025
+
+
+# Ineligible sud Linkage - Linkage in Progress
+table(eip_2025$ltc_sud_prevented_rsn___18)
+eip_2025$sud_ongoing_linkage_2025[eip_2025$sud_ltc_2025 == 1 &
+                                    eip_2025$ltc_sud_prevented_rsn___18 == 1] <- 1
+table(eip_2025$sud_ongoing_linkage_2025)
+
+table(eip_2025$sud_ongoing_linkage_2025)
+sud_ongoing_linkage_2025 <- eip_2025[which(eip_2025$sud_ongoing_linkage_2025 == 1), ]
+dim(sud_ongoing_linkage_2025)
+sud_ongoing_linkage_2025 <- nrow(sud_ongoing_linkage_2025)
+sud_ongoing_linkage_2025
+
+
+# sud Ineligible Cases
+eip_2025$sud_ineligible_ltc_2025[eip_2025$sud_already_linked_2025 == 1 |
+                                   eip_2025$sud_deceased_2025 == 1 |
+                                   eip_2025$sud_incarcerated_2025 == 1 |
+                                   eip_2025$sud_inability_to_contact_2025 == 1 |
+                                   eip_2025$sud_linkage_declined_2025 == 1 |
+                                   eip_2025$sud_ongoing_linkage_2025 == 1] <- 1
+table(eip_2025$sud_ineligible_ltc_2025)
+
+table(eip_2025$sud_ineligible_ltc_2025)
+sud_ineligible_ltc_2025 <- eip_2025[which(eip_2025$sud_ineligible_ltc_2025 == 1), ]
+dim(sud_ineligible_ltc_2025)
+sud_ineligible_ltc_2025 <- nrow(sud_ineligible_ltc_2025)
+sud_ineligible_ltc_2025
+
+sud_ineligible_ltc_2025_percent <- percent(sud_ineligible_ltc_2025/sud_ltc_2025, accuracy = 0.1)
+sud_ineligible_ltc_2025_percent
+
+sud_already_linked_2025_percent <- percent(sud_already_linked_2025/sud_ineligible_ltc_2025, accuracy = 0.1)
+sud_already_linked_2025_percent
+
+sud_deceased_2025_percent <- percent(sud_deceased_2025/sud_ineligible_ltc_2025, accuracy = 0.1)
+sud_deceased_2025_percent
+
+sud_incarcerated_2025_percent <- percent(sud_incarcerated_2025/sud_ineligible_ltc_2025, accuracy = 0.1)
+sud_incarcerated_2025_percent
+
+sud_inability_to_contact_2025_percent <- percent(sud_inability_to_contact_2025/sud_ineligible_ltc_2025, accuracy = 0.1)
+sud_inability_to_contact_2025_percent
+
+sud_linkage_declined_2025_percent <- percent(sud_linkage_declined_2025/sud_ineligible_ltc_2025, accuracy = 0.1)
+sud_linkage_declined_2025_percent
+
+sud_ongoing_linkage_2025_percent <- percent(sud_ongoing_linkage_2025/sud_ineligible_ltc_2025, accuracy = 0.1)
+sud_ongoing_linkage_2025_percent
+
+
+# sud Eligibility to be Linked
+eip_2025$sud_eligible_ltc_2025[eip_2025$sud_ltc_2025 == 1 &
+                                 (is.na(eip_2025$sud_already_linked_2025) &
+                                    is.na(eip_2025$sud_deceased_2025) &
+                                    is.na(eip_2025$sud_incarcerated_2025) &
+                                    is.na(eip_2025$sud_inability_to_contact_2025) &
+                                    is.na(eip_2025$sud_linkage_declined_2025) &
+                                    is.na(eip_2025$sud_ongoing_linkage_2025))] <- 1
+table(eip_2025$sud_eligible_ltc_2025)
+
+table(eip_2025$sud_eligible_ltc_2025)
+sud_eligible_ltc_2025 <- eip_2025[which(eip_2025$sud_eligible_ltc_2025 == 1), ]
+dim(sud_eligible_ltc_2025)
+sud_eligible_ltc_2025 <- nrow(sud_eligible_ltc_2025)
+sud_eligible_ltc_2025
+
+sud_eligible_ltc_2025_percent <- percent(sud_eligible_ltc_2025/sud_ltc_2025, accuracy = 0.1)
+sud_eligible_ltc_2025_percent
+
+
+
+# sud Open/Closed Cases
+table(eip_2025$ltc_sud_open_case_calc)
+eip_2025$sud_in_progress_2025[eip_2025$sud_eligible_ltc_2025 == 1 &
+                                eip_2025$ltc_sud_open_case_calc == 1] <- 1
+table(eip_2025$sud_in_progress_2025)
+
+table(eip_2025$sud_in_progress_2025)
+sud_in_progress_2025 <- eip_2025[which(eip_2025$sud_in_progress_2025 == 1), ]
+dim(sud_in_progress_2025)
+sud_in_progress_2025 <- nrow(sud_in_progress_2025)
+sud_in_progress_2025
+
+sud_in_progress_2025_percent <- percent(sud_in_progress_2025/sud_eligible_ltc_2025, accuracy = 0.1)
+sud_in_progress_2025_percent
+
+
+
+table(eip_2025$sud_eligible_ltc_2025, eip_2025$sud_in_progress_2025)
+eip_2025$sud_closed_case_2025[eip_2025$sud_eligible_ltc_2025 == 1 &
+                                is.na(eip_2025$sud_in_progress_2025)] <- 1
+table(eip_2025$sud_closed_case_2025)
+
+table(eip_2025$sud_closed_case_2025)
+sud_closed_case_2025 <- eip_2025[which(eip_2025$sud_closed_case_2025 == 1), ]
+dim(sud_closed_case_2025)
+sud_closed_case_2025 <- nrow(sud_closed_case_2025)
+sud_closed_case_2025
+
+sud_closed_case_2025_percent <- percent(sud_closed_case_2025/sud_eligible_ltc_2025, accuracy = 0.1)
+sud_closed_case_2025_percent
+
+
+
+table(eip_2025$sud_in_progress_2025)
+eip_2025$sud_ltc_days_open_2025 <- difftime(Sys.Date(), eip_2025$enc_date, units="days")
+table(eip_2025$sud_ltc_days_open_2025)
+eip_2025$sud_in_progress_90days_2025[eip_2025$sud_in_progress_2025 == 1 &
+                                       (eip_2025$sud_ltc_days_open_2025 > 90)] <- 1
+table(eip_2025$sud_in_progress_90days_2025)
+
+table(eip_2025$sud_in_progress_90days_2025)
+sud_in_progress_90days_2025 <- eip_2025[which(eip_2025$sud_in_progress_90days_2025 == 1), ]
+dim(sud_in_progress_90days_2025)
+sud_in_progress_90days_2025 <- nrow(sud_in_progress_90days_2025)
+sud_in_progress_90days_2025
+
+sud_in_progress_90days_2025_percent <- percent(sud_in_progress_90days_2025/sud_in_progress_2025, accuracy = 0.1)
+sud_in_progress_90days_2025_percent
+
+
+# sud Cases Linked to Care
+table(eip_2025$sud_closed_case_2025, eip_2025$ltc_sud_final_ltc_status)
+eip_2025$sud_linked_2025[eip_2025$sud_closed_case_2025 == 1 &
+                           eip_2025$ltc_sud_final_ltc_status == 1] <- 1
+table(eip_2025$sud_linked_2025)
+
+table(eip_2025$sud_linked_2025)
+sud_linked_2025 <- eip_2025[which(eip_2025$sud_linked_2025 == 1), ]
+dim(sud_linked_2025)
+sud_linked_2025 <- nrow(sud_linked_2025)
+sud_linked_2025
+
+sud_linked_2025_percent <- percent(sud_linked_2025/sud_closed_case_2025, accuracy = 0.1)
+sud_linked_2025_percent
+
+
+
+eip_2025$sud_not_linked_2025[eip_2025$sud_eligible_ltc_2025 == 1 & is.na(eip_2025$sud_in_progress_2025) & is.na(eip_2025$sud_linked_2025)] <- 1
+table(eip_2025$sud_not_linked_2025)
+
+table(eip_2025$sud_not_linked_2025)
+sud_not_linked_2025 <- eip_2025[which(eip_2025$sud_not_linked_2025 == 1), ]
+dim(sud_not_linked_2025)
+sud_not_linked_2025 <- nrow(sud_not_linked_2025)
+sud_not_linked_2025
+
+sud_not_linked_2025_percent <- percent(sud_not_linked_2025/sud_closed_case_2025, accuracy = 0.1)
+sud_not_linked_2025_percent
+
+
+
+# sud Reasons Not Linked to Care
+eip_2025$sud_not_linked_med_staff_2025[(eip_2025$sud_closed_case_2025 == 1 & is.na(eip_2025$sud_linked_2025)) &
+                                         (eip_2025$ltc_sud_prevented_rsn___1 == 1 |
+                                            eip_2025$ltc_sud_prevented_rsn___2 == 1 |
+                                            eip_2025$ltc_sud_prevented_rsn___11 == 1)] <- 1
+table(eip_2025$sud_not_linked_med_staff_2025)
+
+table(eip_2025$sud_not_linked_med_staff_2025)
+sud_not_linked_med_staff_2025 <- eip_2025[which(eip_2025$sud_not_linked_med_staff_2025 == 1), ]
+dim(sud_not_linked_med_staff_2025)
+sud_not_linked_med_staff_2025 <- nrow(sud_not_linked_med_staff_2025)
+sud_not_linked_med_staff_2025
+
+sud_not_linked_med_staff_2025_percent <- percent(sud_not_linked_med_staff_2025/sud_not_linked_2025, accuracy = 0.1)
+sud_not_linked_med_staff_2025_percent
+
+
+
+eip_2025$sud_not_linked_family_2025[(eip_2025$sud_closed_case_2025 == 1 & is.na(eip_2025$sud_linked_2025)) &
+                                      (eip_2025$ltc_sud_prevented_rsn___3 == 1)] <- 1
+table(eip_2025$sud_not_linked_family_2025)
+
+table(eip_2025$sud_not_linked_family_2025)
+sud_not_linked_family_2025 <- eip_2025[which(eip_2025$sud_not_linked_family_2025 == 1), ]
+dim(sud_not_linked_family_2025)
+sud_not_linked_family_2025 <- nrow(sud_not_linked_family_2025)
+sud_not_linked_family_2025
+
+sud_not_linked_family_2025_percent <- percent(sud_not_linked_family_2025/sud_not_linked_2025, accuracy = 0.1)
+sud_not_linked_family_2025_percent
+
+
+
+eip_2025$sud_not_linked_not_talking_2025[(eip_2025$sud_closed_case_2025 == 1 & is.na(eip_2025$sud_linked_2025)) &
+                                           (eip_2025$ltc_sud_prevented_rsn___4 == 1)] <- 1
+table(eip_2025$sud_not_linked_not_talking_2025)
+
+table(eip_2025$sud_not_linked_not_talking_2025)
+sud_not_linked_not_talking_2025 <- eip_2025[which(eip_2025$sud_not_linked_not_talking_2025 == 1), ]
+dim(sud_not_linked_not_talking_2025)
+sud_not_linked_not_talking_2025 <- nrow(sud_not_linked_not_talking_2025)
+sud_not_linked_not_talking_2025
+
+sud_not_linked_not_talking_2025_percent <- percent(sud_not_linked_not_talking_2025/sud_not_linked_2025, accuracy = 0.1)
+sud_not_linked_not_talking_2025_percent
+
+
+
+eip_2025$sud_not_linked_safety_2025[(eip_2025$sud_closed_case_2025 == 1 & is.na(eip_2025$sud_linked_2025)) &
+                                      (eip_2025$ltc_sud_prevented_rsn___5 == 1)] <- 1
+table(eip_2025$sud_not_linked_safety_2025)
+
+table(eip_2025$sud_not_linked_safety_2025)
+sud_not_linked_safety_2025 <- eip_2025[which(eip_2025$sud_not_linked_safety_2025 == 1), ]
+dim(sud_not_linked_safety_2025)
+sud_not_linked_safety_2025 <- nrow(sud_not_linked_safety_2025)
+sud_not_linked_safety_2025
+
+sud_not_linked_safety_2025_percent <- percent(sud_not_linked_safety_2025/sud_not_linked_2025, accuracy = 0.1)
+sud_not_linked_safety_2025_percent
+
+
+
+eip_2025$sud_not_linked_medical_2025[(eip_2025$sud_closed_case_2025 == 1 & is.na(eip_2025$sud_linked_2025)) &
+                                       (eip_2025$ltc_sud_prevented_rsn___6 == 1 |
+                                          eip_2025$ltc_sud_prevented_rsn___8)] <- 1
+table(eip_2025$sud_not_linked_medical_2025)
+
+table(eip_2025$sud_not_linked_medical_2025)
+sud_not_linked_medical_2025 <- eip_2025[which(eip_2025$sud_not_linked_medical_2025 == 1), ]
+dim(sud_not_linked_medical_2025)
+sud_not_linked_medical_2025 <- nrow(sud_not_linked_medical_2025)
+sud_not_linked_medical_2025
+
+sud_not_linked_medical_2025_percent <- percent(sud_not_linked_medical_2025/sud_not_linked_2025, accuracy = 0.1)
+sud_not_linked_medical_2025_percent
+
+
+
+eip_2025$sud_not_linked_contact_2025[(eip_2025$sud_closed_case_2025 == 1 & is.na(eip_2025$sud_linked_2025)) &
+                                       (eip_2025$ltc_sud_prevented_rsn___20 == 1)] <- 1
+table(eip_2025$sud_not_linked_contact_2025)
+
+table(eip_2025$sud_not_linked_contact_2025)
+sud_not_linked_contact_2025 <- eip_2025[which(eip_2025$sud_not_linked_contact_2025 == 1), ]
+dim(sud_not_linked_contact_2025)
+sud_not_linked_contact_2025 <- nrow(sud_not_linked_contact_2025)
+sud_not_linked_contact_2025
+
+sud_not_linked_contact_2025_percent <- percent(sud_not_linked_contact_2025/sud_not_linked_2025, accuracy = 0.1)
+sud_not_linked_contact_2025_percent
+
+
+
+eip_2025$sud_not_linked_language_2025[(eip_2025$sud_closed_case_2025 == 1 & is.na(eip_2025$sud_linked_2025)) &
+                                        (eip_2025$ltc_sud_prevented_rsn___9 == 1)] <- 1
+table(eip_2025$sud_not_linked_language_2025)
+
+table(eip_2025$sud_not_linked_language_2025)
+sud_not_linked_language_2025 <- eip_2025[which(eip_2025$sud_not_linked_language_2025 == 1), ]
+dim(sud_not_linked_language_2025)
+sud_not_linked_language_2025 <- nrow(sud_not_linked_language_2025)
+sud_not_linked_language_2025
+
+sud_not_linked_language_2025_percent <- percent(sud_not_linked_language_2025/sud_not_linked_2025, accuracy = 0.1)
+sud_not_linked_language_2025_percent
+
+
+
+eip_2025$sud_not_linked_other_2025[(eip_2025$sud_closed_case_2025 == 1 & is.na(eip_2025$sud_linked_2025)) &
+                                     (eip_2025$ltc_sud_prevented_rsn___0 == 1)] <- 1
+table(eip_2025$sud_not_linked_other_2025)
+
+table(eip_2025$sud_not_linked_other_2025)
+sud_not_linked_other_2025 <- eip_2025[which(eip_2025$sud_not_linked_other_2025 == 1), ]
+dim(sud_not_linked_other_2025)
+sud_not_linked_other_2025 <- nrow(sud_not_linked_other_2025)
+sud_not_linked_other_2025
+
+sud_not_linked_other_2025_percent <- percent(sud_not_linked_other_2025/sud_not_linked_2025, accuracy = 0.1)
+sud_not_linked_other_2025_percent
 
 ```
 
@@ -4336,10 +5460,10 @@ monthly_nalox_distribution_plot
 
 # SUD Linkage to Care
 
-The flowchart of the SUD Linkage to Care efforts for EIP are shown below.
+The consort or flow diagram below represents all of the linkage data described above visually. All numbers are represented as total (n, [forest green]{style="color: forestgreen;"}) and percent (%, [dark sea green]{style="color: darkseagreen1;"}). To know the denominator of each percent represented in the consort diagram below, please refer to the description of the data points in the text above.
 
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo = FALSE, warning = FALSE}
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
@@ -4533,6 +5657,614 @@ grid +
 grid + theme_void()
 
 ```
+
+
+The specific SUD linkage numbers for each year are presented below.
+
+
+::: {.panel-tabset}
+
+## 2025
+
+This shows the SUD LTC flow diagram for all linkage cases in 2025, along with the linkage to care success rate.
+
+```{r, echo = FALSE, warning = FALSE}
+
+grid_data <- tibble(x= 1:100, y= 1:100)
+
+grid_data %>% 
+  ggplot(aes(x, y)) +
+  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
+  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
+  theme_linedraw() ->
+  grid
+
+
+grid +
+  # sud Linkage Cases
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 97, label = 'Sud Linkage Cases', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 93, label = sud_ltc_2025, size = 2, color = 'forestgreen') +
+  
+  # Ineligible for Linkage
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 52.5, y = 82, label = 'Ineligible for Linkage', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 78, label = sud_ineligible_ltc_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 78, label = sud_ineligible_ltc_2025_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Reasons Ineligible for Linkage
+  geom_rect(xmin = 83, xmax = 100, ymin = 75, ymax = 85, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 87, y = 85, label = 'Already Linked', size = 2) +
+  annotate('text', x = 87, y = 82, label = '        Deceased', size = 2) +
+  annotate('text', x = 87, y = 79, label = '    Incarcerated', size = 2) +
+  annotate('text', x = 87, y = 76, label = '          Declined', size = 2) +
+  annotate('text', x = 87, y = 73, label = 'Ongoing linkage ', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 94, y = 85, label = sud_already_linked_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 85, label = sud_already_linked_2025_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 82, label = sud_deceased_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 82, label = sud_deceased_2025_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 79, label = sud_incarcerated_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 79, label = sud_incarcerated_2025_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 76, label = sud_linkage_declined_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 76, label = sud_linkage_declined_2025_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 73, label = sud_ongoing_linkage_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 73, label = sud_ongoing_linkage_2025_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Eligible for Linkage
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 67, label = 'Eligible for Linkage', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 63, label = sud_eligible_ltc_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 63, label = sud_eligible_ltc_2025_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # In Progress
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 52, label = 'In Progress', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 48, label = sud_in_progress_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 48, label = sud_in_progress_2025_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # In Progress over 90 days
+  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 52, y = 42, label = '>90 days:', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 56, y = 42, label = sud_in_progress_90days_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 42, label = sud_in_progress_90days_2025_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Closed Cases
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 37, label = 'Closed Cases', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 33, label = sud_closed_case_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 33, label = sud_closed_case_2025_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Not Linked
+  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 22, label = 'Not Linked', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 18, label = sud_not_linked_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 18, label = sud_not_linked_2025_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Reasons Not Linked
+  geom_rect(xmin = 83, xmax = 100, ymin = 0, ymax = 30, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 87, y = 26, label = 'Med Staff interferes    ', size = 2) +
+  annotate('text', x = 87, y = 23, label = '  Family interferes', size = 2) +
+  annotate('text', x = 87, y = 20, label = '    Refuses to talk', size = 2) +
+  annotate('text', x = 87, y = 17, label = '    Personal safety', size = 2) +
+  annotate('text', x = 87, y = 14, label = '    Medical course', size = 2) +
+  annotate('text', x = 87, y = 11, label = 'Inability to contact', size = 2) +
+  annotate('text', x = 87, y = 8, label = ' Language barrier', size = 2) +
+  annotate('text', x = 87, y = 5, label = '                   Other', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 30, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 94, y = 26, label = sud_not_linked_med_staff_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 26, label = sud_not_linked_med_staff_2025_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 23, label = sud_not_linked_family_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 23, label = sud_not_linked_family_2025_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 20, label = sud_not_linked_not_talking_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 20, label = sud_not_linked_not_talking_2025_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 17, label = sud_not_linked_safety_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 17, label = sud_not_linked_safety_2025_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 14, label = sud_not_linked_medical_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 14, label = sud_not_linked_medical_2025_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 11, label = sud_not_linked_contact_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 11, label = sud_not_linked_contact_2025_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 8, label = sud_not_linked_language_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 8, label = sud_not_linked_language_2025_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 5, label = sud_not_linked_other_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 5, label = sud_not_linked_other_2025_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Linked to Care
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 7, label = 'Linked to Care', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 3, label = sud_linked_2025, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 3, label = sud_linked_2025_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Down Arrow 1
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 90, yend = 70, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 2
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 60, yend = 40, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 3
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 30, yend = 10, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Right Arrow 1
+  geom_segment(
+    x = 10.5, xend = 41, y = 80, yend = 80, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 2
+  geom_segment(
+    x = 10.5, xend = 41, y = 50, yend = 50, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 3
+  geom_segment(
+    x = 10.5, xend = 41, y = 20, yend = 20, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Line 1
+  geom_segment(
+    x = 63, xend = 81, y = 80, yend = 80, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
+  
+  # Right Line 2
+  geom_segment(
+    x = 63, xend = 80, y = 20, yend = 20, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted")->
+  grid
+
+grid + theme_void()
+
+```
+
+
+## 2024
+
+This shows the SUD LTC flow diagram for all linkage cases in 2024, along with the linkage to care success rate.
+
+```{r, echo = FALSE, warning = FALSE}
+
+grid_data <- tibble(x= 1:100, y= 1:100)
+
+grid_data %>% 
+  ggplot(aes(x, y)) +
+  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
+  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
+  theme_linedraw() ->
+  grid
+
+
+grid +
+  # sud Linkage Cases
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 97, label = 'Sud Linkage Cases', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 93, label = sud_ltc_2024, size = 2, color = 'forestgreen') +
+  
+  # Ineligible for Linkage
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 52.5, y = 82, label = 'Ineligible for Linkage', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 78, label = sud_ineligible_ltc_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 78, label = sud_ineligible_ltc_2024_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Reasons Ineligible for Linkage
+  geom_rect(xmin = 83, xmax = 100, ymin = 75, ymax = 85, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 87, y = 85, label = 'Already Linked', size = 2) +
+  annotate('text', x = 87, y = 82, label = '        Deceased', size = 2) +
+  annotate('text', x = 87, y = 79, label = '    Incarcerated', size = 2) +
+  annotate('text', x = 87, y = 76, label = '          Declined', size = 2) +
+  annotate('text', x = 87, y = 73, label = 'Ongoing linkage ', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 94, y = 85, label = sud_already_linked_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 85, label = sud_already_linked_2024_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 82, label = sud_deceased_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 82, label = sud_deceased_2024_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 79, label = sud_incarcerated_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 79, label = sud_incarcerated_2024_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 76, label = sud_linkage_declined_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 76, label = sud_linkage_declined_2024_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 73, label = sud_ongoing_linkage_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 73, label = sud_ongoing_linkage_2024_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Eligible for Linkage
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 67, label = 'Eligible for Linkage', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 63, label = sud_eligible_ltc_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 63, label = sud_eligible_ltc_2024_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # In Progress
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 52, label = 'In Progress', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 48, label = sud_in_progress_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 48, label = sud_in_progress_2024_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # In Progress over 90 days
+  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 52, y = 42, label = '>90 days:', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 56, y = 42, label = sud_in_progress_90days_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 42, label = sud_in_progress_90days_2024_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Closed Cases
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 37, label = 'Closed Cases', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 33, label = sud_closed_case_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 33, label = sud_closed_case_2024_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Not Linked
+  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 22, label = 'Not Linked', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 18, label = sud_not_linked_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 18, label = sud_not_linked_2024_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Reasons Not Linked
+  geom_rect(xmin = 83, xmax = 100, ymin = 0, ymax = 30, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 87, y = 26, label = 'Med Staff interferes    ', size = 2) +
+  annotate('text', x = 87, y = 23, label = '  Family interferes', size = 2) +
+  annotate('text', x = 87, y = 20, label = '    Refuses to talk', size = 2) +
+  annotate('text', x = 87, y = 17, label = '    Personal safety', size = 2) +
+  annotate('text', x = 87, y = 14, label = '    Medical course', size = 2) +
+  annotate('text', x = 87, y = 11, label = 'Inability to contact', size = 2) +
+  annotate('text', x = 87, y = 8, label = ' Language barrier', size = 2) +
+  annotate('text', x = 87, y = 5, label = '                   Other', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 30, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 94, y = 26, label = sud_not_linked_med_staff_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 26, label = sud_not_linked_med_staff_2024_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 23, label = sud_not_linked_family_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 23, label = sud_not_linked_family_2024_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 20, label = sud_not_linked_not_talking_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 20, label = sud_not_linked_not_talking_2024_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 17, label = sud_not_linked_safety_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 17, label = sud_not_linked_safety_2024_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 14, label = sud_not_linked_medical_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 14, label = sud_not_linked_medical_2024_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 11, label = sud_not_linked_contact_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 11, label = sud_not_linked_contact_2024_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 8, label = sud_not_linked_language_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 8, label = sud_not_linked_language_2024_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 5, label = sud_not_linked_other_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 5, label = sud_not_linked_other_2024_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Linked to Care
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 7, label = 'Linked to Care', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 3, label = sud_linked_2024, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 3, label = sud_linked_2024_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Down Arrow 1
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 90, yend = 70, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 2
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 60, yend = 40, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 3
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 30, yend = 10, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Right Arrow 1
+  geom_segment(
+    x = 10.5, xend = 41, y = 80, yend = 80, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 2
+  geom_segment(
+    x = 10.5, xend = 41, y = 50, yend = 50, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 3
+  geom_segment(
+    x = 10.5, xend = 41, y = 20, yend = 20, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Line 1
+  geom_segment(
+    x = 63, xend = 81, y = 80, yend = 80, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
+  
+  # Right Line 2
+  geom_segment(
+    x = 63, xend = 80, y = 20, yend = 20, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted")->
+  grid
+
+grid + theme_void()
+
+```
+
+
+## 2023
+
+This shows the SUD LTC flow diagram for all linkage cases in 2023, along with the linkage to care success rate.
+
+```{r, echo = FALSE, warning = FALSE}
+
+grid_data <- tibble(x= 1:100, y= 1:100)
+
+grid_data %>% 
+  ggplot(aes(x, y)) +
+  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
+  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
+  theme_linedraw() ->
+  grid
+
+
+grid +
+  # sud Linkage Cases
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 97, label = 'Sud Linkage Cases', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 93, label = sud_ltc_2023, size = 2, color = 'forestgreen') +
+  
+  # Ineligible for Linkage
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 52.5, y = 82, label = 'Ineligible for Linkage', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 78, label = sud_ineligible_ltc_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 78, label = sud_ineligible_ltc_2023_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Reasons Ineligible for Linkage
+  geom_rect(xmin = 83, xmax = 100, ymin = 75, ymax = 85, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 87, y = 85, label = 'Already Linked', size = 2) +
+  annotate('text', x = 87, y = 82, label = '        Deceased', size = 2) +
+  annotate('text', x = 87, y = 79, label = '    Incarcerated', size = 2) +
+  annotate('text', x = 87, y = 76, label = '          Declined', size = 2) +
+  annotate('text', x = 87, y = 73, label = 'Ongoing linkage ', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 94, y = 85, label = sud_already_linked_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 85, label = sud_already_linked_2023_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 82, label = sud_deceased_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 82, label = sud_deceased_2023_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 79, label = sud_incarcerated_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 79, label = sud_incarcerated_2023_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 76, label = sud_linkage_declined_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 76, label = sud_linkage_declined_2023_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 73, label = sud_ongoing_linkage_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 73, label = sud_ongoing_linkage_2023_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Eligible for Linkage
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 67, label = 'Eligible for Linkage', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 63, label = sud_eligible_ltc_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 63, label = sud_eligible_ltc_2023_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # In Progress
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 52, label = 'In Progress', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 48, label = sud_in_progress_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 48, label = sud_in_progress_2023_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # In Progress over 90 days
+  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 52, y = 42, label = '>90 days:', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 56, y = 42, label = sud_in_progress_90days_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 42, label = sud_in_progress_90days_2023_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Closed Cases
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 37, label = 'Closed Cases', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 33, label = sud_closed_case_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 33, label = sud_closed_case_2023_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Not Linked
+  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 22, label = 'Not Linked', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 18, label = sud_not_linked_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 60, y = 18, label = sud_not_linked_2023_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Reasons Not Linked
+  geom_rect(xmin = 83, xmax = 100, ymin = 0, ymax = 30, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 87, y = 26, label = 'Med Staff interferes    ', size = 2) +
+  annotate('text', x = 87, y = 23, label = '  Family interferes', size = 2) +
+  annotate('text', x = 87, y = 20, label = '    Refuses to talk', size = 2) +
+  annotate('text', x = 87, y = 17, label = '    Personal safety', size = 2) +
+  annotate('text', x = 87, y = 14, label = '    Medical course', size = 2) +
+  annotate('text', x = 87, y = 11, label = 'Inability to contact', size = 2) +
+  annotate('text', x = 87, y = 8, label = ' Language barrier', size = 2) +
+  annotate('text', x = 87, y = 5, label = '                   Other', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 30, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 94, y = 26, label = sud_not_linked_med_staff_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 26, label = sud_not_linked_med_staff_2023_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 23, label = sud_not_linked_family_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 23, label = sud_not_linked_family_2023_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 20, label = sud_not_linked_not_talking_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 20, label = sud_not_linked_not_talking_2023_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 17, label = sud_not_linked_safety_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 17, label = sud_not_linked_safety_2023_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 14, label = sud_not_linked_medical_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 14, label = sud_not_linked_medical_2023_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 11, label = sud_not_linked_contact_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 11, label = sud_not_linked_contact_2023_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 8, label = sud_not_linked_language_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 8, label = sud_not_linked_language_2023_percent, size = 2, color = 'darkseagreen4') +
+  annotate('text', x = 94, y = 5, label = sud_not_linked_other_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 98, y = 5, label = sud_not_linked_other_2023_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Linked to Care
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
+            fill = 'darkseagreen1', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 7, label = 'Linked to Care', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 3, label = sud_linked_2023, size = 2, color = 'forestgreen') +
+  annotate('text', x = 19, y = 3, label = sud_linked_2023_percent, size = 2, color = 'darkseagreen4') +
+  
+  
+  # Down Arrow 1
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 90, yend = 70, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 2
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 60, yend = 40, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 3
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 30, yend = 10, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Right Arrow 1
+  geom_segment(
+    x = 10.5, xend = 41, y = 80, yend = 80, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 2
+  geom_segment(
+    x = 10.5, xend = 41, y = 50, yend = 50, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 3
+  geom_segment(
+    x = 10.5, xend = 41, y = 20, yend = 20, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Line 1
+  geom_segment(
+    x = 63, xend = 81, y = 80, yend = 80, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
+  
+  # Right Line 2
+  geom_segment(
+    x = 63, xend = 80, y = 20, yend = 20, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted")->
+  grid
+
+grid + theme_void()
+
+```
+
+:::
+
 
 
 

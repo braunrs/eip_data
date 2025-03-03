@@ -2690,7 +2690,8 @@ enc$hiv_linkage_declined[(enc$hiv_ltc == 1 &
                             enc$ltc_hiv_final_ltc_status == 2) &
                            (is.na(enc$hiv_already_linked) &
                               is.na(enc$hiv_deceased) &
-                              is.na(enc$hiv_incarcerated))] <- 1
+                              is.na(enc$hiv_incarcerated) &
+                              is.na(enc$hiv_inability_to_contact))] <- 1
 table(enc$hiv_linkage_declined)
 
 table(enc$hiv_linkage_declined)
@@ -3246,7 +3247,8 @@ eip_2023$hiv_linkage_declined_2023[(eip_2023$hiv_ltc_2023 == 1 &
                                       eip_2023$ltc_hiv_final_ltc_status == 2) &
                                      (is.na(eip_2023$hiv_already_linked_2023) &
                                         is.na(eip_2023$hiv_deceased_2023) &
-                                        is.na(eip_2023$hiv_incarcerated_2023))] <- 1
+                                        is.na(eip_2023$hiv_incarcerated_2023) &
+                                        is.na(eip_2023$hiv_inability_to_contact_2023))] <- 1
 table(eip_2023$hiv_linkage_declined_2023)
 
 table(eip_2023$hiv_linkage_declined_2023)
@@ -3787,7 +3789,8 @@ eip_2024$hiv_linkage_declined_2024[(eip_2024$hiv_ltc_2024 == 1 &
                                       eip_2024$ltc_hiv_final_ltc_status == 2) &
                                      (is.na(eip_2024$hiv_already_linked_2024) &
                                         is.na(eip_2024$hiv_deceased_2024) &
-                                        is.na(eip_2024$hiv_incarcerated_2024))] <- 1
+                                        is.na(eip_2024$hiv_incarcerated_2024) &
+                                        is.na(eip_2024$hiv_inability_to_contact_2024))] <- 1
 table(eip_2024$hiv_linkage_declined_2024)
 
 table(eip_2024$hiv_linkage_declined_2024)
@@ -4328,7 +4331,8 @@ eip_2025$hiv_linkage_declined_2025[(eip_2025$hiv_ltc_2025 == 1 &
                                       eip_2025$ltc_hiv_final_ltc_status == 2) &
                                      (is.na(eip_2025$hiv_already_linked_2025) &
                                         is.na(eip_2025$hiv_deceased_2025) &
-                                        is.na(eip_2025$hiv_incarcerated_2025))] <- 1
+                                        is.na(eip_2025$hiv_incarcerated_2025) &
+                                        is.na(eip_2025$hiv_inability_to_contact_2025))] <- 1
 table(eip_2025$hiv_linkage_declined_2025)
 
 table(eip_2025$hiv_linkage_declined_2025)
