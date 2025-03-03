@@ -2649,7 +2649,7 @@ There were additional deliverables made for population-based objectives, and the
 
 From this statement, we specifically state deliverables for how many MSM will be assessed for risk and/or need, and how many MSM will be tested using EHE-funded tests. Additionally, EIP states a specific number of tests at each site (UCMC, WCH, community sites). Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table in the next section.
 
-For those individuals who identify as a male, they are determined to be a MSM if they meet at least one of the following criteria: *their sexual orientation is homosexual or bisexual, they report sex with a male or a transgender male within the past year, or they are a PLWHA and their reported risk was MSM*. [**The total number of individuals who are MSM that have been assessed during this time period is `r ehe_msm_assessed`, which is `r ehe_msm_assessed_deliverable_percent` of the total promise of `r ehe_msm_assessed_deliverable`**]{style="color: darkgreen;"}.
+For those individuals who identify as a male, they are determined to be a MSM if they meet at least one of the following criteria: *their sexual orientation is homosexual or bisexual, they report sex with a male within the past year, or they are a PLWHA and their reported risk was MSM*. [**The total number of individuals who are MSM that have been assessed during this time period is `r ehe_msm_assessed`, which is `r ehe_msm_assessed_deliverable_percent` of the total promise of `r ehe_msm_assessed_deliverable`**]{style="color: darkgreen;"}.
 
 
 ```{r, echo = FALSE, fig.asp=0.50}
