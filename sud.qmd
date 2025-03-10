@@ -38,22 +38,22 @@ eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
 summary(eip23$record_id)
 
 # 2024
-eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20250303_1024.csv')
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20250310_1020.csv')
 dim(eip24)
 summary(eip24$record_id)
 eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
 summary(eip24$record_id)
 
 # 2025
-eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20250303_1029.csv')
+eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20250310_1018.csv')
 dim(eip25)
 summary(eip25$record_id)
 eip25$record_id <- paste(eip25$record_id, "_25", sep = "")
 summary(eip25$record_id)
 
-# Naloxone Distribution Data
-nalox <- read.csv('M:/EIP Data/EIP Database/EIP Naloxone Distribution Database/EIP Naloxone Distribution/EIP Naloxone Distribution Data 20250303_1034.csv')
-dim(nalox)
+# EIP Community Distribution Database
+comm <- read.csv('M:/EIP Data/EIP Database/EIP Community Distribution Database/EIP Community Distribution Data 20250310_1017.csv')
+dim(comm)
 
 ```
 
@@ -2465,56 +2465,56 @@ eip$datediff50 <- as.numeric(interval(eip$enc_date, eip$followup_date50)/ddays(1
 
 ```{r Naloxone Dataset, include=FALSE}
 
-#####################################  Formatting Naloxone Database Data  ########################################
+################################  Formatting EIP Community Database Data  ###################################
 
-dim(nalox)
-head(nalox)
-summary(nalox$date)
-nalox$date <- as.Date(nalox$date, format = '%m/%d/%Y')
-summary(nalox$date)
+dim(comm)
+head(comm)
+summary(comm$date)
+comm$date <- as.Date(comm$date, format = '%m/%d/%Y')
+summary(comm$date)
 
-head(nalox)
-table(nalox$version)
+head(comm)
+table(comm$nalox_version)
 
-nalox_version_individual <- nalox[which(nalox$version == 1), ]
+nalox_version_individual <- comm[which(comm$nalox_version == 1), ]
 nalox_version_individual <- select(nalox_version_individual, date)
 nalox_version_individual$individual_dist <- 1
 head(nalox_version_individual)
 individual_naloxone_distribution <- nrow(nalox_version_individual)
 individual_naloxone_distribution
 
-nalox_version_transfer <- nalox[which(nalox$version == 2), ]
+nalox_version_transfer <- comm[which(comm$nalox_version == 2), ]
 nalox_version_transfer <- select(nalox_version_transfer, date)
 nalox_version_transfer$transfer_dist <- 1
 head(nalox_version_transfer)
 transfer_naloxone_distribution <- nrow(nalox_version_transfer)
 transfer_naloxone_distribution
 
-nalox_version_oad <- nalox[which(nalox$version == 3), ]
+nalox_version_oad <- comm[which(comm$nalox_version == 3), ]
 nalox_version_oad <- select(nalox_version_oad, date)
 nalox_version_oad$oad_dist <- 1
 head(nalox_version_oad)
 oad_naloxone_distribution <- nrow(nalox_version_oad)
 oad_naloxone_distribution
 
-table(nalox$transfer_type)
-nalox_version_transfer_partner <- nalox[which(nalox$version == 2 & nalox$transfer_type == 1), ]
+table(comm$nalox_transfer_type)
+nalox_version_transfer_partner <- comm[which(comm$nalox_version == 2 & comm$nalox_transfer_type == 1), ]
 nalox_version_transfer_partner <- select(nalox_version_transfer_partner, date)
 nalox_version_transfer_partner$transfer_partner <- 1
 head(nalox_version_transfer_partner)
 transfer_naloxone_distribution_partner <- nrow(nalox_version_transfer_partner)
 transfer_naloxone_distribution_partner
 
-table(nalox$transfer_type)
-nalox_version_transfer_service <- nalox[which(nalox$version == 2 & nalox$transfer_type == 2), ]
+table(comm$nalox_transfer_type)
+nalox_version_transfer_service <- comm[which(comm$nalox_version == 2 & comm$nalox_transfer_type == 2), ]
 nalox_version_transfer_service <- select(nalox_version_transfer_service, date)
 nalox_version_transfer_service$transfer_service <- 1
 head(nalox_version_transfer_service)
 transfer_naloxone_distribution_service <- nrow(nalox_version_transfer_service)
 transfer_naloxone_distribution_service
 
-table(nalox$transfer_type)
-nalox_version_transfer_naloxbox <- nalox[which(nalox$version == 2 & nalox$transfer_type == 3), ]
+table(comm$nalox_transfer_type)
+nalox_version_transfer_naloxbox <- comm[which(comm$nalox_version == 2 & comm$nalox_transfer_type == 3), ]
 nalox_version_transfer_naloxbox <- select(nalox_version_transfer_naloxbox, date)
 if (nrow(nalox_version_transfer_naloxbox) > 0) {
   nalox_version_transfer_naloxbox$transfer_naloxbox <- 1
@@ -2525,20 +2525,20 @@ if (nrow(nalox_version_transfer_naloxbox) > 0) {
 }
 transfer_naloxone_distribution_naloxbox
 
-table(nalox$agency)
-nalox_agency <- nalox[which(nalox$version == 2 | nalox$version == 3), ]
-nalox_agency <- select(nalox_agency, agency)
+table(comm$nalox_agency)
+nalox_agency <- comm[which(comm$nalox_version == 2 | comm$nalox_version == 3), ]
+nalox_agency <- select(nalox_agency, nalox_agency)
 dim(nalox_agency)
 nalox_agency <- distinct(nalox_agency)
 dim(nalox_agency)
 nalox_agency
-nalox_agency <- nalox_agency[which(nalox_agency$agency != ''), ]
+nalox_agency <- nalox_agency[which(nalox_agency$nalox_agency != ''), ]
 nalox_agency
 
 
 # Number of kits distributed
 
-nalox_dist <- select(nalox, date, ucmc_omnicell, wch_omnicell, number_kits)
+nalox_dist <- select(comm, date, ucmc_omnicell, wch_omnicell, nalox_kits)
 head(nalox_dist)
 nalox_dist$site[nalox_dist$ucmc_omnicell == 1] <- 'UCMC Omnicell'
 nalox_dist$site[nalox_dist$wch_omnicell == 1] <- 'WCH Omnicell'
@@ -2546,14 +2546,14 @@ nalox_dist$site[is.na(nalox_dist$ucmc_omnicell) & is.na(nalox_dist$wch_omnicell)
 head(nalox_dist)
 
 
-monthly_nalox_distribution <- select(nalox_dist, date, site, number_kits)
+monthly_nalox_distribution <- select(nalox_dist, date, site, nalox_kits)
 head(monthly_nalox_distribution)
 dim(monthly_nalox_distribution)
 
-monthly_nalox_distribution$Date <- as.Date(monthly_nalox_distribution$date, format="%d/%m/%Y")
+monthly_nalox_distribution$Date <- as.Date(monthly_nalox_distribution$date, format = "%d/%m/%Y")
 head(monthly_nalox_distribution)
 
-monthly_nalox_distribution <- aggregate(number_kits ~ as.yearmon(Date) + site,
+monthly_nalox_distribution <- aggregate(nalox_kits ~ as.yearmon(Date) + site,
                                         data = monthly_nalox_distribution,
                                         FUN = sum)
 monthly_nalox_distribution$Date <- as.Date(as.yearmon(monthly_nalox_distribution$`as.yearmon(Date)`))
@@ -3403,47 +3403,47 @@ eip_fts_distribution <- select(eip_fts_distribution, enc_date, enc_location, fts
 
 
 
-# Naloxone Database
+# EIP Community Database
 
-table(nalox$fts)
-nalox_fts_distribution <- nalox[which(nalox$fts == 1), ]
-nalox_fts_distribution <- select(nalox_fts_distribution, date, setting, fts_number)
-head(nalox_fts_distribution)
-colnames(nalox_fts_distribution)[1] <- 'enc_date'
-colnames(nalox_fts_distribution)[2] <- 'enc_location'
-head(nalox_fts_distribution)
+table(comm$fts)
+comm_fts_distribution <- comm[which(comm$fts == 1), ]
+comm_fts_distribution <- select(comm_fts_distribution, date, nalox_setting, fts_number)
+head(comm_fts_distribution)
+colnames(comm_fts_distribution)[1] <- 'enc_date'
+colnames(comm_fts_distribution)[2] <- 'enc_location'
+head(comm_fts_distribution)
 
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 1] <- 'CAP'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 2] <- 'Court System'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 3] <- 'ED'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 4] <- 'FQHC/non-LHD Clinic'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 5] <- 'Hospital'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 6] <- 'Jail'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 7] <- 'Leave-Behind (EMS/LEO)'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 8] <- 'Local HD'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 9] <- 'Mobile Unit'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 10] <- 'Online Mail Order'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 11] <- 'Pharmacy'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 12] <- 'QRT'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 13] <- 'School/University'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 14] <- 'Street/Outreach'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 15] <- 'SSP'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 16] <- 'Treatment/Recovery'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 17] <- 'Vending/Dispensing Machine'
-nalox_fts_distribution$enc_location[nalox_fts_distribution$enc_location == 0] <- 'Other'
-head(nalox_fts_distribution)
-dim(nalox_fts_distribution)
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 1] <- 'CAP'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 2] <- 'Court System'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 3] <- 'ED'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 4] <- 'FQHC/non-LHD Clinic'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 5] <- 'Hospital'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 6] <- 'Jail'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 7] <- 'Leave-Behind (EMS/LEO)'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 8] <- 'Local HD'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 9] <- 'Mobile Unit'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 10] <- 'Online Mail Order'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 11] <- 'Pharmacy'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 12] <- 'QRT'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 13] <- 'School/University'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 14] <- 'Street/Outreach'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 15] <- 'SSP'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 16] <- 'Treatment/Recovery'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 17] <- 'Vending/Dispensing Machine'
+comm_fts_distribution$enc_location[comm_fts_distribution$enc_location == 0] <- 'Other'
+head(comm_fts_distribution)
+dim(comm_fts_distribution)
 
 
 
 
 # Monthly FTS Distribution
 
-monthly_fts_distribution <- rbind(eip_fts_distribution, nalox_fts_distribution)
+monthly_fts_distribution <- rbind(eip_fts_distribution, comm_fts_distribution)
 head(monthly_fts_distribution)
 dim(monthly_fts_distribution)
 
-monthly_fts_distribution$Date <- as.Date(monthly_fts_distribution$enc_date, format="%d/%m/%Y")
+monthly_fts_distribution$Date <- as.Date(monthly_fts_distribution$enc_date, format = "%d/%m/%Y")
 head(monthly_fts_distribution)
 
 monthly_fts_distribution <- aggregate(fts_number ~ as.yearmon(Date) + enc_location,
@@ -5370,8 +5370,6 @@ monthly_fts_distribution_plot
 ```
 
 
-*It is important to note that the number represented here is the number of individual strips, not the number of kits. Standard FTS kits are in packages of 5 strips, and the EIP HPA can select this as an option when documenting the distribution of FTS to individuals. However, they are also able to document non-standard amounts that are distributed in a free text field. Therefore, anytime they select that they distributed the standard kit of 5 strips, this is counted as five individual strips and combined with the free text field of non-standard distribution.*
-
 <br>
 
 
@@ -5426,13 +5424,13 @@ nalox_enc_location_colors <- c("UCMC Omnicell" = "coral2", "WCH Omnicell" = "aqu
 
 total_distribution <- monthly_nalox_distribution %>%
   group_by(Date) %>%
-  summarise(total_kits = sum(number_kits))
+  summarise(total_kits = sum(nalox_kits))
 
 monthly_nalox_distribution_plot <- plot_ly() %>%
   add_trace(
     data = monthly_nalox_distribution,
     x = ~Date,
-    y = ~number_kits,
+    y = ~nalox_kits,
     color = ~site,
     type = "scatter",
     mode = "lines+markers",
