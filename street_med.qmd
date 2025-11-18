@@ -3239,7 +3239,7 @@ leaflet() %>%
     data = street_med_sites,
     color = 'red',
     label = ~site) %>%
-  addProviderTiles(providers$Stadia.AlidadeSmooth) %>%
+  addProviderTiles(providers$Esri.WorldTopoMap) %>%
   addDrawToolbar()
 
 ```
