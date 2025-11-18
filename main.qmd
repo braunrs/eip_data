@@ -1,0 +1,21 @@
+---
+title: "Welcome to the EIP Data Website"
+image: images/eip_logo.jpg
+lightbox:
+  match: auto
+  effect: fade
+  loop: true
+about:
+    template: jolla
+    image-shape: round
+    image-width: 10em
+---
+
+:::{#hero-heading}
+This site shows our ongoing projects and historical data regarding EIP services. As of now, the EIP Data website contains data going back to the beginning of January 1st, 2023 until the most recent refresh date.
+:::
+
+<br>
+<br>
+<br>
+

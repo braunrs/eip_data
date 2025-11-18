@@ -3,17 +3,29 @@ project:
   output-dir: docs
 
 website:
-  title: "eip_data"
+  title: "EIP Data Website"
   navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+    right:
+      - text: "Home"
+        href: main.qmd
+      - text: "Clinical"
+        menu:
+          - text: HIV
+            href: hiv.html
+          - text: Hepatitis-C
+            href: hcv.html
+          - text: SUD
+            href: sud.html
+          - text: Street Medicine
+            href: street_med.html
+          - text: Human Trafficking
+            href: ht.html
 
 format:
   html:
-    theme: cosmo
-    css: styles.css
+    theme:
+      light: spacelab
+      dark: darkly
     toc: true
 
 
