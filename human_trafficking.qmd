@@ -4192,6 +4192,8 @@ The flowchart of the HT Linkage to Care efforts for EIP are shown below. A linka
 
 
 ```{r, echo=FALSE, warning=FALSE}
+#| lightbox:
+#|   description: Human Trafficking Linkage Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 

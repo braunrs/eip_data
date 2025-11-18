@@ -5654,6 +5654,8 @@ The consort or flow diagram below represents all of the linkage data described a
 
 
 ```{r, echo = FALSE, warning = FALSE}
+#| lightbox:
+#|   description: 2025 YTD HIV Linkage Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
@@ -5947,6 +5949,8 @@ Since HIV LTC data is typically reported on an annual basis, the specific HIV li
 This shows the HIV LTC flow diagram for all linkage cases in 2025, along with the linkage to care success rate.
 
 ```{r, echo = FALSE, warning = FALSE}
+#| lightbox:
+#|   description: 2025 YTD HIV Linkage Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
@@ -6233,6 +6237,8 @@ config(hiv_linkage_2025_gauge, displayModeBar = FALSE)
 This shows the HIV LTC flow diagram for all linkage cases in 2024, along with the linkage to care success rate.
 
 ```{r, echo = FALSE, warning = FALSE}
+#| lightbox:
+#|   description: 2024 HIV Linkage Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
@@ -6519,6 +6525,8 @@ config(hiv_linkage_2024_gauge, displayModeBar = FALSE)
 This shows the HIV LTC flow diagram for all linkage cases in 2023, along with the linkage to care success rate.
 
 ```{r, echo = FALSE, warning = FALSE}
+#| lightbox:
+#|   description: 2023 HIV Linkage Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 

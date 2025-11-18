@@ -5737,6 +5737,8 @@ The flow diagram below highlights the total aggregate-level data with numbers fo
 
 
 ```{r, echo=FALSE, warning=FALSE}
+#| lightbox:
+#|   description: HCPH SUD Data Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
@@ -5842,6 +5844,8 @@ The flow diagram below summarizes all of the follow-up data for those individual
 
 
 ```{r, echo=FALSE, warning=FALSE}
+#| lightbox:
+#|   description: HCPH SUD Follow-up Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
@@ -6219,6 +6223,8 @@ The consort or flow diagram below represents all of the linkage data described a
 
 
 ```{r, echo = FALSE, warning = FALSE}
+#| lightbox:
+#|   description: 2025 YTD SUD Linkage Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
@@ -6424,6 +6430,8 @@ The specific SUD linkage numbers for each year are presented below.
 This shows the SUD LTC flow diagram for all linkage cases in 2025, along with the linkage to care success rate.
 
 ```{r, echo = FALSE, warning = FALSE}
+#| lightbox:
+#|   description: 2025 YTD SUD Linkage Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
@@ -6624,6 +6632,8 @@ grid + theme_void()
 This shows the SUD LTC flow diagram for all linkage cases in 2024, along with the linkage to care success rate.
 
 ```{r, echo = FALSE, warning = FALSE}
+#| lightbox:
+#|   description: 2024 SUD Linkage Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
@@ -6824,6 +6834,8 @@ grid + theme_void()
 This shows the SUD LTC flow diagram for all linkage cases in 2023, along with the linkage to care success rate.
 
 ```{r, echo = FALSE, warning = FALSE}
+#| lightbox:
+#|   description: 2023 SUD Linkage Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 

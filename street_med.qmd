@@ -3234,7 +3234,7 @@ plwha
 
 leaflet() %>%
   addTiles() %>%
-  setView(lng = -84.5120, lat = 39.1031, zoom = 14) %>%
+  setView(lng = -84.5120, lat = 39.1431, zoom = 11.5) %>%
   addCircleMarkers(
     data = street_med_sites,
     color = 'red',

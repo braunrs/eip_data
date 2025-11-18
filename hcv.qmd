@@ -5341,8 +5341,8 @@ Since EIP is meant to approach each individual that has a reactive HCV Ab test t
 As mentioned above, there were a total of `r hcv_ab_positive` HCV positive tests, with `r hcv_pts_ab_positive` unique individuals. For EIP follow-up, we will focus on the unique number of patients in in regards to education of results or additional testing needed, and linkage to care efforts. A summary flow diagram for EIP's follow-up efforts regarding those that are identified HCV Ab+ through the HCV Dashboard is provided below. You can zoom into this flow diagram by clicking on the image.
 
 ```{r, echo = FALSE, warning = FALSE}
-#| label: HCV Epic Dashboard Follow-up Flow Diagram 
-#| fig-cap: "** *Unable to match records means that we are unable to match the EIP follow-up data with the data pulled from the Epic HCV Dashboard. The reason(s) for why these records are unable to be matched are: Tested under different MRN than patient record.*"
+#| lightbox:
+#|   description: Hepatitis-C Dashboard Linkage Flow Diagram
 
 
 grid_data <- tibble(x= 1:100, y= 1:100)
@@ -5621,6 +5621,8 @@ The flow diagram below shows the total linkage to care efforts for EIP in regard
 
 
 ```{r, echo=FALSE, warning=FALSE}
+#| lightbox:
+#|   description: Hepatitis-C Linkage Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 

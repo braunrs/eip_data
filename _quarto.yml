@@ -19,7 +19,7 @@ website:
           - text: Street Medicine
             href: street_med.html
           - text: Human Trafficking
-            href: ht.html
+            href: human_trafficking.html
 
 format:
   html:
