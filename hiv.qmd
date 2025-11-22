@@ -5571,19 +5571,34 @@ Annual HIV testing for each of the rapid-based testing streams is shown in the g
 
 ```{r, echo = FALSE}
 
+annual_hiv_tests$total_tests <- annual_hiv_tests$ctr_tests + annual_hiv_tests$ehe_tests
+
 annual_hiv_testing_plot <- plot_ly(data = annual_hiv_tests,
                                    x = ~Date,
-                                   y = ~ctr_tests,
+                                   y = ~total_tests,
                                    type = 'bar',
-                                   name = 'CTR Tests',
-                                   text = ~ctr_tests, textposition = 'auto',
-                                   marker = list(color = 'lightskyblue')) %>%
+                                   name = 'Total Tests',
+                                   marker = list(color = 'black'),
+                                   text = ~total_tests,
+                                   textposition = 'auto') %>%
+  
+  add_trace(y = ~ctr_tests,
+            type = 'scatter',
+            mode = 'lines+markers',
+            name = 'CTR Tests',
+            line = list(color = 'lightskyblue', width = 3),
+            marker = list(color = 'lightskyblue')) %>%
+
   add_trace(y = ~ehe_tests,
+            type = 'scatter',
+            mode = 'lines+markers',
             name = 'EHE Tests',
-            text = ~ehe_tests,
-            textposition = 'auto',
+            line = list(color = 'darkgreen', width = 3),
             marker = list(color = 'darkgreen')) %>%
-  layout(yaxis = list(title = 'Total HIV Tests'), barmode = 'stack')
+  
+  layout(yaxis = list(title = 'Number of HIV Tests'),
+         barmode = 'overlay')
+
 config(annual_hiv_testing_plot, displayModeBar = FALSE)
 
 ```
