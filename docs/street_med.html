@@ -9,7 +9,7 @@
 <meta name="dcterms.date" content="2025-12-09">
 <meta name="description" content="[Description]">
 
-<title>Human Trafficking – EIP Data Website</title>
+<title>Street Medicine – EIP Data Website</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -47,9 +47,6 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/bootstrap/bootstrap-a1719f152a44c0071ea46cca3991f6d5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark-d03ce445b6a51a4ef8a32186c2dd8a61.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="site_libs/bootstrap/bootstrap-a1719f152a44c0071ea46cca3991f6d5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
-<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -77,27 +74,37 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
-
-<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
-
 <link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
 
 <script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 
-<script src="site_libs/plotly-binding-4.11.0/plotly.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 
-<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
 
-<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+<script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
 
-<link href="site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
 
-<script src="site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<script src="site_libs/proj4-2.6.2/proj4.min.js"></script>
 
-<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
 
-<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+<link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+
+<script src="site_libs/leaflet-binding-2.2.3/leaflet.js"></script>
+
+<script src="site_libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+
+<script src="site_libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
+
+<link href="site_libs/lfx-draw-1.0.4/lfx-draw-prod.css" rel="stylesheet">
+
+<script src="site_libs/lfx-draw-1.0.4/lfx-draw-prod.js"></script>
+
+<script src="site_libs/lfx-draw-1.0.4/lfx-draw-bindings.js"></script>
+
+<script src="site_libs/lfx-draw-drag-0.4.8/lfx-draw-drag-prod.js"></script>
 
 
 
@@ -332,10 +339,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#screening-for-ht" id="toc-screening-for-ht" class="nav-link active" data-scroll-target="#screening-for-ht">Screening for HT</a></li>
-  <li><a href="#resources-for-ht" id="toc-resources-for-ht" class="nav-link" data-scroll-target="#resources-for-ht">Resources for HT</a></li>
-  <li><a href="#ht-linkage-to-care" id="toc-ht-linkage-to-care" class="nav-link" data-scroll-target="#ht-linkage-to-care">HT Linkage to Care</a></li>
-  <li><a href="#eip-resource-database" id="toc-eip-resource-database" class="nav-link" data-scroll-target="#eip-resource-database">EIP Resource Database</a></li>
+  <li><a href="#on-the-map" id="toc-on-the-map" class="nav-link active" data-scroll-target="#on-the-map">On the Map</a></li>
   </ul>
 </nav>
     </div>
@@ -345,7 +349,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Human Trafficking</h1>
+<h1 class="title">Street Medicine</h1>
 </div>
 
 <div>
@@ -373,224 +377,16 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="screening-for-ht" class="level1">
-<h1>Screening for HT</h1>
-<p>EIP officially began screening for human trafficking (HT) within the EIP Database as of December 1st, 2022 with the introduction of Dr.&nbsp;Christa Pulvino’s pilot grant. The EIP assessment has had some general questions that may indicate the risk of an individual being in a HT situation, but new assessment questions were added to indicate a risk for trafficking, as well as the HPA’s general impression of whether the individual was at risk based on additional information. Additional resources for HT were included within the EIP list, and a new, electronic version of the EIP resource list was created that allowed the ability for patients to access the list of EIP resources using a QR code. The data captured for this project is provided on this page, along with additional data that pertains to the HT efforts within EIP.</p>
-<p>There are a total of 15966 encounters with EIP, with a total of 7211 assessments completed (<em>45.2% of the total number of encounters</em>). As mentioned above, there are several questions within the EIP assessment that may indicate whether someone is in an at-risk situation for HT. The total number of assessments where <em>at least one</em> of these questions was asked and answered is 3815 (<em>52.9% of the total number of assessments, 3815/7211</em>). The questions that are included in the total assessed for HT (<em>in addition to the questions provided by Dr.&nbsp;Pulvino</em>) are noted below:</p>
-<ul>
-<li><em>When did you last receive money and/or drugs for sex?</em></li>
-<li><em>Do you feel safe in your relationship?</em></li>
-<li><em>Does your partner pressure you into having sex?</em></li>
-</ul>
-<p>However, when we only consider those questions that were included with Dr.&nbsp;Pulvino’s HT assessment, the number of assessments where this specific screening was done was 2437 (<em>33.8% of the total number of assessments, 2437/7211</em>). Individuals are considered at risk for HT if they respond ‘Yes’ to any of the questions in this HT assessment. The total number of assessments where an individual screened positive for HT risk is 263 (<em>10.8% of the total assessed using Dr.&nbsp;Pulvino’s assessment, 263/2437</em>). The summary table for HT screening is provided below.</p>
+<section id="on-the-map" class="level1">
+<h1>On the Map</h1>
 <div class="cell">
 <div class="cell-output-display">
-<table data-quarto-disable-processing="true" class=" lightable-paper table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; font-size: 16px; width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:right;"> HT Assessed </th>
-   <th style="text-align:left;"> % Assessed </th>
-   <th style="text-align:right;"> HT Assessed (Pulvino) </th>
-   <th style="text-align:left;"> % Assessed (Pulvino) </th>
-   <th style="text-align:right;"> Screened HT+ </th>
-   <th style="text-align:left;"> % HT+ </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:right;"> 3815 </td>
-   <td style="text-align:left;"> 52.9% </td>
-   <td style="text-align:right;"> 2437 </td>
-   <td style="text-align:left;"> 33.8% </td>
-   <td style="text-align:right;"> 263 </td>
-   <td style="text-align:left;"> 10.8% </td>
-  </tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>The breakdown of the responses for each question on Dr.&nbsp;Pulvino’s HT assessment are provided in the table below to keep track of which specific questions are being asked and answered, and which ones are of highest note for those who are screening positive.</p>
-<div class="cell">
-<div class="cell-output-display">
-<table data-quarto-disable-processing="true" class=" lightable-paper table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; font-size: 16px; width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> Question </th>
-   <th style="text-align:right;"> # Assessed </th>
-   <th style="text-align:right;"> Yes </th>
-   <th style="text-align:left;"> % Yes </th>
-   <th style="text-align:right;"> No </th>
-   <th style="text-align:right;"> Not Asked </th>
-   <th style="text-align:right;"> Declined </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Have you ever worked, or done other things, in a place that made you feel scared or unsafe? </td>
-   <td style="text-align:right;"> 2405 </td>
-   <td style="text-align:right;"> 168 </td>
-   <td style="text-align:left;"> 7% </td>
-   <td style="text-align:right;"> 2237 </td>
-   <td style="text-align:right;"> 285 </td>
-   <td style="text-align:right;"> 31 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> In thinking back over your past experience, have you ever been tricked or forced into doing any kind of work that you did not want to do? </td>
-   <td style="text-align:right;"> 2342 </td>
-   <td style="text-align:right;"> 127 </td>
-   <td style="text-align:left;"> 5% </td>
-   <td style="text-align:right;"> 2215 </td>
-   <td style="text-align:right;"> 314 </td>
-   <td style="text-align:right;"> 32 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Have you ever been afraid to leave or quit a work situation due to fears of violence or threats of harm to yourself or your family? </td>
-   <td style="text-align:right;"> 2294 </td>
-   <td style="text-align:right;"> 85 </td>
-   <td style="text-align:left;"> 4% </td>
-   <td style="text-align:right;"> 2209 </td>
-   <td style="text-align:right;"> 328 </td>
-   <td style="text-align:right;"> 30 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Have you ever received anything in exchange for sex (for example, a place to stay, gifts, or food)? </td>
-   <td style="text-align:right;"> 2270 </td>
-   <td style="text-align:right;"> 154 </td>
-   <td style="text-align:left;"> 7% </td>
-   <td style="text-align:right;"> 2116 </td>
-   <td style="text-align:right;"> 326 </td>
-   <td style="text-align:right;"> 30 </td>
-  </tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>Historically, EIP has asked whether an individual has exchanged money and/or drugs for sex. However, these are asked in conjunction with Dr.&nbsp;Pulvino’s question of whether they have ever received anything for sex, not just money or drugs. The response to Dr.&nbsp;Pulvino’s specific question is shown above, but we can also look at the total number of assessments where the individual endorsed receiving anything for sex, whether it was a response to the historical EIP question(s) or the additional question provided by Dr.&nbsp;Pulvino. Looking at the response to all questions related to receiving anything for sex, there were a total of 282 assessments where the individual endorsed receiving anything for sex (<em>7% of all those assessed for HT, 282/3815</em>).</p>
-<p>Additional questions that can be evaluated in identifying the risk for HT are whether an individual feels safe in their relationship and whether their partner pressures them into having sex. There were a total number of 2185 assessments where the individual answered the question regarding feeling safe in their relationship, with 294 (<em>13% of all those assessed for this question, 294/2185</em>) stating they do not feel safe in their current relationship. There were a total number of 1980 assessments where the individual answered the question regarding being pressured into sex by their partner, with 93 (<em>5% of all those assessed for this question, 93/1980</em>) stating that they have been pressured into sex by their partner.</p>
-<p>Additionally, the EIP staff are asked to document during their encounter whether they had a feeling of whether the individual was a potential risk for HT, regardless of how they answered the questions and based on their overall impression of the encounter as a whole. There were a total of 71 encounters where the EIP staff indicated that they had a feeling the individual was at risk for being trafficked (<em>0.4% of all encounters, 71/15966</em>). The total number of encounters is used as the denominator here (<em>rather than the number of assessments, or those screened for HT risk</em>) because the EIP staff can note their impression of HT risk without completing an assessment. However, we can also look at this total for those that completed an assessment and those that completed HT screening if desired. When looking at it this way, 1.0% of those that completed an EIP assessment were suspected of being in a trafficking situation by the EIP staff (<em>71/7211</em>), while 1.9% of those who were screened for HT were suspected of being in a trafficked situation (<em>71/3815</em>).</p>
-<p>For individuals who screened positive for being a HT risk through Dr.&nbsp;Pulvino’s questions, there were 49 assessments where the EIP staff also stated they had the impression that the individual was at risk for being trafficked (<em>18.6% of all those who screened positive for HT, 49/263</em>). There were a total of 2174 assessments where the individual was screened using Dr.&nbsp;Pulvino’s assessment but <em>did not</em> screen positive, and 7 of these where the EIP staff suspected that they may be at risk (<em>0.3% of all those assessed for HT but were not positive, 7/2174</em>).</p>
-</section>
-<section id="resources-for-ht" class="level1">
-<h1>Resources for HT</h1>
-<p>Referrals to resources for HT are provided by our EIP health promotion advocates (HPAs) after their encounter with the individual. These resources can be provided whether the individual is screened for their risk of HT or not, and can occur at any time during the individual’s encounter within the emergency department. The total number of encounters where resources were provided to the individual by our HPAs was 4738 (<em>29.7% of all encounters, 4738/15966</em>). In order to ensure that all individuals who are screened, and that screened positive, are able to receive the reosurces they need during that encounter. The total number of encounters where the individual screened positive for HT risk and were provided with resources specifically for HT was 137 (<em>52.1% of all those that screened positive, 137/263</em>). Also, when one of our EIP HPAs suspect HT risk, whether they screened positive or not, they are trained to offer resources that may help. The number of encounters where the individual was suspected of being in a trafficked situation by an EIP HPA and where they were provided with referrals was 61 (<em>85.9% of all those that were suspected of HT risk, 61/71</em>). Finally, the number of encounters where an individual was suspected or screened positive for HT during the assessment and was provided resources was 42 (<em>85.7% of all those that were either suspected of or screened positive for HT risk, 42/49</em>).</p>
-</section>
-<section id="ht-linkage-to-care" class="level1">
-<h1>HT Linkage to Care</h1>
-<p>The flowchart of the HT Linkage to Care efforts for EIP are shown below. A linkage case for HT may be started in any situation, and does not require the individual to be screened for HT risk.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><a href="human_trafficking_files/figure-html/unnamed-chunk-3-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-1;" data-gallery="quarto-lightbox-gallery-1"><img src="human_trafficking_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></a></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="eip-resource-database" class="level1">
-<h1>EIP Resource Database</h1>
-<p>With the introduction of screening for human trafficking, EIP established a virtual resource for our services, providing individuals with a way to access and review our resource list anytime using a QR code. This electronic version of the EIP resource list went live on <strong>April 19th, 2023</strong>. With this electronic version, we are able to analyze which resources visitors review for our services provided in the document, based on what options they select when triggering the QR code. There were a total of <strong>335</strong> queries into the EIP resource list using this QR code, and the particular services they reviewed are shown below.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-5fbbb6f283915b948ed1" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-5fbbb6f283915b948ed1">{"x":{"visdat":{"487836722d44":["function () ","plotlyVisDat"]},"cur_data":"487836722d44","attrs":{"487836722d44":{"x":["All Services","HIV","Substance Abuse","Housing","Mental Health","Human Trafficking","Survivors of Abuse","Food Services","General Health","Transportation"],"y":[168,52,75,66,59,47,33,47,38,38],"marker":{"color":"rgb(255,204,153)","line":{"color":"rgb(64,64,64)","width":1.5}},"name":"EIP Resources Accessed","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"EIP Resources Accessed","xaxis":{"domain":[0,1],"automargin":true,"categoryorder":"array","categoryarray":["all_services","hiv","sud","housing","mh","ht","abuse","food","general","transportation"],"title":[],"type":"category"},"yaxis":{"domain":[0,1],"automargin":true,"title":[]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["All Services","HIV","Substance Abuse","Housing","Mental Health","Human Trafficking","Survivors of Abuse","Food Services","General Health","Transportation"],"y":[168,52,75,66,59,47,33,47,38,38],"marker":{"color":"rgb(255,204,153)","line":{"color":"rgb(64,64,64)","width":1.5}},"name":"EIP Resources Accessed","type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-</div>
-</div>
-<p>The table below shows the number of views for each service alone, providing the percentage of the the total number of views (<em>n = 335</em>) for the EIP resource list. In addition, the table provides numbers when considering the times that the individual selected to view all services, since the same resources for the individualized service would be accessible when viewing all services. Therefore, the percentage of the total for each service when combined with the number of views for all services is also shown.</p>
-<div class="cell">
-<div class="cell-output-display">
-<table data-quarto-disable-processing="true" class=" lightable-paper table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; font-size: 16px; width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> Resource </th>
-   <th style="text-align:right;"> Numbers of Views </th>
-   <th style="text-align:left;"> % of Total </th>
-   <th style="text-align:left;"> All Services Included </th>
-   <th style="text-align:left;"> % with All Services </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> All Services </td>
-   <td style="text-align:right;"> 168 </td>
-   <td style="text-align:left;"> 50.1% </td>
-   <td style="text-align:left;"> - </td>
-   <td style="text-align:left;"> - </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> HIV </td>
-   <td style="text-align:right;"> 52 </td>
-   <td style="text-align:left;"> 15.5% </td>
-   <td style="text-align:left;"> 220 </td>
-   <td style="text-align:left;"> 66% </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Substance Abuse </td>
-   <td style="text-align:right;"> 75 </td>
-   <td style="text-align:left;"> 22.4% </td>
-   <td style="text-align:left;"> 243 </td>
-   <td style="text-align:left;"> 73% </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Housing </td>
-   <td style="text-align:right;"> 66 </td>
-   <td style="text-align:left;"> 19.7% </td>
-   <td style="text-align:left;"> 234 </td>
-   <td style="text-align:left;"> 70% </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Mental Health </td>
-   <td style="text-align:right;"> 59 </td>
-   <td style="text-align:left;"> 17.6% </td>
-   <td style="text-align:left;"> 227 </td>
-   <td style="text-align:left;"> 68% </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Human Trafficking </td>
-   <td style="text-align:right;"> 47 </td>
-   <td style="text-align:left;"> 14.0% </td>
-   <td style="text-align:left;"> 215 </td>
-   <td style="text-align:left;"> 64% </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Survivors of Abuse </td>
-   <td style="text-align:right;"> 33 </td>
-   <td style="text-align:left;"> 9.9% </td>
-   <td style="text-align:left;"> 201 </td>
-   <td style="text-align:left;"> 60% </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Food Services </td>
-   <td style="text-align:right;"> 47 </td>
-   <td style="text-align:left;"> 14.0% </td>
-   <td style="text-align:left;"> 215 </td>
-   <td style="text-align:left;"> 64% </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> General Health </td>
-   <td style="text-align:right;"> 38 </td>
-   <td style="text-align:left;"> 11.3% </td>
-   <td style="text-align:left;"> 206 </td>
-   <td style="text-align:left;"> 61% </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Transportation </td>
-   <td style="text-align:right;"> 38 </td>
-   <td style="text-align:left;"> 11.3% </td>
-   <td style="text-align:left;"> 206 </td>
-   <td style="text-align:left;"> 61% </td>
-  </tr>
-</tbody>
-</table>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-9e4389387f9b51a83a07" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-9e4389387f9b51a83a07">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addCircleMarkers","args":[[39.0978,39.1424,39.10216,39.19687,39.1059,null,39.17008,39.09926,39.16084,39.14653,39.09898,39.11848,39.11392,39.17255,39.1033,39.11595,39.1126,39.11548,39.10446,39.09282,39.11281,39.09886,39.28284,39.09519,39.12754,39.1091,39.14519,null],[-84.52043,-84.53148,-84.53485000000001,-84.47725,-84.51348,null,-84.28531,-84.52722,-84.54044,-84.42796,-84.53006000000001,-84.53596,-84.5172,-84.59041999999999,-84.55303000000001,-84.51554,-84.51432,-84.51793000000001,-84.51527,-84.56264,-84.51679,-84.66401,-84.40176,-84.38856,-84.48815999999999,-84.51727,-84.61996000000001,null],10,null,null,{"interactive":true,"className":"","stroke":true,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.2},null,null,null,null,["Bridge the Gap ","Camp Washington - Rest Inn","Carr Street Camp (Carr St &amp; Dalton)","Carthage - Speedway","Cincinnati Public Library","Encampment (45203)","Garfield park","Gest St (Shelterhouse?)","Northside Hoffner Park","Hyde Park (Plaza?)","Linn Street Train Tracks (Linn St &amp; 5th)","Lord's Gym","Mary Magedalen House","Mt Airy Park","Neave Street","Neighborhub Health","OTR (E Liberty &amp; Walnut)","Our Daily Bread","Piatt Park","Price Hill Shell","Republic Street (Republic &amp; Liberty)","River Rd","Sharonville (E Kemper &amp;42)","Stanbery Park","Walnut Hills Library ","Washington Park","Western Hills (Plaza?)","Westside"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addProviderTiles","args":["Esri.WorldTopoMap",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addDrawToolbar","args":[null,null,{"position":"topleft","draw":{"polyline":{"allowIntersection":true,"drawError":{"color":"#b00b00","timeout":2500},"guidelineDistance":20,"maxGuideLineLength":4000,"showLength":true,"metric":true,"feet":true,"nautic":false,"zIndexOffset":2000,"shapeOptions":{"stroke":true,"color":"#03f","weight":1,"opacity":1,"fill":false,"fillColor":"#03f","fillOpacity":0.4,"clickable":true,"smoothFactor":1,"noClip":true},"repeatMode":false},"polygon":{"showArea":false,"metric":true,"shapeOptions":{"stroke":true,"color":"#03f","weight":1,"opacity":1,"fill":true,"fillColor":"#03f","fillOpacity":0.4,"clickable":true,"smoothFactor":1,"noClip":true},"repeatMode":false},"circle":{"shapeOptions":{"stroke":true,"color":"#03f","weight":1,"opacity":1,"fill":true,"fillColor":"#03f","fillOpacity":0.4,"clickable":true,"smoothFactor":1,"noClip":true},"repeatMode":false,"showRadius":true,"metric":true,"feet":true,"nautic":false},"rectangle":{"showArea":true,"metric":true,"shapeOptions":{"stroke":true,"color":"#03f","weight":1,"opacity":1,"fill":true,"fillColor":"#03f","fillOpacity":0.4,"clickable":true,"smoothFactor":1,"noClip":true},"repeatMode":false},"marker":{"zIndexOffset":2000,"repeatMode":false},"circlemarker":{"stroke":true,"color":"#3388ff","weight":4,"opacity":0.5,"fill":true,"fillOpacity":0.2,"clickable":true,"zIndexOffset":2000,"repeatMode":false},"singleFeature":false},"edit":false,"toolbar":null,"handlers":null,"edittoolbar":null,"edithandlers":null}]}],"setView":[[39.1431,-84.512],11.5,[]],"limits":{"lat":[39.09282,39.28284],"lng":[-84.66401,-84.28531]}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 
 
-<div class="hidden" aria-hidden="true">
-<div class="glightbox-desc lightbox-desc-1">
-<p>Human Trafficking Linkage Flow Diagram</p>
-</div>
-</div>
 </section>
 
 </main> <!-- /main -->
@@ -1008,38 +804,6 @@ ul.task-list li input[type="checkbox"] {
   });
   </script>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
-(function() {
-  let previousOnload = window.onload;
-  window.onload = () => {
-    if (previousOnload) {
-      previousOnload();
-    }
-    lightboxQuarto.on('slide_before_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      const href = trigger.getAttribute('href');
-      if (href !== null) {
-        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-        if (imgEl !== null) {
-          const srcAttr = imgEl.getAttribute("src");
-          if (srcAttr && srcAttr.startsWith("data:")) {
-            slideConfig.href = srcAttr;
-          }
-        }
-      } 
-    });
-  
-    lightboxQuarto.on('slide_after_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(slideNode);
-      }
-    });
-  
-  };
-  
-})();
-          </script>
 
 
 
