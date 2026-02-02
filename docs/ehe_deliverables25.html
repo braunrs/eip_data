@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-02-02">
+
+<title>EHE Deliverables (2025/2026) – EIP Data Website</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-2e781afaaf7e055d9dabd3834f628d82.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-24772959a0e306aba8d7698078628ce7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-2e781afaaf7e055d9dabd3834f628d82.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="site_libs/plotly-binding-4.11.0/plotly.js"></script>
+
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+
+<link href="site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">EIP Data Website</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./main.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-clinical" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Clinical</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-clinical">    
+        <li>
+    <a class="dropdown-item" href="./hiv.html">
+ <span class="dropdown-text">HIV</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./hcv.html">
+ <span class="dropdown-text">Hepatitis-C</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-deliverables" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Deliverables</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-deliverables">    
+        <li>
+    <a class="dropdown-item" href="./ctr_deliverables25.html">
+ <span class="dropdown-text">CTR 2025/2026</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ehe_deliverables25.html">
+ <span class="dropdown-text">EHE 2025/2026</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#ehe-deliverables-summary" id="toc-ehe-deliverables-summary" class="nav-link active" data-scroll-target="#ehe-deliverables-summary">EHE Deliverables Summary</a></li>
+  <li><a href="#plwha" id="toc-plwha" class="nav-link" data-scroll-target="#plwha">PLWHA</a></li>
+  <li><a href="#msm" id="toc-msm" class="nav-link" data-scroll-target="#msm">MSM</a></li>
+  <li><a href="#hrhs" id="toc-hrhs" class="nav-link" data-scroll-target="#hrhs">HRHS</a></li>
+  <li><a href="#additional-ehe-metrics" id="toc-additional-ehe-metrics" class="nav-link" data-scroll-target="#additional-ehe-metrics">Additional EHE Metrics</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">EHE Deliverables (2025/2026)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 2, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The Ending the HIV Epidemic (EHE) testing program…(plan to provide an overall description and background for EHE). The table below shows the total number of EHE tests and the overall positivity rate.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table data-quarto-disable-processing="true" class=" lightable-paper table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; font-size: 16px; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:left;"> EHE </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Number of Tests </td>
+   <td style="text-align:left;"> 88 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Positives </td>
+   <td style="text-align:left;"> 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> New Positives </td>
+   <td style="text-align:left;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Positivity Rate </td>
+   <td style="text-align:left;"> 0.00% </td>
+  </tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>EHE testing is reported on a monthly basis. The report sent to Hamilton County Public Health (HCPH), which they then send to the Ohio Department of Health (ODH) each month consists of the total number of EHE-funded tests, and how many individuals were newly diagnosed with HIV from testing. The ODH report is divided into three different files: one comprising the aggregate data for testing by site (sent y email), the positivity data report by site (sent by email), and the priority-based opscan report data by individual (uploaded to a shared OneDrive folder). The aggregate data is further divided into several tabs, each depending on the site where the test occurred. The aggregate data report is essentially divided by the two ED testing sites (UCMC and WCH), the community sites (termed non-traditional testing venues), and the syringe exchange sites. It also consists of the demographic and population data for those tested at these sites. The positivity report identifies the total number of positive tests done at each site per month. The opscan report shows individual-level data regarding personal risk and testing history, with a few additional identifiable data points.</p>
+<p>The figure below shows the monthly EHE testing numbers. <span style="color: green;">It is important to note that there may be a few duplicated tests due to the transition to the new year, and records being in both the 2025 and 2026 databases if an open linkage case from 2025 is actively being worked in the 2026 database. Continuous review and data cleaning occurs until all cases from the prior year are closed.</span></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-2124ec059fbf00534922" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-2124ec059fbf00534922">{"x":{"visdat":{"62d072e14491":["function () ","plotlyVisDat"]},"cur_data":"62d072e14491","attrs":{"62d072e14491":{"x":{},"y":{},"text":{},"textposition":"auto","marker":{"color":"darkgreen"},"name":"EHE Tests","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"yaxis":{"domain":[0,1],"automargin":true,"title":"EHE Tests"},"barmode":"stack","xaxis":{"domain":[0,1],"automargin":true,"tickangle":45,"title":"Date"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":["2025-06-01","2025-07-01","2025-08-01","2025-09-01","2025-10-01","2025-11-01","2025-12-01","2026-01-01"],"y":[13,4,3,20,18,16,8,6],"text":[13,4,3,20,18,16,8,6],"textposition":["auto","auto","auto","auto","auto","auto","auto","auto"],"marker":{"color":"darkgreen","line":{"color":"rgba(31,119,180,1)"}},"name":"EHE Tests","type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p><br></p>
+<section id="ehe-deliverables-summary" class="level2">
+<h2 class="anchored" data-anchor-id="ehe-deliverables-summary">EHE Deliverables Summary</h2>
+<p>The deliverables highlighted below are the numbers that were noted on the 2024 EHE Workplan as what our program would accomplish within the year of funding awarded. The data shown below covers EHE program deliverables starting <strong>June 1st, 2025 through May 31st, 2026</strong>. A summary table of the EHE deliverables, the number of each deliverable achieved, and the percent of the deliverables met are shown below:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<table data-quarto-disable-processing="true" class=" lightable-paper table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> EHE Deliverable </th>
+   <th style="text-align:center;"> Achieved </th>
+   <th style="text-align:center;"> Goal </th>
+   <th style="text-align:center;"> % </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr grouplength="2"><td colspan="4" style="background-color: #F0F0F0"><strong>PLWHA</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> PLWHA not in care </td>
+   <td style="text-align:center;"> 82 </td>
+   <td style="text-align:center;"> 30 </td>
+   <td style="text-align:center;"> 273.3% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> % PLWHA linked </td>
+   <td style="text-align:center;"> 31.7% </td>
+   <td style="text-align:center;"> 80% </td>
+   <td style="text-align:center;">  </td>
+  </tr>
+  <tr grouplength="7"><td colspan="4" style="background-color: #F0F0F0"><strong>MSM</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> MSM assessed </td>
+   <td style="text-align:center;"> 68 </td>
+   <td style="text-align:center;"> 60 </td>
+   <td style="text-align:center;"> 113.3% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> MSM tested </td>
+   <td style="text-align:center;"> 8 </td>
+   <td style="text-align:center;"> 60 </td>
+   <td style="text-align:center;"> 13.3% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> MSM tested at UCMC </td>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 40 </td>
+   <td style="text-align:center;"> 2.5% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> MSM tested in Community </td>
+   <td style="text-align:center;"> 7 </td>
+   <td style="text-align:center;"> 20 </td>
+   <td style="text-align:center;"> 35.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> MSM/Youth tested </td>
+   <td style="text-align:center;"> 7 </td>
+   <td style="text-align:center;"> 40 </td>
+   <td style="text-align:center;"> 17.5% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> MSM/IDU tested </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 10 </td>
+   <td style="text-align:center;"> 0.0% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> MSM new positive </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 10 </td>
+   <td style="text-align:center;"> 0.0% </td>
+  </tr>
+  <tr grouplength="3"><td colspan="4" style="background-color: #F0F0F0"><strong>HRHS</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> HRHS assessed </td>
+   <td style="text-align:center;"> 535 </td>
+   <td style="text-align:center;"> 450 </td>
+   <td style="text-align:center;"> 118.9% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> HRHS assessed at UC </td>
+   <td style="text-align:center;"> 468 </td>
+   <td style="text-align:center;"> 350 </td>
+   <td style="text-align:center;"> 133.7% </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 4em;" indentlevel="2"> HRHS assessed in Community </td>
+   <td style="text-align:center;"> 67 </td>
+   <td style="text-align:center;"> 100 </td>
+   <td style="text-align:center;"> 67.0% </td>
+  </tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
+</section>
+<section id="plwha" class="level2">
+<h2 class="anchored" data-anchor-id="plwha">PLWHA</h2>
+<p>The first impact objective encompasses population-based objectives centered around people living with HIV/AIDS (PLWHA) that are identified not in care. This objective has EIP staff identify those either newly diagnosed or previously diagnosed and determine whether they are out of care and require linkage to care services. This objective is inclusive of those who are women of color (WOC), youth (18-29 years old), and injection drug users (IDU). The statement for the actual deliverables promised for this objective is noted below:</p>
+<ul>
+<li><em>By May 31, 2026, EIP will identify 30 PLWHA not in care (newly and previously diagnosed) and provide Prevention with Positives and Linkage to Care services such that 80% are engaged in HIV medical care as prioritized by RFP workplan table. Of note, this number PLWHA includes newly diagnosed positives found by ED staff testing that, while apart from the core CTR, would not be possible absent the existence of the CTR (as detailed in Program Narrative).</em></li>
+</ul>
+<p>From this statement, we specifically state deliverables for how many PLWHA who are out of care that will be identified by our program, and successfully link 80% of those individuals to care. Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table under ‘Additional Metrics’.</p>
+<p>PLWHA are identified in several different ways within the program, including: <strong>self-report of a positive test on assessment of prior HIV testing history, reason for offering an HIV test was due to a prior HIV positive result, declining an HIV test due to prior positive result, a final positive result through HIV testing, or having an HIV linkage case open with a new or previous HIV status</strong>. EIP staff are meant to identify all PLWHA encountered through the program, and further follow-up and discussion are meant to determine who is currently out of care. The deliverable for all PLWHA identified out of care are those that are “eligible” to be linked to care. They are considered “ineligible” based on the following criteria: they are already linked to care, deceased, currently incarcerated, inaccurate contact information, or they declined EIP linkage services.</p>
+<p>The total number of HIV linkage to care (LTC) cases initiated for PLWHA during this time period is <strong>215</strong>, with the total number of “eligible” LTC cases for PLWHA being 82 (<em>38.1% of all HIV LTC cases initiated, 82/215</em>). <span style="color: darkgreen;"><strong>Therefore, EIP has identified 82 PLWHA for the EHE deliverable, which is 273.3% of the total promise of 30</strong></span>. The total number of these “eligible” HIV LTC cases that have been successfully linked to care is 26, which is <span style="color: darkgreen;"><strong>31.7%</strong></span> of those “eligible” (<em>26/82</em>).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-2c0c8c8614b1c4ee406c" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-2c0c8c8614b1c4ee406c">{"x":{"visdat":{"62d05e4d60e4":["function () ","plotlyVisDat"]},"cur_data":"62d05e4d60e4","attrs":{"62d05e4d60e4":{"domain":{"x":[0,0.5],"y":[0,1]},"value":82,"title":{"text":"PLWHA Identified Not in Care","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,60]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":82,"title":{"text":"PLWHA Identified Not in Care","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,60]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-71457b44f3a1c51d13c9" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-71457b44f3a1c51d13c9">{"x":{"visdat":{"62d06d6f62a7":["function () ","plotlyVisDat"]},"cur_data":"62d06d6f62a7","attrs":{"62d06d6f62a7":{"domain":{"x":[0,0.5],"y":[0,1]},"value":31.707317073170731,"number":{"suffix":"%"},"title":{"text":"% PLWHA Linked to Care","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,100]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray","threshold":{"line":{"color":"red","width":4},"thickness":0.75,"value":80}},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":31.707317073170731,"number":{"suffix":"%"},"title":{"text":"% PLWHA Linked to Care","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,100]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray","threshold":{"line":{"color":"red","width":4},"thickness":0.75,"value":80}},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>We do not separate linkage numbers based on the HIV testing program (CTR/EHE), so these numbers are pulled the same as the numbers that are reported for the linkage deliverables shown for the CTR program. If there are differences in the documented numbers for linkage between these two testing programs, it is likely due to the timeframe used for each program deliverable. The HIV Linkage flow diagram for the EHE deliverable timeframe is shown below to provide an understanding of where the linkage numbers are coming from.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ehe_deliverables25_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><br></p>
+</section>
+<section id="msm" class="level2">
+<h2 class="anchored" data-anchor-id="msm">MSM</h2>
+<p>There were additional deliverables made for population-based objectives, and the first focuses on those who identify as men who have sex with men (MSM). Individuals are only identified as a part of this population group if they complete the necessary portions on the EIP assessment. The statement for the actual deliverables promised for this objective is noted below:</p>
+<ul>
+<li><em>By May 31, 2026, EIP will identify 60 MSM for risk-assessment and prevention intervention including client-centered risk reduction counseling and PrEP education/referral. EIP will provide HIV testing to 60 MSM, inclusive of the following (40 UCMC site, 20 community/outpatient sites; 40 Youth (18-29), and 10 IDU). EIP will identify 10 HIV(+) MSM for the PLWHA program (Workplan Form 4, Part 1). Of note, this does not include MSM PLWHA who are either previously diagnosed or those newly diagnosed by usual ED staff apart from CTR</em></li>
+</ul>
+<p>From this statement, we specifically state deliverables for how many MSM will be assessed for risk and/or need, and how many MSM will be tested using EHE-funded tests. Additionally, EIP states a specific number of tests at each site (UCMC, WCH, community sites). Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table in the next section.</p>
+<p>For those individuals who identify as a male, they are determined to be a MSM if they meet at least one of the following criteria: <em>their sexual orientation is homosexual or bisexual, they report sex with a male within the past year, or they are a PLWHA and their reported risk was MSM</em>. <span style="color: darkgreen;"><strong>The total number of individuals who are MSM that have been assessed during this time period is 68, which is 113.3% of the total promise of 60</strong></span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-500a54206453c74a8b8b" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-500a54206453c74a8b8b">{"x":{"visdat":{"62d07eabf33":["function () ","plotlyVisDat"]},"cur_data":"62d07eabf33","attrs":{"62d07eabf33":{"domain":{"x":[0,0.5],"y":[0,1]},"value":68,"title":{"text":"MSM EHE Assessed","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,80]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":68,"title":{"text":"MSM EHE Assessed","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,80]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p><span style="color: darkgreen;"><strong>The total number of individuals who are MSM that have been tested through the EHE program is 8, which is 13.3% of the total promise of 60</strong></span>. In addition to the total number of tests, there were deliverables for the location where those tests were conducted. For the University of Cincinnati Medical Center (UCMC), this includes only those EHE tests that were conducted within the emergency department (UCMC ED). <span style="color: darkgreen;"><strong>There were a total number of 1 EHE tests that were conducted at UCMC, which is 2.5% of the total promise of 40</strong></span>. For West Chester Hospital (WCH), this includes only those EHE tests that were conducted within the emergency department (WCH ED). <span style="color: darkgreen;"><strong>There were a total number of <code>r</code> EHE tests that were conducted at WCH, which is <code>r</code> of the total promise of <code>r</code></strong></span>. For the community-based tests, this includes all tests that were conducted anywhere EIP operates that does not include one of the EDs (UCMC or WCH). <span style="color: darkgreen;"><strong>There were a total number of 7 EHE tests that were conducted in the community, which is 35.0% of the total promise of 20</strong></span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-c8b87f2a08feffd84769" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-c8b87f2a08feffd84769">{"x":{"visdat":{"62d015f02cb4":["function () ","plotlyVisDat"]},"cur_data":"62d015f02cb4","attrs":{"62d015f02cb4":{"domain":{"x":[0,0.5],"y":[0,1]},"value":8,"title":{"text":"MSM EHE Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,30]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":8,"title":{"text":"MSM EHE Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,30]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-af939485015b967a6ece" style="width:100%;height:292px;"></div>
+<script type="application/json" data-for="htmlwidget-af939485015b967a6ece">{"x":{"visdat":{"62d02291425d":["function () ","plotlyVisDat"]},"cur_data":"62d02291425d","attrs":{"62d02291425d":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":1,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.080000000000000002,0.29999999999999999]},"title":{"text":"<b>UCMC<\/b><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 5<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,20]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":5},"bar":{"color":"darkgreen"}},"inherit":true},"62d02291425d.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":7,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.69999999999999996,0.90000000000000002]},"title":{"text":"<b>Community<\/b><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 20<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,20]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":20},"bar":{"color":"darkgreen"}},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"type":"indicator","mode":"number+gauge","value":1,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.080000000000000002,0.29999999999999999]},"title":{"text":"<b>UCMC<\/b><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 5<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,20]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":5},"bar":{"color":"darkgreen"}},"frame":null},{"type":"indicator","mode":"number+gauge","value":7,"domain":{"x":[0.20000000000000001,0.65000000000000002],"y":[0.69999999999999996,0.90000000000000002]},"title":{"text":"<b>Community<\/b><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 20<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,20]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":20},"bar":{"color":"darkgreen"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>While we do not separate the linkage data between the various testing programs, we can identify which testing programs identify new positive HIV diagnoses. According to the EHE workplan, EIP has promised to identify a certain number of individuals who are newly diagnosed for HIV. <span style="color: darkgreen;"><strong>There were a total number of 0 EHE tests that resulted in a new positive diagnosis for the individual tested, which is 0.0% of the total promise of 10</strong></span>. This number of new positive diagnoses are only those that were tested through the EHE program, and this only considers <em>new</em> positive diagnoses, not those that were tested and later determined to be an individual known to be positive.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-fba7fbb5950c4dbd9387" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-fba7fbb5950c4dbd9387">{"x":{"visdat":{"62d011927d52":["function () ","plotlyVisDat"]},"cur_data":"62d011927d52","attrs":{"62d011927d52":{"domain":{"x":[0,0.5],"y":[0,1]},"value":0,"title":{"text":"MSM EHE New Positive","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,3]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":0,"title":{"text":"MSM EHE New Positive","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,3]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Finally, the EHE program addresses particular population groups for testing. Within the population of MSM, we additionally have deliverables for youth and IDU. For those that are considered in the youth population, EHE defines those between the age of 18-19 years old. However, EIP often encounters individuals younger than the age of 18, so the definition used here are those below the age of 29. <span style="color: darkgreen;"><strong>There were a total number of 7 EHE tests where the individual was both MSM/Youth, which is 17.5% of the total promise of 40</strong></span>. For those that are considered in the IDU population, the individual needs to complete the necessary section within the EIP assessment. We define those who endorse injection drug use behavior ever in their lifetime on the NIDA-Modified ASSIST, or those who are HIV positive and their risk was injection drug use as a part of the IDU population. <span style="color: darkgreen;"><strong>There were a total number of 0 EHE tests where the individual was both MSM/IDU, which is 0.0% of the total promise of 10</strong></span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-0e5c1315aabeb1965263" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-0e5c1315aabeb1965263">{"x":{"visdat":{"62d06b142c2d":["function () ","plotlyVisDat"]},"cur_data":"62d06b142c2d","attrs":{"62d06b142c2d":{"domain":{"x":[0,0.5],"y":[0,1]},"value":7,"title":{"text":"MSM/Youth EHE Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,10]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":7,"title":{"text":"MSM/Youth EHE Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,10]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-b52925bbe2b1871a7a47" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-b52925bbe2b1871a7a47">{"x":{"visdat":{"62d04c52508d":["function () ","plotlyVisDat"]},"cur_data":"62d04c52508d","attrs":{"62d04c52508d":{"domain":{"x":[0,0.5],"y":[0,1]},"value":0,"title":{"text":"MSM/IDU EHE Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,10]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":0,"title":{"text":"MSM/IDU EHE Tested","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,10]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="hrhs" class="level2">
+<h2 class="anchored" data-anchor-id="hrhs">HRHS</h2>
+<p>There were additional deliverables made for population-based objectives, and the second focuses on those who identify as heterosexual that are at high risk for contracting HIV by endorsing high-risk heterosexual sex (HRHS) behaviors. Individuals are only identified as a part of this population group if they complete the necessary portions on the EIP assessment. The statement for the actual deliverables promised for this objective is noted below:</p>
+<ul>
+<li><em>By May 31, 2026, UC EIP will identify 450 HRHS for risk-assessment and prevention intervention including 350 UCMC site, and 100 community/outpatient sites).</em></li>
+</ul>
+<p>From this statement, we specifically state deliverables for how many HRHS will be assessed for risk and/or need, and state a specific number of assessments at each site (UCMC, WCH, community sites). Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table in the next section.</p>
+<p>For those individuals who identify as a heterosexual (men who have sex with women, or women who have sex with men), they are determined to be HRHS if they meet at least one of the following criteria: <em>heterosexual women that have unprotected sex with men or MSM, heterosexual men/women that have sex with an IDU, an HIV positive partner, a STD positive partner, more than three partners, or heterosexual men/women that exchange money/drugs for sex</em>.</p>
+<p><span style="color: darkgreen;"><strong>The total number of individuals who are HRHS that have been assessed during this time period is 535, which is 118.9% of the total promise of 450</strong></span>. In addition to the total number of assessments, there were deliverables for the location where those assessments were conducted. For UCMC, this includes only those assessments that were accompanied by an EHE test that were conducted within the emergency department (UCMC ED). <span style="color: darkgreen;"><strong>There were a total number of 468 EHE HRHS assessments that were conducted at UCMC, which is 133.7% of the total promise of 350</strong></span>. For WCH, this includes only those assessments that were accompanied by an EHE test that were conducted within the emergency department (WCH ED). <span style="color: darkgreen;"><strong>There were a total number of <code>r</code> EHE HRHS assessments that were conducted at WCH, which is <code>r</code> of the total promise of <code>r</code></strong></span>. For the community-based assessments, this includes only those assessments that were accompanied by an EHE test that were conducted anywhere EIP operates that does not include one of the EDs (UCMC or WCH). <span style="color: darkgreen;"><strong>There were a total number of 67 EHE HRHS assessments that were conducted in the community, which is 67.0% of the total promise of 100</strong></span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-80b07a236e6a3103d097" style="width:100%;height:325px;"></div>
+<script type="application/json" data-for="htmlwidget-80b07a236e6a3103d097">{"x":{"visdat":{"62d0192c1ded":["function () ","plotlyVisDat"]},"cur_data":"62d0192c1ded","attrs":{"62d0192c1ded":{"domain":{"x":[0,0.5],"y":[0,1]},"value":535,"title":{"text":"HRHS EHE Assessed","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,550]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator"}},"layout":{"margin":{"b":40,"l":100,"t":25,"r":150},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"domain":{"x":[0,0.5],"y":[0,1]},"value":535,"title":{"text":"HRHS EHE Assessed","font":{"size":24}},"mode":"gauge+number","gauge":{"axis":{"range":[0,550]},"bar":{"color":"darkgreen"},"bgcolor":"white","borderwidth":2,"bordercolor":"gray"},"type":"indicator","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-bfa4c4190ad8a8489751" style="width:100%;height:292px;"></div>
+<script type="application/json" data-for="htmlwidget-bfa4c4190ad8a8489751">{"x":{"visdat":{"62d0d074e8e":["function () ","plotlyVisDat"]},"cur_data":"62d0d074e8e","attrs":{"62d0d074e8e":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":468,"domain":{"x":[0.22,0.65000000000000002],"y":[0.080000000000000002,0.29999999999999999]},"title":{"text":"<b>UCMC<\/b><br><span style='color: gray; font-size:0.5em'>HRHS Assessed Deliverable: 400<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,400]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":400},"bar":{"color":"darkgreen"}},"inherit":true},"62d0d074e8e.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"indicator","mode":"number+gauge","value":67,"domain":{"x":[0.22,0.65000000000000002],"y":[0.69999999999999996,0.90000000000000002]},"title":{"text":"<b>Community<\/b><br><span style='color: gray; font-size:0.5em'>HRHS Assessed Deliverable: 100<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,400]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":100},"bar":{"color":"darkgreen"}},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"type":"indicator","mode":"number+gauge","value":468,"domain":{"x":[0.22,0.65000000000000002],"y":[0.080000000000000002,0.29999999999999999]},"title":{"text":"<b>UCMC<\/b><br><span style='color: gray; font-size:0.5em'>HRHS Assessed Deliverable: 400<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,400]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":400},"bar":{"color":"darkgreen"}},"frame":null},{"type":"indicator","mode":"number+gauge","value":67,"domain":{"x":[0.22,0.65000000000000002],"y":[0.69999999999999996,0.90000000000000002]},"title":{"text":"<b>Community<\/b><br><span style='color: gray; font-size:0.5em'>HRHS Assessed Deliverable: 100<\/span>"},"gauge":{"shape":"bullet","axis":{"range":[0,400]},"threshold":{"line":{"color":"red","width":2},"thickness":0.75,"value":100},"bar":{"color":"darkgreen"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="additional-ehe-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="additional-ehe-metrics">Additional EHE Metrics</h2>
+<p>Additional metrics still to code for:</p>
+<ul>
+<li>#/% of PLWHA assessed</li>
+<li>#/% of PLWHA tested for HCV</li>
+<li>Number of MSM approached</li>
+<li>#/% MSM tested for HCV</li>
+<li>#/% MSM linked for HCV</li>
+<li>#/% HRHS approached</li>
+<li>#/% HRHS HIV+</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

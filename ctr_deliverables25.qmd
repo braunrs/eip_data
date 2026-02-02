@@ -1,0 +1,3008 @@
+---
+title: "CTR Deliverables (2025/2026)"
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r Data, include=FALSE}
+
+rm(list=ls(all=T))
+
+library(dplyr)
+library(tidyverse)
+library(lubridate)
+library(plotly)
+library(ggplot2)
+library(reactable)
+library(htmltools)
+library(lubridate)
+library(gt)
+library(janitor)
+library(scales)
+library(apyramid)
+library(kableExtra)
+library(knitr)
+library(zoo)
+library(DT)
+
+### EIP Database Data
+# 2025
+eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20260202_1204.csv')
+dim(eip25)
+summary(eip25$record_id)
+eip25$record_id <- paste(eip25$record_id, "_25", sep = "")
+summary(eip25$record_id)
+
+# 2026
+eip26 <- read.csv('M:/EIP Data/EIP Database/REDCap 2026/EIP Database Data 20260202_1219.csv')
+dim(eip26)
+summary(eip26$record_id)
+eip26$record_id <- paste(eip26$record_id, "_26", sep = "")
+summary(eip26$record_id)
+
+```
+
+```{r Patient Data to Encounter, include=FALSE}
+
+### Person-level data is only visit_001_arm_1, use to match to encounters
+
+# 2025
+table(eip25$redcap_event_name)
+person <- eip25[which(eip25$redcap_event_name == 'visit_001_arm_1'), ]
+dim(person)
+
+person <- select(person, record_id, mrn, dob, 
+                 race___1, race___2, race___3, race___4, race___5, race___6, ethnicity,
+                 sex_raised, sex_selfdefined, insurance)
+dim(person)
+
+eip25 <- select(eip25, -mrn, -dob, 
+                -race___1, -race___2, -race___3, -race___4, -race___5, 
+                -race___6, -ethnicity,
+                -sex_raised, -sex_selfdefined, -insurance)
+
+# Merge person dataset with full eip dataset
+
+dim(eip25)
+dim(person)
+eip25 <- merge(eip25, person, by='record_id', all.x=T)
+dim(eip25)
+eip25 <- distinct(eip25)
+dim(eip25)
+
+
+# 2026
+table(eip26$redcap_event_name)
+person <- eip26[which(eip26$redcap_event_name == 'visit_001_arm_1'), ]
+dim(person)
+
+person <- select(person, record_id, mrn, dob, 
+                 race___1, race___2, race___3, race___4, race___5, race___6, ethnicity,
+                 sex_raised, sex_selfdefined, insurance)
+dim(person)
+
+eip26 <- select(eip26, -mrn, -dob, 
+                -race___1, -race___2, -race___3, -race___4, -race___5, 
+                -race___6, -ethnicity,
+                -sex_raised, -sex_selfdefined, -insurance)
+
+# Merge person dataset with full eip dataset
+
+dim(eip26)
+dim(person)
+eip26 <- merge(eip26, person, by='record_id', all.x=T)
+dim(eip26)
+eip26 <- distinct(eip26)
+dim(eip26)
+
+```
+
+```{r Combining Datasets, include=FALSE}
+
+####################  Combine 2025/2026 Data  ####################
+
+dim(eip25)
+dim(eip26)
+
+
+#####  Updating 2025 Dataset  #####
+
+# Adding variables added to 2026 database as blank values
+
+eip25$enc_location_street_med <- ''
+eip25$xts_provided <- ''
+eip25$xts_number <- ''
+eip25$ltc_services___6 <- ''
+eip25$ltc_peer_final_ltc_status <- ''
+eip25$ltc_peer_declined_rsn___23 <- ''
+eip25$ltc_peer_declined_rsn___27 <- ''
+eip25$ltc_peer_declined_rsn___3 <- ''
+eip25$ltc_peer_declined_rsn___5 <- ''
+eip25$ltc_peer_declined_rsn___6 <- ''
+eip25$ltc_peer_declined_rsn___7 <- ''
+eip25$ltc_peer_declined_rsn___8 <- ''
+eip25$ltc_peer_declined_rsn___9 <- ''
+eip25$ltc_peer_declined_rsn___10 <- ''
+eip25$ltc_peer_declined_rsn___28 <- ''
+eip25$ltc_peer_declined_rsn___29 <- ''
+eip25$ltc_peer_declined_rsn___30 <- ''
+eip25$ltc_peer_declined_rsn___36 <- ''
+eip25$ltc_peer_declined_rsn___33 <- ''
+eip25$ltc_peer_declined_rsn___34 <- ''
+eip25$ltc_peer_declined_rsn___35 <- ''
+eip25$ltc_peer_declined_rsn___0 <- ''
+eip25$ltc_peer_declined_rsn_other <- ''
+eip25$ltc_peer_prevented_rsn___1 <- ''
+eip25$ltc_peer_prevented_rsn___2 <- ''
+eip25$ltc_peer_prevented_rsn___11 <- ''
+eip25$ltc_peer_prevented_rsn___3 <- ''
+eip25$ltc_peer_prevented_rsn___4 <- ''
+eip25$ltc_peer_prevented_rsn___5 <- ''
+eip25$ltc_peer_prevented_rsn___6 <- ''
+eip25$ltc_peer_prevented_rsn___8 <- ''
+eip25$ltc_peer_prevented_rsn___9 <- ''
+eip25$ltc_peer_prevented_rsn___12 <- ''
+eip25$ltc_peer_prevented_rsn___19 <- ''
+eip25$ltc_peer_prevented_rsn___20 <- ''
+eip25$ltc_peer_prevented_rsn___16 <- ''
+eip25$ltc_peer_prevented_rsn___17 <- ''
+eip25$ltc_peer_prevented_rsn___18 <- ''
+eip25$ltc_peer_prevented_rsn___0 <- ''
+eip25$ltc_peer_prevented_rsn_other <- ''
+eip25$peer_link_eip <- ''
+eip25$ltc_peer_success_story <- ''
+eip25$close_case_peer <- ''
+eip25$close_case_peer_date <- ''
+eip25$hiv_next_follow_up_date <- ''
+eip25$hcv_next_follow_up_date <- ''
+eip25$sud_next_follow_up_date <- ''
+eip25$peer_next_follow_up_date <- ''
+eip25$add_next_follow_up_date <- ''
+
+
+#####  Updating 2026 Dataset  #####
+
+# Adding variables removed in 2026 database from 2024/2025 database as blank values
+eip26$enc_location_urc <- ''
+eip26$appalachian <- ''
+eip26$appalachian_family <- ''
+eip26$fts_knowledge <- ''
+eip26$fts_use <- ''
+eip26$fts_offered <- ''
+eip26$fts_not_provided_rsn___1 <- ''
+eip26$fts_not_provided_rsn___2 <- ''
+eip26$fts_not_provided_rsn___3 <- ''
+eip26$fts_not_provided_rsn___4 <- ''
+eip26$fts_not_provided_rsn___5 <- ''
+eip26$fts_not_provided_rsn___6 <- ''
+eip26$fts_not_provided_rsn___7 <- ''
+eip26$fts_not_provided_rsn___8 <- ''
+eip26$fts_not_provided_rsn___9 <- ''
+eip26$fts_not_provided_rsn___10 <- ''
+eip26$fts_not_provided_rsn_other <- ''
+eip26$fts_declined_rsn___1 <- ''
+eip26$fts_declined_rsn___2 <- ''
+eip26$fts_declined_rsn___3 <- ''
+eip26$fts_declined_rsn___4 <- ''
+eip26$fts_declined_rsn_other <- ''
+eip26$prep_assessment_rsn <- ''
+eip26$prep_counsel_edu <- ''
+eip26$prep_referral <- ''
+eip26$prep_referral_accept <- ''
+eip26$prep_pre_counsel_edu_rsn <- ''
+eip26$prep_pre_counsel_edu_rsn_other <- ''
+eip26$prep_referral_rsn <- ''
+eip26$prep_referral_rsn_other <- ''
+eip26$prep_referral_decline_rsn <- ''
+eip26$prep_referral_decline_rsn_other <- ''
+eip26$reduction_plan <- ''
+eip26$staff_start_peer <- ''
+eip26$date_start_peer <- ''
+eip26$peer_referred_by <- ''
+eip26$peer_reason_for_offer_category <- ''
+eip26$peer_reason_for_offer_self_req___1 <- ''
+eip26$peer_reason_for_offer_self_req___2 <- ''
+eip26$peer_reason_for_offer_self_req___3 <- ''
+eip26$peer_reason_for_offer_self_req___5 <- ''
+eip26$peer_reason_for_offer_self_req___6 <- ''
+eip26$peer_reason_for_offer_self_req___7 <- ''
+eip26$peer_reason_for_offer_self_req___8 <- ''
+eip26$peer_reason_for_offer_self_req___9 <- ''
+eip26$peer_reason_for_offer_self_req___4 <- ''
+eip26$peer_reason_for_offer_routine_freq <- ''
+eip26$peer_reason_for_offer_self_req_other <- ''
+eip26$peer_reason_for_offer_diagnostic___1 <- ''
+eip26$peer_reason_for_offer_diagnostic___2 <- ''
+eip26$peer_reason_for_offer_diagnostic___3 <- ''
+eip26$peer_reason_for_offer_diagnostic___4 <- ''
+eip26$peer_reason_for_offer_diagnostic___5 <- ''
+eip26$peer_reason_for_offer_diagnostic___6 <- ''
+eip26$peer_reason_for_offer_diagnostic___7 <- ''
+eip26$peer_reason_for_offer_diagnostic___8 <- ''
+eip26$peer_reason_for_offer_diagnostic___9 <- ''
+eip26$peer_reason_for_offer_diagnostic___10 <- ''
+eip26$peer_reason_for_offer_diagnostic___11 <- ''
+eip26$peer_reason_for_offer_diagnostic___12 <- ''
+eip26$peer_reason_for_offer_diagnostic___13 <- ''
+eip26$peer_reason_for_offer_diagnostic___14 <- ''
+eip26$peer_reason_for_offer_diagnostic___15 <- ''
+eip26$peer_reason_for_offer_diagnostic___16 <- ''
+eip26$peer_reason_for_offer_diagnostic___17 <- ''
+eip26$peer_reason_for_offer_diagnostic___18 <- ''
+eip26$peer_reason_for_offer_diagnostic___19 <- ''
+eip26$peer_reason_for_offer_diagnostic___20 <- ''
+eip26$peer_reason_for_offer_diagnostic___21 <- ''
+eip26$peer_reason_for_offer_diagnostic___22 <- ''
+eip26$peer_reason_for_offer_diagnostic___23 <- ''
+eip26$peer_reason_for_offer_diagnostic___24 <- ''
+eip26$peer_reason_for_offer_diagnostic___25 <- ''
+eip26$peer_reason_for_offer_diagnostic___26 <- ''
+eip26$peer_reason_for_offer_diagnostic___27 <- ''
+eip26$peer_reason_for_offer_diagnostic___28 <- ''
+eip26$peer_reason_for_offer_diagnostic___29 <- ''
+eip26$peer_reason_for_offer_diagnostic___30 <- ''
+eip26$peer_reason_for_offer_diagnostic___31 <- ''
+eip26$peer_reason_for_offer_diagnostic___32 <- ''
+eip26$peer_reason_for_offer_diagnostic___33 <- ''
+eip26$peer_reason_for_offer_diagnostic_other <- ''
+eip26$peer_reason_for_offer_clinical___1 <- ''
+eip26$peer_reason_for_offer_clinical___2 <- ''
+eip26$peer_reason_for_offer_clinical___3 <- ''
+eip26$peer_reason_for_offer_clinical___4 <- ''
+eip26$peer_reason_for_offer_clinical___5 <- ''
+eip26$peer_reason_for_offer_clinical___7 <- ''
+eip26$peer_reason_for_offer_clinical___8 <- ''
+eip26$peer_reason_for_offer_clinical___9 <- ''
+eip26$peer_reason_for_offer_clinical___10 <- ''
+eip26$peer_reason_for_offer_clinical___11 <- ''
+eip26$peer_reason_for_offer_clinical___12 <- ''
+eip26$peer_reason_for_offer_clinical___13 <- ''
+eip26$peer_reason_for_offer_clinical___14 <- ''
+eip26$peer_reason_for_offer_clinical___15 <- ''
+eip26$peer_reason_for_offer_clinical___16 <- ''
+eip26$peer_reason_for_offer_clinical___17 <- ''
+eip26$peer_reason_for_offer_clinical___18 <- ''
+eip26$peer_reason_for_offer_clinical___19 <- ''
+eip26$peer_reason_for_offer_clinical___20 <- ''
+eip26$peer_reason_for_offer_clinical___21 <- ''
+eip26$peer_reason_for_offer_clinical___22 <- ''
+eip26$peer_reason_for_offer_clinical___23 <- ''
+eip26$peer_reason_for_offer_clinical___24 <- ''
+eip26$peer_reason_for_offer_clinical___25 <- ''
+eip26$peer_reason_for_offer_clinical___26 <- ''
+eip26$peer_reason_for_offer_clinical___27 <- ''
+eip26$peer_reason_for_offer_clinical___28 <- ''
+eip26$peer_reason_for_offer_clinical___29 <- ''
+eip26$peer_reason_for_offer_clinical___30 <- ''
+eip26$peer_reason_for_offer_clinical___31 <- ''
+eip26$peer_reason_for_offer_clinical_other <- ''
+eip26$peer_reason_for_offer_counselor___1 <- ''
+eip26$peer_reason_for_offer_counselor___2 <- ''
+eip26$peer_reason_for_offer_counselor___3 <- ''
+eip26$peer_reason_for_offer_counselor___4 <- ''
+eip26$peer_reason_for_offer_counselor___5 <- ''
+eip26$peer_reason_for_offer_counselor___6 <- ''
+eip26$peer_reason_for_offer_counselor___7 <- ''
+eip26$peer_reason_for_offer_counselor___8 <- ''
+eip26$peer_reason_for_offer_counselor___9 <- ''
+eip26$peer_reason_for_offer_counselor___10 <- ''
+eip26$peer_reason_for_offer_counselor___11 <- ''
+eip26$peer_reason_for_offer_counselor___12 <- ''
+eip26$peer_reason_for_offer_counselor___13 <- ''
+eip26$peer_reason_for_offer_counselor___14 <- ''
+eip26$peer_reason_for_offer_counselor___15 <- ''
+eip26$peer_reason_for_offer_counselor___16 <- ''
+eip26$peer_reason_for_offer_counselor___17 <- ''
+eip26$peer_reason_for_offer_counselor___18 <- ''
+eip26$peer_reason_for_offer_counselor___19 <- ''
+eip26$peer_reason_for_offer_counselor___20 <- ''
+eip26$peer_reason_for_offer_counselor___21 <- ''
+eip26$peer_reason_for_offer_counselor___22 <- ''
+eip26$peer_reason_for_offer_counselor___23 <- ''
+eip26$peer_reason_for_offer_counselor___24 <- ''
+eip26$peer_reason_for_offer_counselor___25 <- ''
+eip26$peer_reason_for_offer_counselor___26 <- ''
+eip26$peer_reason_for_offer_counselor___27 <- ''
+eip26$peer_reason_for_offer_counselor___28 <- ''
+eip26$peer_reason_for_offer_counselor___29 <- ''
+eip26$peer_reason_for_offer_counselor___30 <- ''
+eip26$peer_reason_for_offer_counselor_other <- ''
+eip26$peer_reason_for_offer_demographics___1 <- ''
+eip26$peer_reason_for_offer_demographics___2 <- ''
+eip26$peer_reason_for_offer_demographics___3 <- ''
+eip26$peer_reason_for_offer_demographics___4 <- ''
+eip26$peer_reason_for_offer_tnt___1 <- ''
+eip26$peer_reason_for_offer_tnt___2 <- ''
+eip26$peer_reason_for_offer_tnt___3 <- ''
+eip26$peer_reason_for_offer_tnt_number <- ''
+eip26$peer_reason_for_offer_tnt_relation <- ''
+eip26$offer_outcome_time_peer <- ''
+eip26$offer_outcome_location_peer <- ''
+eip26$offer_outcome_room_peer <- ''
+eip26$offer_outcome_approach_peer___1 <- ''
+eip26$offer_outcome_approach_peer___2 <- ''
+eip26$offer_outcome_approach_peer___3 <- ''
+eip26$offer_outcome_approach_peer___4 <- ''
+eip26$offer_outcome_approach_peer___5 <- ''
+eip26$offer_outcome_approach_peer___6 <- ''
+eip26$offer_outcome_approach_peer___7 <- ''
+eip26$offer_outcome_approach_peer___8 <- ''
+eip26$offer_outcome_peer <- ''
+eip26$offer_outcome_declined_peer___23 <- ''
+eip26$offer_outcome_declined_peer___27 <- ''
+eip26$offer_outcome_declined_peer___3 <- ''
+eip26$offer_outcome_declined_peer___5 <- ''
+eip26$offer_outcome_declined_peer___6 <- ''
+eip26$offer_outcome_declined_peer___7 <- ''
+eip26$offer_outcome_declined_peer___8 <- ''
+eip26$offer_outcome_declined_peer___9 <- ''
+eip26$offer_outcome_declined_peer___10 <- ''
+eip26$offer_outcome_declined_peer___28 <- ''
+eip26$offer_outcome_declined_peer___29 <- ''
+eip26$offer_outcome_declined_peer___30 <- ''
+eip26$offer_outcome_declined_peer___36 <- ''
+eip26$offer_outcome_declined_peer___33 <- ''
+eip26$offer_outcome_declined_peer___34 <- ''
+eip26$offer_outcome_declined_peer___35 <- ''
+eip26$offer_outcome_declined_peer___0 <- ''
+eip26$offer_outcome_declined_other_peer <- ''
+eip26$offer_outcome_prevented_peer___1 <- ''
+eip26$offer_outcome_prevented_peer___2 <- ''
+eip26$offer_outcome_prevented_peer___3 <- ''
+eip26$offer_outcome_prevented_peer___4 <- ''
+eip26$offer_outcome_prevented_peer___5 <- ''
+eip26$offer_outcome_prevented_peer___6 <- ''
+eip26$offer_outcome_prevented_peer___7 <- ''
+eip26$offer_outcome_prevented_peer___8 <- ''
+eip26$offer_outcome_prevented_peer___9 <- ''
+eip26$offer_outcome_prevented_peer___10 <- ''
+eip26$offer_outcome_prevented_other_peer <- ''
+eip26$peer_fts_number_other <- ''
+eip26$peer_fu_yn <- ''
+eip26$peer_next_fu_date <- ''
+eip26$peer_fu_closed <- ''
+eip26$peer_support_complete <- ''
+eip26$offer_outcome_location_hiv <- ''
+eip26$offer_outcome_room_hiv <- ''
+eip26$offer_outcome_location_hiv_2 <- ''
+eip26$offer_outcome_room_hiv_2 <- ''
+eip26$offer_outcome_location_hiv_3 <- ''
+eip26$offer_outcome_room_hiv_3 <- ''
+eip26$offer_outcome_location_hcv <- ''
+eip26$offer_outcome_room_hcv <- ''
+eip26$offer_outcome_location_hcv_2 <- ''
+eip26$offer_outcome_room_hcv_2 <- ''
+eip26$offer_outcome_location_hcv_3 <- ''
+eip26$offer_outcome_room_hcv_3 <- ''
+eip26$offer_outcome_location_sti <- ''
+eip26$offer_outcome_room_sti <- ''
+eip26$offer_outcome_location_sti_2 <- ''
+eip26$offer_outcome_room_sti_2 <- ''
+eip26$offer_outcome_location_sti_3 <- ''
+eip26$offer_outcome_room_sti_3 <- ''
+eip26$ltc_services___5 <- ''
+eip26$ltc_coordinator_per_case___70 <- ''
+eip26$ltc_coordinator_per_case___79 <- ''
+eip26$ltc_coordinator_per_case___78 <- ''
+eip26$ltc_coordinator_per_case___71 <- ''
+eip26$anderson_ltc_open_calc <- ''
+eip26$ltc_coordinator_per_case___1 <- ''
+
+
+#####  Combining matched datasets  #####
+
+setdiff(names(eip25), names(eip26))
+setdiff(names(eip26), names(eip25))
+
+dim(eip25)
+dim(eip26)
+
+eip <- rbind(eip25, eip26)
+dim(eip)
+
+```
+
+``` {r Patient Information, include=FALSE}
+
+# Formatting variables
+
+summary(eip$enc_date)
+eip$enc_date <- as.Date(eip$enc_date, format='%m/%d/%Y')
+summary(eip$enc_date)
+
+summary(eip$dob)
+eip$dob <- as.Date(eip$dob, format='%m/%d/%Y')
+summary(eip$dob)
+
+
+table(eip$race___1)
+White <- eip[which(eip$race___1 == '1'), ]
+dim(White)
+White <- select(White, record_id)
+White$White <- 1
+table(White$White)
+White <- distinct(White)
+dim(White)
+head(White)
+
+table(eip$race___2)
+Black <- eip[which(eip$race___2 == '1'), ]
+dim(Black)
+Black <- select(Black, record_id)
+Black$Black <- 1
+table(Black$Black)
+Black <- distinct(Black)
+dim(Black)
+head(Black)
+
+table(eip$race___3)
+Asian <- eip[which(eip$race___3 == '1'), ]
+dim(Asian)
+Asian <- select(Asian, record_id)
+Asian$Asian <- 1
+table(Asian$Asian)
+Asian <- distinct(Asian)
+dim(Asian)
+head(Asian)
+
+table(eip$race___4)
+AmIn <- eip[which(eip$race___4 == '1'), ]
+dim(AmIn)
+AmIn <- select(AmIn, record_id)
+AmIn$AmIn <- 1
+table(AmIn$AmIn)
+AmIn <- distinct(AmIn)
+dim(AmIn)
+head(AmIn)
+
+table(eip$race___5)
+RaceOther <- eip[which(eip$race___5 == '1'), ]
+dim(RaceOther)
+RaceOther <- select(RaceOther, record_id)
+RaceOther$RaceOther <- 1
+table(RaceOther$RaceOther)
+RaceOther <- distinct(RaceOther)
+dim(RaceOther)
+head(RaceOther)
+
+table(eip$race___6)
+RaceUnk <- eip[which(eip$race___6 == '1'), ]
+dim(RaceUnk)
+RaceUnk <- select(RaceUnk, record_id)
+RaceUnk$RaceUnk <- 1
+table(RaceUnk$RaceUnk)
+RaceUnk <- distinct(RaceUnk)
+dim(RaceUnk)
+head(RaceUnk)
+
+table(eip$ethnicity)
+RaceHisp <- eip[which(eip$ethnicity == 1), ]
+dim(RaceHisp)
+RaceHisp <- select(RaceHisp, record_id)
+RaceHisp$RaceHisp <- 1
+table(RaceHisp$RaceHisp)
+RaceHisp <- distinct(RaceHisp)
+dim(RaceHisp)
+head(RaceHisp)
+
+
+race <- select(eip, record_id)
+race <- distinct(race)
+dim(race)
+
+
+dim(race)
+race <- merge(race, White, by = 'record_id', all.x = T)
+race <- merge(race, Black, by = 'record_id', all.x = T)
+race <- merge(race, Asian, by = 'record_id', all.x = T)
+race <- merge(race, AmIn, by = 'record_id', all.x = T)
+race <- merge(race, RaceOther, by = 'record_id', all.x = T)
+race <- merge(race, RaceUnk, by = 'record_id', all.x = T)
+race <- merge(race, RaceHisp, by = 'record_id', all.x = T)
+dim(race)
+head(race)
+
+race$White[is.na(race$White)] <- 0
+race$Black[is.na(race$Black)] <- 0
+race$Asian[is.na(race$Asian)] <- 0
+race$AmIn[is.na(race$AmIn)] <- 0
+race$RaceOther[is.na(race$RaceOther)] <- 0
+race$RaceUnk[is.na(race$RaceUnk)] <- 0
+race$RaceHisp[is.na(race$RaceHisp)] <- 0
+
+race$RaceNumber <- race$White + race$Black + race$Asian + race$AmIn + race$RaceOther + race$RaceUnk + race$RaceHisp
+table(race$RaceNumber)
+head(race)
+
+race$race[race$RaceNumber == 1 & race$Black == 1] <- 'Black/African American'
+race$race[race$RaceNumber == 1 & race$White == 1] <- 'White'
+race$race[race$RaceNumber == 1 & race$Asian == 1] <- 'Asian/Pacific Islander'
+race$race[race$RaceNumber == 1 & race$AmIn == 1] <- 'American Indian/Alaska native'
+race$race[race$RaceNumber == 1 & race$RaceOther == 1] <- 'Other'
+race$race[(race$RaceNumber == 1 & race$RaceHisp == 1) |
+            (race$RaceNumber > 1 & race$RaceHisp == 1)] <- 'Hispanic/Latinx'
+race$race[race$RaceNumber > 1 & race$RaceHisp != 1] <- 'Biracial/Multiracial'
+race$race[race$RaceNumber == 0 | is.na(race$RaceNumber) | race$RaceUnk == 1] <- 'Unknown'
+table(race$race)
+
+dim(eip)
+dim(race)
+eip <- merge(eip, race, by = 'record_id', all.x = T)
+dim(eip)
+table(eip$race)
+
+
+
+
+table(eip$sex_raised)
+eip$sex[eip$sex_raised == 1] <- 'Male'
+eip$sex[eip$sex_raised == 2] <- 'Female'
+eip$sex[eip$sex_raised == 3 | is.na(eip$sex_raised) | eip$sex_raised == ''] <- 'Unknown/Unassigned'
+table(eip$sex)
+
+
+
+table(eip$sex_raised, eip$sex_selfdefined)
+eip$gender[eip$sex_raised == 1 & eip$sex_selfdefined == 1] <- 'Male'
+eip$gender[eip$sex_raised == 2 & eip$sex_selfdefined == 2] <- 'Female'
+eip$gender[(eip$sex_raised == 1 & eip$sex_selfdefined == 2) |
+             (eip$sex_raised == 2 & eip$sex_selfdefined == 1) |
+             (eip$sex_raised == 1 & eip$sex_selfdefined == 3) |
+             (eip$sex_raised == 2 & eip$sex_selfdefined == 3)] <- 'Transgender/Nonbinary'
+eip$gender[(eip$sex_raised == 3 & eip$sex_selfdefined == 3) |
+             is.na(eip$sex_raised) | is.na(eip$sex_selfdefined)] <- 'Unknown'
+table(eip$gender)
+
+
+table(eip$insurance)
+eip$insurance[eip$insurance == 1] <- 'None'
+eip$insurance[eip$insurance == 2] <- 'UC Health (Levy)'
+eip$insurance[eip$insurance == 3] <- 'Medicaid'
+eip$insurance[eip$insurance == 4] <- 'Medicare'
+eip$insurance[eip$insurance == 5] <- 'Military/VA'
+eip$insurance[eip$insurance == 6] <- 'Private'
+eip$insurance[eip$insurance == 7] <- 'Dual Medicaid/Medicare'
+eip$insurance[is.na(eip$insurance)] <- 'Unknown'
+table(eip$insurance)
+
+
+
+# Populations of Interest
+### WOC, Youth (18-29), MSM, IDU, HRHS, PLWHA
+
+table(eip$race, eip$gender)
+eip$WOC[(eip$race != 'White' & eip$race != 'Unknown') & eip$gender == 'Female'] <- 1
+table(eip$WOC)
+
+
+table(eip$age)
+eip$Youth[eip$age >= 13 & eip$age <= 29] <- 1
+table(eip$Youth)
+
+
+eip$MSM[eip$gender == 'Male' & ((eip$sex_orientation == '2' | eip$sex_orientation == '4') |
+                                  (eip$sex_w_man___1 == '1' | eip$sex_w_man___2 == '1' |
+                                     eip$sex_w_man___3 == '1') |
+                                  (eip$sex_w_ftm___1 == '1' | eip$sex_w_ftm___2 == '1' |
+                                     eip$sex_w_ftm___3 == '1') |
+                                  (eip$sex_msm___1 == '1' | eip$sex_msm___2 == '1' |
+                                     eip$sex_msm___3 == '1') |
+                                  (eip$hiv_dx_risks___2 == '1'))] <- 1
+table(eip$MSM)
+
+
+eip$IDU[eip$idu_calc == 1 | eip$hiv_dx_risks___3 == '1'] <- 1
+table(eip$IDU)
+
+
+# For HRHS, all sexual behavior is within the previous 12 months
+### Heterosexual males that have unprotected sex with women
+### Heterosexual women that have unprotected sex with men
+### Heterosexual women that have sex with MSM
+### Heterosexual men/women that have sex with IDU
+### Heterosexual men/women that have sex with HIV+ partner
+### Heterosexual men/women that exchange money/drugs for sex
+### Heterosexual men/women that have sex with STD+ partner
+### Heterosexual men/women that have more than 3 partners
+
+eip$Hetero[(eip$gender == 'Male' & (eip$sex_w_woman___1 == '1' |
+                                      eip$sex_w_woman___2 == '1' |
+                                      eip$sex_w_woman___3 == '1' |
+                                      eip$sex_orientation == '1')) |
+             (eip$gender == 'Female' & (eip$sex_w_man___1 == '1' |
+                                          eip$sex_w_man___2 == '1' |
+                                          eip$sex_w_man___3 == '1' |
+                                          eip$sex_orientation == '1'))] <- 1
+table(eip$Hetero)
+
+
+eip$HRHS[((eip$Hetero == 1) & ((((eip$sex_w_woman___6 == '1' | eip$sex_w_woman___7 == '1') |
+                                   (is.na(eip$sex_w_woman___6) & is.na(eip$sex_w_woman___7) &
+                                      is.na(eip$sex_w_woman___8)))) | (((eip$sex_w_man___6 == '1' |
+                                                                           eip$sex_w_man___7 == '1') |
+                                                                          (is.na(eip$sex_w_man___6) &
+                                                                             is.na(eip$sex_w_man___7) &
+                                                                             is.na(eip$sex_w_man___8)))) |
+                                 (eip$sex_msm___1 == '1' | eip$sex_msm___2 == '1' | eip$sex_msm___3 == '1') |
+                                 (eip$sex_idu___1 == '1' | eip$sex_idu___2 == '1' | eip$sex_idu___3 == '1') |
+                                 (eip$sex_hiv_pos___1 == '1' | eip$sex_hiv_pos___2 == '1' |
+                                    eip$sex_hiv_pos___3 == '1') | (eip$sex_receivemoney___1 == '1' |
+                                                                     eip$sex_receivemoney___2 == '1' |
+                                                                     eip$sex_receivemoney___3 == '1' |
+                                                                     eip$sex_receivedrugs___1 == '1' |
+                                                                     eip$sex_receivedrugs___2 == '1' |
+                                                                     eip$sex_receivedrugs___3 == '1' |
+                                                                     eip$sex_paymoney___1 == '1' |
+                                                                     eip$sex_paymoney___2 == '1' |
+                                                                     eip$sex_paymoney___3 == '1' |
+                                                                     eip$sex_paydrugs___1 == '1' |
+                                                                     eip$sex_paydrugs___2 == '1' |
+                                                                     eip$sex_paydrugs___3 == '1')  |
+                                 (eip$sex_sti_pos___1 == '1' | eip$sex_sti_pos___2 == '1' |
+                                    eip$sex_sti_pos___3 == '1') | (eip$sex_partners_past_year >= 3))) |
+           (eip$hiv_dx_risks___1 == '1')] <- 1
+table(eip$HRHS)
+
+
+
+
+# Appalachian
+
+eip$appalachian_pt[eip$address_zip_code == 43006 | eip$address_zip_code == 43056 |
+                     eip$address_zip_code == 43076 | eip$address_zip_code == 43101 |
+                     eip$address_zip_code == 43102 | eip$address_zip_code == 43107 |
+                     eip$address_zip_code == 43111 | eip$address_zip_code == 43115 |
+                     eip$address_zip_code == 43127 | eip$address_zip_code == 43135 |
+                     eip$address_zip_code == 43138 | eip$address_zip_code == 43144 |
+                     eip$address_zip_code == 43148 | eip$address_zip_code == 43149 |
+                     eip$address_zip_code == 43150 | eip$address_zip_code == 43152 |
+                     eip$address_zip_code == 43155 | eip$address_zip_code == 43158 |
+                     eip$address_zip_code == 43160 | eip$address_zip_code == 43164 |
+                     eip$address_zip_code == 43701 | eip$address_zip_code == 43702 |
+                     eip$address_zip_code == 43711 | eip$address_zip_code == 43713 |
+                     eip$address_zip_code == 43716 | eip$address_zip_code == 43717 |
+                     eip$address_zip_code == 43718 | eip$address_zip_code == 43719 |
+                     eip$address_zip_code == 43720 | eip$address_zip_code == 43722 |
+                     eip$address_zip_code == 43723 | eip$address_zip_code == 43724 |
+                     eip$address_zip_code == 43725 | eip$address_zip_code == 43727 |
+                     eip$address_zip_code == 43728 | eip$address_zip_code == 43730 |
+                     eip$address_zip_code == 43731 | eip$address_zip_code == 43732 |
+                     eip$address_zip_code == 43733 | eip$address_zip_code == 43734 |
+                     eip$address_zip_code == 43735 | eip$address_zip_code == 43736 |
+                     eip$address_zip_code == 43738 | eip$address_zip_code == 43739 |
+                     eip$address_zip_code == 43746 | eip$address_zip_code == 43747 |
+                     eip$address_zip_code == 43748 | eip$address_zip_code == 43749 |
+                     eip$address_zip_code == 43750 | eip$address_zip_code == 43752 |
+                     eip$address_zip_code == 43754 | eip$address_zip_code == 43755 |
+                     eip$address_zip_code == 43756 | eip$address_zip_code == 43757 |
+                     eip$address_zip_code == 43758 | eip$address_zip_code == 43759 |
+                     eip$address_zip_code == 43760 | eip$address_zip_code == 43761 |
+                     eip$address_zip_code == 43762 | eip$address_zip_code == 43764 |
+                     eip$address_zip_code == 43766 | eip$address_zip_code == 43767 |
+                     eip$address_zip_code == 43768 | eip$address_zip_code == 43771 |
+                     eip$address_zip_code == 43772 | eip$address_zip_code == 43773 |
+                     eip$address_zip_code == 43777 | eip$address_zip_code == 43778 |
+                     eip$address_zip_code == 43779 | eip$address_zip_code == 43780 |
+                     eip$address_zip_code == 43782 | eip$address_zip_code == 43783 |
+                     eip$address_zip_code == 43786 | eip$address_zip_code == 43787 |
+                     eip$address_zip_code == 43788 | eip$address_zip_code == 43791 |
+                     eip$address_zip_code == 43793 | eip$address_zip_code == 43802 |
+                     eip$address_zip_code == 43803 | eip$address_zip_code == 43804 |
+                     eip$address_zip_code == 43805 | eip$address_zip_code == 43811 |
+                     eip$address_zip_code == 43812 | eip$address_zip_code == 43821 |
+                     eip$address_zip_code == 43822 | eip$address_zip_code == 43824 |
+                     eip$address_zip_code == 43828 | eip$address_zip_code == 43830 |
+                     eip$address_zip_code == 43832 | eip$address_zip_code == 43836 |
+                     eip$address_zip_code == 43837 | eip$address_zip_code == 43840 |
+                     eip$address_zip_code == 43842 | eip$address_zip_code == 43843 |
+                     eip$address_zip_code == 43844 | eip$address_zip_code == 43845 |
+                     eip$address_zip_code == 43901 | eip$address_zip_code == 43902 |
+                     eip$address_zip_code == 43903 | eip$address_zip_code == 43905 |
+                     eip$address_zip_code == 43906 | eip$address_zip_code == 43907 |
+                     eip$address_zip_code == 43908 | eip$address_zip_code == 43909 |
+                     eip$address_zip_code == 43910 | eip$address_zip_code == 43912 |
+                     eip$address_zip_code == 43913 | eip$address_zip_code == 43914 |
+                     eip$address_zip_code == 43915 | eip$address_zip_code == 43916 |
+                     eip$address_zip_code == 43917 | eip$address_zip_code == 43920 |
+                     eip$address_zip_code == 43925 | eip$address_zip_code == 43926 |
+                     eip$address_zip_code == 43927 | eip$address_zip_code == 43928 |
+                     eip$address_zip_code == 43930 | eip$address_zip_code == 43931 |
+                     eip$address_zip_code == 43932 | eip$address_zip_code == 43933 |
+                     eip$address_zip_code == 43934 | eip$address_zip_code == 43935 |
+                     eip$address_zip_code == 43937 | eip$address_zip_code == 43938 |
+                     eip$address_zip_code == 43939 | eip$address_zip_code == 43940 |
+                     eip$address_zip_code == 43941 | eip$address_zip_code == 43942 |
+                     eip$address_zip_code == 43943 | eip$address_zip_code == 43944 |
+                     eip$address_zip_code == 43945 | eip$address_zip_code == 43946 |
+                     eip$address_zip_code == 43947 | eip$address_zip_code == 43948 |
+                     eip$address_zip_code == 43950 | eip$address_zip_code == 43951 |
+                     eip$address_zip_code == 43952 | eip$address_zip_code == 43953 |
+                     eip$address_zip_code == 43961 | eip$address_zip_code == 43962 |
+                     eip$address_zip_code == 43963 | eip$address_zip_code == 43964 |
+                     eip$address_zip_code == 43967 | eip$address_zip_code == 43968 |
+                     eip$address_zip_code == 43970 | eip$address_zip_code == 43971 |
+                     eip$address_zip_code == 43972 | eip$address_zip_code == 43973 |
+                     eip$address_zip_code == 43974 | eip$address_zip_code == 43976 |
+                     eip$address_zip_code == 43977 | eip$address_zip_code == 43981 |
+                     eip$address_zip_code == 43983 | eip$address_zip_code == 43984 |
+                     eip$address_zip_code == 43985 | eip$address_zip_code == 43986 |
+                     eip$address_zip_code == 43988 | eip$address_zip_code == 44003 |
+                     eip$address_zip_code == 44004 | eip$address_zip_code == 44005 |
+                     eip$address_zip_code == 44010 | eip$address_zip_code == 44030 |
+                     eip$address_zip_code == 44032 | eip$address_zip_code == 44041 |
+                     eip$address_zip_code == 44046 | eip$address_zip_code == 44047 |
+                     eip$address_zip_code == 44048 | eip$address_zip_code == 44057 |
+                     eip$address_zip_code == 44062 | eip$address_zip_code == 44064 |
+                     eip$address_zip_code == 44068 | eip$address_zip_code == 44076 |
+                     eip$address_zip_code == 44082 | eip$address_zip_code == 44084 |
+                     eip$address_zip_code == 44085 | eip$address_zip_code == 44086 |
+                     eip$address_zip_code == 44088 | eip$address_zip_code == 44093 |
+                     eip$address_zip_code == 44099 | eip$address_zip_code == 44231 |
+                     eip$address_zip_code == 44288 | eip$address_zip_code == 44401 |
+                     eip$address_zip_code == 44402 | eip$address_zip_code == 44403 |
+                     eip$address_zip_code == 44404 | eip$address_zip_code == 44405 |
+                     eip$address_zip_code == 44406 | eip$address_zip_code == 44408 |
+                     eip$address_zip_code == 44410 | eip$address_zip_code == 44411 |
+                     eip$address_zip_code == 44412 | eip$address_zip_code == 44413 |
+                     eip$address_zip_code == 44415 | eip$address_zip_code == 44416 |
+                     eip$address_zip_code == 44417 | eip$address_zip_code == 44418 |
+                     eip$address_zip_code == 44420 | eip$address_zip_code == 44422 |
+                     eip$address_zip_code == 44423 | eip$address_zip_code == 44424 |
+                     eip$address_zip_code == 44425 | eip$address_zip_code == 44427 |
+                     eip$address_zip_code == 44428 | eip$address_zip_code == 44429 |
+                     eip$address_zip_code == 44430 | eip$address_zip_code == 44431 |
+                     eip$address_zip_code == 44432 | eip$address_zip_code == 44436 |
+                     eip$address_zip_code == 44437 | eip$address_zip_code == 44438 |
+                     eip$address_zip_code == 44439 | eip$address_zip_code == 44440 |
+                     eip$address_zip_code == 44441 | eip$address_zip_code == 44442 |
+                     eip$address_zip_code == 44443 | eip$address_zip_code == 44444 |
+                     eip$address_zip_code == 44445 | eip$address_zip_code == 44446 |
+                     eip$address_zip_code == 44449 | eip$address_zip_code == 44450 |
+                     eip$address_zip_code == 44451 | eip$address_zip_code == 44452 |
+                     eip$address_zip_code == 44453 | eip$address_zip_code == 44454 |
+                     eip$address_zip_code == 44455 | eip$address_zip_code == 44460 |
+                     eip$address_zip_code == 44470 | eip$address_zip_code == 44471 |
+                     eip$address_zip_code == 44473 | eip$address_zip_code == 44481 |
+                     eip$address_zip_code == 44482 | eip$address_zip_code == 44483 |
+                     eip$address_zip_code == 44484 | eip$address_zip_code == 44485 |
+                     eip$address_zip_code == 44486 | eip$address_zip_code == 44490 |
+                     eip$address_zip_code == 44491 | eip$address_zip_code == 44492 |
+                     eip$address_zip_code == 44493 | eip$address_zip_code == 44501 |
+                     eip$address_zip_code == 44502 | eip$address_zip_code == 44503 |
+                     eip$address_zip_code == 44504 | eip$address_zip_code == 44505 |
+                     eip$address_zip_code == 44506 | eip$address_zip_code == 44507 |
+                     eip$address_zip_code == 44509 | eip$address_zip_code == 44510 |
+                     eip$address_zip_code == 44511 | eip$address_zip_code == 44512 |
+                     eip$address_zip_code == 44513 | eip$address_zip_code == 44514 |
+                     eip$address_zip_code == 44515 | eip$address_zip_code == 44555 |
+                     eip$address_zip_code == 44601 | eip$address_zip_code == 44607 |
+                     eip$address_zip_code == 44608 | eip$address_zip_code == 44609 |
+                     eip$address_zip_code == 44610 | eip$address_zip_code == 44611 |
+                     eip$address_zip_code == 44612 | eip$address_zip_code == 44615 |
+                     eip$address_zip_code == 44617 | eip$address_zip_code == 44619 |
+                     eip$address_zip_code == 44620 | eip$address_zip_code == 44621 |
+                     eip$address_zip_code == 44622 | eip$address_zip_code == 44624 |
+                     eip$address_zip_code == 44625 | eip$address_zip_code == 44626 |
+                     eip$address_zip_code == 44627 | eip$address_zip_code == 44628 |
+                     eip$address_zip_code == 44629 | eip$address_zip_code == 44633 |
+                     eip$address_zip_code == 44634 | eip$address_zip_code == 44637 |
+                     eip$address_zip_code == 44638 | eip$address_zip_code == 44639 |
+                     eip$address_zip_code == 44643 | eip$address_zip_code == 44644 |
+                     eip$address_zip_code == 44651 | eip$address_zip_code == 44653 |
+                     eip$address_zip_code == 44654 | eip$address_zip_code == 44656 |
+                     eip$address_zip_code == 44657 | eip$address_zip_code == 44660 |
+                     eip$address_zip_code == 44661 | eip$address_zip_code == 44663 |
+                     eip$address_zip_code == 44665 | eip$address_zip_code == 44671 |
+                     eip$address_zip_code == 44672 | eip$address_zip_code == 44675 |
+                     eip$address_zip_code == 44676 | eip$address_zip_code == 44678 |
+                     eip$address_zip_code == 44679 | eip$address_zip_code == 44680 |
+                     eip$address_zip_code == 44681 | eip$address_zip_code == 44682 |
+                     eip$address_zip_code == 44683 | eip$address_zip_code == 44687 |
+                     eip$address_zip_code == 44688 | eip$address_zip_code == 44689 |
+                     eip$address_zip_code == 44690 | eip$address_zip_code == 44693 |
+                     eip$address_zip_code == 44695 | eip$address_zip_code == 44697 |
+                     eip$address_zip_code == 44699 | eip$address_zip_code == 44730 |
+                     eip$address_zip_code == 44842 | eip$address_zip_code == 45101 |
+                     eip$address_zip_code == 45102 | eip$address_zip_code == 45103 |
+                     eip$address_zip_code == 45105 | eip$address_zip_code == 45106 |
+                     eip$address_zip_code == 45107 | eip$address_zip_code == 45112 |
+                     eip$address_zip_code == 45115 | eip$address_zip_code == 45118 |
+                     eip$address_zip_code == 45119 | eip$address_zip_code == 45120 |
+                     eip$address_zip_code == 45121 | eip$address_zip_code == 45122 |
+                     eip$address_zip_code == 45123 | eip$address_zip_code == 45130 |
+                     eip$address_zip_code == 45131 | eip$address_zip_code == 45132 |
+                     eip$address_zip_code == 45133 | eip$address_zip_code == 45135 |
+                     eip$address_zip_code == 45140 | eip$address_zip_code == 45142 |
+                     eip$address_zip_code == 45144 | eip$address_zip_code == 45147 |
+                     eip$address_zip_code == 45148 | eip$address_zip_code == 45150 |
+                     eip$address_zip_code == 45153 | eip$address_zip_code == 45154 |
+                     eip$address_zip_code == 45155 | eip$address_zip_code == 45156 |
+                     eip$address_zip_code == 45157 | eip$address_zip_code == 45158 |
+                     eip$address_zip_code == 45159 | eip$address_zip_code == 45160 |
+                     eip$address_zip_code == 45162 | eip$address_zip_code == 45167 |
+                     eip$address_zip_code == 45168 | eip$address_zip_code == 45171 |
+                     eip$address_zip_code == 45172 | eip$address_zip_code == 45176 |
+                     eip$address_zip_code == 45244 | eip$address_zip_code == 45245 |
+                     eip$address_zip_code == 45255 | eip$address_zip_code == 45601 |
+                     eip$address_zip_code == 45612 | eip$address_zip_code == 45613 |
+                     eip$address_zip_code == 45614 | eip$address_zip_code == 45616 |
+                     eip$address_zip_code == 45617 | eip$address_zip_code == 45618 |
+                     eip$address_zip_code == 45619 | eip$address_zip_code == 45620 |
+                     eip$address_zip_code == 45621 | eip$address_zip_code == 45622 |
+                     eip$address_zip_code == 45623 | eip$address_zip_code == 45624 |
+                     eip$address_zip_code == 45628 | eip$address_zip_code == 45629 |
+                     eip$address_zip_code == 45630 | eip$address_zip_code == 45631 |
+                     eip$address_zip_code == 45633 | eip$address_zip_code == 45634 |
+                     eip$address_zip_code == 45636 | eip$address_zip_code == 45638 |
+                     eip$address_zip_code == 45640 | eip$address_zip_code == 45642 |
+                     eip$address_zip_code == 45643 | eip$address_zip_code == 45644 |
+                     eip$address_zip_code == 45645 | eip$address_zip_code == 45646 |
+                     eip$address_zip_code == 45647 | eip$address_zip_code == 45648 |
+                     eip$address_zip_code == 45650 | eip$address_zip_code == 45651 |
+                     eip$address_zip_code == 45652 | eip$address_zip_code == 45653 |
+                     eip$address_zip_code == 45654 | eip$address_zip_code == 45656 |
+                     eip$address_zip_code == 45657 | eip$address_zip_code == 45658 |
+                     eip$address_zip_code == 45659 | eip$address_zip_code == 45660 |
+                     eip$address_zip_code == 45661 | eip$address_zip_code == 45662 |
+                     eip$address_zip_code == 45663 | eip$address_zip_code == 45669 |
+                     eip$address_zip_code == 45671 | eip$address_zip_code == 45672 |
+                     eip$address_zip_code == 45673 | eip$address_zip_code == 45674 |
+                     eip$address_zip_code == 45675 | eip$address_zip_code == 45677 |
+                     eip$address_zip_code == 45678 | eip$address_zip_code == 45679 |
+                     eip$address_zip_code == 45680 | eip$address_zip_code == 45681 |
+                     eip$address_zip_code == 45682 | eip$address_zip_code == 45683 |
+                     eip$address_zip_code == 45684 | eip$address_zip_code == 45685 |
+                     eip$address_zip_code == 45686 | eip$address_zip_code == 45687 |
+                     eip$address_zip_code == 45688 | eip$address_zip_code == 45690 |
+                     eip$address_zip_code == 45692 | eip$address_zip_code == 45693 |
+                     eip$address_zip_code == 45694 | eip$address_zip_code == 45695 |
+                     eip$address_zip_code == 45696 | eip$address_zip_code == 45697 |
+                     eip$address_zip_code == 45698 | eip$address_zip_code == 45699 |
+                     eip$address_zip_code == 45701 | eip$address_zip_code == 45710 |
+                     eip$address_zip_code == 45711 | eip$address_zip_code == 45712 |
+                     eip$address_zip_code == 45713 | eip$address_zip_code == 45714 |
+                     eip$address_zip_code == 45715 | eip$address_zip_code == 45716 |
+                     eip$address_zip_code == 45717 | eip$address_zip_code == 45719 |
+                     eip$address_zip_code == 45720 | eip$address_zip_code == 45721 |
+                     eip$address_zip_code == 45723 | eip$address_zip_code == 45724 |
+                     eip$address_zip_code == 45727 | eip$address_zip_code == 45729 |
+                     eip$address_zip_code == 45732 | eip$address_zip_code == 45734 |
+                     eip$address_zip_code == 45735 | eip$address_zip_code == 45739 |
+                     eip$address_zip_code == 45740 | eip$address_zip_code == 45741 |
+                     eip$address_zip_code == 45742 | eip$address_zip_code == 45743 |
+                     eip$address_zip_code == 45744 | eip$address_zip_code == 45745 |
+                     eip$address_zip_code == 45746 | eip$address_zip_code == 45750 |
+                     eip$address_zip_code == 45760 | eip$address_zip_code == 45761 |
+                     eip$address_zip_code == 45764 | eip$address_zip_code == 45766 |
+                     eip$address_zip_code == 45767 | eip$address_zip_code == 45768 |
+                     eip$address_zip_code == 45769 | eip$address_zip_code == 45770 |
+                     eip$address_zip_code == 45771 | eip$address_zip_code == 45772 |
+                     eip$address_zip_code == 45773 | eip$address_zip_code == 45775 |
+                     eip$address_zip_code == 45776 | eip$address_zip_code == 45777 |
+                     eip$address_zip_code == 45778 | eip$address_zip_code == 45779 |
+                     eip$address_zip_code == 45780 | eip$address_zip_code == 45782 |
+                     eip$address_zip_code == 45783 | eip$address_zip_code == 45784 |
+                     eip$address_zip_code == 45786 | eip$address_zip_code == 45787 |
+                     eip$address_zip_code == 45788 | eip$address_zip_code == 45789 |
+                     (eip$appalachian == 1 | eip$appalachian_family == 1)] <- 1
+table(eip$appalachian_pt)
+
+
+
+# EIP unique patients
+dim(eip)
+eip_pts <- select(eip, record_id)
+dim(eip_pts)
+eip_pts <- distinct(eip_pts)
+dim(eip_pts)
+
+eip_patients <- nrow(eip_pts)
+eip_patients
+
+
+
+# PLWHA
+eip$plwha[(eip$history_hiv_test_result == 1 |
+             eip$reason_for_offer_category_hiv_test == 7 |
+             eip$reason_for_offer_category_hiv_test == 8 |
+             eip$offer_outcome_declined_hiv___21 == 1 |
+             eip$offer_outcome_declined_hiv_2___21 == 1 |
+             eip$offer_outcome_declined_hiv_3___21 == 1 |
+             eip$final_test_status_hiv == 1 |
+             eip$diagnosis_hiv == 1 |
+             eip$diagnosis_hiv == 2)] <- 1
+table(eip$plwha)
+
+
+table(eip$plwha)
+plwha <- eip[which(eip$plwha == 1), ]
+dim(plwha)
+plwha <- nrow(plwha)
+plwha
+
+
+```
+
+```{r CTR, include=FALSE}
+
+###############################################################################################################
+########################################  Creating CTR Dataset  ########################################
+###############################################################################################################
+
+summary(eip$enc_date)
+ctr <- eip[which(eip$enc_date >= '2025-06-01' & eip$enc_date <= '2026-05-31'), ]
+summary(ctr$enc_date)
+
+
+################################################  CTR Metrics  ################################################
+
+table(ctr$ctr_calc)
+ctr_tests <- ctr[which(ctr$ctr_calc == 1), ]
+ctr_tests <- nrow(ctr_tests)
+ctr_tests
+
+table(ctr$ctr_calc, ctr$final_test_status_hiv)
+ctr_positive <- ctr[which(ctr$ctr_calc == 1 & ctr$final_test_status_hiv == 1), ]
+ctr_positive <- nrow(ctr_positive)
+ctr_positive
+
+table(ctr$ctr_calc, ctr$final_test_status_hiv, ctr$diagnosis_hiv)
+ctr_new_positive <- ctr[which(ctr$ctr_calc == 1 & ctr$final_test_status_hiv == 1 & ctr$diagnosis_hiv == 1), ]
+ctr_new_positive <- nrow(ctr_new_positive)
+ctr_new_positive
+
+ctr_positivity_rate <- percent(ctr_new_positive/ctr_tests, accuracy = 0.01)
+ctr_positivity_rate
+
+
+# Monthly CTR Testing
+monthly_ctr_testing <- select(ctr, enc_date, ctr_calc)
+monthly_ctr_testing <- monthly_ctr_testing[which(monthly_ctr_testing$ctr_calc == 1), ]
+head(monthly_ctr_testing)
+colnames(monthly_ctr_testing)[2] <- 'ctr_tests'
+monthly_ctr_testing$ctr_tests[is.na(monthly_ctr_testing$ctr_tests)] <- 0
+head(monthly_ctr_testing)
+
+monthly_ctr_testing$Date <- as.Date(monthly_ctr_testing$enc_date, format="%d/%m/%Y")
+head(monthly_ctr_testing)
+
+monthly_ctr_tests <- aggregate(ctr_tests ~ as.yearmon(Date),
+                               monthly_ctr_testing,
+                               FUN = sum)
+monthly_ctr_tests$Date <- as.Date(as.yearmon(monthly_ctr_tests$`as.yearmon(Date)`))
+head(monthly_ctr_tests)
+monthly_ctr_tests
+
+
+# MSM
+table(ctr$MSM, ctr$offer_outcome_risks)
+ctr_msm_assessed <- ctr[which(ctr$MSM == 1 & ctr$offer_outcome_risks == 1), ]
+ctr_msm_assessed <- nrow(ctr_msm_assessed)
+ctr_msm_assessed
+
+ctr_msm_assessed_deliverable <- 150
+ctr_msm_assessed_deliverable_percent <- percent(ctr_msm_assessed/ctr_msm_assessed_deliverable, accuracy = 0.1)
+ctr_msm_assessed_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$MSM)
+ctr_msm_tested <- ctr[which(ctr$ctr_calc == 1 & ctr$MSM == 1), ]
+ctr_msm_tested <- nrow(ctr_msm_tested)
+ctr_msm_tested
+
+ctr_msm_tested_deliverable <- 100
+ctr_msm_tested_deliverable_percent <- percent(ctr_msm_tested/ctr_msm_tested_deliverable, accuracy = 0.1)
+ctr_msm_tested_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$diagnosis_hiv, ctr$MSM)
+ctr_msm_new_positive <- ctr[which(ctr$ctr_calc == 1 & ctr$MSM == 1 & ctr$diagnosis_hiv == 1), ]
+ctr_msm_new_positive <- nrow(ctr_msm_new_positive)
+ctr_msm_new_positive
+
+ctr_msm_new_positive_deliverable <- 3
+ctr_msm_new_positive_deliverable_percent <- percent(ctr_msm_new_positive/ctr_msm_new_positive_deliverable, accuracy = 0.1)
+ctr_msm_new_positive_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$enc_location, ctr$MSM)
+ctr_msm_ucmc_test <- ctr[which(ctr$ctr_calc == 1 & ctr$MSM == 1 &
+                                 (ctr$enc_location == 5 | ctr$enc_location == 8)), ]
+ctr_msm_ucmc_test <- nrow(ctr_msm_ucmc_test)
+ctr_msm_ucmc_test
+
+ctr_msm_ucmc_test_deliverable <- 75
+ctr_msm_ucmc_test_deliverable_percent <- percent(ctr_msm_ucmc_test/ctr_msm_ucmc_test_deliverable, accuracy = 0.1)
+ctr_msm_ucmc_test_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$enc_location, ctr$MSM)
+ctr_msm_ssp_test <- ctr[which(ctr$ctr_calc == 1 & ctr$MSM == 1 & 
+                                     (ctr$enc_location == 43 |
+                                        ctr$enc_location == 59 |
+                                        ctr$enc_location == 60 |
+                                        ctr$enc_location == 34 |
+                                        ctr$enc_location == 61 |
+                                        ctr$enc_location == 52 |
+                                        ctr$enc_location == 41 |
+                                        ctr$enc_location == 42 |
+                                        ctr$enc_location == 36 |
+                                        ctr$enc_location == 37 |
+                                        ctr$enc_location == 38 |
+                                        ctr$enc_location == 51 |
+                                        ctr$enc_location == 53)), ]
+ctr_msm_ssp_test <- nrow(ctr_msm_ssp_test)
+ctr_msm_ssp_test
+
+ctr_msm_ssp_test_deliverable <- 10
+ctr_msm_ssp_test_deliverable_percent <- percent(ctr_msm_ssp_test/ctr_msm_ssp_test_deliverable, accuracy = 0.1)
+ctr_msm_ssp_test_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$enc_location, ctr$MSM)
+ctr_msm_comm_test <- ctr[which(ctr$ctr_calc == 1 & ctr$MSM == 1 & 
+                                 (ctr$enc_location == 1 |
+                                    ctr$enc_location == 44 |
+                                    ctr$enc_location == 45 |
+                                    ctr$enc_location == 12 |
+                                    ctr$enc_location == 57 |
+                                    ctr$enc_location == 4 |
+                                    ctr$enc_location == 9 |
+                                    ctr$enc_location == 58 |
+                                    ctr$enc_location == 15 |
+                                    ctr$enc_location == 16 |
+                                    ctr$enc_location == 17 |
+                                    ctr$enc_location == 18 |
+                                    ctr$enc_location == 19 |
+                                    ctr$enc_location == 20 |
+                                    ctr$enc_location == 21 |
+                                    ctr$enc_location == 22 |
+                                    ctr$enc_location == 49 |
+                                    ctr$enc_location == 50 |
+                                    ctr$enc_location == 54 |
+                                    ctr$enc_location == 55 |
+                                    ctr$enc_location == 56 |
+                                    ctr$enc_location == 2 |
+                                    ctr$enc_location == 3 |
+                                    ctr$enc_location == 62 |
+                                    ctr$enc_location == 63 |
+                                    ctr$enc_location == 23 |
+                                    ctr$enc_location == 46 |
+                                    ctr$enc_location == 47 |
+                                    ctr$enc_location == 48 |
+                                    ctr$enc_location == 40)), ]
+ctr_msm_comm_test <- nrow(ctr_msm_comm_test)
+ctr_msm_comm_test
+
+ctr_msm_comm_test_deliverable <- 5
+ctr_msm_comm_test_deliverable_percent <- percent(ctr_msm_comm_test/ctr_msm_comm_test_deliverable, accuracy = 0.1)
+ctr_msm_comm_test_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$MSM, ctr$Youth)
+ctr_msm_youth_tested <- ctr[which(ctr$ctr_calc == 1 & ctr$MSM == 1 & ctr$Youth == 1), ]
+ctr_msm_youth_tested <- nrow(ctr_msm_youth_tested)
+ctr_msm_youth_tested
+
+ctr_msm_youth_tested_deliverable <- 25
+ctr_msm_youth_tested_deliverable_percent <- percent(ctr_msm_youth_tested/ctr_msm_youth_tested_deliverable, accuracy = 0.1)
+ctr_msm_youth_tested_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$MSM, ctr$IDU)
+ctr_msm_idu_tested <- ctr[which(ctr$ctr_calc == 1 & ctr$MSM == 1 & ctr$IDU == 1), ]
+ctr_msm_idu_tested <- nrow(ctr_msm_idu_tested)
+ctr_msm_idu_tested
+
+ctr_msm_idu_tested_deliverable <- 25
+ctr_msm_idu_tested_deliverable_percent <- percent(ctr_msm_idu_tested/ctr_msm_idu_tested_deliverable, accuracy = 0.1)
+ctr_msm_idu_tested_deliverable_percent
+
+
+
+monthly_msm_testing <- select(ctr, enc_date, ctr_calc, MSM)
+monthly_msm_testing <- monthly_msm_testing[which(monthly_msm_testing$ctr_calc == 1 & monthly_msm_testing$MSM == 1), ]
+head(monthly_msm_testing)
+colnames(monthly_msm_testing)[2] <- 'ctr_tests'
+colnames(monthly_msm_testing)[3] <- 'MSM'
+monthly_msm_testing$ctr_tests[is.na(monthly_msm_testing$ctr_tests)] <- 0
+monthly_msm_testing$MSM[is.na(monthly_msm_testing$MSM)] <- 0
+head(monthly_msm_testing)
+
+monthly_msm_testing$Date <- as.Date(monthly_msm_testing$enc_date, format="%d/%m/%Y")
+head(monthly_msm_testing)
+
+monthly_msm_tests <- aggregate(cbind(ctr_tests, MSM) ~ as.yearmon(Date),
+                               monthly_msm_testing,
+                               FUN = sum)
+monthly_msm_tests$Date <- as.Date(as.yearmon(monthly_msm_tests$`as.yearmon(Date)`))
+head(monthly_msm_tests)
+monthly_msm_tests
+
+
+
+# HRHS
+
+table(ctr$offer_outcome_risks, ctr$HRHS)
+ctr_hrhs_assessed <- ctr[which(ctr$HRHS == 1 & ctr$offer_outcome_risks == 1), ]
+ctr_hrhs_assessed <- nrow(ctr_hrhs_assessed)
+ctr_hrhs_assessed
+
+ctr_hrhs_assessed_deliverable <- 1150
+ctr_hrhs_assessed_deliverable_percent <- percent(ctr_hrhs_assessed/ctr_hrhs_assessed_deliverable, accuracy = 0.1)
+ctr_hrhs_assessed_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$HRHS)
+ctr_hrhs_tested <- ctr[which(ctr$ctr_calc == 1 & ctr$HRHS == 1), ]
+ctr_hrhs_tested <- nrow(ctr_hrhs_tested)
+ctr_hrhs_tested
+
+ctr_hrhs_tested_deliverable <- 800
+ctr_hrhs_tested_deliverable_percent <- percent(ctr_hrhs_tested/ctr_hrhs_tested_deliverable, accuracy = 0.1)
+ctr_hrhs_tested_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$diagnosis_hiv, ctr$HRHS)
+ctr_hrhs_new_positive <- ctr[which(ctr$ctr_calc == 1 & ctr$HRHS == 1 & ctr$diagnosis_hiv == 1), ]
+ctr_hrhs_new_positive <- nrow(ctr_hrhs_new_positive)
+ctr_hrhs_new_positive
+
+ctr_hrhs_new_positive_deliverable <- 9
+ctr_hrhs_new_positive_deliverable_percent <- percent(ctr_hrhs_new_positive/ctr_hrhs_new_positive_deliverable, accuracy = 0.1)
+ctr_hrhs_new_positive_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$enc_location, ctr$HRHS)
+ctr_hrhs_ucmc_tested <- ctr[which(ctr$ctr_calc == 1 & ctr$HRHS == 1 &
+                                    (ctr$enc_location == 5 | ctr$enc_location == 8)), ]
+ctr_hrhs_ucmc_tested <- nrow(ctr_hrhs_ucmc_tested)
+ctr_hrhs_ucmc_tested
+
+ctr_hrhs_ucmc_tested_deliverable <- 550
+ctr_hrhs_ucmc_tested_deliverable_percent <- percent(ctr_hrhs_ucmc_tested/ctr_hrhs_ucmc_tested_deliverable, accuracy = 0.1)
+ctr_hrhs_ucmc_tested_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$enc_location, ctr$HRHS)
+ctr_hrhs_wch_tested <- ctr[which(ctr$ctr_calc == 1 & ctr$HRHS == 1 &
+                                   (ctr$enc_location == 1 | ctr$enc_location == 10)), ]
+ctr_hrhs_wch_tested <- nrow(ctr_hrhs_wch_tested)
+ctr_hrhs_wch_tested
+
+ctr_hrhs_wch_tested_deliverable <- 50
+ctr_hrhs_wch_tested_deliverable_percent <- percent(ctr_hrhs_wch_tested/ctr_hrhs_wch_tested_deliverable, accuracy = 0.1)
+ctr_hrhs_wch_tested_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$enc_location, ctr$HRHS)
+ctr_hrhs_ssp_tested <- ctr[which(ctr$ctr_calc == 1 & ctr$HRHS == 1 &
+                                        (ctr$enc_location == 43 |
+                                           ctr$enc_location == 59 |
+                                           ctr$enc_location == 60 |
+                                           ctr$enc_location == 34 |
+                                           ctr$enc_location == 61 |
+                                           ctr$enc_location == 52 |
+                                           ctr$enc_location == 41 |
+                                           ctr$enc_location == 42 |
+                                           ctr$enc_location == 36 |
+                                           ctr$enc_location == 37 |
+                                           ctr$enc_location == 38 |
+                                           ctr$enc_location == 51 |
+                                           ctr$enc_location == 53)), ]
+ctr_hrhs_ssp_tested <- nrow(ctr_hrhs_ssp_tested)
+ctr_hrhs_ssp_tested
+
+ctr_hrhs_ssp_tested_deliverable <- 150
+ctr_hrhs_ssp_tested_deliverable_percent <- percent(ctr_hrhs_ssp_tested/ctr_hrhs_ssp_tested_deliverable, accuracy = 0.1)
+ctr_hrhs_ssp_tested_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$enc_location, ctr$HRHS)
+ctr_hrhs_comm_tested <- ctr[which(ctr$ctr_calc == 1 & ctr$HRHS == 1 & 
+                                    (ctr$enc_location == 44 |
+                                       ctr$enc_location == 45 |
+                                       ctr$enc_location == 12 |
+                                       ctr$enc_location == 57 |
+                                       ctr$enc_location == 4 |
+                                       ctr$enc_location == 9 |
+                                       ctr$enc_location == 58 |
+                                       ctr$enc_location == 15 |
+                                       ctr$enc_location == 16 |
+                                       ctr$enc_location == 17 |
+                                       ctr$enc_location == 18 |
+                                       ctr$enc_location == 19 |
+                                       ctr$enc_location == 20 |
+                                       ctr$enc_location == 21 |
+                                       ctr$enc_location == 22 |
+                                       ctr$enc_location == 49 |
+                                       ctr$enc_location == 50 |
+                                       ctr$enc_location == 54 |
+                                       ctr$enc_location == 55 |
+                                       ctr$enc_location == 56 |
+                                       ctr$enc_location == 2 |
+                                       ctr$enc_location == 3 |
+                                       ctr$enc_location == 62 |
+                                       ctr$enc_location == 63 |
+                                       ctr$enc_location == 23 |
+                                       ctr$enc_location == 46 |
+                                       ctr$enc_location == 47 |
+                                       ctr$enc_location == 48 |
+                                       ctr$enc_location == 40)), ]
+ctr_hrhs_comm_tested <- nrow(ctr_hrhs_comm_tested)
+ctr_hrhs_comm_tested
+
+ctr_hrhs_comm_tested_deliverable <- 100
+ctr_hrhs_comm_tested_deliverable_percent <- percent(ctr_hrhs_comm_tested/ctr_hrhs_comm_tested_deliverable, accuracy = 0.1)
+ctr_hrhs_comm_tested_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$HRHS, ctr$WOC)
+ctr_hrhs_woc_tested <- ctr[which(ctr$ctr_calc == 1 & ctr$HRHS == 1 & ctr$WOC == 1), ]
+ctr_hrhs_woc_tested <- nrow(ctr_hrhs_woc_tested)
+ctr_hrhs_woc_tested
+
+ctr_hrhs_woc_tested_deliverable <- 130
+ctr_hrhs_woc_tested_deliverable_percent <- percent(ctr_hrhs_woc_tested/ctr_hrhs_woc_tested_deliverable, accuracy = 0.1)
+ctr_hrhs_woc_tested_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$HRHS, ctr$Youth)
+ctr_hrhs_youth_tested <- ctr[which(ctr$ctr_calc == 1 & ctr$HRHS == 1 & ctr$Youth == 1), ]
+ctr_hrhs_youth_tested <- nrow(ctr_hrhs_youth_tested)
+ctr_hrhs_youth_tested
+
+ctr_hrhs_youth_tested_deliverable <- 200
+ctr_hrhs_youth_tested_deliverable_percent <- percent(ctr_hrhs_youth_tested/ctr_hrhs_youth_tested_deliverable, accuracy = 0.1)
+ctr_hrhs_youth_tested_deliverable_percent
+
+
+
+table(ctr$ctr_calc, ctr$HRHS, ctr$IDU)
+ctr_hrhs_idu_tested <- ctr[which(ctr$ctr_calc == 1 & ctr$HRHS == 1 & ctr$IDU == 1), ]
+ctr_hrhs_idu_tested <- nrow(ctr_hrhs_idu_tested)
+ctr_hrhs_idu_tested
+
+ctr_hrhs_idu_tested_deliverable <- 300
+ctr_hrhs_idu_tested_deliverable_percent <- percent(ctr_hrhs_idu_tested/ctr_hrhs_idu_tested_deliverable, accuracy = 0.1)
+ctr_hrhs_idu_tested_deliverable_percent
+
+
+
+
+monthly_hrhs_testing <- select(ctr, enc_date, ctr_calc, HRHS)
+monthly_hrhs_testing <- monthly_hrhs_testing[which(monthly_hrhs_testing$ctr_calc == 1 & monthly_hrhs_testing$HRHS == 1), ]
+head(monthly_hrhs_testing)
+colnames(monthly_hrhs_testing)[2] <- 'ctr_tests'
+colnames(monthly_hrhs_testing)[3] <- 'HRHS'
+monthly_hrhs_testing$ctr_tests[is.na(monthly_hrhs_testing$ctr_tests)] <- 0
+monthly_hrhs_testing$HRHS[is.na(monthly_hrhs_testing$HRHS)] <- 0
+head(monthly_hrhs_testing)
+
+monthly_hrhs_testing$Date <- as.Date(monthly_hrhs_testing$enc_date, format="%d/%m/%Y")
+head(monthly_hrhs_testing)
+
+monthly_hrhs_tests <- aggregate(cbind(ctr_tests, HRHS) ~ as.yearmon(Date),
+                                monthly_hrhs_testing,
+                                FUN = sum)
+monthly_hrhs_tests$Date <- as.Date(as.yearmon(monthly_hrhs_tests$`as.yearmon(Date)`))
+head(monthly_hrhs_tests)
+monthly_hrhs_tests
+
+
+
+
+# Linkage to Care
+
+table(ctr$plwha)
+ctr_plwha <- ctr[which(ctr$plwha == 1), ]
+dim(ctr_plwha)
+
+ctr_plwha <- nrow(ctr_plwha)
+ctr_plwha
+
+
+
+table(ctr$ltc_services___1)
+ctr$ctr_hiv_ltc[ctr$ltc_services___1 == 1] <- 1
+table(ctr$ctr_hiv_ltc)
+
+table(ctr$ctr_hiv_ltc)
+ctr_hiv_ltc <- ctr[which(ctr$ctr_hiv_ltc == 1), ]
+dim(ctr_hiv_ltc)
+ctr_hiv_ltc <- nrow(ctr_hiv_ltc)
+ctr_hiv_ltc
+
+ctr_hiv_ltc_percent <- percent(ctr_hiv_ltc/ctr_plwha, accuracy = 0.1)
+ctr_hiv_ltc_percent
+
+
+
+# Ineligible HIV Linkage - Already Linked
+
+table(ctr$ltc_hiv_declined_rsn___23)
+table(ctr$ltc_hiv_prevented_rsn___16)
+ctr$ctr_hiv_already_linked[ctr$ctr_hiv_ltc == 1 &
+                             (ctr$ltc_hiv_declined_rsn___23 == 1 |
+                                ctr$ltc_hiv_prevented_rsn___16 == 1)] <- 1
+table(ctr$ctr_hiv_already_linked)
+
+table(ctr$ctr_hiv_already_linked)
+ctr_hiv_already_linked <- ctr[which(ctr$ctr_hiv_already_linked == 1), ]
+dim(ctr_hiv_already_linked)
+ctr_hiv_already_linked <- nrow(ctr_hiv_already_linked)
+ctr_hiv_already_linked
+
+
+
+# Ineligible HIV Linkage - Deceased
+
+table(ctr$ltc_hiv_declined_rsn___35)
+table(ctr$ltc_hiv_prevented_rsn___17)
+ctr$ctr_hiv_deceased[ctr$ctr_hiv_ltc == 1 &
+                       (ctr$ltc_hiv_declined_rsn___35 == 1 |
+                          ctr$ltc_hiv_prevented_rsn___17 == 1)] <- 1
+table(ctr$ctr_hiv_deceased)
+
+table(ctr$ctr_hiv_deceased)
+ctr_hiv_deceased <- ctr[which(ctr$ctr_hiv_deceased == 1), ]
+dim(ctr_hiv_deceased)
+ctr_hiv_deceased <- nrow(ctr_hiv_deceased)
+ctr_hiv_deceased
+
+
+
+# Ineligible HIV Linkage - Incarcerated
+
+table(ctr$ltc_hiv_prevented_rsn___12)
+ctr$ctr_hiv_incarcerated[ctr$ctr_hiv_ltc == 1 &
+                           ctr$ltc_hiv_prevented_rsn___12 == 1] <- 1
+table(ctr$ctr_hiv_incarcerated)
+
+table(ctr$ctr_hiv_incarcerated)
+ctr_hiv_incarcerated <- ctr[which(ctr$ctr_hiv_incarcerated == 1), ]
+dim(ctr_hiv_incarcerated)
+ctr_hiv_incarcerated <- nrow(ctr_hiv_incarcerated)
+ctr_hiv_incarcerated
+
+
+
+# Ineligible HIV Linkage - Inability to Contact
+
+table(ctr$ltc_hiv_final_ltc_status)
+ctr$ctr_hiv_inability_to_contact[ctr$ctr_hiv_ltc == 1 &
+                                   ctr$ltc_hiv_prevented_rsn___19 == 1] <- 1
+table(ctr$ctr_hiv_inability_to_contact)
+
+table(ctr$ctr_hiv_inability_to_contact)
+ctr_hiv_inability_to_contact <- ctr[which(ctr$ctr_hiv_inability_to_contact == 1), ]
+dim(ctr_hiv_inability_to_contact)
+ctr_hiv_inability_to_contact <- nrow(ctr_hiv_inability_to_contact)
+ctr_hiv_inability_to_contact
+
+
+
+# Ineligible HIV Linkage - Declined Linkage Service
+
+table(ctr$ltc_hiv_final_ltc_status)
+ctr$ctr_hiv_linkage_declined[(ctr$ctr_hiv_ltc == 1 &
+                                ctr$ltc_hiv_final_ltc_status == 2) &
+                               (is.na(ctr$ctr_hiv_already_linked) &
+                                  is.na(ctr$ctr_hiv_deceased) &
+                                  is.na(ctr$ctr_hiv_incarcerated) &
+                                  is.na(ctr$ctr_hiv_inability_to_contact))] <- 1
+table(ctr$ctr_hiv_linkage_declined)
+
+table(ctr$ctr_hiv_linkage_declined)
+ctr_hiv_linkage_declined <- ctr[which(ctr$ctr_hiv_linkage_declined == 1), ]
+dim(ctr_hiv_linkage_declined)
+ctr_hiv_linkage_declined <- nrow(ctr_hiv_linkage_declined)
+ctr_hiv_linkage_declined
+
+
+
+# Ineligible HIV Linkage - Linkage in Progress
+
+table(ctr$ltc_hiv_prevented_rsn___18)
+ctr$ctr_hiv_ongoing_linkage[ctr$ctr_hiv_ltc == 1 &
+                              ctr$ltc_hiv_prevented_rsn___18 == 1] <- 1
+table(ctr$ctr_hiv_ongoing_linkage)
+
+table(ctr$ctr_hiv_ongoing_linkage)
+ctr_hiv_ongoing_linkage <- ctr[which(ctr$ctr_hiv_ongoing_linkage == 1), ]
+dim(ctr_hiv_ongoing_linkage)
+ctr_hiv_ongoing_linkage <- nrow(ctr_hiv_ongoing_linkage)
+ctr_hiv_ongoing_linkage
+
+
+
+# HIV Ineligible Cases
+
+ctr$ctr_hiv_ineligible_ltc[ctr$ctr_hiv_already_linked == 1 |
+                             ctr$ctr_hiv_deceased == 1 |
+                             ctr$ctr_hiv_incarcerated == 1 |
+                             ctr$ctr_hiv_inability_to_contact == 1 |
+                             ctr$ctr_hiv_linkage_declined == 1 |
+                             ctr$ctr_hiv_ongoing_linkage == 1] <- 1
+table(ctr$ctr_hiv_ineligible_ltc)
+
+table(ctr$ctr_hiv_ineligible_ltc)
+ctr_hiv_ineligible_ltc <- ctr[which(ctr$ctr_hiv_ineligible_ltc == 1), ]
+dim(ctr_hiv_ineligible_ltc)
+ctr_hiv_ineligible_ltc <- nrow(ctr_hiv_ineligible_ltc)
+ctr_hiv_ineligible_ltc
+
+ctr_hiv_ineligible_ltc_percent <- percent(ctr_hiv_ineligible_ltc/ctr_hiv_ltc, accuracy = 0.1)
+ctr_hiv_ineligible_ltc_percent
+
+ctr_hiv_already_linked_percent <- percent(ctr_hiv_already_linked/ctr_hiv_ineligible_ltc, accuracy = 0.1)
+ctr_hiv_already_linked_percent
+
+ctr_hiv_deceased_percent <- percent(ctr_hiv_deceased/ctr_hiv_ineligible_ltc, accuracy = 0.1)
+ctr_hiv_deceased_percent
+
+ctr_hiv_incarcerated_percent <- percent(ctr_hiv_incarcerated/ctr_hiv_ineligible_ltc, accuracy = 0.1)
+ctr_hiv_incarcerated_percent
+
+ctr_hiv_inability_to_contact_percent <- percent(ctr_hiv_inability_to_contact/ctr_hiv_ineligible_ltc, accuracy = 0.1)
+ctr_hiv_inability_to_contact_percent
+
+ctr_hiv_linkage_declined_percent <- percent(ctr_hiv_linkage_declined/ctr_hiv_ineligible_ltc, accuracy = 0.1)
+ctr_hiv_linkage_declined_percent
+
+ctr_hiv_ongoing_linkage_percent <- percent(ctr_hiv_ongoing_linkage/ctr_hiv_ineligible_ltc, accuracy = 0.1)
+ctr_hiv_ongoing_linkage_percent
+
+
+
+# HIV Eligibility to be Linked
+
+ctr$ctr_hiv_eligible_ltc[ctr$ctr_hiv_ltc == 1 &
+                           (is.na(ctr$ctr_hiv_already_linked) &
+                              is.na(ctr$ctr_hiv_deceased) &
+                              is.na(ctr$ctr_hiv_incarcerated) &
+                              is.na(ctr$ctr_hiv_inability_to_contact) &
+                              is.na(ctr$ctr_hiv_linkage_declined) &
+                              is.na(ctr$ctr_hiv_ongoing_linkage))] <- 1
+table(ctr$ctr_hiv_eligible_ltc)
+
+table(ctr$ctr_hiv_eligible_ltc)
+ctr_hiv_eligible_ltc <- ctr[which(ctr$ctr_hiv_eligible_ltc == 1), ]
+dim(ctr_hiv_eligible_ltc)
+ctr_hiv_eligible_ltc <- nrow(ctr_hiv_eligible_ltc)
+ctr_hiv_eligible_ltc
+
+ctr_hiv_eligible_ltc_percent <- percent(ctr_hiv_eligible_ltc/ctr_hiv_ltc, accuracy = 0.1)
+ctr_hiv_eligible_ltc_percent
+
+
+ctr_plwha_deliverable <- 125
+ctr_plwha_deliverable_percent <- percent(ctr_hiv_eligible_ltc/ctr_plwha_deliverable, accuracy = 0.1)
+ctr_plwha_deliverable_percent
+
+
+
+ctr$ctr_hiv_eligible_ltc_ucmc[ctr$ctr_hiv_eligible_ltc == 1 &
+                                (ctr$enc_location == 5 | ctr$enc_location == 8)] <- 1
+table(ctr$ctr_hiv_eligible_ltc_ucmc)
+ctr_hiv_eligible_ltc_ucmc <- ctr[which(ctr$ctr_hiv_eligible_ltc_ucmc == 1), ]
+dim(ctr_hiv_eligible_ltc_ucmc)
+ctr_hiv_eligible_ltc_ucmc <- nrow(ctr_hiv_eligible_ltc_ucmc)
+ctr_hiv_eligible_ltc_ucmc
+
+ctr_plwha_ucmc_deliverable <- 80
+ctr_plwha_ucmc_deliverable_percent <- percent(ctr_hiv_eligible_ltc_ucmc/ctr_plwha_ucmc_deliverable, accuracy = 0.1)
+ctr_plwha_ucmc_deliverable_percent
+
+
+
+ctr$ctr_hiv_eligible_ltc_wch[ctr$ctr_hiv_eligible_ltc == 1 &
+                               (ctr$enc_location == 1 | ctr$enc_location == 10)] <- 1
+table(ctr$ctr_hiv_eligible_ltc_wch)
+ctr_hiv_eligible_ltc_wch <- ctr[which(ctr$ctr_hiv_eligible_ltc_wch == 1), ]
+dim(ctr_hiv_eligible_ltc_wch)
+ctr_hiv_eligible_ltc_wch <- nrow(ctr_hiv_eligible_ltc_wch)
+ctr_hiv_eligible_ltc_wch
+
+ctr_plwha_wch_deliverable <- 10
+ctr_plwha_wch_deliverable_percent <- percent(ctr_hiv_eligible_ltc_wch/ctr_plwha_wch_deliverable, accuracy = 0.1)
+ctr_plwha_wch_deliverable_percent
+
+
+
+ctr$ctr_hiv_eligible_ltc_ssp[ctr$ctr_hiv_eligible_ltc == 1 &
+                                    ((ctr$enc_location >= 34 & ctr$enc_location <= 38) |
+                                       (ctr$enc_location >= 41 & ctr$enc_location <= 43) |
+                                       (ctr$enc_location >= 51 & ctr$enc_location <= 53))] <- 1
+table(ctr$ctr_hiv_eligible_ltc_ssp)
+ctr_hiv_eligible_ltc_ssp <- ctr[which(ctr$ctr_hiv_eligible_ltc_ssp == 1), ]
+dim(ctr_hiv_eligible_ltc_ssp)
+ctr_hiv_eligible_ltc_ssp <- nrow(ctr_hiv_eligible_ltc_ssp)
+ctr_hiv_eligible_ltc_ssp
+
+ctr_plwha_ssp_deliverable <- 5
+ctr_plwha_ssp_deliverable_percent <- percent(ctr_hiv_eligible_ltc_ssp/ctr_plwha_ssp_deliverable, accuracy = 0.1)
+ctr_plwha_ssp_deliverable_percent
+
+
+
+ctr$ctr_hiv_eligible_ltc_woc[ctr$ctr_hiv_eligible_ltc == 1 & ctr$WOC == 1] <- 1
+table(ctr$ctr_hiv_eligible_ltc_woc)
+ctr_hiv_eligible_ltc_woc <- ctr[which(ctr$ctr_hiv_eligible_ltc_woc == 1), ]
+dim(ctr_hiv_eligible_ltc_woc)
+ctr_hiv_eligible_ltc_woc <- nrow(ctr_hiv_eligible_ltc_woc)
+ctr_hiv_eligible_ltc_woc
+
+ctr_plwha_woc_deliverable <- 10
+ctr_plwha_woc_deliverable_percent <- percent(ctr_hiv_eligible_ltc_woc/ctr_plwha_woc_deliverable, accuracy = 0.1)
+ctr_plwha_woc_deliverable_percent
+
+
+
+ctr$ctr_hiv_eligible_ltc_youth[ctr$ctr_hiv_eligible_ltc == 1 & ctr$Youth == 1] <- 1
+table(ctr$ctr_hiv_eligible_ltc_youth)
+ctr_hiv_eligible_ltc_youth <- ctr[which(ctr$ctr_hiv_eligible_ltc_youth == 1), ]
+dim(ctr_hiv_eligible_ltc_youth)
+ctr_hiv_eligible_ltc_youth <- nrow(ctr_hiv_eligible_ltc_youth)
+ctr_hiv_eligible_ltc_youth
+
+ctr_plwha_youth_deliverable <- 25
+ctr_plwha_youth_deliverable_percent <- percent(ctr_hiv_eligible_ltc_youth/ctr_plwha_youth_deliverable, accuracy = 0.1)
+ctr_plwha_youth_deliverable_percent
+
+
+
+ctr$ctr_hiv_eligible_ltc_idu[ctr$ctr_hiv_eligible_ltc == 1 & ctr$IDU == 1] <- 1
+table(ctr$ctr_hiv_eligible_ltc_idu)
+ctr_hiv_eligible_ltc_idu <- ctr[which(ctr$ctr_hiv_eligible_ltc_idu == 1), ]
+dim(ctr_hiv_eligible_ltc_idu)
+ctr_hiv_eligible_ltc_idu <- nrow(ctr_hiv_eligible_ltc_idu)
+ctr_hiv_eligible_ltc_idu
+
+ctr_plwha_idu_deliverable <- 30
+ctr_plwha_idu_deliverable_percent <- percent(ctr_hiv_eligible_ltc_idu/ctr_plwha_idu_deliverable, accuracy = 0.1)
+ctr_plwha_idu_deliverable_percent
+
+
+
+table(ctr$ctr_hiv_eligible_ltc, ctr$diagnosis_hiv)
+ctr$ctr_hiv_new_eligible_ltc[ctr$ctr_hiv_eligible_ltc == 1 &
+                               ctr$diagnosis_hiv == 1] <- 1
+table(ctr$ctr_hiv_new_eligible_ltc)
+
+table(ctr$ctr_hiv_new_eligible_ltc)
+ctr_hiv_new_eligible_ltc <- ctr[which(ctr$ctr_hiv_new_eligible_ltc == 1), ]
+dim(ctr_hiv_new_eligible_ltc)
+ctr_hiv_new_eligible_ltc <- nrow(ctr_hiv_new_eligible_ltc)
+ctr_hiv_new_eligible_ltc
+
+ctr_hiv_new_eligible_ltc_percent <- percent(ctr_hiv_new_eligible_ltc/ctr_hiv_eligible_ltc, accuracy = 0.1)
+ctr_hiv_new_eligible_ltc_percent
+
+
+
+
+table(ctr$ctr_hiv_eligible_ltc, ctr$diagnosis_hiv)
+ctr$ctr_hiv_prev_eligible_ltc[ctr$ctr_hiv_eligible_ltc == 1 &
+                                ctr$diagnosis_hiv == 2] <- 1
+table(ctr$ctr_hiv_prev_eligible_ltc)
+
+table(ctr$ctr_hiv_prev_eligible_ltc)
+ctr_hiv_prev_eligible_ltc <- ctr[which(ctr$ctr_hiv_prev_eligible_ltc == 1), ]
+dim(ctr_hiv_prev_eligible_ltc)
+ctr_hiv_prev_eligible_ltc <- nrow(ctr_hiv_prev_eligible_ltc)
+ctr_hiv_prev_eligible_ltc
+
+ctr_hiv_prev_eligible_ltc_percent <- percent(ctr_hiv_prev_eligible_ltc/ctr_hiv_eligible_ltc, accuracy = 0.1)
+ctr_hiv_prev_eligible_ltc_percent
+
+
+
+table(ctr$ctr_hiv_eligible_ltc, ctr$diagnosis_hiv)
+ctr$ctr_hiv_unk_eligible_ltc[(ctr$ctr_hiv_eligible_ltc == 1 &
+                                (ctr$diagnosis_hiv == 3 |
+                                   is.na(ctr$diagnosis_hiv)))] <- 1
+table(ctr$ctr_hiv_unk_eligible_ltc)
+
+table(ctr$ctr_hiv_unk_eligible_ltc)
+ctr_hiv_unk_eligible_ltc <- ctr[which(ctr$ctr_hiv_unk_eligible_ltc == 1), ]
+dim(ctr_hiv_unk_eligible_ltc)
+ctr_hiv_unk_eligible_ltc <- nrow(ctr_hiv_unk_eligible_ltc)
+ctr_hiv_unk_eligible_ltc
+
+ctr_hiv_unk_eligible_ltc_percent <- percent(ctr_hiv_unk_eligible_ltc/ctr_hiv_eligible_ltc, accuracy = 0.1)
+ctr_hiv_unk_eligible_ltc_percent
+
+
+
+# HIV Open/Closed Cases
+
+table(ctr$ltc_hiv_open_case_calc)
+ctr$ctr_hiv_in_progress[ctr$ctr_hiv_eligible_ltc == 1 &
+                          ctr$ltc_hiv_open_case_calc == 1] <- 1
+table(ctr$ctr_hiv_in_progress)
+
+table(ctr$ctr_hiv_in_progress)
+ctr_hiv_in_progress <- ctr[which(ctr$ctr_hiv_in_progress == 1), ]
+dim(ctr_hiv_in_progress)
+ctr_hiv_in_progress <- nrow(ctr_hiv_in_progress)
+ctr_hiv_in_progress
+
+ctr_hiv_in_progress_percent <- percent(ctr_hiv_in_progress/ctr_hiv_eligible_ltc, accuracy = 0.1)
+ctr_hiv_in_progress_percent
+
+
+
+table(ctr$ctr_hiv_in_progress, ctr$diagnosis_hiv)
+ctr$ctr_hiv_new_in_progress[ctr$ctr_hiv_in_progress == 1 &
+                              ctr$diagnosis_hiv == 1] <- 1
+table(ctr$ctr_hiv_new_in_progress)
+
+table(ctr$ctr_hiv_new_in_progress)
+ctr_hiv_new_in_progress <- ctr[which(ctr$ctr_hiv_new_in_progress == 1), ]
+dim(ctr_hiv_new_in_progress)
+ctr_hiv_new_in_progress <- nrow(ctr_hiv_new_in_progress)
+ctr_hiv_new_in_progress
+
+ctr_hiv_new_in_progress_percent <- percent(ctr_hiv_new_in_progress/ctr_hiv_new_eligible_ltc, accuracy = 0.1)
+ctr_hiv_new_in_progress_percent
+
+
+
+table(ctr$ctr_hiv_in_progress, ctr$diagnosis_hiv)
+ctr$ctr_hiv_prev_in_progress[ctr$ctr_hiv_in_progress == 1 &
+                               ctr$diagnosis_hiv == 2] <- 1
+table(ctr$ctr_hiv_prev_in_progress)
+
+table(ctr$ctr_hiv_prev_in_progress)
+ctr_hiv_prev_in_progress <- ctr[which(ctr$ctr_hiv_prev_in_progress == 1), ]
+dim(ctr_hiv_prev_in_progress)
+ctr_hiv_prev_in_progress <- nrow(ctr_hiv_prev_in_progress)
+ctr_hiv_prev_in_progress
+
+ctr_hiv_prev_in_progress_percent <- percent(ctr_hiv_prev_in_progress/ctr_hiv_prev_eligible_ltc, accuracy = 0.1)
+ctr_hiv_prev_in_progress_percent
+
+
+
+table(ctr$ctr_hiv_in_progress, ctr$diagnosis_hiv)
+ctr$ctr_hiv_unk_in_progress[ctr$ctr_hiv_in_progress == 1 &
+                              (ctr$diagnosis_hiv == 3 |
+                                 is.na(ctr$diagnosis_hiv))] <- 1
+table(ctr$ctr_hiv_unk_in_progress)
+
+table(ctr$ctr_hiv_unk_in_progress)
+ctr_hiv_unk_in_progress <- ctr[which(ctr$ctr_hiv_unk_in_progress == 1), ]
+dim(ctr_hiv_unk_in_progress)
+ctr_hiv_unk_in_progress <- nrow(ctr_hiv_unk_in_progress)
+ctr_hiv_unk_in_progress
+
+ctr_hiv_unk_in_progress_percent <- percent(ctr_hiv_unk_in_progress/ctr_hiv_unk_eligible_ltc, accuracy = 0.1)
+ctr_hiv_unk_in_progress_percent
+
+
+
+table(ctr$ctr_hiv_eligible_ltc, ctr$ctr_hiv_in_progress)
+ctr$ctr_hiv_closed_case[ctr$ctr_hiv_eligible_ltc == 1 &
+                          is.na(ctr$ctr_hiv_in_progress)] <- 1
+table(ctr$ctr_hiv_closed_case)
+
+table(ctr$ctr_hiv_closed_case)
+ctr_hiv_closed_case <- ctr[which(ctr$ctr_hiv_closed_case == 1), ]
+dim(ctr_hiv_closed_case)
+ctr_hiv_closed_case <- nrow(ctr_hiv_closed_case)
+ctr_hiv_closed_case
+
+ctr_hiv_closed_case_percent <- percent(ctr_hiv_closed_case/ctr_hiv_eligible_ltc, accuracy = 0.1)
+ctr_hiv_closed_case_percent
+
+
+
+ctr$ctr_hiv_new_closed_case[ctr$ctr_hiv_closed_case == 1 &
+                              ctr$diagnosis_hiv == 1] <- 1
+table(ctr$ctr_hiv_new_closed_case)
+
+table(ctr$ctr_hiv_new_closed_case)
+ctr_hiv_new_closed_case <- ctr[which(ctr$ctr_hiv_new_closed_case == 1), ]
+dim(ctr_hiv_new_closed_case)
+ctr_hiv_new_closed_case <- nrow(ctr_hiv_new_closed_case)
+ctr_hiv_new_closed_case
+
+ctr_hiv_new_closed_case_percent <- percent(ctr_hiv_new_closed_case/ctr_hiv_closed_case, accuracy = 0.1)
+ctr_hiv_new_closed_case_percent
+
+
+
+ctr$ctr_hiv_prev_closed_case[ctr$ctr_hiv_closed_case == 1 &
+                               ctr$diagnosis_hiv == 2] <- 1
+table(ctr$ctr_hiv_prev_closed_case)
+
+table(ctr$ctr_hiv_prev_closed_case)
+ctr_hiv_prev_closed_case <- ctr[which(ctr$ctr_hiv_prev_closed_case == 1), ]
+dim(ctr_hiv_prev_closed_case)
+ctr_hiv_prev_closed_case <- nrow(ctr_hiv_prev_closed_case)
+ctr_hiv_prev_closed_case
+
+ctr_hiv_prev_closed_case_percent <- percent(ctr_hiv_prev_closed_case/ctr_hiv_closed_case, accuracy = 0.1)
+ctr_hiv_prev_closed_case_percent
+
+
+
+table(ctr$ctr_hiv_in_progress)
+ctr$ctr_hiv_ltc_days_open <- difftime(Sys.Date(), ctr$enc_date, units="days")
+table(ctr$ctr_hiv_ltc_days_open)
+ctr$ctr_hiv_in_progress_90days[ctr$ctr_hiv_in_progress == 1 &
+                                 (ctr$ctr_hiv_ltc_days_open > 90)] <- 1
+table(ctr$ctr_hiv_in_progress_90days)
+
+table(ctr$ctr_hiv_in_progress_90days)
+ctr_hiv_in_progress_90days <- ctr[which(ctr$ctr_hiv_in_progress_90days == 1), ]
+dim(ctr_hiv_in_progress_90days)
+ctr_hiv_in_progress_90days <- nrow(ctr_hiv_in_progress_90days)
+ctr_hiv_in_progress_90days
+
+ctr_hiv_in_progress_90days_percent <- percent(ctr_hiv_in_progress_90days/ctr_hiv_in_progress, accuracy = 0.1)
+ctr_hiv_in_progress_90days_percent
+
+
+
+
+# HIV Cases Linked to Care
+
+table(ctr$ctr_hiv_closed_case, ctr$ltc_hiv_final_ltc_status)
+ctr$ctr_hiv_linked[ctr$ctr_hiv_closed_case == 1 &
+                     ctr$ltc_hiv_final_ltc_status == 1] <- 1
+table(ctr$ctr_hiv_linked)
+
+table(ctr$ctr_hiv_linked)
+ctr_hiv_linked <- ctr[which(ctr$ctr_hiv_linked == 1), ]
+dim(ctr_hiv_linked)
+ctr_hiv_linked <- nrow(ctr_hiv_linked)
+ctr_hiv_linked
+
+ctr_hiv_linked_gauge <- (ctr_hiv_linked/ctr_hiv_eligible_ltc)*100
+ctr_hiv_linked_gauge
+ctr_hiv_linked_percent <- percent(ctr_hiv_linked/ctr_hiv_eligible_ltc, accuracy = 0.1)
+ctr_hiv_linked_percent
+
+
+
+table(ctr$diagnosis_hiv, ctr$ctr_hiv_eligible_ltc)
+table(ctr$ctr_hiv_linked, ctr$diagnosis_hiv)
+ctr$ctr_hiv_new_linked[ctr$ctr_hiv_linked == 1 &
+                         ctr$diagnosis_hiv == 1] <- 1
+table(ctr$ctr_hiv_new_linked)
+
+table(ctr$ctr_hiv_new_linked)
+ctr_hiv_new_linked <- ctr[which(ctr$ctr_hiv_new_linked == 1), ]
+dim(ctr_hiv_new_linked)
+ctr_hiv_new_linked <- nrow(ctr_hiv_new_linked)
+ctr_hiv_new_linked
+
+ctr_hiv_new_linked_percent <- percent(ctr_hiv_new_linked/ctr_hiv_new_eligible_ltc, accuracy = 0.1)
+ctr_hiv_new_linked_percent
+
+
+
+table(ctr$diagnosis_hiv, ctr$ctr_hiv_eligible_ltc)
+table(ctr$ctr_hiv_linked, ctr$diagnosis_hiv)
+ctr$ctr_hiv_prev_linked[ctr$ctr_hiv_linked == 1 &
+                          ctr$diagnosis_hiv == 2] <- 1
+table(ctr$ctr_hiv_prev_linked)
+
+table(ctr$ctr_hiv_prev_linked)
+ctr_hiv_prev_linked <- ctr[which(ctr$ctr_hiv_prev_linked == 1), ]
+dim(ctr_hiv_prev_linked)
+ctr_hiv_prev_linked <- nrow(ctr_hiv_prev_linked)
+ctr_hiv_prev_linked
+
+ctr_hiv_prev_linked_percent <- percent(ctr_hiv_prev_linked/ctr_hiv_prev_eligible_ltc, accuracy = 0.1)
+ctr_hiv_prev_linked_percent
+
+
+
+
+ctr$ctr_hiv_not_linked[ctr$ctr_hiv_eligible_ltc == 1 & is.na(ctr$ctr_hiv_in_progress) & is.na(ctr$ctr_hiv_linked)] <- 1
+table(ctr$ctr_hiv_not_linked)
+
+table(ctr$ctr_hiv_not_linked)
+ctr_hiv_not_linked <- ctr[which(ctr$ctr_hiv_not_linked == 1), ]
+dim(ctr_hiv_not_linked)
+ctr_hiv_not_linked <- nrow(ctr_hiv_not_linked)
+ctr_hiv_not_linked
+
+ctr_hiv_not_linked_percent <- percent(ctr_hiv_not_linked/ctr_hiv_closed_case, accuracy = 0.1)
+ctr_hiv_not_linked_percent
+
+
+
+table(ctr$ctr_hiv_not_linked, ctr$diagnosis_hiv)
+ctr$ctr_hiv_new_not_linked[ctr$ctr_hiv_not_linked == 1 &
+                             ctr$diagnosis_hiv == 1] <- 1
+table(ctr$ctr_hiv_new_not_linked)
+
+table(ctr$ctr_hiv_new_not_linked)
+ctr_hiv_new_not_linked <- ctr[which(ctr$ctr_hiv_new_not_linked == 1), ]
+dim(ctr_hiv_new_not_linked)
+ctr_hiv_new_not_linked <- nrow(ctr_hiv_new_not_linked)
+ctr_hiv_new_not_linked
+
+ctr_hiv_new_not_linked_percent <- percent(ctr_hiv_new_not_linked/ctr_hiv_new_eligible_ltc, accuracy = 0.1)
+ctr_hiv_new_not_linked_percent
+
+
+
+table(ctr$ctr_hiv_not_linked, ctr$diagnosis_hiv)
+ctr$ctr_hiv_prev_not_linked[ctr$ctr_hiv_not_linked == 1 &
+                              ctr$diagnosis_hiv == 2] <- 1
+table(ctr$ctr_hiv_prev_not_linked)
+
+table(ctr$ctr_hiv_prev_not_linked)
+ctr_hiv_prev_not_linked <- ctr[which(ctr$ctr_hiv_prev_not_linked == 1), ]
+dim(ctr_hiv_prev_not_linked)
+ctr_hiv_prev_not_linked <- nrow(ctr_hiv_prev_not_linked)
+ctr_hiv_prev_not_linked
+
+ctr_hiv_prev_not_linked_percent <- percent(ctr_hiv_prev_not_linked/ctr_hiv_prev_eligible_ltc, accuracy = 0.1)
+ctr_hiv_prev_not_linked_percent
+
+
+
+
+# HIV Reasons Not Linked to Care
+
+ctr$ctr_hiv_not_linked_med_staff[(ctr$ctr_hiv_closed_case == 1 & is.na(ctr$ctr_hiv_linked)) &
+                                   (ctr$ltc_hiv_prevented_rsn___1 == 1 |
+                                      ctr$ltc_hiv_prevented_rsn___2 == 1 |
+                                      ctr$ltc_hiv_prevented_rsn___11 == 1)] <- 1
+table(ctr$ctr_hiv_not_linked_med_staff)
+
+table(ctr$ctr_hiv_not_linked_med_staff)
+ctr_hiv_not_linked_med_staff <- ctr[which(ctr$ctr_hiv_not_linked_med_staff == 1), ]
+dim(ctr_hiv_not_linked_med_staff)
+ctr_hiv_not_linked_med_staff <- nrow(ctr_hiv_not_linked_med_staff)
+ctr_hiv_not_linked_med_staff
+
+ctr_hiv_not_linked_med_staff_percent <- percent(ctr_hiv_not_linked_med_staff/ctr_hiv_not_linked, accuracy = 0.1)
+ctr_hiv_not_linked_med_staff_percent
+
+
+
+ctr$ctr_hiv_not_linked_family[(ctr$ctr_hiv_closed_case == 1 & is.na(ctr$ctr_hiv_linked)) &
+                                (ctr$ltc_hiv_prevented_rsn___3 == 1)] <- 1
+table(ctr$ctr_hiv_not_linked_family)
+
+table(ctr$ctr_hiv_not_linked_family)
+ctr_hiv_not_linked_family <- ctr[which(ctr$ctr_hiv_not_linked_family == 1), ]
+dim(ctr_hiv_not_linked_family)
+ctr_hiv_not_linked_family <- nrow(ctr_hiv_not_linked_family)
+ctr_hiv_not_linked_family
+
+ctr_hiv_not_linked_family_percent <- percent(ctr_hiv_not_linked_family/ctr_hiv_not_linked, accuracy = 0.1)
+ctr_hiv_not_linked_family_percent
+
+
+
+ctr$ctr_hiv_not_linked_not_talking[(ctr$ctr_hiv_closed_case == 1 & is.na(ctr$ctr_hiv_linked)) &
+                                     (ctr$ltc_hiv_prevented_rsn___4 == 1)] <- 1
+table(ctr$ctr_hiv_not_linked_not_talking)
+
+table(ctr$ctr_hiv_not_linked_not_talking)
+ctr_hiv_not_linked_not_talking <- ctr[which(ctr$ctr_hiv_not_linked_not_talking == 1), ]
+dim(ctr_hiv_not_linked_not_talking)
+ctr_hiv_not_linked_not_talking <- nrow(ctr_hiv_not_linked_not_talking)
+ctr_hiv_not_linked_not_talking
+
+ctr_hiv_not_linked_not_talking_percent <- percent(ctr_hiv_not_linked_not_talking/ctr_hiv_not_linked, accuracy = 0.1)
+ctr_hiv_not_linked_not_talking_percent
+
+
+
+ctr$ctr_hiv_not_linked_safety[(ctr$ctr_hiv_closed_case == 1 & is.na(ctr$ctr_hiv_linked)) &
+                                (ctr$ltc_hiv_prevented_rsn___5 == 1)] <- 1
+table(ctr$ctr_hiv_not_linked_safety)
+
+table(ctr$ctr_hiv_not_linked_safety)
+ctr_hiv_not_linked_safety <- ctr[which(ctr$ctr_hiv_not_linked_safety == 1), ]
+dim(ctr_hiv_not_linked_safety)
+ctr_hiv_not_linked_safety <- nrow(ctr_hiv_not_linked_safety)
+ctr_hiv_not_linked_safety
+
+ctr_hiv_not_linked_safety_percent <- percent(ctr_hiv_not_linked_safety/ctr_hiv_not_linked, accuracy = 0.1)
+ctr_hiv_not_linked_safety_percent
+
+
+
+ctr$ctr_hiv_not_linked_medical[(ctr$ctr_hiv_closed_case == 1 & is.na(ctr$ctr_hiv_linked)) &
+                                 (ctr$ltc_hiv_prevented_rsn___6 == 1 |
+                                    ctr$ltc_hiv_prevented_rsn___8)] <- 1
+table(ctr$ctr_hiv_not_linked_medical)
+
+table(ctr$ctr_hiv_not_linked_medical)
+ctr_hiv_not_linked_medical <- ctr[which(ctr$ctr_hiv_not_linked_medical == 1), ]
+dim(ctr_hiv_not_linked_medical)
+ctr_hiv_not_linked_medical <- nrow(ctr_hiv_not_linked_medical)
+ctr_hiv_not_linked_medical
+
+ctr_hiv_not_linked_medical_percent <- percent(ctr_hiv_not_linked_medical/ctr_hiv_not_linked, accuracy = 0.1)
+ctr_hiv_not_linked_medical_percent
+
+
+
+ctr$ctr_hiv_not_linked_contact[(ctr$ctr_hiv_closed_case == 1 & is.na(ctr$ctr_hiv_linked)) &
+                                 (ctr$ltc_hiv_prevented_rsn___20 == 1)] <- 1
+table(ctr$ctr_hiv_not_linked_contact)
+
+table(ctr$ctr_hiv_not_linked_contact)
+ctr_hiv_not_linked_contact <- ctr[which(ctr$ctr_hiv_not_linked_contact == 1), ]
+dim(ctr_hiv_not_linked_contact)
+ctr_hiv_not_linked_contact <- nrow(ctr_hiv_not_linked_contact)
+ctr_hiv_not_linked_contact
+
+ctr_hiv_not_linked_contact_percent <- percent(ctr_hiv_not_linked_contact/ctr_hiv_not_linked, accuracy = 0.1)
+ctr_hiv_not_linked_contact_percent
+
+
+
+ctr$ctr_hiv_not_linked_language[(ctr$ctr_hiv_closed_case == 1 & is.na(ctr$ctr_hiv_linked)) &
+                                  (ctr$ltc_hiv_prevented_rsn___9 == 1)] <- 1
+table(ctr$ctr_hiv_not_linked_language)
+
+table(ctr$ctr_hiv_not_linked_language)
+ctr_hiv_not_linked_language <- ctr[which(ctr$ctr_hiv_not_linked_language == 1), ]
+dim(ctr_hiv_not_linked_language)
+ctr_hiv_not_linked_language <- nrow(ctr_hiv_not_linked_language)
+ctr_hiv_not_linked_language
+
+ctr_hiv_not_linked_language_percent <- percent(ctr_hiv_not_linked_language/ctr_hiv_not_linked, accuracy = 0.1)
+ctr_hiv_not_linked_language_percent
+
+
+
+ctr$ctr_hiv_not_linked_other[(ctr$ctr_hiv_closed_case == 1 & is.na(ctr$ctr_hiv_linked)) &
+                               (ctr$ltc_hiv_prevented_rsn___0 == 1)] <- 1
+table(ctr$ctr_hiv_not_linked_other)
+
+table(ctr$ctr_hiv_not_linked_other)
+ctr_hiv_not_linked_other <- ctr[which(ctr$ctr_hiv_not_linked_other == 1), ]
+dim(ctr_hiv_not_linked_other)
+ctr_hiv_not_linked_other <- nrow(ctr_hiv_not_linked_other)
+ctr_hiv_not_linked_other
+
+ctr_hiv_not_linked_other_percent <- percent(ctr_hiv_not_linked_other/ctr_hiv_not_linked, accuracy = 0.1)
+ctr_hiv_not_linked_other_percent
+
+```
+
+# CTR Program
+
+The Counseling, Testing, and Referral to treatment (CTR) testing program...(plan to provide an overall description and background for CTR)
+
+```{r, echo = FALSE}
+
+ctr_testing_tbl <- data.frame(matrix(ncol = 2, nrow = 0))
+colnames(ctr_testing_tbl) <- c(' ', 'CTR')
+ctr_testing_tbl[nrow(ctr_testing_tbl) + 1,] <- list('Number of Tests', ctr_tests)
+ctr_testing_tbl[nrow(ctr_testing_tbl) + 1,] <- list('Positives', ctr_positive)
+ctr_testing_tbl[nrow(ctr_testing_tbl) + 1,] <- list('New Positives', ctr_new_positive)
+ctr_testing_tbl[nrow(ctr_testing_tbl) + 1,] <- list('Positivity Rate', ctr_positivity_rate)
+ctr_testing_tbl %>%
+  kbl(table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  kable_styling(full_width = F, font_size = 16)
+
+```
+
+
+CTR testing is reported on a monthly basis. There are different reports required to the local health department, Hamilton County Public Health (HCPH), and to the state health department, Ohio Department of Health (ODH). The report for HCPH is due by the 5th of the month for the prior month's testing data. This report includes the total number of CTR-funded tests performed, how many were reactive (and then confirmed positive), and whether those positive tests were for patients newly-diagnosed or for a person known to be living with HIV. Additionally, the total number of assessments conducted, and how many individuals were tested and assessed are reported to HCPH each month for CTR. The report sent to ODH each month consists of the total number of CTR-funded tests, and how many individuals were newly diagnosed with HIV from testing. Additionally, the ODH report consists of the record-level assessment data for each negative test, only providing the ODH assessment questions. The ODH report is divided into three parts: 1) the number of tests and assessment data for all those testing negative, 2) the opscan data for all those testing negative, and 3) the supplemental opscan data for those that were tested but did not have an assessment conducted at the time of the test. The table above shows the total number of CTR tests and the overall positivity rate for the current grant period. The figure below shows the monthly CTR testing numbers for the current grant period.
+
+
+```{r, echo = FALSE, fig.align='center'}
+
+# CTR Monthly Testing
+monthly_ctr_tests <- monthly_ctr_tests[order(monthly_ctr_tests$Date), ]
+monthly_ctr_tests_plot <- plot_ly(data = monthly_ctr_tests,
+                                  x = ~Date,
+                                  y = ~ctr_tests,
+                                  type = 'bar',
+                                  name = 'CTR Tests',
+                                  text = ~ctr_tests, textposition = 'auto',
+                                  marker = list(color = 'lightskyblue')) %>%
+  layout(yaxis = list(title = 'CTR Tests'), barmode = 'stack',
+         xaxis = list(tickangle = 45))
+monthly_ctr_tests_plot <- monthly_ctr_tests_plot %>% 
+  config(displayModeBar = FALSE)
+monthly_ctr_tests_plot
+
+```
+<br>
+
+The deliverables highlighted below are the numbers that were noted on the 2025 CTR Workplan as what our program would accomplish within the year of funding awarded. The data shown in the table below covers the CTR program deliverables starting **July 1st, 2025 through May 31, 2026**. A summary table of the CTR deliverables, the number of each deliverable achieved, and the percent of the deliverables met are shown below:
+
+```{r, echo = FALSE, fig.align='center', fig.asp=0.50}
+
+# CTR Deliverable Summary Table
+ctr_deliverables_tbl <- data.frame(matrix(ncol = 4, nrow = 0))
+colnames(ctr_deliverables_tbl) <- c('CTR Deliverable', 'Achieved', 'Goal', '%')
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('PLWHA not in care', ctr_hiv_eligible_ltc, ctr_plwha_deliverable, ctr_plwha_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('PLWHA at UCMC', ctr_hiv_eligible_ltc_ucmc, ctr_plwha_ucmc_deliverable, ctr_plwha_ucmc_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('PLWHA at WCH', ctr_hiv_eligible_ltc_wch, ctr_plwha_wch_deliverable, ctr_plwha_wch_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('PLWHA at the SSP', ctr_hiv_eligible_ltc_ssp, ctr_plwha_ssp_deliverable, ctr_plwha_ssp_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('PLWHA/WOC', ctr_hiv_eligible_ltc_woc, ctr_plwha_woc_deliverable, ctr_plwha_woc_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('PLWHA/Youth', ctr_hiv_eligible_ltc_youth, ctr_plwha_youth_deliverable, ctr_plwha_youth_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('PLWHA/IDU', ctr_hiv_eligible_ltc_idu, ctr_plwha_idu_deliverable, ctr_plwha_idu_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('% PLWHA linked', ctr_hiv_linked_percent, '80%', '')
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM assessed', ctr_msm_assessed, ctr_msm_assessed_deliverable, ctr_msm_assessed_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM tested', ctr_msm_tested, ctr_msm_tested_deliverable, ctr_msm_tested_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM tested at UCMC', ctr_msm_ucmc_test, ctr_msm_ucmc_test_deliverable, ctr_msm_ucmc_test_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM tested at the SSP', ctr_msm_ssp_test, ctr_msm_ssp_test_deliverable, ctr_msm_ssp_test_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM tested in community', ctr_msm_comm_test, ctr_msm_comm_test_deliverable, ctr_msm_comm_test_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM/Youth tested', ctr_msm_youth_tested, ctr_msm_youth_tested_deliverable, ctr_msm_youth_tested_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM/IDU tested', ctr_msm_idu_tested, ctr_msm_idu_tested_deliverable, ctr_msm_idu_tested_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('MSM new positive', ctr_msm_new_positive, ctr_msm_new_positive_deliverable, ctr_msm_new_positive_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS assessed', ctr_hrhs_assessed, ctr_hrhs_assessed_deliverable, ctr_hrhs_assessed_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS tested', ctr_hrhs_tested, ctr_hrhs_tested_deliverable, ctr_hrhs_tested_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS tested at UC', ctr_hrhs_ucmc_tested, ctr_hrhs_ucmc_tested_deliverable, ctr_hrhs_ucmc_tested_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS tested at WCH', ctr_hrhs_wch_tested, ctr_hrhs_wch_tested_deliverable, ctr_hrhs_wch_tested_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS tested at the SSP', ctr_hrhs_ssp_tested, ctr_hrhs_ssp_tested_deliverable, ctr_hrhs_ssp_tested_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS tested in community', ctr_hrhs_comm_tested, ctr_hrhs_comm_tested_deliverable, ctr_hrhs_comm_tested_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS/WOC tested', ctr_hrhs_woc_tested, ctr_hrhs_woc_tested_deliverable, ctr_hrhs_woc_tested_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS/Youth tested', ctr_hrhs_youth_tested, ctr_hrhs_youth_tested_deliverable, ctr_hrhs_youth_tested_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS/IDU tested', ctr_hrhs_idu_tested, ctr_hrhs_idu_tested_deliverable, ctr_hrhs_idu_tested_deliverable_percent)
+ctr_deliverables_tbl[nrow(ctr_deliverables_tbl) + 1,] <- list('HRHS new positive', ctr_hrhs_new_positive, ctr_hrhs_new_positive_deliverable, ctr_hrhs_new_positive_deliverable_percent)
+ctr_deliverables_tbl %>%
+  kbl(align = 'lccc', table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  pack_rows("PLWHA", 1, 8, label_row_css = "background-color: #F0F0F0") %>%
+  pack_rows("MSM", 9, 16, label_row_css = "background-color: #F0F0F0") %>%
+  pack_rows("HRHS", 17, 26, label_row_css = "background-color: #F0F0F0") %>%
+  add_indent(c(2,3,4,5,6,7,11,12,13,14,15,16,19,20,21,22,23,24,25,26)) %>%
+  kable_styling(full_width = F, font_size = 12)
+
+```
+<br>
+
+
+## PLWHA
+
+The first impact objective encompasses population-based objectives centered around people living with HIV/AIDS (PLWHA) that are identified not to be in care. This objective has EIP staff identify those either newly diagnosed or previously diagnosed with HIV and determine whether they are currently out of care, requiring linkage to care services. This objective is inclusive of those who are women of color (WOC), youth (15-29 years old), and injection drug users (IDU). The statement for the actual deliverables promised for this objective is noted below:
+
+- *By May 31, 2026, EIP will perform 125 risk assessments on PLWHA not in care (newly and previously diagnosed) and provide Prevention with Positives and Linkage to Care services such that 80% are engaged in HIV medical care, inclusive of the following (80 at UCMC, 10 WCH, and 5 at the SSP; of which will be 10 WOC, 25 Youth (18-29), and 30 IDU) as prioritized by RFP workplan table.*
+
+From this statement, we specifically state deliverables for how many PLWHA who are out of care that will be identified by our program, and successfully link 80% of those individuals to care. Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table under 'Additional Metrics'.
+
+PLWHA are identified in several different ways within the program, including: **self-report of a prior positive test during the assessment of HIV testing history, reason for offering an HIV test was due to a prior HIV positive result, declining an HIV test due to prior positive result, a final positive result through HIV testing, or having an HIV linkage case open with a new or previous HIV status**. EIP staff are meant to identify all PLWHA encountered through the program, with further follow-up and discussion meant to determine who is currently out of care. The deliverable for all PLWHA identified out of care are those that are “eligible” to be linked to care within the linkage flow process (*diagrammed below*). They are considered “ineligible” based on the following criteria: **they are already linked to care, they are deceased, they are currently incarcerated, we do not have accurate contact information to follow-up with them, they already have an ongoing linkage case for HIV within the program, or they declined EIP linkage services**. These situations are determined "ineligible" linkage cases because of the significant level of barriers our program faces in certain situations, or because they cannot be realistically linked through our linkage process. While it is possible for our team to link individuals to care in some of these cases, as a whole they are termed "ineligible" due to the complexity of their situation. The numbers provided here are based on the total number of encounters, not unique number of patients, because EIP may encounter individuals frequently throughout the reporting period and identify them as being out of care during any of these encounters.
+
+The total number of HIV linkage to care (LTC) cases initiated for PLWHA during this time period is **`r ctr_hiv_ltc`**, with the total number of "eligible" LTC cases for PLWHA being `r ctr_hiv_eligible_ltc` (*`r ctr_hiv_eligible_ltc_percent` of all HIV LTC cases initiated, `r ctr_hiv_eligible_ltc`/`r ctr_hiv_ltc`*). [**Therefore, EIP has identified `r ctr_hiv_eligible_ltc` PLWHA for the CTR deliverable, which is `r ctr_plwha_deliverable_percent` of the total promise of `r ctr_plwha_deliverable`**]{style="color: lightskyblue;"}. The total number of these "eligible" HIV LTC cases that have been successfully linked to care is `r ctr_hiv_linked`, which is [**`r ctr_hiv_linked_percent`**]{style="color: lightskyblue;"} of those "eligible" (*`r ctr_hiv_linked`/`r ctr_hiv_eligible_ltc`*).
+
+
+```{r, echo=FALSE}
+
+# CTR PLWHA Deliverable
+ctr_plwha_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_hiv_eligible_ltc,
+  title = list(text = "PLWHA Identified Not in Care", font = list(size = 14)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 125),
+      tickvals = c(0, 25, 50, 75, 100, 125),
+      ticktext = c("0", "25", "50", "75", "100", "125")),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_plwha_gauge <- ctr_plwha_gauge %>%
+  layout(margin = list(t=20, b=20, l=50,r=20))
+config(ctr_plwha_gauge, displayModeBar = FALSE)
+
+
+
+# CTR Linkage Rate Deliverable
+ctr_linkage_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_hiv_linked_gauge,
+  number = list(suffix = "%"),
+  title = list(text = "% PLWHA Linked to Care", font = list(size = 14)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 100)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray",
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = 80))) 
+ctr_linkage_gauge <- ctr_linkage_gauge %>%
+  layout(margin = list(t=20, b=20, l=20,r=50))
+config(ctr_linkage_gauge, displayModeBar = FALSE)
+
+```
+
+
+We do not separate linkage numbers based on the HIV testing program (CTR/EHE), so these numbers are pulled the same as the numbers that are reported for the linkage deliverables shown for the EHE program. If there are differences in the documented numbers for linkage between these two testing programs, it is likely due to the timeframe used for each program deliverable. The HIV Linkage flow diagram for the CTR deliverable timeframe is shown below to provide an understanding of where the linkage numbers are coming from.
+
+
+```{r, echo=FALSE, warning=FALSE}
+
+grid_data <- tibble(x= 1:100, y= 1:100)
+
+grid_data %>% 
+  ggplot(aes(x, y)) +
+  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
+  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
+  theme_linedraw() ->
+  grid
+
+
+grid +
+  # HIV Linkage Cases
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
+            fill = 'lightblue', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 97, label = 'HIV Linkage Cases', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 93, label = ctr_hiv_ltc, size = 2, color = 'blue') +
+  
+  # Ineligible for Linkage
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 52.5, y = 82, label = 'Ineligible for Linkage', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 78, label = ctr_hiv_ineligible_ltc, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 78, label = ctr_hiv_ineligible_ltc_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Reasons Ineligible for Linkage
+  geom_rect(xmin = 83, xmax = 100, ymin = 75, ymax = 85, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 87, y = 85, label = 'Already Linked', size = 2) +
+  annotate('text', x = 87, y = 82, label = '        Deceased', size = 2) +
+  annotate('text', x = 87, y = 79, label = '    Incarcerated', size = 2) +
+  annotate('text', x = 87, y = 76, label = 'Inability to Contact', size = 2) +
+  annotate('text', x = 87, y = 73, label = '          Declined', size = 2) +
+  annotate('text', x = 87, y = 70, label = 'Ongoing linkage ', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 94, y = 85, label = ctr_hiv_already_linked, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 85, label = ctr_hiv_already_linked_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 82, label = ctr_hiv_deceased, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 82, label = ctr_hiv_deceased_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 79, label = ctr_hiv_incarcerated, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 79, label = ctr_hiv_incarcerated_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 76, label = ctr_hiv_inability_to_contact, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 76, label = ctr_hiv_inability_to_contact_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 73, label = ctr_hiv_linkage_declined, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 73, label = ctr_hiv_linkage_declined_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 70, label = ctr_hiv_ongoing_linkage, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 70, label = ctr_hiv_ongoing_linkage_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Eligible for Linkage
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
+            fill = 'lightblue', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 67, label = 'Eligible for Linkage', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 63, label = ctr_hiv_eligible_ltc, size = 2, color = 'blue') +
+  annotate('text', x = 19, y = 63, label = ctr_hiv_eligible_ltc_percent, size = 2, color = 'steelblue') +
+  
+  
+  # New vs. Prev vs. Unk Eligibility
+  geom_rect(xmin = 25, xmax = 35, ymin = 60, ymax = 70, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 26, y = 69, label = 'New Dx:', size = 2) +
+  annotate('text', x = 26, y = 65, label = 'Prev Dx:', size = 2) +
+  annotate('text', x = 26, y = 61, label = 'Unk Dx:', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 30, y = 69, label = ctr_hiv_new_eligible_ltc, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 69, label = ctr_hiv_new_eligible_ltc_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 30, y = 65, label = ctr_hiv_prev_eligible_ltc, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 65, label = ctr_hiv_prev_eligible_ltc_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 30, y = 61, label = ctr_hiv_unk_eligible_ltc, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 61, label = ctr_hiv_unk_eligible_ltc_percent, size = 2, color = 'steelblue') +
+  
+  
+  # In Progress
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 52, label = 'In Progress', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 48, label = ctr_hiv_in_progress, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 48, label = ctr_hiv_in_progress_percent, size = 2, color = 'steelblue') +
+  
+  
+  # In Progress over 90 days
+  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 52, y = 42, label = '>90 days:', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 56, y = 42, label = ctr_hiv_in_progress_90days, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 42, label = ctr_hiv_in_progress_90days_percent, size = 2, color = 'steelblue') +
+  
+  
+  # New vs. Prev vs. Unk In Progress
+  geom_rect(xmin = 66, xmax = 88, ymin = 45, ymax = 55, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 67, y = 54, label = 'New Dx:', size = 2) +
+  annotate('text', x = 67, y = 50, label = 'Prev Dx:', size = 2) +
+  annotate('text', x = 67, y = 46, label = 'Unk Dx:', size = 2) +
+  geom_rect(xmin = 66, xmax = 88, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 71, y = 54, label = ctr_hiv_new_in_progress, size = 2, color = 'blue') +
+  annotate('text', x = 75, y = 54, label = ctr_hiv_new_in_progress_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 71, y = 50, label = ctr_hiv_prev_in_progress, size = 2, color = 'blue') +
+  annotate('text', x = 75, y = 50, label = ctr_hiv_prev_in_progress_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 71, y = 46, label = ctr_hiv_unk_in_progress, size = 2, color = 'blue') +
+  annotate('text', x = 75, y = 46, label = ctr_hiv_unk_in_progress_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Closed Cases
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
+            fill = 'lightblue', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 37, label = 'Closed Cases', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 33, label = ctr_hiv_closed_case, size = 2, color = 'blue') +
+  annotate('text', x = 19, y = 33, label = ctr_hiv_closed_case_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Not Linked
+  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 22, label = 'Not Linked', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 18, label = ctr_hiv_not_linked, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 18, label = ctr_hiv_not_linked_percent, size = 2, color = 'steelblue') +
+  
+  
+  # New vs. Prev Not Linked
+  geom_rect(xmin = 41, xmax = 63, ymin = 7, ymax = 14, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 52, y = 12, label = 'New Dx:', size = 2) +
+  annotate('text', x = 52, y = 8, label = 'Prev Dx:', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 7, ymax = 14, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 56, y = 12, label = ctr_hiv_new_not_linked, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 12, label = ctr_hiv_new_not_linked_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 56, y = 8, label = ctr_hiv_prev_not_linked, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 8, label = ctr_hiv_prev_not_linked_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Reasons Not Linked
+  geom_rect(xmin = 83, xmax = 100, ymin = 0, ymax = 30, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 87, y = 26, label = 'Med Staff interferes    ', size = 2) +
+  annotate('text', x = 87, y = 23, label = '  Family interferes', size = 2) +
+  annotate('text', x = 87, y = 20, label = '    Refuses to talk', size = 2) +
+  annotate('text', x = 87, y = 17, label = '    Personal safety', size = 2) +
+  annotate('text', x = 87, y = 14, label = '    Medical course', size = 2) +
+  annotate('text', x = 87, y = 11, label = 'Unable to contact', size = 2) +
+  annotate('text', x = 87, y = 8, label = ' Language barrier', size = 2) +
+  annotate('text', x = 87, y = 5, label = '                   Other', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 30, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 94, y = 26, label = ctr_hiv_not_linked_med_staff, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 26, label = ctr_hiv_not_linked_med_staff_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 23, label = ctr_hiv_not_linked_family, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 23, label = ctr_hiv_not_linked_family_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 20, label = ctr_hiv_not_linked_not_talking, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 20, label = ctr_hiv_not_linked_not_talking_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 17, label = ctr_hiv_not_linked_safety, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 17, label = ctr_hiv_not_linked_safety_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 14, label = ctr_hiv_not_linked_medical, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 14, label = ctr_hiv_not_linked_medical_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 11, label = ctr_hiv_not_linked_contact, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 11, label = ctr_hiv_not_linked_contact_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 8, label = ctr_hiv_not_linked_language, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 8, label = ctr_hiv_not_linked_language_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 5, label = ctr_hiv_not_linked_other, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 5, label = ctr_hiv_not_linked_other_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Linked to Care
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
+            fill = 'lightblue', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 7, label = 'Linked to Care', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 3, label = ctr_hiv_linked, size = 2, color = 'blue') +
+  annotate('text', x = 19, y = 3, label = ctr_hiv_linked_percent, size = 2, color = 'steelblue') +
+  
+  
+  # New vs. Prev Linked to Care
+  geom_rect(xmin = 25, xmax = 35, ymin = 0, ymax = 10, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 26, y = 7, label = 'New Dx:', size = 2) +
+  annotate('text', x = 26, y = 3, label = 'Prev Dx:', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 30, y = 7, label = ctr_hiv_new_linked, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 7, label = ctr_hiv_new_linked_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 30, y = 3, label = ctr_hiv_prev_linked, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 3, label = ctr_hiv_prev_linked_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Down Arrow 1
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 90, yend = 70, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 2
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 60, yend = 40, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 3
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 30, yend = 10, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Right Arrow 1
+  geom_segment(
+    x = 10.5, xend = 41, y = 80, yend = 80, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 2
+  geom_segment(
+    x = 10.5, xend = 41, y = 50, yend = 50, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 3
+  geom_segment(
+    x = 10.5, xend = 41, y = 20, yend = 20, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Line 1
+  geom_segment(
+    x = 63, xend = 81, y = 80, yend = 80, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
+  
+  # Right Line 2
+  geom_segment(
+    x = 63, xend = 80, y = 20, yend = 20, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted")->
+  grid
+
+grid + theme_void()
+
+```
+
+<br>
+
+Additional deliverables were made for identifying PLWHA at specific sites where EIP operates. For the University of Cincinnati Medical Center (UCMC), this includes only those individuals identified within the emergency department (UCMC ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_hiv_eligible_ltc_ucmc` PLWHA identified at UCMC, which is `r ctr_plwha_ucmc_deliverable_percent` of the total promise of `r ctr_plwha_ucmc_deliverable`**]{style="color: lightskyblue;"}. For West Chester Hospital (WCH), this includes only those individuals identified within the emergency department (WCH ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_hiv_eligible_ltc_wch` PLWHA identified at at WCH, which is `r ctr_plwha_wch_deliverable_percent` of the total promise of `r ctr_plwha_wch_deliverable`**]{style="color: lightskyblue;"}. For the SSP locations, this includes only those CTR tests that were conducted at any location where the Syringe Service Program (SSP) operates. [**There were a total number of `r ctr_hiv_eligible_ltc_ssp` PLWHA identified at SSP locations, which is `r ctr_plwha_ssp_deliverable_percent` of the total promise of `r ctr_plwha_ssp_deliverable`**]{style="color: lightskyblue;"}. The bullet chart below shows the promised deliverables for each site and our current efforts toward those goals.
+
+<br>
+
+```{r, echo=FALSE, fig.asp=0.45}
+
+# CTR PLWHA by Site Deliverables
+ctr_plwha_site_bullet <- plot_ly() %>%
+  add_trace(type = "indicator",
+            mode = "number+gauge",
+            value = ctr_hiv_eligible_ltc_ucmc,
+            domain = list(x = c(0.20, 0.65), y = c(0.25, 0.35)),
+            title =list(text = "<b><span style='font-size:0.75em'>UCMC</b></span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 80</span>"),
+            gauge = list(shape = "bullet",
+                         axis = list(range = c(0, 100)),
+                         threshold = list(line = list(color = "red", width = 2),
+                                          thickness = 0.75,
+                                          value = 80),
+                         bar = list(color = "lightskyblue"))) %>%
+  add_trace(type = "indicator",
+            mode = "number+gauge",
+            value = ctr_hiv_eligible_ltc_wch,
+            domain = list(x = c(0.20, 0.65), y = c(0.45, 0.55)),
+            title = list(text = "<b><span style='font-size:0.75em'>WCH</b></span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 10</span>"),
+            gauge = list(shape = "bullet",
+                         axis = list(range = list(0, 100)),
+                         threshold = list(line = list(color = "red", width = 2),
+                                          thickness = 0.75,
+                                          value = 10),
+                         bar = list(color = "lightskyblue"))) %>%
+  add_trace(type =  "indicator",
+            mode = "number+gauge",
+            value = ctr_hiv_eligible_ltc_ssp,
+            domain = list(x = c(0.20, 0.65), y = c(0.65, 0.75)),
+            title = list(text = "<b><span style='font-size:0.75em'>SSP</b></span><br><span style='color: gray; font-size:0.6em'>PLWHA Deliverable: 5</span>"),
+            gauge = list(shape = "bullet",
+                         axis = list(range = list(0, 100)),
+                         threshold = list(line = list(color = "red", width = 2),
+                                          thickness = 0.75,
+                                          value = 5),
+                         bar = list(color = "lightskyblue")))
+config(ctr_plwha_site_bullet, displayModeBar = FALSE)
+
+```
+
+<br>
+
+Finally, for this objective regarding PLWHA, the CTR program addresses particular population groups for linkage to care. EIP additionally has deliverables for those who are HIV+ and are also WOC, youth and IDU. For those who are WOC, this is defined as any individual who identifies as female whose race/ethnicity is not 'White/Caucasian'. [**There were a total number of `r ctr_hiv_eligible_ltc_woc` PLWHA who were also WOC, which is `r ctr_plwha_woc_deliverable_percent` of the total promise of `r ctr_plwha_woc_deliverable`**]{style="color: lightskyblue;"}. For those that are considered in the youth population, CTR defines those between the age of 15-19 years old. However, EIP can encounter individuals younger than the age of 15 (although rarely), so the definition used here are those below the age of 29. [**There were a total number of `r ctr_hiv_eligible_ltc_youth` PLWHA who were also Youth, which is `r ctr_plwha_youth_deliverable_percent` of the total promise of `r ctr_plwha_youth_deliverable`**]{style="color: lightskyblue;"}. For those that are considered in the IDU population, the individual needs to complete the necessary section within the EIP assessment. We define those who endorse injection drug use behavior ever in their lifetime on the NIDA-Modified ASSIST, or those who are HIV positive and their associated risk was injection drug use as a part of the IDU population. [**There were a total number of `r ctr_hiv_eligible_ltc_idu` PLWHA who were also IDU, which is `r ctr_plwha_idu_deliverable_percent` of the total promise of `r ctr_plwha_idu_deliverable`**]{style="color: lightskyblue;"}.
+
+
+```{r, echo=FALSE, fig.asp=0.50, fig.margin = rep(0, 4)}
+
+# PLWHA/WOC Deliverable
+ctr_plwha_woc_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_hiv_eligible_ltc_woc,
+  title = list(text = "PLWHA/WOC Identified", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 10)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_plwha_woc_gauge <- ctr_plwha_woc_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_plwha_woc_gauge, displayModeBar = FALSE)
+
+```
+
+
+```{r, echo=FALSE, fig.asp=0.50, fig.margin = rep(0, 4)}
+
+# PLWHA/Youth Deliverable
+ctr_plwha_youth_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_hiv_eligible_ltc_youth,
+  title = list(text = "PLWHA/Youth Identified", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 25)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_plwha_youth_gauge <- ctr_plwha_youth_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_plwha_youth_gauge, displayModeBar = FALSE)
+
+```
+
+
+```{r, echo=FALSE, fig.asp=0.50, fig.margin = rep(0, 4)}
+
+# PLWHA/IDU Deliverable
+ctr_plwha_idu_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_hiv_eligible_ltc_idu,
+  title = list(text = "PLWHA/IDU Identified", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 30)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_plwha_idu_gauge <- ctr_plwha_idu_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_plwha_idu_gauge, displayModeBar = FALSE)
+
+```
+
+
+For the mid-year and end-of-year reports to HCPH for linkage numbers, we report the total number of PLWHA that were out of care, whether newly diagnosed or previously known to be positive. The report independently notes the total number of PLWHA who were new diagnoses or previous diagnoses, and the total. This report also determines the number of cases currently in progress (broken down by new/previous/total), and the number of cases successfully closed (broken down by new/previous/total). For those cases that were closed, we report the total number that were successfully linked to care (broken down by new/previous/total) and the number that were not linked to care (broken down by new/previous/total). The table belows shows how these numbers are reported to HCPH at the mid-year and end-of-year reports.
+
+
+```{r, echo = FALSE, fig.align='center', fig.asp=0.50}
+
+# CTR Deliverable Summary Table
+ctr_link_report_tbl <- data.frame(matrix(ncol = 7, nrow = 0))
+colnames(ctr_link_report_tbl) <- c('', 'New Dx #', 'New Dx %', 'Previous Dx #', 'Previous Dx %', 'Total #', 'Total %')
+ctr_link_report_tbl[nrow(ctr_link_report_tbl) + 1,] <- list('# PLWHA Out of Care', ctr_hiv_new_eligible_ltc, '', ctr_hiv_prev_eligible_ltc, '', ctr_hiv_eligible_ltc, '')
+ctr_link_report_tbl[nrow(ctr_link_report_tbl) + 1,] <- list('Cases in Progress', ctr_hiv_new_in_progress, ctr_hiv_new_in_progress_percent, ctr_hiv_prev_in_progress, ctr_hiv_prev_in_progress_percent, ctr_hiv_in_progress, ctr_hiv_in_progress_percent)
+ctr_link_report_tbl[nrow(ctr_link_report_tbl) + 1,] <- list('Cases Closed', ctr_hiv_new_closed_case, ctr_hiv_new_closed_case_percent, ctr_hiv_prev_closed_case, ctr_hiv_prev_closed_case_percent, ctr_hiv_closed_case, ctr_hiv_closed_case_percent)
+ctr_link_report_tbl[nrow(ctr_link_report_tbl) + 1,] <- list('Linked to Care', ctr_hiv_new_linked, ctr_hiv_new_linked_percent, ctr_hiv_prev_linked, ctr_hiv_prev_linked_percent, ctr_hiv_linked, ctr_hiv_linked_percent)
+ctr_link_report_tbl[nrow(ctr_link_report_tbl) + 1,] <- list('Not Linked to Care', ctr_hiv_new_not_linked, ctr_hiv_new_not_linked_percent, ctr_hiv_prev_not_linked, ctr_hiv_prev_not_linked_percent, ctr_hiv_not_linked, ctr_hiv_not_linked_percent)
+ctr_link_report_tbl %>%
+  kbl(align = 'lcccccc', table.attr = 'data-quarto-disable-processing="true"') %>%
+  kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  kable_styling(full_width = F, font_size = 12)
+
+```
+
+
+Any discrepancies in the total numbers compared to the individual new/previous numbers is likely due to the situation when the HIV status in a linkage case has not yet been determined as a new diagnosis or a previous diagnosis.
+
+
+## MSM
+
+There were additional deliverables made for population-based objectives, and the first focuses on those who identify as men who have sex with other men (MSM). Individuals are only identified as a part of this population group if they complete the necessary portions on the EIP assessment. The statement for the actual deliverables promised for this objective is noted below:
+
+- *By May 31, 2026 EIP will identify 150 MSM for risk-assessment and prevention intervention including client- centered risk reduction counseling and PrEP education/referral. EIP will provide CTR testing to 100 MSM, inclusive of the following (75 at UCMC, 10 at the SSP, and 5 at community-based organizations; of which will be 25 Youth (15-29) and 25 IDU). Of the 100 MSM tested, EIP will identify between 3-5 HIV(+) MSM for the PLWHA program (Workplan Form 4, Part 1).*
+
+From this statement, we specifically state deliverables for how many MSM will be assessed for risk and/or need, and how many MSM will be tested using CTR-funded tests. Additionally, EIP states a specific number of tests at each site (UCMC, WCH, the SSP, and community). EIP also states how many MSM will be tested using CTR-funded tests who are also youth (15-29) and injection drug users (IDU), as well as a specific number of newly diagnosed individuals who identify as MSM. Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table under 'Additional Metrics'.
+
+For those individuals who identify as a male, they are determined to be a MSM if they meet at least one of the following criteria: *they identify as Male and their sexual orientation is homosexual or bisexual, they report sex with a male within the past year, or they are a PLWHA and their reported risk was MSM*. [**The total number of individuals who are MSM that have been assessed during this time period is `r ctr_msm_assessed`, which is `r ctr_msm_assessed_deliverable_percent` of the total promise of `r ctr_msm_assessed_deliverable`**]{style="color: lightskyblue;"}.
+
+
+```{r, echo = FALSE, fig.asp=0.50}
+
+# CTR MSM Assessed Deliverable
+ctr_msm_assessed_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_msm_assessed,
+  title = list(text = "MSM CTR Assessed", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 150)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_msm_assessed_gauge <- ctr_msm_assessed_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_msm_assessed_gauge, displayModeBar = FALSE)
+
+```
+
+```{r echo=FALSE, fig.asp=0.50}
+
+# CTR MSM Tested Deliverable
+ctr_msm_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_msm_tested,
+  title = list(text = "MSM CTR Tested", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 150)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_msm_tested_gauge <- ctr_msm_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_msm_tested_gauge, displayModeBar = FALSE)
+
+```
+
+
+[**The total number of individuals who are MSM that have been tested through the CTR program is `r ctr_msm_tested`, which is `r ctr_msm_tested_deliverable_percent` of the total promise of `r ctr_msm_tested_deliverable`**]{style="color: lightskyblue;"}. In addition to the total number of tests, there were deliverables for the location where those tests were conducted. For the University of Cincinnati Medical Center (UCMC), this includes only those CTR tests that were conducted within the emergency department (UCMC ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_msm_ucmc_test` CTR tests that were conducted at UCMC, which is `r ctr_msm_ucmc_test_deliverable_percent` of the total promise of `r ctr_msm_ucmc_test_deliverable`**]{style="color: lightskyblue;"}. For the SSP locations, this includes only those CTR tests that were conducted at any location where the Syringe Service Program (SSP) operates. [**There were a total number of `r ctr_msm_ssp_test` CTR tests that were conducted at SSP locations, which is `r ctr_msm_ssp_test_deliverable_percent` of the total promise of `r ctr_msm_ssp_test_deliverable`**]{style="color: lightskyblue;"}. For the other community locations, this includes only those CTR tests that were conducted at any community based site. [**There were a total number of `r ctr_msm_comm_test` CTR tests that were conducted in community locations, which is `r ctr_msm_comm_test_deliverable_percent` of the total promise of `r ctr_msm_comm_test_deliverable`**]{style="color: lightskyblue;"}. Other community site testing is included in the total number of tests conducted, but not in these particular site-based deliverables. The bullet chart below shows the promised deliverables for each site and our current efforts toward those goals.
+
+
+```{r echo=FALSE, fig.asp=0.45}
+
+# CTR MSM Tested by Site Deliverables
+ctr_msm_tested_site_bullet <- plot_ly() %>%
+  add_trace(type = "indicator",
+            mode = "number+gauge",
+            value = ctr_msm_ucmc_test,
+            domain = list(x = c(0.20, 0.65), y = c(0.25, 0.35)),
+            title =list(text = "<b><span style='font-size:0.75em'>UCMC</b></span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 75</span>"),
+            gauge = list(shape = "bullet",
+                         axis = list(range = c(0, 75)),
+                         threshold = list(line = list(color = "red", width = 2),
+                                          thickness = 0.75,
+                                          value = 75),
+                         bar = list(color = "lightskyblue"))) %>%
+  add_trace(type =  "indicator",
+            mode = "number+gauge",
+            value = ctr_msm_ssp_test,
+            domain = list(x = c(0.20, 0.65), y = c(0.65, 0.75)),
+            title = list(text = "<b><span style='font-size:0.75em'>SSP</b></span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 10</span>"),
+            gauge = list(shape = "bullet",
+                         axis = list(range = list(0, 75)),
+                         threshold = list(line = list(color = "red", width = 2),
+                                          thickness = 0.75,
+                                          value = 10),
+                         bar = list(color = "lightskyblue"))) %>%
+  add_trace(type =  "indicator",
+            mode = "number+gauge",
+            value = ctr_msm_comm_test,
+            domain = list(x = c(0.20, 0.65), y = c(0.85, 0.95)),
+            title = list(text = "<b><span style='font-size:0.75em'>Community</b></span><br><span style='color: gray; font-size:0.6em'>MSM Tested Deliverable: 5</span>"),
+            gauge = list(shape = "bullet",
+                         axis = list(range = list(0, 75)),
+                         threshold = list(line = list(color = "red", width = 2),
+                                          thickness = 0.75,
+                                          value = 5),
+                         bar = list(color = "lightskyblue")))
+config(ctr_msm_tested_site_bullet, displayModeBar = FALSE)
+
+```
+
+
+While we do not separate the linkage data between the various testing programs, we can identify which testing programs identify new positive HIV diagnoses. According to the CTR workplan, EIP has promised to identify a certain number of individuals who identify as MSM who are newly diagnosed for HIV. [**There were a total number of `r ctr_msm_new_positive` MSM CTR tests that resulted in a new positive diagnosis for the individual tested, which is `r ctr_msm_new_positive_deliverable_percent` of the total promise of `r ctr_msm_new_positive_deliverable`**]{style="color: lightskyblue;"}. This number of new positive diagnoses are only those that were tested through the CTR program, and this only considers *new* positive diagnoses, not those that were tested and later determined to be an individual known to be positive.
+
+
+```{r, echo = FALSE, fig.asp=0.50}
+
+# CTR MSM New Positive Deliverable
+ctr_msm_new_dx_gauge <- plot_ly(
+  domain = list(x = c(0, 0.45), y = c(0, 1)),
+  value = ctr_msm_new_positive,
+  title = list(text = "MSM CTR New Positive", font = list(size = 18)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 5)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray",
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = 3))) 
+ctr_msm_new_dx_gauge <- ctr_msm_new_dx_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_msm_new_dx_gauge, displayModeBar = FALSE)
+
+```
+
+
+This can be further broken down monthly to determine how frequently we test those who identify as MSM, and determine if program evaluation needs to occur based on how we can increase testing for this population or whether decreased testing numbers are due to staffing changes and program barriers. The monthly breakdown of MSM CTR testing by month is shown here.
+
+
+```{r, echo = FALSE, fig.align='center'}
+
+# CTR Monthly MSM Testing
+monthly_msm_tests <- monthly_msm_tests[order(monthly_msm_tests$Date), ]
+monthly_msm_tests_plot <- plot_ly(data = monthly_msm_tests, 
+                                   x = ~Date, 
+                                   y = ~ctr_tests, 
+                                   type = 'scatter', 
+                                   mode = 'lines+markers', 
+                                   name = 'MSM CTR Tested',
+                                   text = ~ctr_tests, 
+                                   textposition = 'auto',
+                                   line = list(color = 'lightskyblue')) %>%
+  layout(yaxis = list(title = 'MSM CTR Tested'), 
+         xaxis = list(title = 'Date', tickangle = 45))
+config(monthly_msm_tests_plot, displayModeBar = FALSE)
+
+```
+
+
+Finally, the CTR program addresses particular population groups for testing. Within the population of MSM, we additionally have deliverables for youth and IDU. For those that are considered in the youth population, CTR defines those between the age of 15-19 years old. However, EIP often encounters individuals younger than the age of 15, so the definition used here are those below the age of 29. [**There were a total number of `r ctr_msm_youth_tested` CTR tests where the individual was both MSM/Youth, which is `r ctr_msm_youth_tested_deliverable_percent` of the total promise of `r ctr_msm_youth_tested_deliverable`**]{style="color: lightskyblue;"}. For those that are considered in the IDU population, the individual needs to complete the necessary section within the EIP assessment. We define those who endorse injection drug use behavior ever in their lifetime on the NIDA-Modified ASSIST, or those who are HIV positive and their risk was injection drug use as a part of the IDU population. [**There were a total number of `r ctr_msm_idu_tested` CTR tests where the individual was both MSM/IDU, which is `r ctr_msm_idu_tested_deliverable_percent` of the total promise of `r ctr_msm_idu_tested_deliverable`**]{style="color: lightskyblue;"}.
+
+
+```{r echo=FALSE, fig.asp=0.50}
+
+# MSM Youth Tested Deliverable
+ctr_msm_youth_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_msm_youth_tested,
+  title = list(text = "MSM/Youth CTR Tested", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 25)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_msm_youth_tested_gauge <- ctr_msm_youth_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_msm_youth_tested_gauge, displayModeBar = FALSE)
+
+```
+
+
+```{r echo=FALSE, fig.asp=0.50}
+
+# MSM IDU Tested Deliverable
+ctr_msm_idu_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_msm_idu_tested,
+  title = list(text = "MSM/IDU CTR Tested", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 25)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_msm_idu_tested_gauge <- ctr_msm_idu_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_msm_idu_tested_gauge, displayModeBar = FALSE)
+
+```
+
+<br>
+
+
+## HRHS
+
+There were additional deliverables made for population-based objectives, and the second focuses on those who identify as heterosexual that are at high risk for contracting HIV by endorsing high-risk heterosexual sex (HRHS) behaviors. Individuals are only identified as a part of this population group if they complete the necessary portions on the EIP assessment. The statement for the actual deliverables promised for this objective is noted below:
+
+- *By May 31, 2026, EIP will identify 1150 HRHS for risk-assessment and prevention intervention including client-centered risk reduction counseling and PrEP education/referral. EIP will provide CTR testing to 800 HRHS, inclusive of the following (550 UCMC, 50 WCH, 150 at the SSP site, 100 at community-based street outreach; of which will be Group 31, Grouped object130 WOC, 200 Youth (15-29), and 300 IDU). Of the 800 HRHS tested, EIP will identify 9 HIV(+) HRHS for the PLWHA program (Workplan Form 4, Part 1).*
+
+From this statement, we specifically state deliverables for how many HRHS will be assessed for risk and/or need, how many HRHS individuals will be tested through CTR-funded tests, and state a specific number of tests at each site (UCMC, WCH, the SSP, and community). Additionally, EIP stated specific populations within those who are HRHS, including WOC, youth (15-29), and IDU. EIP also stated a specific number of individuals newly diagnosed with HIV through CTR testing. Additional metrics were noted in this section, but no specific details on the numbers for those metrics were provided. Therefore, we stated we would monitor and report those as needed. These metrics are shown in the table under 'Additional Metrics'.
+
+For those individuals who identify as a heterosexual (men who have sex with women, or women who have sex with men), they are determined to be HRHS if they meet at least one of the following criteria: *heterosexual women that have unprotected sex with men or MSM, heterosexual men/women that have sex with an IDU, an HIV positive partner, a STD positive partner, more than three partners, or heterosexual men/women that exchange money/drugs for sex*. These behaviors are all within the past year.
+
+[**The total number of encounters with individuals who are HRHS that have been assessed during this time period is `r ctr_hrhs_assessed`, which is `r ctr_hrhs_assessed_deliverable_percent` of the total promise of `r ctr_hrhs_assessed_deliverable`**]{style="color: lightskyblue;"}. In addition to the total number of assessments, there were deliverables for the number of CTR-funded tests performed. [**The total number of encounters where HRHS individuals were tested is `r ctr_hrhs_tested`, which is `r ctr_hrhs_tested_deliverable_percent` of the total promise of `r ctr_hrhs_tested_deliverable`**]{style="color: lightskyblue;"}.
+
+
+```{r, echo = FALSE, fig.asp=0.50}
+
+# CTR HRHS Assessed Deliverable
+ctr_hrhs_assessed_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_hrhs_assessed,
+  title = list(text = "HRHS CTR Assessed", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 1150)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_hrhs_assessed_gauge <- ctr_hrhs_assessed_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_hrhs_assessed_gauge, displayModeBar = FALSE)
+
+```
+
+
+```{r echo=FALSE, fig.asp=0.50}
+
+# CTR HRHS Tested Deliverable
+ctr_hrhs_test_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_hrhs_tested,
+  title = list(text = "HRHS CTR Tested", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 800)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_hrhs_test_gauge <- ctr_hrhs_test_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_hrhs_test_gauge, displayModeBar = FALSE)
+
+```
+
+
+There were also deliverables for the number of tests performed at specific sites where EIP operates. For UCMC, this includes only those assessments that were accompanied by a CTR test that were conducted within the emergency department (UCMC ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_hrhs_ucmc_tested` CTR HRHS tests that were conducted at UCMC, which is `r ctr_hrhs_ucmc_tested_deliverable_percent` of the total promise of `r ctr_hrhs_ucmc_tested_deliverable`**]{style="color: lightskyblue;"}. For WCH, this includes only those assessments that were accompanied by a CTR test that were conducted within the emergency department (WCH ED) or with admitted patients within the hospital. [**There were a total number of `r ctr_hrhs_wch_tested` CTR HRHS assessments that were conducted at WCH, which is `r ctr_hrhs_wch_tested_deliverable_percent` of the total promise of `r ctr_hrhs_wch_tested_deliverable`**]{style="color: lightskyblue;"}. For the SSP, this includes any site where the SSP operates. [**There were a total number of `r ctr_hrhs_ssp_tested` CTR HRHS tests that were conducted at the SSP, which is `r ctr_hrhs_ssp_tested_deliverable_percent` of the total promise of `r ctr_hrhs_ssp_tested_deliverable`**]{style="color: lightskyblue;"}. For the other community locations, this includes only those CTR tests that were conducted at any community based community site. [**There were a total number of `r ctr_hrhs_comm_tested` CTR HRHS tests that were conducted in the community, which is `r ctr_hrhs_comm_tested_deliverable_percent` of the total promise of `r ctr_hrhs_comm_tested_deliverable`**]{style="color: lightskyblue;"}. Other community site testing is included in the total number of tests conducted, but not in these particular site-based deliverables. The bullet chart below shows the promised deliverables for each site and our current efforts toward those goals.
+
+
+```{r echo=FALSE, fig.asp=0.45}
+
+# CTR HRHS Tested by Site Deliverables
+ctr_hrhs_tested_site_bullet <- plot_ly() %>%
+  add_trace(type = "indicator",
+            mode = "number+gauge",
+            value = ctr_hrhs_ucmc_tested,
+            domain = list(x = c(0.20, 0.65), y = c(0.25, 0.35)),
+            title =list(text = "<b><span style='font-size:0.75em'>UCMC</b></span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 550</span>"),
+            gauge = list(shape = "bullet",
+                         axis = list(range = c(0, 550)),
+                         threshold = list(line = list(color = "red", width = 2),
+                                          thickness = 0.75,
+                                          value = 550),
+                         bar = list(color = "lightskyblue"))) %>%
+  add_trace(type = "indicator",
+            mode = "number+gauge",
+            value = ctr_hrhs_wch_tested,
+            domain = list(x = c(0.20, 0.65), y = c(0.45, 0.55)),
+            title = list(text = "<b><span style='font-size:0.75em'>WCH</b></span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 50</span>"),
+            gauge = list(shape = "bullet",
+                         axis = list(range = list(0, 550)),
+                         threshold = list(line = list(color = "red", width = 2),
+                                          thickness = 0.75,
+                                          value = 50),
+                         bar = list(color = "lightskyblue"))) %>%
+  add_trace(type =  "indicator",
+            mode = "number+gauge",
+            value = ctr_hrhs_ssp_tested,
+            domain = list(x = c(0.20, 0.65), y = c(0.65, 0.75)),
+            title = list(text = "<b><span style='font-size:0.75em'>SSP</b></span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 150</span>"),
+            gauge = list(shape = "bullet",
+                         axis = list(range = list(0, 550)),
+                         threshold = list(line = list(color = "red", width = 2),
+                                          thickness = 0.75,
+                                          value = 150),
+                         bar = list(color = "lightskyblue"))) %>%
+  add_trace(type =  "indicator",
+            mode = "number+gauge",
+            value = ctr_hrhs_comm_tested,
+            domain = list(x = c(0.20, 0.65), y = c(0.85, 0.95)),
+            title = list(text = "<b><span style='font-size:0.75em'>Community</b></span><br><span style='color: gray; font-size:0.6em'>HRHS Test Deliverable: 100</span>"),
+            gauge = list(shape = "bullet",
+                         axis = list(range = list(0, 550)),
+                         threshold = list(line = list(color = "red", width = 2),
+                                          thickness = 0.75,
+                                          value = 100),
+                         bar = list(color = "lightskyblue")))
+config(ctr_hrhs_tested_site_bullet, displayModeBar = FALSE)
+
+```
+
+
+While we do not separate the linkage data between the various testing programs, we can identify which testing programs identify new positive HIV diagnoses. According to the CTR workplan, EIP has promised to identify a certain number of individuals that are HRHS who are newly diagnosed for HIV. [**There were a total number of `r ctr_hrhs_new_positive` HRHS CTR tests that resulted in a new positive diagnosis for the individual tested, which is `r ctr_hrhs_new_positive_deliverable_percent` of the total promise of `r ctr_hrhs_new_positive_deliverable`**]{style="color: lightskyblue;"}. This number of new positive diagnoses are only those that were tested through the CTR program, and this only considers *new* positive diagnoses, not those that were tested and later determined to be an individual known to be positive.
+
+
+```{r, echo = FALSE, fig.asp=0.50}
+
+# CTR HRHS New Positive Deliverable
+ctr_hrhs_new_dx_gauge <- plot_ly(
+  domain = list(x = c(0, 0.45), y = c(0, 1)),
+  value = ctr_hrhs_new_positive,
+  title = list(text = "HRHS CTR New Positive", font = list(size = 18)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 10)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray",
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = 9))) 
+ctr_hrhs_new_dx_gauge <- ctr_hrhs_new_dx_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_hrhs_new_dx_gauge, displayModeBar = FALSE)
+
+```
+
+
+This can be further broken down monthly to determine how frequently we test those who are HRHS, and determine if program evaluation needs to occur based on how we can increase testing for this population or whether decreased testing numbers are due to staffing changes and program barriers. The monthly breakdown of HRHS CTR testing by month is shown here.
+
+
+```{r, echo = FALSE, fig.align='center'}
+
+# CTR Monthly HRHS Testing
+monthly_hrhs_tests <- monthly_hrhs_tests[order(monthly_hrhs_tests$Date), ]
+monthly_hrhs_tests_plot <- plot_ly(data = monthly_hrhs_tests,
+                                   x = ~Date,
+                                   y = ~ctr_tests,
+                                   type = 'scatter',
+                                   name = 'HRHS CTR Tested',
+                                   mode = 'lines+markers',
+                                   text = ~ctr_tests,
+                                   textposition = 'auto',
+                                   line = list(color = 'lightskyblue')) %>%
+  layout(yaxis = list(title = 'HRHS CTR Tested'),
+         xaxis = list(title = 'Date', tickangle = 45))
+config(monthly_hrhs_tests_plot, displayModeBar = FALSE)
+
+```
+
+
+Finally, the CTR program addresses particular population groups for testing. Within the population of HRHS, we additionally have deliverables for WOC, youth and IDU. For those who are WOC, this is defined as any individual who identifies as female whose race/ethnicity is not 'White/Caucasian'. [**There were a total number of `r ctr_hrhs_woc_tested` CTR tests where the individual was both HRHS/WOC, which is `r ctr_hrhs_woc_tested_deliverable_percent` of the total promise of `r ctr_hrhs_woc_tested_deliverable`**]{style="color: lightskyblue;"}. For those that are considered in the youth population, CTR defines those between the age of 15-19 years old. However, EIP often encounters individuals younger than the age of 15, so the definition used here are those below the age of 29. [**There were a total number of `r ctr_hrhs_youth_tested` CTR tests where the individual was both HRHS/Youth, which is `r ctr_hrhs_youth_tested_deliverable_percent` of the total promise of `r ctr_hrhs_youth_tested_deliverable`**]{style="color: lightskyblue;"}. For those that are considered in the IDU population, the individual needs to complete the necessary section within the EIP assessment. We define those who endorse injection drug use behavior ever in their lifetime on the NIDA-Modified ASSIST, or those who are HIV positive and their risk was injection drug use as a part of the IDU population. [**There were a total number of `r ctr_hrhs_idu_tested` CTR tests where the individual was both HRHS/IDU, which is `r ctr_hrhs_idu_tested_deliverable_percent` of the total promise of `r ctr_hrhs_idu_tested_deliverable`**]{style="color: lightskyblue;"}.
+
+
+```{r echo=FALSE, fig.asp=0.50}
+
+# HRHS WOC Tested Deliverable
+ctr_hrhs_woc_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_hrhs_woc_tested,
+  title = list(text = "HRHS/WOC CTR Tested", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 300)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray",
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = 130))) 
+ctr_hrhs_woc_tested_gauge <- ctr_hrhs_woc_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_hrhs_woc_tested_gauge, displayModeBar = FALSE)
+
+```
+
+
+```{r echo=FALSE, fig.asp=0.50}
+
+# HRHS Youth Tested Deliverable
+ctr_hrhs_youth_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_hrhs_youth_tested,
+  title = list(text = "HRHS/Youth CTR Tested", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 300)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray",
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = 200))) 
+ctr_hrhs_youth_tested_gauge <- ctr_hrhs_youth_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_hrhs_youth_tested_gauge, displayModeBar = FALSE)
+
+```
+
+
+```{r, echo = FALSE, fig.asp=0.50}
+
+# HRHS IDU Tested Deliverable
+ctr_hrhs_idu_tested_gauge <- plot_ly(
+  domain = list(x = c(0, 0.5), y = c(0, 1)),
+  value = ctr_hrhs_idu_tested,
+  title = list(text = "HRHS/IDU CTR Tested", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 300)),
+    bar = list(color = "lightskyblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray")) 
+ctr_hrhs_idu_tested_gauge <- ctr_hrhs_idu_tested_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(ctr_hrhs_idu_tested_gauge, displayModeBar = FALSE)
+
+```
+
+
+## Additional Metrics
+
+Additional metrics still to code for:
+
+- Number of PLWHA approached
+- Number receiving intervention
+- Number of interactions between EIP staff and site staff
+- Number/% of PLWHA not in care (new and previous)
+- Number/% of PLWHA linked to medical care and other services
+- Number/% of PLWHA receiving risk assessment and counseling
+- Number of MSM approached
+- Number of MSM receiving intervention
+- Number/% of HIV(-) MSM receiving risk reduction counseling and PrEP education/referral
+- Number/% of MSM receiving HIV testing
+- Number/% of MSM who test HIV+
+- Number HRHS approached
+- Number receiving intervention
+- Number/% of HIV(-) HRHS receiving risk reduction counseling and PrEP education/referral
+- Number/% of HRHS receiving HIV testing
+- Number/% HRHS who test HIV+
+

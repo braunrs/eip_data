@@ -14,12 +14,12 @@ website:
             href: hiv.html
           - text: Hepatitis-C
             href: hcv.html
-          - text: SUD
-            href: sud.html
-          - text: Street Medicine
-            href: street_med.html
-          - text: Human Trafficking
-            href: human_trafficking.html
+      - text: "Deliverables"
+        menu:
+          - text: CTR 2025/2026
+            href: ctr_deliverables25.html
+          - text: EHE 2025/2026
+            href: ehe_deliverables25.html
 
 format:
   html:
