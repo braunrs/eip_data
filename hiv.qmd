@@ -53,14 +53,14 @@ eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
 summary(eip24$record_id)
 
 # 2025
-eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20260210_1408.csv')
+eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20260223_1001.csv')
 dim(eip25)
 summary(eip25$record_id)
 eip25$record_id <- paste(eip25$record_id, "_25", sep = "")
 summary(eip25$record_id)
 
 # 2026
-eip26 <- read.csv('M:/EIP Data/EIP Database/REDCap 2026/EIP Database Data 20260220_1023.csv')
+eip26 <- read.csv('M:/EIP Data/EIP Database/REDCap 2026/EIP Database Data 20260223_1005.csv')
 dim(eip26)
 summary(eip26$record_id)
 eip26$record_id <- paste(eip26$record_id, "_26", sep = "")
@@ -4020,7 +4020,7 @@ hiv_not_linked_other_percent
 
 
 
-####################  Total HIV Linkage Data  ####################
+####################  2023 HIV Linkage Data  ####################
 
 summary(eip$enc_date)
 eip_2023 <- eip[which(eip$enc_date >= '2023-01-01' & eip$enc_date <= '2023-12-31'), ]
@@ -4562,7 +4562,7 @@ hiv_not_linked_other_2023_percent
 
 
 
-####################  Total HIV Linkage Data  ####################
+####################  2024 HIV Linkage Data  ####################
 
 summary(eip$enc_date)
 eip_2024 <- eip[which(eip$enc_date >= '2024-01-01' & eip$enc_date <= '2024-12-31'), ]
@@ -5104,7 +5104,7 @@ hiv_not_linked_other_2024_percent
 
 
 
-####################  Total HIV Linkage Data  ####################
+####################  2025 HIV Linkage Data  ####################
 
 summary(eip$enc_date)
 eip_2025 <- eip[which(eip$enc_date >= '2025-01-01' & eip$enc_date <= '2025-12-31'), ]
@@ -5643,6 +5643,547 @@ hiv_not_linked_other_2025
 hiv_not_linked_other_2025_percent <- percent(hiv_not_linked_other_2025/hiv_not_linked_2025, accuracy = 0.1)
 hiv_not_linked_other_2025_percent
 
+
+
+####################  2026 HIV Linkage Data  ####################
+
+summary(eip$enc_date)
+eip_2026 <- eip[which(eip$enc_date >= '2026-01-01' & eip$enc_date <= '2026-12-31'), ]
+summary(eip_2026$enc_date)
+
+table(eip_2026$plwha)
+plwha_2026 <- eip_2026[which(eip_2026$plwha == 1), ]
+dim(plwha_2026)
+plwha_2026 <- nrow(plwha_2026)
+plwha_2026
+
+
+# HIV Linkage Data
+table(eip_2026$ltc_services___1)
+eip_2026$hiv_ltc_2026[eip_2026$ltc_services___1 == 1] <- 1
+table(eip_2026$hiv_ltc_2026)
+
+table(eip_2026$hiv_ltc_2026)
+hiv_ltc_2026 <- eip_2026[which(eip_2026$hiv_ltc_2026 == 1), ]
+dim(hiv_ltc_2026)
+hiv_ltc_2026 <- nrow(hiv_ltc_2026)
+hiv_ltc_2026
+
+hiv_ltc_2026_percent <- percent(hiv_ltc_2026/plwha_2026, accuracy = 0.1)
+hiv_ltc_2026_percent
+
+
+# Ineligible HIV Linkage - Already Linked
+table(eip_2026$ltc_hiv_declined_rsn___23)
+table(eip_2026$ltc_hiv_prevented_rsn___16)
+eip_2026$hiv_already_linked_2026[eip_2026$hiv_ltc_2026 == 1 &
+                                   (eip_2026$ltc_hiv_declined_rsn___23 == 1 |
+                                      eip_2026$ltc_hiv_prevented_rsn___16 == 1)] <- 1
+table(eip_2026$hiv_already_linked_2026)
+
+table(eip_2026$hiv_already_linked_2026)
+hiv_already_linked_2026 <- eip_2026[which(eip_2026$hiv_already_linked_2026 == 1), ]
+dim(hiv_already_linked_2026)
+hiv_already_linked_2026 <- nrow(hiv_already_linked_2026)
+hiv_already_linked_2026
+
+
+# Ineligible HIV Linkage - Deceased
+table(eip_2026$ltc_hiv_declined_rsn___35)
+table(eip_2026$ltc_hiv_prevented_rsn___17)
+eip_2026$hiv_deceased_2026[eip_2026$hiv_ltc_2026 == 1 &
+                             (eip_2026$ltc_hiv_declined_rsn___35 == 1 |
+                                eip_2026$ltc_hiv_prevented_rsn___17 == 1)] <- 1
+table(eip_2026$hiv_deceased_2026)
+
+table(eip_2026$hiv_deceased_2026)
+hiv_deceased_2026 <- eip_2026[which(eip_2026$hiv_deceased_2026 == 1), ]
+dim(hiv_deceased_2026)
+hiv_deceased_2026 <- nrow(hiv_deceased_2026)
+hiv_deceased_2026
+
+
+# Ineligible HIV Linkage - Incarcerated
+table(eip_2026$ltc_hiv_prevented_rsn___12)
+eip_2026$hiv_incarcerated_2026[eip_2026$hiv_ltc_2026 == 1 &
+                                 eip_2026$ltc_hiv_prevented_rsn___12 == 1] <- 1
+table(eip_2026$hiv_incarcerated_2026)
+
+table(eip_2026$hiv_incarcerated_2026)
+hiv_incarcerated_2026 <- eip_2026[which(eip_2026$hiv_incarcerated_2026 == 1), ]
+dim(hiv_incarcerated_2026)
+hiv_incarcerated_2026 <- nrow(hiv_incarcerated_2026)
+hiv_incarcerated_2026
+
+
+# Ineligible HIV Linkage - Inability to Contact
+table(eip_2026$ltc_hiv_final_ltc_status)
+eip_2026$hiv_inability_to_contact_2026[eip_2026$hiv_ltc_2026 == 1 &
+                                         eip_2026$ltc_hiv_prevented_rsn___19 == 1] <- 1
+table(eip_2026$hiv_inability_to_contact_2026)
+
+table(eip_2026$hiv_inability_to_contact_2026)
+hiv_inability_to_contact_2026 <- eip_2026[which(eip_2026$hiv_inability_to_contact_2026 == 1), ]
+dim(hiv_inability_to_contact_2026)
+hiv_inability_to_contact_2026 <- nrow(hiv_inability_to_contact_2026)
+hiv_inability_to_contact_2026
+
+
+# Ineligible HIV Linkage - Declined Linkage Service
+table(eip_2026$ltc_hiv_final_ltc_status)
+eip_2026$hiv_linkage_declined_2026[(eip_2026$hiv_ltc_2026 == 1 &
+                                      eip_2026$ltc_hiv_final_ltc_status == 2) &
+                                     (is.na(eip_2026$hiv_already_linked_2026) &
+                                        is.na(eip_2026$hiv_deceased_2026) &
+                                        is.na(eip_2026$hiv_incarcerated_2026) &
+                                        is.na(eip_2026$hiv_inability_to_contact_2026))] <- 1
+table(eip_2026$hiv_linkage_declined_2026)
+
+table(eip_2026$hiv_linkage_declined_2026)
+hiv_linkage_declined_2026 <- eip_2026[which(eip_2026$hiv_linkage_declined_2026 == 1), ]
+dim(hiv_linkage_declined_2026)
+hiv_linkage_declined_2026 <- nrow(hiv_linkage_declined_2026)
+hiv_linkage_declined_2026
+
+
+# Ineligible HIV Linkage - Linkage in Progress
+table(eip_2026$ltc_hiv_prevented_rsn___18)
+eip_2026$hiv_ongoing_linkage_2026[eip_2026$hiv_ltc_2026 == 1 &
+                                    eip_2026$ltc_hiv_prevented_rsn___18 == 1] <- 1
+table(eip_2026$hiv_ongoing_linkage_2026)
+
+table(eip_2026$hiv_ongoing_linkage_2026)
+hiv_ongoing_linkage_2026 <- eip_2026[which(eip_2026$hiv_ongoing_linkage_2026 == 1), ]
+dim(hiv_ongoing_linkage_2026)
+hiv_ongoing_linkage_2026 <- nrow(hiv_ongoing_linkage_2026)
+hiv_ongoing_linkage_2026
+
+
+# HIV Ineligible Cases
+eip_2026$hiv_ineligible_ltc_2026[eip_2026$hiv_already_linked_2026 == 1 |
+                                   eip_2026$hiv_deceased_2026 == 1 |
+                                   eip_2026$hiv_incarcerated_2026 == 1 |
+                                   eip_2026$hiv_inability_to_contact_2026 == 1 |
+                                   eip_2026$hiv_linkage_declined_2026 == 1 |
+                                   eip_2026$hiv_ongoing_linkage_2026 == 1] <- 1
+table(eip_2026$hiv_ineligible_ltc_2026)
+
+table(eip_2026$hiv_ineligible_ltc_2026)
+hiv_ineligible_ltc_2026 <- eip_2026[which(eip_2026$hiv_ineligible_ltc_2026 == 1), ]
+dim(hiv_ineligible_ltc_2026)
+hiv_ineligible_ltc_2026 <- nrow(hiv_ineligible_ltc_2026)
+hiv_ineligible_ltc_2026
+
+hiv_ineligible_ltc_2026_percent <- percent(hiv_ineligible_ltc_2026/hiv_ltc_2026, accuracy = 0.1)
+hiv_ineligible_ltc_2026_percent
+
+hiv_already_linked_2026_percent <- percent(hiv_already_linked_2026/hiv_ineligible_ltc_2026, accuracy = 0.1)
+hiv_already_linked_2026_percent
+
+hiv_deceased_2026_percent <- percent(hiv_deceased_2026/hiv_ineligible_ltc_2026, accuracy = 0.1)
+hiv_deceased_2026_percent
+
+hiv_incarcerated_2026_percent <- percent(hiv_incarcerated_2026/hiv_ineligible_ltc_2026, accuracy = 0.1)
+hiv_incarcerated_2026_percent
+
+hiv_inability_to_contact_2026_percent <- percent(hiv_inability_to_contact_2026/hiv_ineligible_ltc_2026, accuracy = 0.1)
+hiv_inability_to_contact_2026_percent
+
+hiv_linkage_declined_2026_percent <- percent(hiv_linkage_declined_2026/hiv_ineligible_ltc_2026, accuracy = 0.1)
+hiv_linkage_declined_2026_percent
+
+hiv_ongoing_linkage_2026_percent <- percent(hiv_ongoing_linkage_2026/hiv_ineligible_ltc_2026, accuracy = 0.1)
+hiv_ongoing_linkage_2026_percent
+
+
+# HIV Eligibility to be Linked
+eip_2026$hiv_eligible_ltc_2026[eip_2026$hiv_ltc_2026 == 1 &
+                                 (is.na(eip_2026$hiv_already_linked_2026) &
+                                    is.na(eip_2026$hiv_deceased_2026) &
+                                    is.na(eip_2026$hiv_incarcerated_2026) &
+                                    is.na(eip_2026$hiv_inability_to_contact_2026) &
+                                    is.na(eip_2026$hiv_linkage_declined_2026) &
+                                    is.na(eip_2026$hiv_ongoing_linkage_2026))] <- 1
+table(eip_2026$hiv_eligible_ltc_2026)
+
+table(eip_2026$hiv_eligible_ltc_2026)
+hiv_eligible_ltc_2026 <- eip_2026[which(eip_2026$hiv_eligible_ltc_2026 == 1), ]
+dim(hiv_eligible_ltc_2026)
+hiv_eligible_ltc_2026 <- nrow(hiv_eligible_ltc_2026)
+hiv_eligible_ltc_2026
+
+hiv_eligible_ltc_2026_percent <- percent(hiv_eligible_ltc_2026/hiv_ltc_2026, accuracy = 0.1)
+hiv_eligible_ltc_2026_percent
+
+
+
+table(eip_2026$hiv_eligible_ltc_2026, eip_2026$hiv_status)
+eip_2026$hiv_new_eligible_ltc_2026[eip_2026$hiv_eligible_ltc_2026 == 1 &
+                                     eip_2026$hiv_status == 'New HIV Diagnosis'] <- 1
+table(eip_2026$hiv_new_eligible_ltc_2026)
+
+table(eip_2026$hiv_new_eligible_ltc_2026)
+hiv_new_eligible_ltc_2026 <- eip_2026[which(eip_2026$hiv_new_eligible_ltc_2026 == 1), ]
+dim(hiv_new_eligible_ltc_2026)
+hiv_new_eligible_ltc_2026 <- nrow(hiv_new_eligible_ltc_2026)
+hiv_new_eligible_ltc_2026
+
+hiv_new_eligible_ltc_2026_percent <- percent(hiv_new_eligible_ltc_2026/hiv_eligible_ltc_2026, accuracy = 0.1)
+hiv_new_eligible_ltc_2026_percent
+
+
+
+table(eip_2026$hiv_eligible_ltc_2026, eip_2026$hiv_status)
+eip_2026$hiv_prev_eligible_ltc_2026[eip_2026$hiv_eligible_ltc_2026 == 1 &
+                                      eip_2026$hiv_status == 'Previous HIV Diagnosis'] <- 1
+table(eip_2026$hiv_prev_eligible_ltc_2026)
+
+table(eip_2026$hiv_prev_eligible_ltc_2026)
+hiv_prev_eligible_ltc_2026 <- eip_2026[which(eip_2026$hiv_prev_eligible_ltc_2026 == 1), ]
+dim(hiv_prev_eligible_ltc_2026)
+hiv_prev_eligible_ltc_2026 <- nrow(hiv_prev_eligible_ltc_2026)
+hiv_prev_eligible_ltc_2026
+
+hiv_prev_eligible_ltc_2026_percent <- percent(hiv_prev_eligible_ltc_2026/hiv_eligible_ltc_2026, accuracy = 0.1)
+hiv_prev_eligible_ltc_2026_percent
+
+
+
+table(eip_2026$hiv_eligible_ltc_2026, eip_2026$hiv_status)
+eip_2026$hiv_unk_eligible_ltc_2026[(eip_2026$hiv_eligible_ltc_2026 == 1 &
+                                      (eip_2026$hiv_status == 'Unknown HIV Status' |
+                                         is.na(eip_2026$hiv_status)))] <- 1
+table(eip_2026$hiv_unk_eligible_ltc_2026)
+
+table(eip_2026$hiv_unk_eligible_ltc_2026)
+hiv_unk_eligible_ltc_2026 <- eip_2026[which(eip_2026$hiv_unk_eligible_ltc_2026 == 1), ]
+dim(hiv_unk_eligible_ltc_2026)
+hiv_unk_eligible_ltc_2026 <- nrow(hiv_unk_eligible_ltc_2026)
+hiv_unk_eligible_ltc_2026
+
+hiv_unk_eligible_ltc_2026_percent <- percent(hiv_unk_eligible_ltc_2026/hiv_eligible_ltc_2026, accuracy = 0.1)
+hiv_unk_eligible_ltc_2026_percent
+
+
+# HIV Open/Closed Cases
+table(eip_2026$ltc_hiv_open_case_calc)
+eip_2026$hiv_in_progress_2026[eip_2026$hiv_eligible_ltc_2026 == 1 &
+                                eip_2026$ltc_hiv_open_case_calc == 1] <- 1
+table(eip_2026$hiv_in_progress_2026)
+
+table(eip_2026$hiv_in_progress_2026)
+hiv_in_progress_2026 <- eip_2026[which(eip_2026$hiv_in_progress_2026 == 1), ]
+dim(hiv_in_progress_2026)
+hiv_in_progress_2026 <- nrow(hiv_in_progress_2026)
+hiv_in_progress_2026
+
+hiv_in_progress_2026_percent <- percent(hiv_in_progress_2026/hiv_eligible_ltc_2026, accuracy = 0.1)
+hiv_in_progress_2026_percent
+
+
+
+table(eip_2026$hiv_in_progress_2026, eip_2026$hiv_status)
+eip_2026$hiv_new_in_progress_2026[eip_2026$hiv_in_progress_2026 == 1 &
+                                    eip_2026$hiv_status == 'New HIV Diagnosis'] <- 1
+table(eip_2026$hiv_new_in_progress_2026)
+
+table(eip_2026$hiv_new_in_progress_2026)
+hiv_new_in_progress_2026 <- eip_2026[which(eip_2026$hiv_new_in_progress_2026 == 1), ]
+dim(hiv_new_in_progress_2026)
+hiv_new_in_progress_2026 <- nrow(hiv_new_in_progress_2026)
+hiv_new_in_progress_2026
+
+hiv_new_in_progress_2026_percent <- percent(hiv_new_in_progress_2026/hiv_new_eligible_ltc_2026, accuracy = 0.1)
+hiv_new_in_progress_2026_percent
+
+
+
+table(eip_2026$hiv_in_progress_2026, eip_2026$hiv_status)
+eip_2026$hiv_prev_in_progress_2026[eip_2026$hiv_in_progress_2026 == 1 &
+                                     eip_2026$hiv_status == 'Previous HIV Diagnosis'] <- 1
+table(eip_2026$hiv_prev_in_progress_2026)
+
+table(eip_2026$hiv_prev_in_progress_2026)
+hiv_prev_in_progress_2026 <- eip_2026[which(eip_2026$hiv_prev_in_progress_2026 == 1), ]
+dim(hiv_prev_in_progress_2026)
+hiv_prev_in_progress_2026 <- nrow(hiv_prev_in_progress_2026)
+hiv_prev_in_progress_2026
+
+hiv_prev_in_progress_2026_percent <- percent(hiv_prev_in_progress_2026/hiv_prev_eligible_ltc_2026, accuracy = 0.1)
+hiv_prev_in_progress_2026_percent
+
+
+
+table(eip_2026$hiv_in_progress_2026, eip_2026$hiv_status)
+eip_2026$hiv_unk_in_progress_2026[eip_2026$hiv_in_progress_2026 == 1 &
+                                    (eip_2026$hiv_status == 'Unknown HIV Status' |
+                                       is.na(eip_2026$hiv_status))] <- 1
+table(eip_2026$hiv_unk_in_progress_2026)
+
+table(eip_2026$hiv_unk_in_progress_2026)
+hiv_unk_in_progress_2026 <- eip_2026[which(eip_2026$hiv_unk_in_progress_2026 == 1), ]
+dim(hiv_unk_in_progress_2026)
+hiv_unk_in_progress_2026 <- nrow(hiv_unk_in_progress_2026)
+hiv_unk_in_progress_2026
+
+hiv_unk_in_progress_2026_percent <- percent(hiv_unk_in_progress_2026/hiv_unk_eligible_ltc_2026, accuracy = 0.1)
+hiv_unk_in_progress_2026_percent
+
+
+
+table(eip_2026$hiv_eligible_ltc_2026, eip_2026$hiv_in_progress_2026)
+eip_2026$hiv_closed_case_2026[eip_2026$hiv_eligible_ltc_2026 == 1 &
+                                is.na(eip_2026$hiv_in_progress_2026)] <- 1
+table(eip_2026$hiv_closed_case_2026)
+
+table(eip_2026$hiv_closed_case_2026)
+hiv_closed_case_2026 <- eip_2026[which(eip_2026$hiv_closed_case_2026 == 1), ]
+dim(hiv_closed_case_2026)
+hiv_closed_case_2026 <- nrow(hiv_closed_case_2026)
+hiv_closed_case_2026
+
+hiv_closed_case_2026_percent <- percent(hiv_closed_case_2026/hiv_eligible_ltc_2026, accuracy = 0.1)
+hiv_closed_case_2026_percent
+
+
+
+table(eip_2026$hiv_in_progress_2026)
+eip_2026$hiv_ltc_days_open_2026 <- difftime(Sys.Date(), eip_2026$enc_date, units="days")
+table(eip_2026$hiv_ltc_days_open_2026)
+eip_2026$hiv_in_progress_90days_2026[eip_2026$hiv_in_progress_2026 == 1 &
+                                       (eip_2026$hiv_ltc_days_open_2026 > 90)] <- 1
+table(eip_2026$hiv_in_progress_90days_2026)
+
+table(eip_2026$hiv_in_progress_90days_2026)
+hiv_in_progress_90days_2026 <- eip_2026[which(eip_2026$hiv_in_progress_90days_2026 == 1), ]
+dim(hiv_in_progress_90days_2026)
+hiv_in_progress_90days_2026 <- nrow(hiv_in_progress_90days_2026)
+hiv_in_progress_90days_2026
+
+hiv_in_progress_90days_2026_percent <- percent(hiv_in_progress_90days_2026/hiv_in_progress_2026, accuracy = 0.1)
+hiv_in_progress_90days_2026_percent
+
+
+# HIV Cases Linked to Care
+table(eip_2026$hiv_closed_case_2026, eip_2026$ltc_hiv_final_ltc_status)
+eip_2026$hiv_linked_2026[eip_2026$hiv_closed_case_2026 == 1 &
+                           eip_2026$ltc_hiv_final_ltc_status == 1] <- 1
+table(eip_2026$hiv_linked_2026)
+
+table(eip_2026$hiv_linked_2026)
+hiv_linked_2026 <- eip_2026[which(eip_2026$hiv_linked_2026 == 1), ]
+dim(hiv_linked_2026)
+hiv_linked_2026 <- nrow(hiv_linked_2026)
+hiv_linked_2026
+
+hiv_linked_2026_gauge <- (hiv_linked_2026/hiv_closed_case_2026)*100
+hiv_linked_2026_gauge
+hiv_linked_2026_percent <- percent(hiv_linked_2026/hiv_closed_case_2026, accuracy = 0.1)
+hiv_linked_2026_percent
+
+
+
+table(eip_2026$hiv_status, eip_2026$hiv_eligible_ltc_2026)
+table(eip_2026$hiv_linked_2026, eip_2026$hiv_status)
+eip_2026$hiv_new_linked_2026[eip_2026$hiv_linked_2026 == 1 &
+                               eip_2026$hiv_status == 'New HIV Diagnosis'] <- 1
+table(eip_2026$hiv_new_linked_2026)
+
+table(eip_2026$hiv_new_linked_2026)
+hiv_new_linked_2026 <- eip_2026[which(eip_2026$hiv_new_linked_2026 == 1), ]
+dim(hiv_new_linked_2026)
+hiv_new_linked_2026 <- nrow(hiv_new_linked_2026)
+hiv_new_linked_2026
+
+hiv_new_linked_2026_percent <- percent(hiv_new_linked_2026/hiv_new_eligible_ltc_2026, accuracy = 0.1)
+hiv_new_linked_2026_percent
+
+
+
+table(eip_2026$hiv_status, eip_2026$hiv_eligible_ltc_2026)
+table(eip_2026$hiv_linked_2026, eip_2026$hiv_status)
+eip_2026$hiv_prev_linked_2026[eip_2026$hiv_linked_2026 == 1 &
+                                eip_2026$hiv_status == 'Previous HIV Diagnosis'] <- 1
+table(eip_2026$hiv_prev_linked_2026)
+
+table(eip_2026$hiv_prev_linked_2026)
+hiv_prev_linked_2026 <- eip_2026[which(eip_2026$hiv_prev_linked_2026 == 1), ]
+dim(hiv_prev_linked_2026)
+hiv_prev_linked_2026 <- nrow(hiv_prev_linked_2026)
+hiv_prev_linked_2026
+
+hiv_prev_linked_2026_percent <- percent(hiv_prev_linked_2026/hiv_prev_eligible_ltc_2026, accuracy = 0.1)
+hiv_prev_linked_2026_percent
+
+
+
+eip_2026$hiv_not_linked_2026[eip_2026$hiv_eligible_ltc_2026 == 1 & is.na(eip_2026$hiv_in_progress_2026) & is.na(eip_2026$hiv_linked_2026)] <- 1
+table(eip_2026$hiv_not_linked_2026)
+
+table(eip_2026$hiv_not_linked_2026)
+hiv_not_linked_2026 <- eip_2026[which(eip_2026$hiv_not_linked_2026 == 1), ]
+dim(hiv_not_linked_2026)
+hiv_not_linked_2026 <- nrow(hiv_not_linked_2026)
+hiv_not_linked_2026
+
+hiv_not_linked_2026_percent <- percent(hiv_not_linked_2026/hiv_closed_case_2026, accuracy = 0.1)
+hiv_not_linked_2026_percent
+
+
+
+table(eip_2026$hiv_not_linked_2026, eip_2026$hiv_status)
+eip_2026$hiv_new_not_linked_2026[eip_2026$hiv_not_linked_2026 == 1 &
+                                   eip_2026$hiv_status == 'New HIV Diagnosis'] <- 1
+table(eip_2026$hiv_new_not_linked_2026)
+
+table(eip_2026$hiv_new_not_linked_2026)
+hiv_new_not_linked_2026 <- eip_2026[which(eip_2026$hiv_new_not_linked_2026 == 1), ]
+dim(hiv_new_not_linked_2026)
+hiv_new_not_linked_2026 <- nrow(hiv_new_not_linked_2026)
+hiv_new_not_linked_2026
+
+hiv_new_not_linked_2026_percent <- percent(hiv_new_not_linked_2026/hiv_new_eligible_ltc_2026, accuracy = 0.1)
+hiv_new_not_linked_2026_percent
+
+
+
+table(eip_2026$hiv_not_linked_2026, eip_2026$hiv_status)
+eip_2026$hiv_prev_not_linked_2026[eip_2026$hiv_not_linked_2026 == 1 &
+                                    eip_2026$hiv_status == 'Previous HIV Diagnosis'] <- 1
+table(eip_2026$hiv_prev_not_linked_2026)
+
+table(eip_2026$hiv_prev_not_linked_2026)
+hiv_prev_not_linked_2026 <- eip_2026[which(eip_2026$hiv_prev_not_linked_2026 == 1), ]
+dim(hiv_prev_not_linked_2026)
+hiv_prev_not_linked_2026 <- nrow(hiv_prev_not_linked_2026)
+hiv_prev_not_linked_2026
+
+hiv_prev_not_linked_2026_percent <- percent(hiv_prev_not_linked_2026/hiv_prev_eligible_ltc_2026, accuracy = 0.1)
+hiv_prev_not_linked_2026_percent
+
+
+# HIV Reasons Not Linked to Care
+eip_2026$hiv_not_linked_med_staff_2026[(eip_2026$hiv_closed_case_2026 == 1 & is.na(eip_2026$hiv_linked_2026)) &
+                                         (eip_2026$ltc_hiv_prevented_rsn___1 == 1 |
+                                            eip_2026$ltc_hiv_prevented_rsn___2 == 1 |
+                                            eip_2026$ltc_hiv_prevented_rsn___11 == 1)] <- 1
+table(eip_2026$hiv_not_linked_med_staff_2026)
+
+table(eip_2026$hiv_not_linked_med_staff_2026)
+hiv_not_linked_med_staff_2026 <- eip_2026[which(eip_2026$hiv_not_linked_med_staff_2026 == 1), ]
+dim(hiv_not_linked_med_staff_2026)
+hiv_not_linked_med_staff_2026 <- nrow(hiv_not_linked_med_staff_2026)
+hiv_not_linked_med_staff_2026
+
+hiv_not_linked_med_staff_2026_percent <- percent(hiv_not_linked_med_staff_2026/hiv_not_linked_2026, accuracy = 0.1)
+hiv_not_linked_med_staff_2026_percent
+
+
+
+eip_2026$hiv_not_linked_family_2026[(eip_2026$hiv_closed_case_2026 == 1 & is.na(eip_2026$hiv_linked_2026)) &
+                                      (eip_2026$ltc_hiv_prevented_rsn___3 == 1)] <- 1
+table(eip_2026$hiv_not_linked_family_2026)
+
+table(eip_2026$hiv_not_linked_family_2026)
+hiv_not_linked_family_2026 <- eip_2026[which(eip_2026$hiv_not_linked_family_2026 == 1), ]
+dim(hiv_not_linked_family_2026)
+hiv_not_linked_family_2026 <- nrow(hiv_not_linked_family_2026)
+hiv_not_linked_family_2026
+
+hiv_not_linked_family_2026_percent <- percent(hiv_not_linked_family_2026/hiv_not_linked_2026, accuracy = 0.1)
+hiv_not_linked_family_2026_percent
+
+
+
+eip_2026$hiv_not_linked_not_talking_2026[(eip_2026$hiv_closed_case_2026 == 1 & is.na(eip_2026$hiv_linked_2026)) &
+                                           (eip_2026$ltc_hiv_prevented_rsn___4 == 1)] <- 1
+table(eip_2026$hiv_not_linked_not_talking_2026)
+
+table(eip_2026$hiv_not_linked_not_talking_2026)
+hiv_not_linked_not_talking_2026 <- eip_2026[which(eip_2026$hiv_not_linked_not_talking_2026 == 1), ]
+dim(hiv_not_linked_not_talking_2026)
+hiv_not_linked_not_talking_2026 <- nrow(hiv_not_linked_not_talking_2026)
+hiv_not_linked_not_talking_2026
+
+hiv_not_linked_not_talking_2026_percent <- percent(hiv_not_linked_not_talking_2026/hiv_not_linked_2026, accuracy = 0.1)
+hiv_not_linked_not_talking_2026_percent
+
+
+
+eip_2026$hiv_not_linked_safety_2026[(eip_2026$hiv_closed_case_2026 == 1 & is.na(eip_2026$hiv_linked_2026)) &
+                                      (eip_2026$ltc_hiv_prevented_rsn___5 == 1)] <- 1
+table(eip_2026$hiv_not_linked_safety_2026)
+
+table(eip_2026$hiv_not_linked_safety_2026)
+hiv_not_linked_safety_2026 <- eip_2026[which(eip_2026$hiv_not_linked_safety_2026 == 1), ]
+dim(hiv_not_linked_safety_2026)
+hiv_not_linked_safety_2026 <- nrow(hiv_not_linked_safety_2026)
+hiv_not_linked_safety_2026
+
+hiv_not_linked_safety_2026_percent <- percent(hiv_not_linked_safety_2026/hiv_not_linked_2026, accuracy = 0.1)
+hiv_not_linked_safety_2026_percent
+
+
+
+eip_2026$hiv_not_linked_medical_2026[(eip_2026$hiv_closed_case_2026 == 1 & is.na(eip_2026$hiv_linked_2026)) &
+                                       (eip_2026$ltc_hiv_prevented_rsn___6 == 1 |
+                                          eip_2026$ltc_hiv_prevented_rsn___8)] <- 1
+table(eip_2026$hiv_not_linked_medical_2026)
+
+table(eip_2026$hiv_not_linked_medical_2026)
+hiv_not_linked_medical_2026 <- eip_2026[which(eip_2026$hiv_not_linked_medical_2026 == 1), ]
+dim(hiv_not_linked_medical_2026)
+hiv_not_linked_medical_2026 <- nrow(hiv_not_linked_medical_2026)
+hiv_not_linked_medical_2026
+
+hiv_not_linked_medical_2026_percent <- percent(hiv_not_linked_medical_2026/hiv_not_linked_2026, accuracy = 0.1)
+hiv_not_linked_medical_2026_percent
+
+
+
+eip_2026$hiv_not_linked_contact_2026[(eip_2026$hiv_closed_case_2026 == 1 & is.na(eip_2026$hiv_linked_2026)) &
+                                       (eip_2026$ltc_hiv_prevented_rsn___20 == 1)] <- 1
+table(eip_2026$hiv_not_linked_contact_2026)
+
+table(eip_2026$hiv_not_linked_contact_2026)
+hiv_not_linked_contact_2026 <- eip_2026[which(eip_2026$hiv_not_linked_contact_2026 == 1), ]
+dim(hiv_not_linked_contact_2026)
+hiv_not_linked_contact_2026 <- nrow(hiv_not_linked_contact_2026)
+hiv_not_linked_contact_2026
+
+hiv_not_linked_contact_2026_percent <- percent(hiv_not_linked_contact_2026/hiv_not_linked_2026, accuracy = 0.1)
+hiv_not_linked_contact_2026_percent
+
+
+
+eip_2026$hiv_not_linked_language_2026[(eip_2026$hiv_closed_case_2026 == 1 & is.na(eip_2026$hiv_linked_2026)) &
+                                        (eip_2026$ltc_hiv_prevented_rsn___9 == 1)] <- 1
+table(eip_2026$hiv_not_linked_language_2026)
+
+table(eip_2026$hiv_not_linked_language_2026)
+hiv_not_linked_language_2026 <- eip_2026[which(eip_2026$hiv_not_linked_language_2026 == 1), ]
+dim(hiv_not_linked_language_2026)
+hiv_not_linked_language_2026 <- nrow(hiv_not_linked_language_2026)
+hiv_not_linked_language_2026
+
+hiv_not_linked_language_2026_percent <- percent(hiv_not_linked_language_2026/hiv_not_linked_2026, accuracy = 0.1)
+hiv_not_linked_language_2026_percent
+
+
+
+eip_2026$hiv_not_linked_other_2026[(eip_2026$hiv_closed_case_2026 == 1 & is.na(eip_2026$hiv_linked_2026)) &
+                                     (eip_2026$ltc_hiv_prevented_rsn___0 == 1)] <- 1
+table(eip_2026$hiv_not_linked_other_2026)
+
+table(eip_2026$hiv_not_linked_other_2026)
+hiv_not_linked_other_2026 <- eip_2026[which(eip_2026$hiv_not_linked_other_2026 == 1), ]
+dim(hiv_not_linked_other_2026)
+hiv_not_linked_other_2026 <- nrow(hiv_not_linked_other_2026)
+hiv_not_linked_other_2026
+
+hiv_not_linked_other_2026_percent <- percent(hiv_not_linked_other_2026/hiv_not_linked_2026, accuracy = 0.1)
+hiv_not_linked_other_2026_percent
+
 ```
 
 
@@ -5777,7 +6318,7 @@ The consort or flow diagram below represents all of the linkage data described a
 
 ```{r, echo = FALSE, warning = FALSE}
 #| lightbox:
-#|   description: 2023-2025 HIV Linkage Flow Diagram
+#|   description: 2023-2026 HIV Linkage Flow Diagram
 
 grid_data <- tibble(x= 1:100, y= 1:100)
 
@@ -6065,6 +6606,294 @@ Since HIV LTC data is typically reported on an annual basis, the specific HIV li
 
 
 ::: {.panel-tabset}
+
+## 2026
+
+This shows the HIV LTC flow diagram for all linkage cases in 2026, along with the linkage to care success rate.
+
+```{r, echo = FALSE, warning = FALSE}
+#| lightbox:
+#|   description: 2026 YTD HIV Linkage Flow Diagram
+
+grid_data <- tibble(x= 1:100, y= 1:100)
+
+grid_data %>% 
+  ggplot(aes(x, y)) +
+  scale_x_continuous(minor_breaks = seq(10, 100, 10)) +
+  scale_y_continuous(minor_breaks = seq(10, 100, 10)) +
+  theme_linedraw() ->
+  grid
+
+
+grid +
+  # HIV Linkage Cases
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = 'black',
+            fill = 'lightblue', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 97, label = 'HIV Linkage Cases', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 90, ymax = 100, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 93, label = hiv_ltc_2026, size = 2, color = 'blue') +
+  
+  # Ineligible for Linkage
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 52.5, y = 82, label = 'Ineligible for Linkage', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 78, label = hiv_ineligible_ltc_2026, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 78, label = hiv_ineligible_ltc_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Reasons Ineligible for Linkage
+  geom_rect(xmin = 83, xmax = 100, ymin = 75, ymax = 85, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 87, y = 85, label = 'Already Linked', size = 2) +
+  annotate('text', x = 87, y = 82, label = '        Deceased', size = 2) +
+  annotate('text', x = 87, y = 79, label = '    Incarcerated', size = 2) +
+  annotate('text', x = 87, y = 76, label = 'Inability to Contact', size = 2) +
+  annotate('text', x = 87, y = 73, label = '          Declined', size = 2) +
+  annotate('text', x = 87, y = 70, label = 'Ongoing linkage ', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 75, ymax = 85, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 94, y = 85, label = hiv_already_linked_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 85, label = hiv_already_linked_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 82, label = hiv_deceased_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 82, label = hiv_deceased_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 79, label = hiv_incarcerated_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 79, label = hiv_incarcerated_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 76, label = hiv_inability_to_contact_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 76, label = hiv_inability_to_contact_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 73, label = hiv_linkage_declined_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 73, label = hiv_linkage_declined_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 70, label = hiv_ongoing_linkage_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 70, label = hiv_ongoing_linkage_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Eligible for Linkage
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = 'black',
+            fill = 'lightblue', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 67, label = 'Eligible for Linkage', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 63, label = hiv_eligible_ltc_2026, size = 2, color = 'blue') +
+  annotate('text', x = 19, y = 63, label = hiv_eligible_ltc_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # New vs. Prev vs. Unk Eligibility
+  geom_rect(xmin = 25, xmax = 35, ymin = 60, ymax = 70, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 26, y = 69, label = 'New Dx:', size = 2) +
+  annotate('text', x = 26, y = 65, label = 'Prev Dx:', size = 2) +
+  annotate('text', x = 26, y = 61, label = 'Unk Dx:', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 60, ymax = 70, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 30, y = 69, label = hiv_new_eligible_ltc_2026, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 69, label = hiv_new_eligible_ltc_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 30, y = 65, label = hiv_prev_eligible_ltc_2026, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 65, label = hiv_prev_eligible_ltc_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 30, y = 61, label = hiv_unk_eligible_ltc_2026, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 61, label = hiv_unk_eligible_ltc_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # In Progress
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 52, label = 'In Progress', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 48, label = hiv_in_progress_2026, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 48, label = hiv_in_progress_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # In Progress over 90 days
+  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 52, y = 42, label = '>90 days:', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 37, ymax = 44, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 56, y = 42, label = hiv_in_progress_90days_2026, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 42, label = hiv_in_progress_90days_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # New vs. Prev vs. Unk In Progress
+  geom_rect(xmin = 66, xmax = 88, ymin = 45, ymax = 55, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 67, y = 54, label = 'New Dx:', size = 2) +
+  annotate('text', x = 67, y = 50, label = 'Prev Dx:', size = 2) +
+  annotate('text', x = 67, y = 46, label = 'Unk Dx:', size = 2) +
+  geom_rect(xmin = 66, xmax = 88, ymin = 45, ymax = 55, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 71, y = 54, label = hiv_new_in_progress_2026, size = 2, color = 'blue') +
+  annotate('text', x = 75, y = 54, label = hiv_new_in_progress_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 71, y = 50, label = hiv_prev_in_progress_2026, size = 2, color = 'blue') +
+  annotate('text', x = 75, y = 50, label = hiv_prev_in_progress_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 71, y = 46, label = hiv_unk_in_progress_2026, size = 2, color = 'blue') +
+  annotate('text', x = 75, y = 46, label = hiv_unk_in_progress_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Closed Cases
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = 'black',
+            fill = 'lightblue', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 37, label = 'Closed Cases', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 30, ymax = 40, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 33, label = hiv_closed_case_2026, size = 2, color = 'blue') +
+  annotate('text', x = 19, y = 33, label = hiv_closed_case_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Not Linked
+  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = 'gray',
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 50.5, y = 22, label = 'Not Linked', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 15, ymax = 25, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 51.5, y = 18, label = hiv_not_linked_2026, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 18, label = hiv_not_linked_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # New vs. Prev Not Linked
+  geom_rect(xmin = 41, xmax = 63, ymin = 7, ymax = 14, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 52, y = 12, label = 'New Dx:', size = 2) +
+  annotate('text', x = 52, y = 8, label = 'Prev Dx:', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 7, ymax = 14, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 56, y = 12, label = hiv_new_not_linked_2026, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 12, label = hiv_new_not_linked_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 56, y = 8, label = hiv_prev_not_linked_2026, size = 2, color = 'blue') +
+  annotate('text', x = 60, y = 8, label = hiv_prev_not_linked_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Reasons Not Linked
+  geom_rect(xmin = 83, xmax = 100, ymin = 0, ymax = 30, color = NA,
+            fill = 'white', size = 0.25) +
+  annotate('text', x = 87, y = 26, label = 'Med Staff interferes    ', size = 2) +
+  annotate('text', x = 87, y = 23, label = '  Family interferes', size = 2) +
+  annotate('text', x = 87, y = 20, label = '    Refuses to talk', size = 2) +
+  annotate('text', x = 87, y = 17, label = '    Personal safety', size = 2) +
+  annotate('text', x = 87, y = 14, label = '    Medical course', size = 2) +
+  annotate('text', x = 87, y = 11, label = 'Inability to contact', size = 2) +
+  annotate('text', x = 87, y = 8, label = ' Language barrier', size = 2) +
+  annotate('text', x = 87, y = 5, label = '                   Other', size = 2) +
+  geom_rect(xmin = 41, xmax = 63, ymin = 0, ymax = 30, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 94, y = 26, label = hiv_not_linked_med_staff_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 26, label = hiv_not_linked_med_staff_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 23, label = hiv_not_linked_family_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 23, label = hiv_not_linked_family_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 20, label = hiv_not_linked_not_talking_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 20, label = hiv_not_linked_not_talking_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 17, label = hiv_not_linked_safety_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 17, label = hiv_not_linked_safety_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 14, label = hiv_not_linked_medical_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 14, label = hiv_not_linked_medical_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 11, label = hiv_not_linked_contact_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 11, label = hiv_not_linked_contact_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 8, label = hiv_not_linked_language_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 8, label = hiv_not_linked_language_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 94, y = 5, label = hiv_not_linked_other_2026, size = 2, color = 'blue') +
+  annotate('text', x = 98, y = 5, label = hiv_not_linked_other_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Linked to Care
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = 'black',
+            fill = 'lightblue', size = 0.25, size = 0.25) +
+  annotate('text', x = 10.5, y = 7, label = 'Linked to Care', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 10.5, y = 3, label = hiv_linked_2026, size = 2, color = 'blue') +
+  annotate('text', x = 19, y = 3, label = hiv_linked_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # New vs. Prev Linked to Care
+  geom_rect(xmin = 25, xmax = 35, ymin = 0, ymax = 10, color = NA,
+            fill = 'white', size = 0.25, size = 0.25) +
+  annotate('text', x = 26, y = 7, label = 'New Dx:', size = 2) +
+  annotate('text', x = 26, y = 3, label = 'Prev Dx:', size = 2) +
+  geom_rect(xmin = 0, xmax = 22, ymin = 0, ymax = 10, color = NA,
+            fill = NA, size = 0.25) +
+  annotate('text', x = 30, y = 7, label = hiv_new_linked_2026, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 7, label = hiv_new_linked_2026_percent, size = 2, color = 'steelblue') +
+  annotate('text', x = 30, y = 3, label = hiv_prev_linked_2026, size = 2, color = 'blue') +
+  annotate('text', x = 34, y = 3, label = hiv_prev_linked_2026_percent, size = 2, color = 'steelblue') +
+  
+  
+  # Down Arrow 1
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 90, yend = 70, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 2
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 60, yend = 40, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Down Arrow 3
+  geom_segment(
+    x = 10.5, xend = 10.5, y = 30, yend = 10, 
+    size = 0.15, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(2,"mm"), type = "closed")) +
+  
+  # Right Arrow 1
+  geom_segment(
+    x = 10.5, xend = 41, y = 80, yend = 80, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 2
+  geom_segment(
+    x = 10.5, xend = 41, y = 50, yend = 50, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Arrow 3
+  geom_segment(
+    x = 10.5, xend = 41, y = 20, yend = 20, 
+    size = 0.05, linejoin = "mitre", lineend = "butt",
+    arrow = arrow(length = unit(1,"mm"), type = "closed"), color = 'darkgray') +
+  
+  # Right Line 1
+  geom_segment(
+    x = 63, xend = 81, y = 80, yend = 80, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted") +
+  
+  # Right Line 2
+  geom_segment(
+    x = 63, xend = 80, y = 20, yend = 20, 
+    size = 0.15, linejoin = "mitre", lineend = "butt", linetype = "dotted")->
+  grid
+
+grid + theme_void()
+
+```
+
+```{r, echo = FALSE, warning = FALSE}
+
+hiv_linkage_2026_gauge <- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = hiv_linked_2026_gauge,
+  number = list(suffix = "%"),
+  title = list(text = "% PLWHA Linked to Care", font = list(size = 24)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis =list(range = list(0, 100)),
+    bar = list(color = "royalblue"),
+    bgcolor = "white",
+    borderwidth = 2,
+    bordercolor = "gray",
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = 80))) 
+hiv_linkage_2026_gauge <- hiv_linkage_2026_gauge %>%
+  layout(margin = list(l=100,r=150))
+config(hiv_linkage_2026_gauge, displayModeBar = FALSE)
+
+```
+
 
 ## 2025
 
