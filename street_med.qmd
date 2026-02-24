@@ -1,0 +1,2227 @@
+---
+title: "Street Medicine"
+date: today
+description: |
+  [Description]
+page-layout: full
+format:
+  html: 
+    grid:
+      sidebar-width: 200px
+      body-width: 1050px
+      margin-width: 250px
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r Data, include=FALSE}
+
+library(dplyr)
+library(tidyverse)
+library(lubridate)
+library(plotly)
+library(ggplot2)
+library(reactable)
+library(htmltools)
+library(lubridate)
+library(gt)
+library(janitor)
+library(scales)
+library(apyramid)
+library(kableExtra)
+library(knitr)
+library(zoo)
+library(DT)
+library(leaflet)
+library(leaflet.extras)
+
+### Street Medicine Sites
+street_med_sites <- read.csv('C:/Users/braunrs/OneDrive - University of Cincinnati/Desktop/EIP Websites/eip_data/data/Street Medicine Sites.csv')
+head(street_med_sites)
+
+### EIP Database Data
+# 2024
+eip24 <- read.csv('M:/EIP Data/EIP Database/REDCap 2024/EIP Database Data 20260210_1406.csv')
+dim(eip24)
+summary(eip24$record_id)
+eip24$record_id <- paste(eip24$record_id, "_24", sep = "")
+summary(eip24$record_id)
+
+# 2025
+eip25 <- read.csv('M:/EIP Data/EIP Database/REDCap 2025/EIP Database Data 20260223_1001.csv')
+dim(eip25)
+summary(eip25$record_id)
+eip25$record_id <- paste(eip25$record_id, "_25", sep = "")
+summary(eip25$record_id)
+
+# 2026
+eip26 <- read.csv('M:/EIP Data/EIP Database/REDCap 2026/EIP Database Data 20260223_1005.csv')
+dim(eip26)
+summary(eip26$record_id)
+eip26$record_id <- paste(eip26$record_id, "_26", sep = "")
+summary(eip26$record_id)
+
+```
+
+```{r Patient Data to Encounter, include=FALSE}
+
+### Person-level data is only visit_001_arm_1, use to match to encounters
+
+# 2024
+table(eip24$redcap_event_name)
+person <- eip24[which(eip24$redcap_event_name == 'visit_001_arm_1'), ]
+dim(person)
+
+person <- select(person, record_id, mrn, dob, 
+                 race___1, race___2, race___3, race___4, race___5, race___6, ethnicity,
+                 sex_raised, sex_selfdefined, insurance, address_county,
+                 address_zip_code)
+dim(person)
+
+eip24 <- select(eip24, -mrn, -dob, 
+                -race___1, -race___2, -race___3, -race___4, -race___5, 
+                -race___6, -ethnicity,
+                -sex_raised, -sex_selfdefined, -insurance, -address_county,
+                -address_zip_code)
+
+# Merge person dataset with full eip24 dataset
+
+dim(eip24)
+dim(person)
+eip24 <- merge(eip24, person, by='record_id', all.x=T)
+dim(eip24)
+eip24 <- distinct(eip24)
+dim(eip24)
+
+
+# 2025
+table(eip25$redcap_event_name)
+person <- eip25[which(eip25$redcap_event_name == 'visit_001_arm_1'), ]
+dim(person)
+
+person <- select(person, record_id, mrn, dob, 
+                 race___1, race___2, race___3, race___4, race___5, race___6, ethnicity,
+                 sex_raised, sex_selfdefined, insurance, address_county,
+                 address_zip_code)
+dim(person)
+
+eip25 <- select(eip25, -mrn, -dob, 
+                -race___1, -race___2, -race___3, -race___4, -race___5, 
+                -race___6, -ethnicity,
+                -sex_raised, -sex_selfdefined, -insurance, -address_county,
+                -address_zip_code)
+
+# Merge person dataset with full eip dataset
+
+dim(eip25)
+dim(person)
+eip25 <- merge(eip25, person, by='record_id', all.x=T)
+dim(eip25)
+eip25 <- distinct(eip25)
+dim(eip25)
+
+
+# 2026
+table(eip26$redcap_event_name)
+person <- eip26[which(eip26$redcap_event_name == 'visit_001_arm_1'), ]
+dim(person)
+
+person <- select(person, record_id, mrn, dob, 
+                 race___1, race___2, race___3, race___4, race___5, race___6, ethnicity,
+                 sex_raised, sex_selfdefined, insurance, address_county,
+                 address_zip_code)
+dim(person)
+
+eip26 <- select(eip26, -mrn, -dob, 
+                -race___1, -race___2, -race___3, -race___4, -race___5, 
+                -race___6, -ethnicity,
+                -sex_raised, -sex_selfdefined, -insurance, -address_county,
+                -address_zip_code)
+
+# Merge person dataset with full eip dataset
+
+dim(eip26)
+dim(person)
+eip26 <- merge(eip26, person, by='record_id', all.x=T)
+dim(eip26)
+eip26 <- distinct(eip26)
+dim(eip26)
+
+```
+
+```{r Combining Datasets, include=FALSE}
+
+####################  Combine 2023/2024/2025/2026 Data  ####################
+
+dim(eip24)
+dim(eip25)
+dim(eip26)
+
+
+#####  Updating 2024 Dataset  #####
+
+# Adding variables introduced in 2025/2026 database to 2024 dataset as blank values
+eip24$hcph_sud_day90_contact_date <- ''
+eip24$wound_care_kit <- ''
+eip24$wound_care_kit_number <- ''
+eip24$final_ed_dx <- ''
+eip24$syph_order <- ''
+eip24$ltc_coordinator_per_case___3 <- ''
+eip24$ltc_coordinator_per_case___83 <- ''
+eip24$ltc_coordinator_per_case___84 <- ''
+eip24$ltc_coordinator_per_case___85 <- ''
+eip24$ltc_coordinator_per_case___86 <- ''
+eip24$abbey_ltc_open_calc <- ''
+eip24$powers_ltc_open_calc <- ''
+eip24$johannes_ltc_open_calc <- ''
+eip24$spaeth_ltc_open_calc <- ''
+eip24$counselor_sti_start <- ''
+eip24$datetime_sti_start <- ''
+eip24$referred_by_sti <- ''
+eip24$reason_for_offer_category_sti_test <- ''
+eip24$reason_for_offer_routine_freq_sti <- ''
+eip24$reason_for_offer_self_req_other_sti <- ''
+eip24$reason_for_offer_diagnostic_other_sti <- ''
+eip24$reason_for_offer_clinical_other_sti <- ''
+eip24$reason_for_offer_counselor_other_sti <- ''
+eip24$offer_outcome_time_sti <- ''
+eip24$offer_outcome_location_sti <- ''
+eip24$offer_outcome_room_sti <- ''
+eip24$offer_outcome_sti <- ''
+eip24$offer_outcome_declined_other_sti <- ''
+eip24$offer_outcome_prevented_other_sti <- ''
+eip24$offer_outcome_later_sti <- ''
+eip24$offer_outcome_time_sti_2 <- ''
+eip24$offer_outcome_location_sti_2 <- ''
+eip24$offer_outcome_room_sti_2 <- ''
+eip24$offer_outcome_sti_2 <- ''
+eip24$offer_outcome_declined_other_sti_2 <- ''
+eip24$offer_outcome_prevented_other_sti_2 <- ''
+eip24$offer_outcome_later_sti_2 <- ''
+eip24$offer_outcome_time_sti_3 <- ''
+eip24$offer_outcome_location_sti_3 <- ''
+eip24$offer_outcome_room_sti_3 <- ''
+eip24$offer_outcome_sti_3 <- ''
+eip24$offer_outcome_declined_other_sti_3 <- ''
+eip24$offer_outcome_prevented_other_sti_3 <- ''
+eip24$sti_test_type1 <- ''
+eip24$sti_syph_test_assay1 <- ''
+eip24$sti_test_sample1 <- ''
+eip24$sti_test_collected1 <- ''
+eip24$sti_test_processed1 <- ''
+eip24$sample_obtained_sti1 <- ''
+eip24$assay_began_sti1 <- ''
+eip24$sti_test_processing_location1 <- ''
+eip24$sti_test_lot_no1 <- ''
+eip24$sti_test_conv_no1 <- ''
+eip24$sti_test_collected_rsn1 <- ''
+eip24$sti_test_process_rsn1 <- ''
+eip24$assay_read_sti1 <- ''
+eip24$sti_result1 <- ''
+eip24$sti_result_yn2 <- ''
+eip24$sti_test_type2 <- ''
+eip24$sti_syph_test_assay2 <- ''
+eip24$sti_test_sample2 <- ''
+eip24$sti_test_collected2 <- ''
+eip24$sti_test_processed2 <- ''
+eip24$sample_obtained_sti2 <- ''
+eip24$assay_began_sti2 <- ''
+eip24$sti_test_processing_location2 <- ''
+eip24$sti_test_lot_no2 <- ''
+eip24$sti_test_conv_no2 <- ''
+eip24$sti_test_collected_rsn2 <- ''
+eip24$sti_test_process_rsn2 <- ''
+eip24$assay_read_sti2 <- ''
+eip24$sti_result2 <- ''
+eip24$sti_result_yn3 <- ''
+eip24$sti_test_type3 <- ''
+eip24$sti_syph_test_assay3 <- ''
+eip24$sti_test_sample3 <- ''
+eip24$sti_test_collected3 <- ''
+eip24$sti_test_processed3 <- ''
+eip24$sample_obtained_sti3 <- ''
+eip24$assay_began_sti3 <- ''
+eip24$sti_test_processing_location3 <- ''
+eip24$sti_test_lot_no3 <- ''
+eip24$sti_test_conv_no3 <- ''
+eip24$sti_test_collected_rsn3 <- ''
+eip24$sti_test_process_rsn3 <- ''
+eip24$assay_read_sti3 <- ''
+eip24$sti_result3 <- ''
+eip24$sti_result_yn4 <- ''
+eip24$sti_test_type4 <- ''
+eip24$sti_syph_test_assay4 <- ''
+eip24$sti_test_sample4 <- ''
+eip24$sti_test_collected4 <- ''
+eip24$sti_test_processed4 <- ''
+eip24$sample_obtained_sti4 <- ''
+eip24$assay_began_sti4 <- ''
+eip24$sti_test_processing_location4 <- ''
+eip24$sti_test_lot_no4 <- ''
+eip24$sti_test_conv_no4 <- ''
+eip24$sti_test_collected_rsn4 <- ''
+eip24$sti_test_process_rsn4 <- ''
+eip24$assay_read_sti4 <- ''
+eip24$sti_result4 <- ''
+eip24$sti_result_yn5 <- ''
+eip24$sti_test_type5 <- ''
+eip24$sti_syph_test_assay5 <- ''
+eip24$sti_test_sample5 <- ''
+eip24$sti_test_collected5 <- ''
+eip24$sti_test_processed5 <- ''
+eip24$sample_obtained_sti5 <- ''
+eip24$assay_began_sti5 <- ''
+eip24$sti_test_processing_location5 <- ''
+eip24$sti_test_lot_no5 <- ''
+eip24$sti_test_conv_no5 <- ''
+eip24$sti_test_collected_rsn5 <- ''
+eip24$sti_test_process_rsn5 <- ''
+eip24$assay_read_sti5 <- ''
+eip24$sti_result5 <- ''
+eip24$sti_result_yn6 <- ''
+eip24$sti_test_type6 <- ''
+eip24$sti_syph_test_assay6 <- ''
+eip24$sti_test_sample6 <- ''
+eip24$sti_test_collected6 <- ''
+eip24$sti_test_processed6 <- ''
+eip24$sample_obtained_sti6 <- ''
+eip24$assay_began_sti6 <- ''
+eip24$sti_test_processing_location6 <- ''
+eip24$sti_test_lot_no6 <- ''
+eip24$sti_test_conv_no6 <- ''
+eip24$sti_test_collected_rsn6 <- ''
+eip24$sti_test_process_rsn6 <- ''
+eip24$assay_read_sti6 <- ''
+eip24$sti_result6 <- ''
+eip24$final_test_status_sti <- ''
+eip24$sti_test_ltc_ref <- ''
+eip24$sti_test_ltc_check <- ''
+eip24$sti_test_ltc_report_hd <- ''
+eip24$sti_result_notified_enc_yn <- ''
+eip24$result_notification_sti <- ''
+eip24$pt_not_notified_sti_reason <- ''
+eip24$pt_not_notified_sti_reason_disp <- ''
+eip24$pt_not_notified_sti_reason_dc <- ''
+eip24$sti_result_notification_fu <- ''
+eip24$result_notification_sti_fu <- ''
+eip24$reason_for_offer_self_req_sti___1 <- ''
+eip24$reason_for_offer_self_req_sti___2 <- ''    
+eip24$reason_for_offer_self_req_sti___3 <- ''
+eip24$reason_for_offer_self_req_sti___5 <- ''
+eip24$reason_for_offer_self_req_sti___6 <- ''
+eip24$reason_for_offer_self_req_sti___7 <- ''
+eip24$reason_for_offer_self_req_sti___8 <- ''
+eip24$reason_for_offer_self_req_sti___9 <- ''
+eip24$reason_for_offer_self_req_sti___4 <- ''
+eip24$reason_for_offer_diagnostic_sti___1 <- ''
+eip24$reason_for_offer_diagnostic_sti___2 <- ''
+eip24$reason_for_offer_diagnostic_sti___3 <- ''
+eip24$reason_for_offer_diagnostic_sti___4 <- ''
+eip24$reason_for_offer_diagnostic_sti___5 <- ''
+eip24$reason_for_offer_diagnostic_sti___6 <- ''
+eip24$reason_for_offer_diagnostic_sti___7 <- ''
+eip24$reason_for_offer_diagnostic_sti___8 <- ''
+eip24$reason_for_offer_diagnostic_sti___9 <- ''
+eip24$reason_for_offer_diagnostic_sti___10 <- ''
+eip24$reason_for_offer_diagnostic_sti___11 <- ''
+eip24$reason_for_offer_diagnostic_sti___12 <- ''
+eip24$reason_for_offer_diagnostic_sti___13 <- ''
+eip24$reason_for_offer_diagnostic_sti___14 <- ''
+eip24$reason_for_offer_diagnostic_sti___15 <- ''
+eip24$reason_for_offer_diagnostic_sti___16 <- ''
+eip24$reason_for_offer_diagnostic_sti___17 <- ''
+eip24$reason_for_offer_diagnostic_sti___18 <- ''
+eip24$reason_for_offer_diagnostic_sti___19 <- ''
+eip24$reason_for_offer_diagnostic_sti___20 <- ''
+eip24$reason_for_offer_diagnostic_sti___21 <- ''
+eip24$reason_for_offer_diagnostic_sti___22 <- ''
+eip24$reason_for_offer_diagnostic_sti___23 <- ''
+eip24$reason_for_offer_diagnostic_sti___24 <- ''
+eip24$reason_for_offer_diagnostic_sti___25 <- ''
+eip24$reason_for_offer_diagnostic_sti___26 <- ''
+eip24$reason_for_offer_diagnostic_sti___27 <- ''
+eip24$reason_for_offer_diagnostic_sti___28 <- ''
+eip24$reason_for_offer_diagnostic_sti___29 <- ''
+eip24$reason_for_offer_diagnostic_sti___30 <- ''
+eip24$reason_for_offer_diagnostic_sti___31 <- ''
+eip24$reason_for_offer_diagnostic_sti___32 <- ''
+eip24$reason_for_offer_diagnostic_sti___33 <- ''
+eip24$reason_for_offer_clinical_sti___1 <- ''
+eip24$reason_for_offer_clinical_sti___2 <- ''
+eip24$reason_for_offer_clinical_sti___3 <- ''
+eip24$reason_for_offer_clinical_sti___4 <- ''
+eip24$reason_for_offer_clinical_sti___5 <- ''
+eip24$reason_for_offer_clinical_sti___7 <- ''
+eip24$reason_for_offer_clinical_sti___8 <- ''
+eip24$reason_for_offer_clinical_sti___9 <- ''
+eip24$reason_for_offer_clinical_sti___10 <- ''
+eip24$reason_for_offer_clinical_sti___11 <- ''
+eip24$reason_for_offer_clinical_sti___12 <- ''
+eip24$reason_for_offer_clinical_sti___13 <- ''
+eip24$reason_for_offer_clinical_sti___14 <- ''
+eip24$reason_for_offer_clinical_sti___15 <- ''
+eip24$reason_for_offer_clinical_sti___32 <- ''
+eip24$reason_for_offer_clinical_sti___16 <- ''
+eip24$reason_for_offer_clinical_sti___17 <- ''
+eip24$reason_for_offer_clinical_sti___18 <- ''
+eip24$reason_for_offer_clinical_sti___19 <- ''
+eip24$reason_for_offer_clinical_sti___20 <- ''
+eip24$reason_for_offer_clinical_sti___21 <- ''
+eip24$reason_for_offer_clinical_sti___22 <- ''
+eip24$reason_for_offer_clinical_sti___23 <- ''
+eip24$reason_for_offer_clinical_sti___24 <- ''
+eip24$reason_for_offer_clinical_sti___25 <- ''
+eip24$reason_for_offer_clinical_sti___26 <- ''
+eip24$reason_for_offer_clinical_sti___27 <- ''
+eip24$reason_for_offer_clinical_sti___28 <- ''
+eip24$reason_for_offer_clinical_sti___29 <- ''
+eip24$reason_for_offer_clinical_sti___30 <- ''
+eip24$reason_for_offer_clinical_sti___31 <- ''
+eip24$reason_for_offer_counselor_sti___1 <- ''
+eip24$reason_for_offer_counselor_sti___2 <- ''
+eip24$reason_for_offer_counselor_sti___3 <- ''
+eip24$reason_for_offer_counselor_sti___4 <- ''
+eip24$reason_for_offer_counselor_sti___5 <- ''
+eip24$reason_for_offer_counselor_sti___6 <- ''
+eip24$reason_for_offer_counselor_sti___7 <- ''
+eip24$reason_for_offer_counselor_sti___8 <- ''
+eip24$reason_for_offer_counselor_sti___9 <- ''
+eip24$reason_for_offer_counselor_sti___10 <- ''
+eip24$reason_for_offer_counselor_sti___11 <- ''
+eip24$reason_for_offer_counselor_sti___12 <- ''
+eip24$reason_for_offer_counselor_sti___13 <- ''
+eip24$reason_for_offer_counselor_sti___14 <- ''
+eip24$reason_for_offer_counselor_sti___31 <- ''
+eip24$reason_for_offer_counselor_sti___15 <- ''
+eip24$reason_for_offer_counselor_sti___16 <- ''
+eip24$reason_for_offer_counselor_sti___17 <- ''
+eip24$reason_for_offer_counselor_sti___18 <- ''
+eip24$reason_for_offer_counselor_sti___19 <- ''
+eip24$reason_for_offer_counselor_sti___20 <- ''
+eip24$reason_for_offer_counselor_sti___21 <- ''
+eip24$reason_for_offer_counselor_sti___22 <- ''
+eip24$reason_for_offer_counselor_sti___23 <- ''
+eip24$reason_for_offer_counselor_sti___24 <- ''
+eip24$reason_for_offer_counselor_sti___25 <- ''
+eip24$reason_for_offer_counselor_sti___26 <- ''
+eip24$reason_for_offer_counselor_sti___27 <- ''
+eip24$reason_for_offer_counselor_sti___28 <- ''
+eip24$reason_for_offer_counselor_sti___29 <- ''
+eip24$reason_for_offer_counselor_sti___30 <- ''
+eip24$reason_for_offer_demographics_sti___1 <- ''
+eip24$reason_for_offer_demographics_sti___2 <- ''
+eip24$reason_for_offer_demographics_sti___3 <- ''
+eip24$reason_for_offer_demographics_sti___4 <- ''
+eip24$offer_outcome_approach_sti___1 <- ''
+eip24$offer_outcome_approach_sti___2 <- ''
+eip24$offer_outcome_approach_sti___3 <- ''
+eip24$offer_outcome_approach_sti___4 <- ''
+eip24$offer_outcome_approach_sti___5 <- ''
+eip24$offer_outcome_approach_sti___6 <- ''
+eip24$offer_outcome_approach_sti___7 <- ''
+eip24$offer_outcome_approach_sti___8 <- ''
+eip24$offer_outcome_declined_sti___1 <- ''
+eip24$offer_outcome_declined_sti___2 <- ''
+eip24$offer_outcome_declined_sti___3 <- ''
+eip24$offer_outcome_declined_sti___4 <- ''
+eip24$offer_outcome_declined_sti___5 <- ''
+eip24$offer_outcome_declined_sti___6 <- ''
+eip24$offer_outcome_declined_sti___7 <- ''
+eip24$offer_outcome_declined_sti___8 <- ''
+eip24$offer_outcome_declined_sti___9 <- ''
+eip24$offer_outcome_declined_sti___10 <- ''
+eip24$offer_outcome_declined_sti___27 <- ''
+eip24$offer_outcome_declined_sti___11 <- ''
+eip24$offer_outcome_declined_sti___12 <- ''
+eip24$offer_outcome_declined_sti___13 <- ''
+eip24$offer_outcome_declined_sti___14 <- ''
+eip24$offer_outcome_declined_sti___15 <- ''
+eip24$offer_outcome_declined_sti___16 <- ''
+eip24$offer_outcome_declined_sti___17 <- ''
+eip24$offer_outcome_declined_sti___18 <- ''
+eip24$offer_outcome_declined_sti___19 <- ''
+eip24$offer_outcome_declined_sti___20 <- ''
+eip24$offer_outcome_declined_sti___21 <- ''
+eip24$offer_outcome_declined_sti___22 <- ''
+eip24$offer_outcome_declined_sti___23 <- ''
+eip24$offer_outcome_declined_sti___24 <- ''
+eip24$offer_outcome_declined_sti___25 <- ''
+eip24$offer_outcome_declined_sti___28 <- ''
+eip24$offer_outcome_declined_sti___26 <- ''
+eip24$offer_outcome_prevented_sti___1 <- ''
+eip24$offer_outcome_prevented_sti___2 <- ''
+eip24$offer_outcome_prevented_sti___3 <- ''
+eip24$offer_outcome_prevented_sti___4 <- ''
+eip24$offer_outcome_prevented_sti___5 <- ''
+eip24$offer_outcome_prevented_sti___6 <- ''
+eip24$offer_outcome_prevented_sti___7 <- ''
+eip24$offer_outcome_prevented_sti___8 <- ''
+eip24$offer_outcome_prevented_sti___9 <- ''
+eip24$offer_outcome_prevented_sti___10 <- ''
+eip24$offer_outcome_approach_sti_2___1 <- ''
+eip24$offer_outcome_approach_sti_2___2 <- ''
+eip24$offer_outcome_approach_sti_2___3 <- ''
+eip24$offer_outcome_approach_sti_2___4 <- ''
+eip24$offer_outcome_approach_sti_2___5 <- ''
+eip24$offer_outcome_approach_sti_2___6 <- ''
+eip24$offer_outcome_approach_sti_2___7 <- ''
+eip24$offer_outcome_approach_sti_2___8 <- ''
+eip24$offer_outcome_declined_sti_2___1 <- ''
+eip24$offer_outcome_declined_sti_2___2 <- ''
+eip24$offer_outcome_declined_sti_2___3 <- ''
+eip24$offer_outcome_declined_sti_2___4 <- ''
+eip24$offer_outcome_declined_sti_2___5 <- ''
+eip24$offer_outcome_declined_sti_2___6 <- ''
+eip24$offer_outcome_declined_sti_2___7 <- ''
+eip24$offer_outcome_declined_sti_2___8 <- ''
+eip24$offer_outcome_declined_sti_2___9 <- ''
+eip24$offer_outcome_declined_sti_2___10 <- ''
+eip24$offer_outcome_declined_sti_2___27 <- ''
+eip24$offer_outcome_declined_sti_2___11 <- ''
+eip24$offer_outcome_declined_sti_2___12 <- ''
+eip24$offer_outcome_declined_sti_2___13 <- ''
+eip24$offer_outcome_declined_sti_2___14 <- ''
+eip24$offer_outcome_declined_sti_2___15 <- ''
+eip24$offer_outcome_declined_sti_2___16 <- ''
+eip24$offer_outcome_declined_sti_2___17 <- ''
+eip24$offer_outcome_declined_sti_2___18 <- ''
+eip24$offer_outcome_declined_sti_2___19 <- ''
+eip24$offer_outcome_declined_sti_2___20 <- ''
+eip24$offer_outcome_declined_sti_2___21 <- ''
+eip24$offer_outcome_declined_sti_2___22 <- ''
+eip24$offer_outcome_declined_sti_2___23 <- ''
+eip24$offer_outcome_declined_sti_2___24 <- ''
+eip24$offer_outcome_declined_sti_2___25 <- ''
+eip24$offer_outcome_declined_sti_2___28 <- ''
+eip24$offer_outcome_declined_sti_2___26 <- ''
+eip24$offer_outcome_prevented_sti_2___1 <- ''
+eip24$offer_outcome_prevented_sti_2___2 <- ''
+eip24$offer_outcome_prevented_sti_2___3 <- ''
+eip24$offer_outcome_prevented_sti_2___4 <- ''
+eip24$offer_outcome_prevented_sti_2___5 <- ''
+eip24$offer_outcome_prevented_sti_2___6 <- ''
+eip24$offer_outcome_prevented_sti_2___7 <- ''
+eip24$offer_outcome_prevented_sti_2___8 <- ''
+eip24$offer_outcome_prevented_sti_2___9 <- ''
+eip24$offer_outcome_prevented_sti_2___10 <- ''
+eip24$offer_outcome_approach_sti_3___1 <- ''
+eip24$offer_outcome_approach_sti_3___2 <- ''
+eip24$offer_outcome_approach_sti_3___3 <- ''
+eip24$offer_outcome_approach_sti_3___4 <- ''
+eip24$offer_outcome_approach_sti_3___5 <- ''
+eip24$offer_outcome_approach_sti_3___6 <- ''
+eip24$offer_outcome_approach_sti_3___7 <- ''
+eip24$offer_outcome_approach_sti_3___8 <- ''
+eip24$offer_outcome_declined_sti_3___1 <- ''
+eip24$offer_outcome_declined_sti_3___2 <- ''
+eip24$offer_outcome_declined_sti_3___3 <- ''
+eip24$offer_outcome_declined_sti_3___4 <- ''
+eip24$offer_outcome_declined_sti_3___5 <- ''
+eip24$offer_outcome_declined_sti_3___6 <- ''
+eip24$offer_outcome_declined_sti_3___7 <- ''
+eip24$offer_outcome_declined_sti_3___8 <- ''
+eip24$offer_outcome_declined_sti_3___9 <- ''
+eip24$offer_outcome_declined_sti_3___10 <- ''
+eip24$offer_outcome_declined_sti_3___27 <- ''
+eip24$offer_outcome_declined_sti_3___11 <- ''
+eip24$offer_outcome_declined_sti_3___12 <- ''
+eip24$offer_outcome_declined_sti_3___13 <- ''
+eip24$offer_outcome_declined_sti_3___14 <- ''
+eip24$offer_outcome_declined_sti_3___15 <- ''
+eip24$offer_outcome_declined_sti_3___16 <- ''
+eip24$offer_outcome_declined_sti_3___17 <- ''
+eip24$offer_outcome_declined_sti_3___18 <- ''
+eip24$offer_outcome_declined_sti_3___19 <- ''
+eip24$offer_outcome_declined_sti_3___20 <- ''
+eip24$offer_outcome_declined_sti_3___21 <- ''
+eip24$offer_outcome_declined_sti_3___22 <- ''
+eip24$offer_outcome_declined_sti_3___23 <- ''
+eip24$offer_outcome_declined_sti_3___24 <- ''
+eip24$offer_outcome_declined_sti_3___25 <- ''
+eip24$offer_outcome_declined_sti_3___28 <- ''
+eip24$offer_outcome_declined_sti_3___26 <- ''
+eip24$offer_outcome_prevented_sti_3___1 <- ''
+eip24$offer_outcome_prevented_sti_3___2 <- ''
+eip24$offer_outcome_prevented_sti_3___3 <- ''
+eip24$offer_outcome_prevented_sti_3___4 <- ''
+eip24$offer_outcome_prevented_sti_3___5 <- ''
+eip24$offer_outcome_prevented_sti_3___6 <- ''
+eip24$offer_outcome_prevented_sti_3___7 <- ''
+eip24$offer_outcome_prevented_sti_3___8 <- ''
+eip24$offer_outcome_prevented_sti_3___9 <- ''
+eip24$offer_outcome_prevented_sti_3___10 <- ''
+eip24$testing_sti_complete <- ''
+eip24$oend_eip_facilitated_med_staff___0 <- ''
+eip24$oend_eip_facilitated_dist_method___3 <- ''
+eip24$oend_eip_facilitated_nalox_vend <- ''
+eip24$ltc_coordinator_per_case___87 <- ''
+eip24$ltc_coordinator_per_case___88 <- ''
+eip24$ltc_coordinator_per_case___89 <- ''
+eip24$ltc_coordinator_per_case___90 <- ''
+eip24$ltc_coordinator_per_case___91 <- ''
+eip24$ltc_coordinator_per_case___92 <- ''
+eip24$kahloon_ltc_open_calc <- ''
+eip24$enc_location_medvouc <- ''
+eip24$enc_location_medvouc_other <- ''
+eip24$offer_outcome_declined_peer___27 <- ''
+eip24$offer_outcome_declined_peer___28 <- ''
+eip24$offer_outcome_declined_peer___29 <- ''
+eip24$offer_outcome_declined_peer___30 <- ''
+eip24$offer_outcome_declined_peer___36 <- ''
+eip24$offer_outcome_declined_peer___33 <- ''
+eip24$offer_outcome_declined_peer___34 <- ''
+eip24$offer_outcome_declined_peer___35 <- ''
+eip24$offer_outcome_declined_peer___0 <- ''
+eip24$ltc_hiv_success_story <- ''
+eip24$ltc_hcv_success_story <- ''
+eip24$ltc_sud_success_story <- ''
+eip24$ltc_prep_success_story <- ''
+eip24$ltc_mh_success_story <- ''
+eip24$ltc_housing_success_story <- ''
+eip24$ltc_food_success_story <- ''
+eip24$ltc_financial_success_story <- ''
+eip24$ltc_ht_success_story <- ''
+eip24$ltc_abuse_success_story <- ''
+eip24$ltc_general_success_story <- ''
+eip24$ltc_sti_success_story <- ''
+eip24$ltc_other_success_story <- ''
+eip24$hcph_sud_next_follow_up_date <- ''
+eip24$enc_location_street_med <- ''
+eip24$xts_provided <- ''
+eip24$xts_number <- ''
+eip24$ltc_services___6 <- ''
+eip24$ltc_peer_final_ltc_status <- ''
+eip24$ltc_peer_declined_rsn___23 <- ''
+eip24$ltc_peer_declined_rsn___27 <- ''
+eip24$ltc_peer_declined_rsn___3 <- ''
+eip24$ltc_peer_declined_rsn___5 <- ''
+eip24$ltc_peer_declined_rsn___6 <- ''
+eip24$ltc_peer_declined_rsn___7 <- ''
+eip24$ltc_peer_declined_rsn___8 <- ''
+eip24$ltc_peer_declined_rsn___9 <- ''
+eip24$ltc_peer_declined_rsn___10 <- ''
+eip24$ltc_peer_declined_rsn___28 <- ''
+eip24$ltc_peer_declined_rsn___29 <- ''
+eip24$ltc_peer_declined_rsn___30 <- ''
+eip24$ltc_peer_declined_rsn___36 <- ''
+eip24$ltc_peer_declined_rsn___33 <- ''
+eip24$ltc_peer_declined_rsn___34 <- ''
+eip24$ltc_peer_declined_rsn___35 <- ''
+eip24$ltc_peer_declined_rsn___0 <- ''
+eip24$ltc_peer_declined_rsn_other <- ''
+eip24$ltc_peer_prevented_rsn___1 <- ''
+eip24$ltc_peer_prevented_rsn___2 <- ''
+eip24$ltc_peer_prevented_rsn___11 <- ''
+eip24$ltc_peer_prevented_rsn___3 <- ''
+eip24$ltc_peer_prevented_rsn___4 <- ''
+eip24$ltc_peer_prevented_rsn___5 <- ''
+eip24$ltc_peer_prevented_rsn___6 <- ''
+eip24$ltc_peer_prevented_rsn___8 <- ''
+eip24$ltc_peer_prevented_rsn___9 <- ''
+eip24$ltc_peer_prevented_rsn___12 <- ''
+eip24$ltc_peer_prevented_rsn___19 <- ''
+eip24$ltc_peer_prevented_rsn___20 <- ''
+eip24$ltc_peer_prevented_rsn___16 <- ''
+eip24$ltc_peer_prevented_rsn___17 <- ''
+eip24$ltc_peer_prevented_rsn___18 <- ''
+eip24$ltc_peer_prevented_rsn___0 <- ''
+eip24$ltc_peer_prevented_rsn_other <- ''
+eip24$peer_link_eip <- ''
+eip24$ltc_peer_success_story <- ''
+eip24$close_case_peer <- ''
+eip24$close_case_peer_date <- ''
+eip24$hiv_next_follow_up_date <- ''
+eip24$hcv_next_follow_up_date <- ''
+eip24$sud_next_follow_up_date <- ''
+eip24$peer_next_follow_up_date <- ''
+eip24$add_next_follow_up_date <- ''
+eip24$ltc_sud_referral_hopeline___0 <- ''
+eip24$ltc_sud_referral_hopeline___1 <- ''
+eip24$ltc_sud_referral_hopeline___2 <- ''
+eip24$ltc_sud_referral_hopeline___3 <- ''
+eip24$ltc_sud_referral_hopeline_date <- ''
+eip24$ltc_sud_referral_uc_inpt___0 <- ''
+eip24$ltc_sud_referral_uc_inpt___1 <- ''
+eip24$ltc_sud_referral_uc_inpt___2 <- ''
+eip24$ltc_sud_referral_uc_inpt___3 <- ''
+eip24$ltc_sud_referral_uc_inpt_date <- ''
+eip24$counselor_ref_sud_specific___60 <- ''
+eip24$counselor_ref_sud_specific___61 <- ''
+eip24$ltc_coordinator_per_case___2 <- ''
+eip24$ltc_hcv_referral_uc_pharmacy_telehealth___1 <- ''
+eip24$ltc_hcv_referral_uc_pharmacy_telehealth___2 <- ''
+eip24$ltc_hcv_referral_uc_pharmacy_telehealth___3 <- ''
+eip24$ltc_coordinator_per_case___12 <- ''
+eip24$ltc_coordinator_per_case___61 <- ''
+eip24$ltc_coordinator_per_case___54 <- ''
+eip24$ltc_coordinator_per_case___24 <- ''
+eip24$ltc_coordinator_per_case___64 <- ''
+eip24$ltc_coordinator_per_case___28 <- ''
+eip24$ltc_coordinator_per_case___63 <- ''
+eip24$ltc_coordinator_per_case___49 <- ''
+eip24$ltc_coordinator_per_case___69 <- ''
+eip24$ltc_coordinator_per_case___30 <- ''
+eip24$mgen_sr <- ''
+eip24$mgen_treat <- ''
+
+
+#####  Updating 2025 Dataset  #####
+
+# Adding variables removed in 2025 database from 2024 database as blank values
+eip25$peer_navigator_id___14 <- ''
+eip25$peer_navigator_id___67 <- ''
+eip25$peer_navigator_id___14 <- ''
+eip25$peer_navigator_id___67               
+eip25$eligible_blackard_icf <- ''
+eip25$naccho_day14_contact_date <- ''
+eip25$naccho_day30_contact_date <- ''
+eip25$partner_status_1___1 <- ''
+eip25$partner_status_1___2 <- ''
+eip25$partner_status_1___3 <- ''
+eip25$partner_status_1___4 <- ''
+eip25$partner_status_1___5 <- ''
+eip25$partner_status_1___6 <- ''
+eip25$partner_status_1___7 <- ''
+eip25$partner_status_1___8 <- ''
+eip25$partner_status_2___1 <- ''
+eip25$partner_status_2___2 <- ''
+eip25$partner_status_2___3 <- ''
+eip25$partner_status_2___4 <- ''
+eip25$partner_status_2___5 <- ''
+eip25$partner_status_2___6 <- ''
+eip25$partner_status_2___7 <- ''
+eip25$partner_status_2___8 <- ''
+eip25$partner_status_3___1 <- ''
+eip25$partner_status_3___2 <- ''
+eip25$partner_status_3___3 <- ''
+eip25$partner_status_3___4 <- ''
+eip25$partner_status_3___5 <- ''
+eip25$partner_status_3___6 <- ''
+eip25$partner_status_3___7 <- ''
+eip25$partner_status_3___8 <- ''
+eip25$partner_status_4___1 <- ''
+eip25$partner_status_4___2 <- ''
+eip25$partner_status_4___3 <- ''
+eip25$partner_status_4___4 <- ''
+eip25$partner_status_4___5 <- ''
+eip25$partner_status_4___6 <- ''
+eip25$partner_status_4___7 <- ''
+eip25$partner_status_4___8 <- ''
+eip25$partner_status_5___1 <- ''
+eip25$partner_status_5___2 <- ''
+eip25$partner_status_5___3 <- ''
+eip25$partner_status_5___4 <- ''
+eip25$partner_status_5___5 <- ''
+eip25$partner_status_5___6 <- ''
+eip25$partner_status_5___7 <- ''
+eip25$partner_status_5___8 <- ''
+eip25$counselor_ref_sti_specific___6 <- ''
+eip25$ltc_coordinator_per_case___5 <- ''
+eip25$ltc_coordinator_per_case___6 <- ''
+eip25$ltc_coordinator_per_case___8 <- ''
+eip25$ltc_coordinator_per_case___73 <- ''
+eip25$ltc_coordinator_per_case___14 <- ''
+eip25$ltc_coordinator_per_case___65 <- ''
+eip25$ltc_coordinator_per_case___59 <- ''
+eip25$ltc_coordinator_per_case___67 <- ''
+eip25$ltc_coordinator_per_case___72 <- ''
+eip25$ltc_coordinator_per_case___47 <- ''
+eip25$ltc_coordinator_per_case___66 <- ''
+eip25$ltc_coordinator_per_case___76 <- ''
+eip25$ltc_coordinator_per_case___40 <- ''
+eip25$ltc_coordinator_per_case___41 <- ''
+eip25$ltc_coordinator_per_case___75 <- ''
+eip25$ltc_coordinator_per_case___1 <- ''
+eip25$ltc_coordinator_per_case___48 <- ''
+eip25$ltc_sud_oud_fu <- ''
+eip25$ltc_sud_oud_pos_fu <- ''
+eip25$ltc_service1___6 <- ''
+eip25$ltc_service2___6 <- ''
+eip25$ltc_service3___6 <- ''
+eip25$ltc_service4___6 <- ''
+eip25$ltc_service5___6 <- ''
+eip25$ltc_service6___6 <- ''
+eip25$ltc_service7___6 <- ''
+eip25$ltc_service8___6 <- ''
+eip25$ltc_service9___6 <- ''
+eip25$ltc_service10___6 <- ''
+eip25$ltc_service11___6 <- ''
+eip25$ltc_service12___6 <- ''
+eip25$ltc_service13___6 <- ''
+eip25$ltc_service14___6 <- ''
+eip25$ltc_service15___6 <- ''
+eip25$ltc_service16___6 <- ''
+eip25$ltc_service17___6 <- ''
+eip25$ltc_service18___6 <- ''
+eip25$ltc_service19___6 <- ''
+eip25$ltc_service20___6 <- ''
+eip25$ltc_service21___6 <- ''
+eip25$ltc_service22___6 <- ''
+eip25$ltc_service23___6 <- ''
+eip25$ltc_service24___6 <- ''
+eip25$ltc_service25___6 <- ''
+eip25$ltc_service26___6 <- ''
+eip25$ltc_service27___6 <- ''
+eip25$ltc_service28___6 <- ''
+eip25$ltc_service29___6 <- ''
+eip25$ltc_service30___6 <- ''
+eip25$ltc_service31___6 <- ''
+eip25$ltc_service32___6 <- ''
+eip25$ltc_service33___6 <- ''
+eip25$ltc_service34___6 <- ''
+eip25$ltc_service35___6 <- ''
+eip25$ltc_service36___6 <- ''
+eip25$ltc_service37___6 <- ''
+eip25$ltc_service38___6 <- ''
+eip25$ltc_service39___6 <- ''
+eip25$ltc_service40___6 <- ''
+eip25$ltc_service41___6 <- ''
+eip25$ltc_service42___6 <- ''
+eip25$ltc_service43___6 <- ''
+eip25$ltc_service44___6 <- ''
+eip25$ltc_service45___6 <- ''
+eip25$ltc_service46___6 <- ''
+eip25$ltc_service47___6 <- ''
+eip25$ltc_service48___6 <- ''
+eip25$ltc_service49___6 <- ''
+eip25$ltc_service50___6 <- ''
+eip25$ltc_service1___8 <- ''
+eip25$ltc_service2___8 <- ''
+eip25$ltc_service3___8 <- ''
+eip25$ltc_service4___8 <- ''
+eip25$ltc_service5___8 <- ''
+eip25$ltc_service6___8 <- ''
+eip25$ltc_service7___8 <- ''
+eip25$ltc_service8___8 <- ''
+eip25$ltc_service9___8 <- ''
+eip25$ltc_service10___8 <- ''
+eip25$ltc_service11___8 <- ''
+eip25$ltc_service12___8 <- ''
+eip25$ltc_service13___8 <- ''
+eip25$ltc_service14___8 <- ''
+eip25$ltc_service15___8 <- ''
+eip25$ltc_service16___8 <- ''
+eip25$ltc_service17___8 <- ''
+eip25$ltc_service18___8 <- ''
+eip25$ltc_service19___8 <- ''
+eip25$ltc_service20___8 <- ''
+eip25$ltc_service21___8 <- ''
+eip25$ltc_service22___8 <- ''
+eip25$ltc_service23___8 <- ''
+eip25$ltc_service24___8 <- ''
+eip25$ltc_service25___8 <- ''
+eip25$ltc_service26___8 <- ''
+eip25$ltc_service27___8 <- ''
+eip25$ltc_service28___8 <- ''
+eip25$ltc_service29___8 <- ''
+eip25$ltc_service30___8 <- ''
+eip25$ltc_service31___8 <- ''
+eip25$ltc_service32___8 <- ''
+eip25$ltc_service33___8 <- ''
+eip25$ltc_service34___8 <- ''
+eip25$ltc_service35___8 <- ''
+eip25$ltc_service36___8 <- ''
+eip25$ltc_service37___8 <- ''
+eip25$ltc_service38___8 <- ''
+eip25$ltc_service39___8 <- ''
+eip25$ltc_service40___8 <- ''
+eip25$ltc_service41___8 <- ''
+eip25$ltc_service42___8 <- ''
+eip25$ltc_service43___8 <- ''
+eip25$ltc_service44___8 <- ''
+eip25$ltc_service45___8 <- ''
+eip25$ltc_service46___8 <- ''
+eip25$ltc_service47___8 <- ''
+eip25$ltc_service48___8 <- ''
+eip25$ltc_service49___8 <- ''
+eip25$ltc_service50___8 <- ''
+eip25$naccho_contact_day1 <- ''
+eip25$naccho_contact_day2 <- ''
+eip25$naccho_contact_day3 <- ''
+eip25$naccho_contact_day4 <- ''
+eip25$naccho_contact_day5 <- ''
+eip25$naccho_contact_day6 <- ''
+eip25$naccho_contact_day7 <- ''
+eip25$naccho_contact_day8 <- ''
+eip25$naccho_contact_day9 <- ''
+eip25$naccho_contact_day10 <- ''
+eip25$naccho_contact_day11 <- ''
+eip25$naccho_contact_day12 <- ''
+eip25$naccho_contact_day13 <- ''
+eip25$naccho_contact_day14 <- ''
+eip25$naccho_contact_day15 <- ''
+eip25$naccho_contact_day16 <- ''
+eip25$naccho_contact_day17 <- ''
+eip25$naccho_contact_day18 <- ''
+eip25$naccho_contact_day19 <- ''
+eip25$naccho_contact_day20 <- ''
+eip25$naccho_contact_day21 <- ''
+eip25$naccho_contact_day22 <- ''
+eip25$naccho_contact_day23 <- ''
+eip25$naccho_contact_day24 <- ''
+eip25$naccho_contact_day25 <- ''
+eip25$naccho_contact_day26 <- ''
+eip25$naccho_contact_day27 <- ''
+eip25$naccho_contact_day28 <- ''
+eip25$naccho_contact_day29 <- ''
+eip25$naccho_contact_day30 <- ''
+eip25$naccho_contact_day31 <- ''
+eip25$naccho_contact_day32 <- ''
+eip25$naccho_contact_day33 <- ''
+eip25$naccho_contact_day34 <- ''
+eip25$naccho_contact_day35 <- ''
+eip25$naccho_contact_day36 <- ''
+eip25$naccho_contact_day37 <- ''
+eip25$naccho_contact_day38 <- ''
+eip25$naccho_contact_day39 <- ''
+eip25$naccho_contact_day40 <- ''
+eip25$naccho_contact_day41 <- ''
+eip25$naccho_contact_day42 <- ''
+eip25$naccho_contact_day43 <- ''
+eip25$naccho_contact_day44 <- ''
+eip25$naccho_contact_day45 <- ''
+eip25$naccho_contact_day46 <- ''
+eip25$naccho_contact_day47 <- ''
+eip25$naccho_contact_day48 <- ''
+eip25$naccho_contact_day49 <- ''
+eip25$naccho_contact_day50 <- ''
+eip25$naccho_contact_confirm_tx1 <- ''
+eip25$naccho_contact_confirm_tx2 <- ''
+eip25$naccho_contact_confirm_tx3 <- ''
+eip25$naccho_contact_confirm_tx4 <- ''
+eip25$naccho_contact_confirm_tx5 <- ''
+eip25$naccho_contact_confirm_tx6 <- ''
+eip25$naccho_contact_confirm_tx7 <- ''
+eip25$naccho_contact_confirm_tx8 <- ''
+eip25$naccho_contact_confirm_tx9 <- ''
+eip25$naccho_contact_confirm_tx10 <- ''
+eip25$naccho_contact_confirm_tx11 <- ''
+eip25$naccho_contact_confirm_tx12 <- ''
+eip25$naccho_contact_confirm_tx13 <- ''
+eip25$naccho_contact_confirm_tx14 <- ''
+eip25$naccho_contact_confirm_tx15 <- ''
+eip25$naccho_contact_confirm_tx16 <- ''
+eip25$naccho_contact_confirm_tx17 <- ''
+eip25$naccho_contact_confirm_tx18 <- ''
+eip25$naccho_contact_confirm_tx19 <- ''
+eip25$naccho_contact_confirm_tx20 <- ''
+eip25$naccho_contact_confirm_tx21 <- ''
+eip25$naccho_contact_confirm_tx22 <- ''
+eip25$naccho_contact_confirm_tx23 <- ''
+eip25$naccho_contact_confirm_tx24 <- ''
+eip25$naccho_contact_confirm_tx25 <- ''
+eip25$naccho_contact_confirm_tx26 <- ''
+eip25$naccho_contact_confirm_tx27 <- ''
+eip25$naccho_contact_confirm_tx28 <- ''
+eip25$naccho_contact_confirm_tx29 <- ''
+eip25$naccho_contact_confirm_tx30 <- ''
+eip25$naccho_contact_confirm_tx31 <- ''
+eip25$naccho_contact_confirm_tx32 <- ''
+eip25$naccho_contact_confirm_tx33 <- ''
+eip25$naccho_contact_confirm_tx34 <- ''
+eip25$naccho_contact_confirm_tx35 <- ''
+eip25$naccho_contact_confirm_tx36 <- ''
+eip25$naccho_contact_confirm_tx37 <- ''
+eip25$naccho_contact_confirm_tx38 <- ''
+eip25$naccho_contact_confirm_tx39 <- ''
+eip25$naccho_contact_confirm_tx40 <- ''
+eip25$naccho_contact_confirm_tx41 <- ''
+eip25$naccho_contact_confirm_tx42 <- ''
+eip25$naccho_contact_confirm_tx43 <- ''
+eip25$naccho_contact_confirm_tx44 <- ''
+eip25$naccho_contact_confirm_tx45 <- ''
+eip25$naccho_contact_confirm_tx46 <- ''
+eip25$naccho_contact_confirm_tx47 <- ''
+eip25$naccho_contact_confirm_tx48 <- ''
+eip25$naccho_contact_confirm_tx49 <- ''
+eip25$naccho_contact_confirm_tx50 <- ''
+eip25$ltc_hcv_referral_uc_pharmacy_telehealth___1 <- ''
+eip25$ltc_hcv_referral_uc_pharmacy_telehealth___2 <- ''
+eip25$ltc_hcv_referral_uc_pharmacy_telehealth___3 <- ''
+eip25$ltc_coordinator_per_case___2 <- ''
+eip25$ltc_coordinator_per_case___12 <- ''
+eip25$ltc_coordinator_per_case___61 <- ''
+eip25$ltc_coordinator_per_case___54 <- ''
+eip25$ltc_coordinator_per_case___24 <- ''
+eip25$ltc_coordinator_per_case___64 <- ''
+eip25$ltc_coordinator_per_case___28 <- ''
+eip25$ltc_coordinator_per_case___63 <- ''
+eip25$ltc_coordinator_per_case___49 <- ''
+eip25$ltc_coordinator_per_case___69 <- ''
+eip25$ltc_coordinator_per_case___30 <- ''
+eip25$offer_outcome_declined_peer___1 <- ''
+eip25$offer_outcome_declined_peer___2 <- ''
+eip25$offer_outcome_declined_peer___4 <- ''
+eip25$offer_outcome_declined_peer___11 <- ''
+eip25$offer_outcome_declined_peer___12 <- ''
+eip25$offer_outcome_declined_peer___13 <- ''
+eip25$offer_outcome_declined_peer___14 <- ''
+eip25$offer_outcome_declined_peer___15 <- ''
+eip25$offer_outcome_declined_peer___16 <- ''
+eip25$offer_outcome_declined_peer___17 <- ''
+eip25$offer_outcome_declined_peer___18 <- ''
+eip25$offer_outcome_declined_peer___19 <- ''
+eip25$offer_outcome_declined_peer___20 <- ''
+eip25$offer_outcome_declined_peer___21 <- ''
+eip25$offer_outcome_declined_peer___22 <- ''
+eip25$offer_outcome_declined_peer___24 <- ''
+eip25$offer_outcome_declined_peer___25 <- ''
+eip25$offer_outcome_declined_peer___26 <- ''
+
+# Adding variables added to 2026 database as blank values
+eip25$enc_location_street_med <- ''
+eip25$xts_provided <- ''
+eip25$xts_number <- ''
+eip25$ltc_services___6 <- ''
+eip25$ltc_peer_final_ltc_status <- ''
+eip25$ltc_peer_declined_rsn___23 <- ''
+eip25$ltc_peer_declined_rsn___27 <- ''
+eip25$ltc_peer_declined_rsn___3 <- ''
+eip25$ltc_peer_declined_rsn___5 <- ''
+eip25$ltc_peer_declined_rsn___6 <- ''
+eip25$ltc_peer_declined_rsn___7 <- ''
+eip25$ltc_peer_declined_rsn___8 <- ''
+eip25$ltc_peer_declined_rsn___9 <- ''
+eip25$ltc_peer_declined_rsn___10 <- ''
+eip25$ltc_peer_declined_rsn___28 <- ''
+eip25$ltc_peer_declined_rsn___29 <- ''
+eip25$ltc_peer_declined_rsn___30 <- ''
+eip25$ltc_peer_declined_rsn___36 <- ''
+eip25$ltc_peer_declined_rsn___33 <- ''
+eip25$ltc_peer_declined_rsn___34 <- ''
+eip25$ltc_peer_declined_rsn___35 <- ''
+eip25$ltc_peer_declined_rsn___0 <- ''
+eip25$ltc_peer_declined_rsn_other <- ''
+eip25$ltc_peer_prevented_rsn___1 <- ''
+eip25$ltc_peer_prevented_rsn___2 <- ''
+eip25$ltc_peer_prevented_rsn___11 <- ''
+eip25$ltc_peer_prevented_rsn___3 <- ''
+eip25$ltc_peer_prevented_rsn___4 <- ''
+eip25$ltc_peer_prevented_rsn___5 <- ''
+eip25$ltc_peer_prevented_rsn___6 <- ''
+eip25$ltc_peer_prevented_rsn___8 <- ''
+eip25$ltc_peer_prevented_rsn___9 <- ''
+eip25$ltc_peer_prevented_rsn___12 <- ''
+eip25$ltc_peer_prevented_rsn___19 <- ''
+eip25$ltc_peer_prevented_rsn___20 <- ''
+eip25$ltc_peer_prevented_rsn___16 <- ''
+eip25$ltc_peer_prevented_rsn___17 <- ''
+eip25$ltc_peer_prevented_rsn___18 <- ''
+eip25$ltc_peer_prevented_rsn___0 <- ''
+eip25$ltc_peer_prevented_rsn_other <- ''
+eip25$peer_link_eip <- ''
+eip25$ltc_peer_success_story <- ''
+eip25$close_case_peer <- ''
+eip25$close_case_peer_date <- ''
+eip25$hiv_next_follow_up_date <- ''
+eip25$hcv_next_follow_up_date <- ''
+eip25$sud_next_follow_up_date <- ''
+eip25$peer_next_follow_up_date <- ''
+eip25$add_next_follow_up_date <- ''
+eip25$ltc_sud_referral_hopeline___0 <- ''
+eip25$ltc_sud_referral_hopeline___1 <- ''
+eip25$ltc_sud_referral_hopeline___2 <- ''
+eip25$ltc_sud_referral_hopeline___3 <- ''
+eip25$ltc_sud_referral_hopeline_date <- ''
+eip25$ltc_sud_referral_uc_inpt___0 <- ''
+eip25$ltc_sud_referral_uc_inpt___1 <- ''
+eip25$ltc_sud_referral_uc_inpt___2 <- ''
+eip25$ltc_sud_referral_uc_inpt___3 <- ''
+eip25$ltc_sud_referral_uc_inpt_date <- ''
+eip25$counselor_ref_sud_specific___60 <- ''
+eip25$counselor_ref_sud_specific___61 <- ''
+eip25$mgen_sr <- ''
+eip25$mgen_treat <- ''
+
+
+#####  Updating 2026 Dataset  #####
+
+# Adding variables removed in 2026 database from 2024/2025 database as blank values
+eip26$peer_navigator_id___14 <- ''
+eip26$peer_navigator_id___67 <- ''
+eip26$eligible_blackard_icf <- ''
+eip26$naccho_day14_contact_date <- ''
+eip26$naccho_day30_contact_date <- ''
+eip26$partner_status_1___1 <- ''
+eip26$partner_status_1___2 <- ''
+eip26$partner_status_1___3 <- ''
+eip26$partner_status_1___4 <- ''
+eip26$partner_status_1___5 <- ''
+eip26$partner_status_1___6 <- ''
+eip26$partner_status_1___7 <- ''
+eip26$partner_status_1___8 <- ''
+eip26$partner_status_2___1 <- ''
+eip26$partner_status_2___2 <- ''
+eip26$partner_status_2___3 <- ''
+eip26$partner_status_2___4 <- ''
+eip26$partner_status_2___5 <- ''
+eip26$partner_status_2___6 <- ''
+eip26$partner_status_2___7 <- ''
+eip26$partner_status_2___8 <- ''
+eip26$partner_status_3___1 <- ''
+eip26$partner_status_3___2 <- ''
+eip26$partner_status_3___3 <- ''
+eip26$partner_status_3___4 <- ''
+eip26$partner_status_3___5 <- ''
+eip26$partner_status_3___6 <- ''
+eip26$partner_status_3___7 <- ''
+eip26$partner_status_3___8 <- ''
+eip26$partner_status_4___1 <- ''
+eip26$partner_status_4___2 <- ''
+eip26$partner_status_4___3 <- ''
+eip26$partner_status_4___4 <- ''
+eip26$partner_status_4___5 <- ''
+eip26$partner_status_4___6 <- ''
+eip26$partner_status_4___7 <- ''
+eip26$partner_status_4___8 <- ''
+eip26$partner_status_5___1 <- ''
+eip26$partner_status_5___2 <- ''
+eip26$partner_status_5___3 <- ''
+eip26$partner_status_5___4 <- ''
+eip26$partner_status_5___5 <- ''
+eip26$partner_status_5___6 <- ''
+eip26$partner_status_5___7 <- ''
+eip26$partner_status_5___8 <- ''
+eip26$counselor_ref_sti_specific___6 <- ''
+eip26$ltc_coordinator_per_case___5 <- ''
+eip26$ltc_coordinator_per_case___6 <- ''
+eip26$ltc_coordinator_per_case___8 <- ''
+eip26$ltc_coordinator_per_case___73 <- ''
+eip26$ltc_coordinator_per_case___14 <- ''
+eip26$ltc_coordinator_per_case___65 <- ''
+eip26$ltc_coordinator_per_case___59 <- ''
+eip26$ltc_coordinator_per_case___67 <- ''
+eip26$ltc_coordinator_per_case___72 <- ''
+eip26$ltc_coordinator_per_case___47 <- ''
+eip26$ltc_coordinator_per_case___66 <- ''
+eip26$ltc_coordinator_per_case___76 <- ''
+eip26$ltc_coordinator_per_case___40 <- ''
+eip26$ltc_coordinator_per_case___41 <- ''
+eip26$ltc_coordinator_per_case___75 <- ''
+eip26$ltc_coordinator_per_case___1 <- ''
+eip26$ltc_coordinator_per_case___48 <- ''
+eip26$ltc_sud_oud_fu <- ''
+eip26$ltc_sud_oud_pos_fu <- ''
+eip26$ltc_service1___6 <- ''
+eip26$ltc_service2___6 <- ''
+eip26$ltc_service3___6 <- ''
+eip26$ltc_service4___6 <- ''
+eip26$ltc_service5___6 <- ''
+eip26$ltc_service6___6 <- ''
+eip26$ltc_service7___6 <- ''
+eip26$ltc_service8___6 <- ''
+eip26$ltc_service9___6 <- ''
+eip26$ltc_service10___6 <- ''
+eip26$ltc_service11___6 <- ''
+eip26$ltc_service12___6 <- ''
+eip26$ltc_service13___6 <- ''
+eip26$ltc_service14___6 <- ''
+eip26$ltc_service15___6 <- ''
+eip26$ltc_service16___6 <- ''
+eip26$ltc_service17___6 <- ''
+eip26$ltc_service18___6 <- ''
+eip26$ltc_service19___6 <- ''
+eip26$ltc_service20___6 <- ''
+eip26$ltc_service21___6 <- ''
+eip26$ltc_service22___6 <- ''
+eip26$ltc_service23___6 <- ''
+eip26$ltc_service24___6 <- ''
+eip26$ltc_service25___6 <- ''
+eip26$ltc_service26___6 <- ''
+eip26$ltc_service27___6 <- ''
+eip26$ltc_service28___6 <- ''
+eip26$ltc_service29___6 <- ''
+eip26$ltc_service30___6 <- ''
+eip26$ltc_service31___6 <- ''
+eip26$ltc_service32___6 <- ''
+eip26$ltc_service33___6 <- ''
+eip26$ltc_service34___6 <- ''
+eip26$ltc_service35___6 <- ''
+eip26$ltc_service36___6 <- ''
+eip26$ltc_service37___6 <- ''
+eip26$ltc_service38___6 <- ''
+eip26$ltc_service39___6 <- ''
+eip26$ltc_service40___6 <- ''
+eip26$ltc_service41___6 <- ''
+eip26$ltc_service42___6 <- ''
+eip26$ltc_service43___6 <- ''
+eip26$ltc_service44___6 <- ''
+eip26$ltc_service45___6 <- ''
+eip26$ltc_service46___6 <- ''
+eip26$ltc_service47___6 <- ''
+eip26$ltc_service48___6 <- ''
+eip26$ltc_service49___6 <- ''
+eip26$ltc_service50___6 <- ''
+eip26$ltc_service1___8 <- ''
+eip26$ltc_service2___8 <- ''
+eip26$ltc_service3___8 <- ''
+eip26$ltc_service4___8 <- ''
+eip26$ltc_service5___8 <- ''
+eip26$ltc_service6___8 <- ''
+eip26$ltc_service7___8 <- ''
+eip26$ltc_service8___8 <- ''
+eip26$ltc_service9___8 <- ''
+eip26$ltc_service10___8 <- ''
+eip26$ltc_service11___8 <- ''
+eip26$ltc_service12___8 <- ''
+eip26$ltc_service13___8 <- ''
+eip26$ltc_service14___8 <- ''
+eip26$ltc_service15___8 <- ''
+eip26$ltc_service16___8 <- ''
+eip26$ltc_service17___8 <- ''
+eip26$ltc_service18___8 <- ''
+eip26$ltc_service19___8 <- ''
+eip26$ltc_service20___8 <- ''
+eip26$ltc_service21___8 <- ''
+eip26$ltc_service22___8 <- ''
+eip26$ltc_service23___8 <- ''
+eip26$ltc_service24___8 <- ''
+eip26$ltc_service25___8 <- ''
+eip26$ltc_service26___8 <- ''
+eip26$ltc_service27___8 <- ''
+eip26$ltc_service28___8 <- ''
+eip26$ltc_service29___8 <- ''
+eip26$ltc_service30___8 <- ''
+eip26$ltc_service31___8 <- ''
+eip26$ltc_service32___8 <- ''
+eip26$ltc_service33___8 <- ''
+eip26$ltc_service34___8 <- ''
+eip26$ltc_service35___8 <- ''
+eip26$ltc_service36___8 <- ''
+eip26$ltc_service37___8 <- ''
+eip26$ltc_service38___8 <- ''
+eip26$ltc_service39___8 <- ''
+eip26$ltc_service40___8 <- ''
+eip26$ltc_service41___8 <- ''
+eip26$ltc_service42___8 <- ''
+eip26$ltc_service43___8 <- ''
+eip26$ltc_service44___8 <- ''
+eip26$ltc_service45___8 <- ''
+eip26$ltc_service46___8 <- ''
+eip26$ltc_service47___8 <- ''
+eip26$ltc_service48___8 <- ''
+eip26$ltc_service49___8 <- ''
+eip26$ltc_service50___8 <- ''
+eip26$naccho_contact_day1 <- ''
+eip26$naccho_contact_day2 <- ''
+eip26$naccho_contact_day3 <- ''
+eip26$naccho_contact_day4 <- ''
+eip26$naccho_contact_day5 <- ''
+eip26$naccho_contact_day6 <- ''
+eip26$naccho_contact_day7 <- ''
+eip26$naccho_contact_day8 <- ''
+eip26$naccho_contact_day9 <- ''
+eip26$naccho_contact_day10 <- ''
+eip26$naccho_contact_day11 <- ''
+eip26$naccho_contact_day12 <- ''
+eip26$naccho_contact_day13 <- ''
+eip26$naccho_contact_day14 <- ''
+eip26$naccho_contact_day15 <- ''
+eip26$naccho_contact_day16 <- ''
+eip26$naccho_contact_day17 <- ''
+eip26$naccho_contact_day18 <- ''
+eip26$naccho_contact_day19 <- ''
+eip26$naccho_contact_day20 <- ''
+eip26$naccho_contact_day21 <- ''
+eip26$naccho_contact_day22 <- ''
+eip26$naccho_contact_day23 <- ''
+eip26$naccho_contact_day24 <- ''
+eip26$naccho_contact_day25 <- ''
+eip26$naccho_contact_day26 <- ''
+eip26$naccho_contact_day27 <- ''
+eip26$naccho_contact_day28 <- ''
+eip26$naccho_contact_day29 <- ''
+eip26$naccho_contact_day30 <- ''
+eip26$naccho_contact_day31 <- ''
+eip26$naccho_contact_day32 <- ''
+eip26$naccho_contact_day33 <- ''
+eip26$naccho_contact_day34 <- ''
+eip26$naccho_contact_day35 <- ''
+eip26$naccho_contact_day36 <- ''
+eip26$naccho_contact_day37 <- ''
+eip26$naccho_contact_day38 <- ''
+eip26$naccho_contact_day39 <- ''
+eip26$naccho_contact_day40 <- ''
+eip26$naccho_contact_day41 <- ''
+eip26$naccho_contact_day42 <- ''
+eip26$naccho_contact_day43 <- ''
+eip26$naccho_contact_day44 <- ''
+eip26$naccho_contact_day45 <- ''
+eip26$naccho_contact_day46 <- ''
+eip26$naccho_contact_day47 <- ''
+eip26$naccho_contact_day48 <- ''
+eip26$naccho_contact_day49 <- ''
+eip26$naccho_contact_day50 <- ''
+eip26$naccho_contact_confirm_tx1 <- ''
+eip26$naccho_contact_confirm_tx2 <- ''
+eip26$naccho_contact_confirm_tx3 <- ''
+eip26$naccho_contact_confirm_tx4 <- ''
+eip26$naccho_contact_confirm_tx5 <- ''
+eip26$naccho_contact_confirm_tx6 <- ''
+eip26$naccho_contact_confirm_tx7 <- ''
+eip26$naccho_contact_confirm_tx8 <- ''
+eip26$naccho_contact_confirm_tx9 <- ''
+eip26$naccho_contact_confirm_tx10 <- ''
+eip26$naccho_contact_confirm_tx11 <- ''
+eip26$naccho_contact_confirm_tx12 <- ''
+eip26$naccho_contact_confirm_tx13 <- ''
+eip26$naccho_contact_confirm_tx14 <- ''
+eip26$naccho_contact_confirm_tx15 <- ''
+eip26$naccho_contact_confirm_tx16 <- ''
+eip26$naccho_contact_confirm_tx17 <- ''
+eip26$naccho_contact_confirm_tx18 <- ''
+eip26$naccho_contact_confirm_tx19 <- ''
+eip26$naccho_contact_confirm_tx20 <- ''
+eip26$naccho_contact_confirm_tx21 <- ''
+eip26$naccho_contact_confirm_tx22 <- ''
+eip26$naccho_contact_confirm_tx23 <- ''
+eip26$naccho_contact_confirm_tx24 <- ''
+eip26$naccho_contact_confirm_tx25 <- ''
+eip26$naccho_contact_confirm_tx26 <- ''
+eip26$naccho_contact_confirm_tx27 <- ''
+eip26$naccho_contact_confirm_tx28 <- ''
+eip26$naccho_contact_confirm_tx29 <- ''
+eip26$naccho_contact_confirm_tx30 <- ''
+eip26$naccho_contact_confirm_tx31 <- ''
+eip26$naccho_contact_confirm_tx32 <- ''
+eip26$naccho_contact_confirm_tx33 <- ''
+eip26$naccho_contact_confirm_tx34 <- ''
+eip26$naccho_contact_confirm_tx35 <- ''
+eip26$naccho_contact_confirm_tx36 <- ''
+eip26$naccho_contact_confirm_tx37 <- ''
+eip26$naccho_contact_confirm_tx38 <- ''
+eip26$naccho_contact_confirm_tx39 <- ''
+eip26$naccho_contact_confirm_tx40 <- ''
+eip26$naccho_contact_confirm_tx41 <- ''
+eip26$naccho_contact_confirm_tx42 <- ''
+eip26$naccho_contact_confirm_tx43 <- ''
+eip26$naccho_contact_confirm_tx44 <- ''
+eip26$naccho_contact_confirm_tx45 <- ''
+eip26$naccho_contact_confirm_tx46 <- ''
+eip26$naccho_contact_confirm_tx47 <- ''
+eip26$naccho_contact_confirm_tx48 <- ''
+eip26$naccho_contact_confirm_tx49 <- ''
+eip26$naccho_contact_confirm_tx50 <- ''
+eip26$ltc_hcv_referral_uc_pharmacy_telehealth___1 <- ''
+eip26$ltc_hcv_referral_uc_pharmacy_telehealth___2 <- ''
+eip26$ltc_hcv_referral_uc_pharmacy_telehealth___3 <- ''
+eip26$ltc_coordinator_per_case___2 <- ''
+eip26$ltc_coordinator_per_case___12 <- ''
+eip26$ltc_coordinator_per_case___61 <- ''
+eip26$ltc_coordinator_per_case___54 <- ''
+eip26$ltc_coordinator_per_case___24 <- ''
+eip26$ltc_coordinator_per_case___64 <- ''
+eip26$ltc_coordinator_per_case___28 <- ''
+eip26$ltc_coordinator_per_case___63 <- ''
+eip26$ltc_coordinator_per_case___49 <- ''
+eip26$ltc_coordinator_per_case___69 <- ''
+eip26$ltc_coordinator_per_case___30 <- ''
+eip26$offer_outcome_declined_peer___1 <- ''
+eip26$offer_outcome_declined_peer___2 <- ''
+eip26$offer_outcome_declined_peer___4 <- ''
+eip26$offer_outcome_declined_peer___11 <- ''
+eip26$offer_outcome_declined_peer___12 <- ''
+eip26$offer_outcome_declined_peer___13 <- ''
+eip26$offer_outcome_declined_peer___14 <- ''
+eip26$offer_outcome_declined_peer___15 <- ''
+eip26$offer_outcome_declined_peer___16 <- ''
+eip26$offer_outcome_declined_peer___17 <- ''
+eip26$offer_outcome_declined_peer___18 <- ''
+eip26$offer_outcome_declined_peer___19 <- ''
+eip26$offer_outcome_declined_peer___20 <- ''
+eip26$offer_outcome_declined_peer___21 <- ''
+eip26$offer_outcome_declined_peer___22 <- ''
+eip26$offer_outcome_declined_peer___24 <- ''
+eip26$offer_outcome_declined_peer___25 <- ''
+eip26$offer_outcome_declined_peer___26 <- ''
+eip26$enc_location_urc <- ''
+eip26$appalachian <- ''
+eip26$appalachian_family <- ''
+eip26$fts_knowledge <- ''
+eip26$fts_use <- ''
+eip26$fts_offered <- ''
+eip26$fts_not_provided_rsn___1 <- ''
+eip26$fts_not_provided_rsn___2 <- ''
+eip26$fts_not_provided_rsn___3 <- ''
+eip26$fts_not_provided_rsn___4 <- ''
+eip26$fts_not_provided_rsn___5 <- ''
+eip26$fts_not_provided_rsn___6 <- ''
+eip26$fts_not_provided_rsn___7 <- ''
+eip26$fts_not_provided_rsn___8 <- ''
+eip26$fts_not_provided_rsn___9 <- ''
+eip26$fts_not_provided_rsn___10 <- ''
+eip26$fts_not_provided_rsn_other <- ''
+eip26$fts_declined_rsn___1 <- ''
+eip26$fts_declined_rsn___2 <- ''
+eip26$fts_declined_rsn___3 <- ''
+eip26$fts_declined_rsn___4 <- ''
+eip26$fts_declined_rsn_other <- ''
+eip26$prep_assessment_rsn <- ''
+eip26$prep_counsel_edu <- ''
+eip26$prep_referral <- ''
+eip26$prep_referral_accept <- ''
+eip26$prep_pre_counsel_edu_rsn <- ''
+eip26$prep_pre_counsel_edu_rsn_other <- ''
+eip26$prep_referral_rsn <- ''
+eip26$prep_referral_rsn_other <- ''
+eip26$prep_referral_decline_rsn <- ''
+eip26$prep_referral_decline_rsn_other <- ''
+eip26$reduction_plan <- ''
+eip26$staff_start_peer <- ''
+eip26$date_start_peer <- ''
+eip26$peer_referred_by <- ''
+eip26$peer_reason_for_offer_category <- ''
+eip26$peer_reason_for_offer_self_req___1 <- ''
+eip26$peer_reason_for_offer_self_req___2 <- ''
+eip26$peer_reason_for_offer_self_req___3 <- ''
+eip26$peer_reason_for_offer_self_req___5 <- ''
+eip26$peer_reason_for_offer_self_req___6 <- ''
+eip26$peer_reason_for_offer_self_req___7 <- ''
+eip26$peer_reason_for_offer_self_req___8 <- ''
+eip26$peer_reason_for_offer_self_req___9 <- ''
+eip26$peer_reason_for_offer_self_req___4 <- ''
+eip26$peer_reason_for_offer_routine_freq <- ''
+eip26$peer_reason_for_offer_self_req_other <- ''
+eip26$peer_reason_for_offer_diagnostic___1 <- ''
+eip26$peer_reason_for_offer_diagnostic___2 <- ''
+eip26$peer_reason_for_offer_diagnostic___3 <- ''
+eip26$peer_reason_for_offer_diagnostic___4 <- ''
+eip26$peer_reason_for_offer_diagnostic___5 <- ''
+eip26$peer_reason_for_offer_diagnostic___6 <- ''
+eip26$peer_reason_for_offer_diagnostic___7 <- ''
+eip26$peer_reason_for_offer_diagnostic___8 <- ''
+eip26$peer_reason_for_offer_diagnostic___9 <- ''
+eip26$peer_reason_for_offer_diagnostic___10 <- ''
+eip26$peer_reason_for_offer_diagnostic___11 <- ''
+eip26$peer_reason_for_offer_diagnostic___12 <- ''
+eip26$peer_reason_for_offer_diagnostic___13 <- ''
+eip26$peer_reason_for_offer_diagnostic___14 <- ''
+eip26$peer_reason_for_offer_diagnostic___15 <- ''
+eip26$peer_reason_for_offer_diagnostic___16 <- ''
+eip26$peer_reason_for_offer_diagnostic___17 <- ''
+eip26$peer_reason_for_offer_diagnostic___18 <- ''
+eip26$peer_reason_for_offer_diagnostic___19 <- ''
+eip26$peer_reason_for_offer_diagnostic___20 <- ''
+eip26$peer_reason_for_offer_diagnostic___21 <- ''
+eip26$peer_reason_for_offer_diagnostic___22 <- ''
+eip26$peer_reason_for_offer_diagnostic___23 <- ''
+eip26$peer_reason_for_offer_diagnostic___24 <- ''
+eip26$peer_reason_for_offer_diagnostic___25 <- ''
+eip26$peer_reason_for_offer_diagnostic___26 <- ''
+eip26$peer_reason_for_offer_diagnostic___27 <- ''
+eip26$peer_reason_for_offer_diagnostic___28 <- ''
+eip26$peer_reason_for_offer_diagnostic___29 <- ''
+eip26$peer_reason_for_offer_diagnostic___30 <- ''
+eip26$peer_reason_for_offer_diagnostic___31 <- ''
+eip26$peer_reason_for_offer_diagnostic___32 <- ''
+eip26$peer_reason_for_offer_diagnostic___33 <- ''
+eip26$peer_reason_for_offer_diagnostic_other <- ''
+eip26$peer_reason_for_offer_clinical___1 <- ''
+eip26$peer_reason_for_offer_clinical___2 <- ''
+eip26$peer_reason_for_offer_clinical___3 <- ''
+eip26$peer_reason_for_offer_clinical___4 <- ''
+eip26$peer_reason_for_offer_clinical___5 <- ''
+eip26$peer_reason_for_offer_clinical___7 <- ''
+eip26$peer_reason_for_offer_clinical___8 <- ''
+eip26$peer_reason_for_offer_clinical___9 <- ''
+eip26$peer_reason_for_offer_clinical___10 <- ''
+eip26$peer_reason_for_offer_clinical___11 <- ''
+eip26$peer_reason_for_offer_clinical___12 <- ''
+eip26$peer_reason_for_offer_clinical___13 <- ''
+eip26$peer_reason_for_offer_clinical___14 <- ''
+eip26$peer_reason_for_offer_clinical___15 <- ''
+eip26$peer_reason_for_offer_clinical___16 <- ''
+eip26$peer_reason_for_offer_clinical___17 <- ''
+eip26$peer_reason_for_offer_clinical___18 <- ''
+eip26$peer_reason_for_offer_clinical___19 <- ''
+eip26$peer_reason_for_offer_clinical___20 <- ''
+eip26$peer_reason_for_offer_clinical___21 <- ''
+eip26$peer_reason_for_offer_clinical___22 <- ''
+eip26$peer_reason_for_offer_clinical___23 <- ''
+eip26$peer_reason_for_offer_clinical___24 <- ''
+eip26$peer_reason_for_offer_clinical___25 <- ''
+eip26$peer_reason_for_offer_clinical___26 <- ''
+eip26$peer_reason_for_offer_clinical___27 <- ''
+eip26$peer_reason_for_offer_clinical___28 <- ''
+eip26$peer_reason_for_offer_clinical___29 <- ''
+eip26$peer_reason_for_offer_clinical___30 <- ''
+eip26$peer_reason_for_offer_clinical___31 <- ''
+eip26$peer_reason_for_offer_clinical_other <- ''
+eip26$peer_reason_for_offer_counselor___1 <- ''
+eip26$peer_reason_for_offer_counselor___2 <- ''
+eip26$peer_reason_for_offer_counselor___3 <- ''
+eip26$peer_reason_for_offer_counselor___4 <- ''
+eip26$peer_reason_for_offer_counselor___5 <- ''
+eip26$peer_reason_for_offer_counselor___6 <- ''
+eip26$peer_reason_for_offer_counselor___7 <- ''
+eip26$peer_reason_for_offer_counselor___8 <- ''
+eip26$peer_reason_for_offer_counselor___9 <- ''
+eip26$peer_reason_for_offer_counselor___10 <- ''
+eip26$peer_reason_for_offer_counselor___11 <- ''
+eip26$peer_reason_for_offer_counselor___12 <- ''
+eip26$peer_reason_for_offer_counselor___13 <- ''
+eip26$peer_reason_for_offer_counselor___14 <- ''
+eip26$peer_reason_for_offer_counselor___15 <- ''
+eip26$peer_reason_for_offer_counselor___16 <- ''
+eip26$peer_reason_for_offer_counselor___17 <- ''
+eip26$peer_reason_for_offer_counselor___18 <- ''
+eip26$peer_reason_for_offer_counselor___19 <- ''
+eip26$peer_reason_for_offer_counselor___20 <- ''
+eip26$peer_reason_for_offer_counselor___21 <- ''
+eip26$peer_reason_for_offer_counselor___22 <- ''
+eip26$peer_reason_for_offer_counselor___23 <- ''
+eip26$peer_reason_for_offer_counselor___24 <- ''
+eip26$peer_reason_for_offer_counselor___25 <- ''
+eip26$peer_reason_for_offer_counselor___26 <- ''
+eip26$peer_reason_for_offer_counselor___27 <- ''
+eip26$peer_reason_for_offer_counselor___28 <- ''
+eip26$peer_reason_for_offer_counselor___29 <- ''
+eip26$peer_reason_for_offer_counselor___30 <- ''
+eip26$peer_reason_for_offer_counselor_other <- ''
+eip26$peer_reason_for_offer_demographics___1 <- ''
+eip26$peer_reason_for_offer_demographics___2 <- ''
+eip26$peer_reason_for_offer_demographics___3 <- ''
+eip26$peer_reason_for_offer_demographics___4 <- ''
+eip26$peer_reason_for_offer_tnt___1 <- ''
+eip26$peer_reason_for_offer_tnt___2 <- ''
+eip26$peer_reason_for_offer_tnt___3 <- ''
+eip26$peer_reason_for_offer_tnt_number <- ''
+eip26$peer_reason_for_offer_tnt_relation <- ''
+eip26$offer_outcome_time_peer <- ''
+eip26$offer_outcome_location_peer <- ''
+eip26$offer_outcome_room_peer <- ''
+eip26$offer_outcome_approach_peer___1 <- ''
+eip26$offer_outcome_approach_peer___2 <- ''
+eip26$offer_outcome_approach_peer___3 <- ''
+eip26$offer_outcome_approach_peer___4 <- ''
+eip26$offer_outcome_approach_peer___5 <- ''
+eip26$offer_outcome_approach_peer___6 <- ''
+eip26$offer_outcome_approach_peer___7 <- ''
+eip26$offer_outcome_approach_peer___8 <- ''
+eip26$offer_outcome_peer <- ''
+eip26$offer_outcome_declined_peer___23 <- ''
+eip26$offer_outcome_declined_peer___27 <- ''
+eip26$offer_outcome_declined_peer___3 <- ''
+eip26$offer_outcome_declined_peer___5 <- ''
+eip26$offer_outcome_declined_peer___6 <- ''
+eip26$offer_outcome_declined_peer___7 <- ''
+eip26$offer_outcome_declined_peer___8 <- ''
+eip26$offer_outcome_declined_peer___9 <- ''
+eip26$offer_outcome_declined_peer___10 <- ''
+eip26$offer_outcome_declined_peer___28 <- ''
+eip26$offer_outcome_declined_peer___29 <- ''
+eip26$offer_outcome_declined_peer___30 <- ''
+eip26$offer_outcome_declined_peer___36 <- ''
+eip26$offer_outcome_declined_peer___33 <- ''
+eip26$offer_outcome_declined_peer___34 <- ''
+eip26$offer_outcome_declined_peer___35 <- ''
+eip26$offer_outcome_declined_peer___0 <- ''
+eip26$offer_outcome_declined_other_peer <- ''
+eip26$offer_outcome_prevented_peer___1 <- ''
+eip26$offer_outcome_prevented_peer___2 <- ''
+eip26$offer_outcome_prevented_peer___3 <- ''
+eip26$offer_outcome_prevented_peer___4 <- ''
+eip26$offer_outcome_prevented_peer___5 <- ''
+eip26$offer_outcome_prevented_peer___6 <- ''
+eip26$offer_outcome_prevented_peer___7 <- ''
+eip26$offer_outcome_prevented_peer___8 <- ''
+eip26$offer_outcome_prevented_peer___9 <- ''
+eip26$offer_outcome_prevented_peer___10 <- ''
+eip26$offer_outcome_prevented_other_peer <- ''
+eip26$peer_fts_number_other <- ''
+eip26$peer_fu_yn <- ''
+eip26$peer_next_fu_date <- ''
+eip26$peer_fu_closed <- ''
+eip26$peer_support_complete <- ''
+eip26$offer_outcome_location_hiv <- ''
+eip26$offer_outcome_room_hiv <- ''
+eip26$offer_outcome_location_hiv_2 <- ''
+eip26$offer_outcome_room_hiv_2 <- ''
+eip26$offer_outcome_location_hiv_3 <- ''
+eip26$offer_outcome_room_hiv_3 <- ''
+eip26$offer_outcome_location_hcv <- ''
+eip26$offer_outcome_room_hcv <- ''
+eip26$offer_outcome_location_hcv_2 <- ''
+eip26$offer_outcome_room_hcv_2 <- ''
+eip26$offer_outcome_location_hcv_3 <- ''
+eip26$offer_outcome_room_hcv_3 <- ''
+eip26$offer_outcome_location_sti <- ''
+eip26$offer_outcome_room_sti <- ''
+eip26$offer_outcome_location_sti_2 <- ''
+eip26$offer_outcome_room_sti_2 <- ''
+eip26$offer_outcome_location_sti_3 <- ''
+eip26$offer_outcome_room_sti_3 <- ''
+eip26$ltc_services___5 <- ''
+eip26$ltc_coordinator_per_case___70 <- ''
+eip26$ltc_coordinator_per_case___79 <- ''
+eip26$ltc_coordinator_per_case___78 <- ''
+eip26$ltc_coordinator_per_case___71 <- ''
+eip26$anderson_ltc_open_calc <- ''
+eip26$counselor_ref_sud_specific___12 <- ''
+
+
+#####  Combining matched datasets  #####
+
+setdiff(names(eip24), names(eip25))
+setdiff(names(eip25), names(eip24))
+
+setdiff(names(eip25), names(eip26))
+setdiff(names(eip26), names(eip25))
+
+dim(eip24)
+dim(eip25)
+dim(eip26)
+
+eip <- rbind(eip24, eip25, eip26)
+dim(eip)
+
+
+```
+
+```{r Patient Information, include=FALSE}
+
+# Formatting variables
+
+summary(eip$enc_date)
+eip$enc_date <- as.Date(eip$enc_date, format = '%m/%d/%Y')
+summary(eip$enc_date)
+
+summary(eip$dob)
+eip$dob <- as.Date(eip$dob, format = '%m/%d/%Y')
+summary(eip$dob)
+
+
+table(eip$race___1)
+White <- eip[which(eip$race___1 == 1), ]
+dim(White)
+White <- select(White, record_id)
+White$White <- 1
+table(White$White)
+White <- distinct(White)
+dim(White)
+head(White)
+
+table(eip$race___2)
+Black <- eip[which(eip$race___2 == 1), ]
+dim(Black)
+Black <- select(Black, record_id)
+Black$Black <- 1
+table(Black$Black)
+Black <- distinct(Black)
+dim(Black)
+head(Black)
+
+table(eip$race___3)
+Asian <- eip[which(eip$race___3 == 1), ]
+dim(Asian)
+Asian <- select(Asian, record_id)
+Asian$Asian <- 1
+table(Asian$Asian)
+Asian <- distinct(Asian)
+dim(Asian)
+head(Asian)
+
+table(eip$race___4)
+AmIn <- eip[which(eip$race___4 == 1), ]
+dim(AmIn)
+AmIn <- select(AmIn, record_id)
+AmIn$AmIn <- 1
+table(AmIn$AmIn)
+AmIn <- distinct(AmIn)
+dim(AmIn)
+head(AmIn)
+
+table(eip$race___5)
+RaceOther <- eip[which(eip$race___5 == 1), ]
+dim(RaceOther)
+RaceOther <- select(RaceOther, record_id)
+RaceOther$RaceOther <- 1
+table(RaceOther$RaceOther)
+RaceOther <- distinct(RaceOther)
+dim(RaceOther)
+head(RaceOther)
+
+table(eip$race___6)
+RaceUnk <- eip[which(eip$race___6 == 1), ]
+dim(RaceUnk)
+RaceUnk <- select(RaceUnk, record_id)
+RaceUnk$RaceUnk <- 1
+table(RaceUnk$RaceUnk)
+RaceUnk <- distinct(RaceUnk)
+dim(RaceUnk)
+head(RaceUnk)
+
+table(eip$ethnicity)
+RaceHisp <- eip[which(eip$ethnicity == 1), ]
+dim(RaceHisp)
+RaceHisp <- select(RaceHisp, record_id)
+RaceHisp$RaceHisp <- 1
+table(RaceHisp$RaceHisp)
+RaceHisp <- distinct(RaceHisp)
+dim(RaceHisp)
+head(RaceHisp)
+
+
+race <- select(eip, record_id)
+race <- distinct(race)
+dim(race)
+
+
+dim(race)
+race <- merge(race, White, by = 'record_id', all.x = T)
+race <- merge(race, Black, by = 'record_id', all.x = T)
+race <- merge(race, Asian, by = 'record_id', all.x = T)
+race <- merge(race, AmIn, by = 'record_id', all.x = T)
+race <- merge(race, RaceOther, by = 'record_id', all.x = T)
+race <- merge(race, RaceUnk, by = 'record_id', all.x = T)
+race <- merge(race, RaceHisp, by = 'record_id', all.x = T)
+dim(race)
+head(race)
+
+race$White[is.na(race$White)] <- 0
+race$Black[is.na(race$Black)] <- 0
+race$Asian[is.na(race$Asian)] <- 0
+race$AmIn[is.na(race$AmIn)] <- 0
+race$RaceOther[is.na(race$RaceOther)] <- 0
+race$RaceUnk[is.na(race$RaceUnk)] <- 0
+race$RaceHisp[is.na(race$RaceHisp)] <- 0
+
+race$RaceNumber <- race$White + race$Black + race$Asian + race$AmIn + race$RaceOther + race$RaceUnk + race$RaceHisp
+table(race$RaceNumber)
+head(race)
+
+race$race[race$RaceNumber == 1 & race$Black == 1] <- 'Black/African American'
+race$race[race$RaceNumber == 1 & race$White == 1] <- 'White'
+race$race[race$RaceNumber == 1 & race$Asian == 1] <- 'Asian/Pacific Islander'
+race$race[race$RaceNumber == 1 & race$AmIn == 1] <- 'American Indian/Alaska native'
+race$race[race$RaceNumber == 1 & race$RaceOther == 1] <- 'Other'
+race$race[(race$RaceNumber == 1 & race$RaceHisp == 1) |
+            (race$RaceNumber > 1 & race$RaceHisp == 1)] <- 'Hispanic/Latinx'
+race$race[race$RaceNumber > 1 & race$RaceHisp != 1] <- 'Biracial/Multiracial'
+race$race[race$RaceNumber == 0 | is.na(race$RaceNumber) | race$RaceUnk == 1] <- 'Unknown'
+table(race$race)
+
+dim(eip)
+dim(race)
+eip <- merge(eip, race, by = 'record_id', all.x = T)
+dim(eip)
+table(eip$race)
+
+
+
+
+table(eip$sex_raised)
+eip$sex[eip$sex_raised == 1] <- 'Male'
+eip$sex[eip$sex_raised == 2] <- 'Female'
+eip$sex[eip$sex_raised == 3 | is.na(eip$sex_raised) | eip$sex_raised == ''] <- 'Unknown/Unassigned'
+table(eip$sex)
+
+
+
+
+table(eip$sex_raised, eip$sex_selfdefined)
+eip$gender[(eip$sex_raised == 1 & eip$sex_selfdefined == 1) |
+             (eip$sex_raised == 1 & eip$sex_selfdefined == 3) |
+             (eip$sex_raised == 1 & is.na(eip$sex_selfdefined))] <- 'Male'
+eip$gender[(eip$sex_raised == 2 & eip$sex_selfdefined == 2) |
+             (eip$sex_raised == 2 & eip$sex_selfdefined == 3) |
+             (eip$sex_raised == 2 & is.na(eip$sex_selfdefined))] <- 'Female'
+eip$gender[(eip$sex_selfdefined == 4) |
+             (eip$sex_raised == 1 & eip$sex_selfdefined == 2) |
+             (eip$sex_raised == 2 & eip$sex_selfdefined == 1)] <- 'Transgender/Nonbinary'
+eip$gender[(is.na(eip$sex_raised) & is.na(eip$sex_selfdefined))] <- 'Unknown'
+table(eip$gender)
+
+
+
+
+table(eip$insurance)
+eip$insurance[eip$insurance == 1] <- 'None'
+eip$insurance[eip$insurance == 2] <- 'UC Health (Levy)'
+eip$insurance[eip$insurance == 3] <- 'Medicaid'
+eip$insurance[eip$insurance == 4] <- 'Medicare'
+eip$insurance[eip$insurance == 5] <- 'Military/VA'
+eip$insurance[eip$insurance == 6] <- 'Private'
+eip$insurance[eip$insurance == 7] <- 'Dual Medicaid/Medicare'
+eip$insurance[is.na(eip$insurance)] <- 'Unknown'
+table(eip$insurance)
+
+
+
+# Populations of Interest
+### WOC, Youth (18-29), MSM, IDU, HRHS, PLWHA
+
+table(eip$race, eip$gender)
+eip$WOC[(eip$race != 'White' & eip$race != 'Unknown') & eip$gender == 'Female'] <- 1
+table(eip$WOC)
+
+
+table(eip$age)
+eip$Youth[eip$age >= 13 & eip$age <= 29] <- 1
+table(eip$Youth)
+
+
+eip$MSM[eip$gender == 'Male' &
+          ((eip$sex_orientation == 2 | eip$sex_orientation == 4) |
+             (eip$sex_w_man___1 == 1 | eip$sex_w_man___2 == 1 | eip$sex_w_man___3 == 1) |
+             (eip$sex_w_ftm___1 == 1 | eip$sex_w_ftm___2 == 1 | eip$sex_w_ftm___3 == 1) |
+             (eip$sex_msm___1 == 1 | eip$sex_msm___2 == 1 | eip$sex_msm___3 == 1) |
+             (eip$hiv_dx_risks___2 == 1))] <- 1
+table(eip$MSM)
+
+
+eip$IDU[eip$idu_calc == 1 | eip$hiv_dx_risks___3 == 1] <- 1
+table(eip$IDU)
+
+
+# For HRHS, all sexual behavior is within the previous 12 months
+### Heterosexual males that have unprotected sex with women
+### Heterosexual women that have unprotected sex with men
+### Heterosexual women that have sex with MSM
+### Heterosexual men/women that have sex with IDU
+### Heterosexual men/women that have sex with HIV+ partner
+### Heterosexual men/women that exchange money/drugs for sex
+### Heterosexual men/women that have sex with STD+ partner
+### Heterosexual men/women that have more than 3 partners
+
+eip$Hetero[(eip$gender == 'Male' &
+              (eip$sex_w_woman___1 == 1 | eip$sex_w_woman___2 == 1 |
+                 eip$sex_w_woman___3 == 1 | eip$sex_orientation == 1)) |
+             (eip$gender == 'Female' &
+                (eip$sex_w_man___1 == 1 | eip$sex_w_man___2 == 1 |
+                   eip$sex_w_man___3 == 1 | eip$sex_orientation == 1))] <- 1
+table(eip$Hetero)
+
+
+eip$HRHS[((eip$Hetero == 1) &
+            ((((eip$sex_w_woman___6 == 1 | eip$sex_w_woman___7 == 1) |
+                 (is.na(eip$sex_w_woman___6) & is.na(eip$sex_w_woman___7) &
+                    is.na(eip$sex_w_woman___8)))) |
+               (((eip$sex_w_man___6 == 1 | eip$sex_w_man___7 == 1) |
+                   (is.na(eip$sex_w_man___6) & is.na(eip$sex_w_man___7) &
+                      is.na(eip$sex_w_man___8)))) |
+               (eip$sex_msm___1 == 1 | eip$sex_msm___2 == 1 | eip$sex_msm___3 == 1) |
+               (eip$sex_idu___1 == 1 | eip$sex_idu___2 == 1 | eip$sex_idu___3 == 1) |
+               (eip$sex_hiv_pos___1 == 1 | eip$sex_hiv_pos___2 == 1 |
+                  eip$sex_hiv_pos___3 == 1) |
+               (eip$sex_receivemoney___1 == 1 | eip$sex_receivemoney___2 == 1 |
+                  eip$sex_receivemoney___3 == 1 | eip$sex_receivedrugs___1 == 1 |
+                  eip$sex_receivedrugs___2 == 1 | eip$sex_receivedrugs___3 == 1 |
+                  eip$sex_paymoney___1 == 1 | eip$sex_paymoney___2 == 1 |
+                  eip$sex_paymoney___3 == 1 | eip$sex_paydrugs___1 == 1 |
+                  eip$sex_paydrugs___2 == 1 | eip$sex_paydrugs___3 == 1)  |
+               (eip$sex_sti_pos___1 == 1 | eip$sex_sti_pos___2 == 1 |
+                  eip$sex_sti_pos___3 == 1) | (eip$sex_partners_past_year >= 3))) |
+           (eip$hiv_dx_risks___1 == 1)] <- 1
+table(eip$HRHS)
+
+
+
+
+# Appalachian
+
+eip$appalachian_pt[eip$address_zip_code == 43006 | eip$address_zip_code == 43056 |
+                     eip$address_zip_code == 43076 | eip$address_zip_code == 43101 |
+                     eip$address_zip_code == 43102 | eip$address_zip_code == 43107 |
+                     eip$address_zip_code == 43111 | eip$address_zip_code == 43115 |
+                     eip$address_zip_code == 43127 | eip$address_zip_code == 43135 |
+                     eip$address_zip_code == 43138 | eip$address_zip_code == 43144 |
+                     eip$address_zip_code == 43148 | eip$address_zip_code == 43149 |
+                     eip$address_zip_code == 43150 | eip$address_zip_code == 43152 |
+                     eip$address_zip_code == 43155 | eip$address_zip_code == 43158 |
+                     eip$address_zip_code == 43160 | eip$address_zip_code == 43164 |
+                     eip$address_zip_code == 43701 | eip$address_zip_code == 43702 |
+                     eip$address_zip_code == 43711 | eip$address_zip_code == 43713 |
+                     eip$address_zip_code == 43716 | eip$address_zip_code == 43717 |
+                     eip$address_zip_code == 43718 | eip$address_zip_code == 43719 |
+                     eip$address_zip_code == 43720 | eip$address_zip_code == 43722 |
+                     eip$address_zip_code == 43723 | eip$address_zip_code == 43724 |
+                     eip$address_zip_code == 43725 | eip$address_zip_code == 43727 |
+                     eip$address_zip_code == 43728 | eip$address_zip_code == 43730 |
+                     eip$address_zip_code == 43731 | eip$address_zip_code == 43732 |
+                     eip$address_zip_code == 43733 | eip$address_zip_code == 43734 |
+                     eip$address_zip_code == 43735 | eip$address_zip_code == 43736 |
+                     eip$address_zip_code == 43738 | eip$address_zip_code == 43739 |
+                     eip$address_zip_code == 43746 | eip$address_zip_code == 43747 |
+                     eip$address_zip_code == 43748 | eip$address_zip_code == 43749 |
+                     eip$address_zip_code == 43750 | eip$address_zip_code == 43752 |
+                     eip$address_zip_code == 43754 | eip$address_zip_code == 43755 |
+                     eip$address_zip_code == 43756 | eip$address_zip_code == 43757 |
+                     eip$address_zip_code == 43758 | eip$address_zip_code == 43759 |
+                     eip$address_zip_code == 43760 | eip$address_zip_code == 43761 |
+                     eip$address_zip_code == 43762 | eip$address_zip_code == 43764 |
+                     eip$address_zip_code == 43766 | eip$address_zip_code == 43767 |
+                     eip$address_zip_code == 43768 | eip$address_zip_code == 43771 |
+                     eip$address_zip_code == 43772 | eip$address_zip_code == 43773 |
+                     eip$address_zip_code == 43777 | eip$address_zip_code == 43778 |
+                     eip$address_zip_code == 43779 | eip$address_zip_code == 43780 |
+                     eip$address_zip_code == 43782 | eip$address_zip_code == 43783 |
+                     eip$address_zip_code == 43786 | eip$address_zip_code == 43787 |
+                     eip$address_zip_code == 43788 | eip$address_zip_code == 43791 |
+                     eip$address_zip_code == 43793 | eip$address_zip_code == 43802 |
+                     eip$address_zip_code == 43803 | eip$address_zip_code == 43804 |
+                     eip$address_zip_code == 43805 | eip$address_zip_code == 43811 |
+                     eip$address_zip_code == 43812 | eip$address_zip_code == 43821 |
+                     eip$address_zip_code == 43822 | eip$address_zip_code == 43824 |
+                     eip$address_zip_code == 43828 | eip$address_zip_code == 43830 |
+                     eip$address_zip_code == 43832 | eip$address_zip_code == 43836 |
+                     eip$address_zip_code == 43837 | eip$address_zip_code == 43840 |
+                     eip$address_zip_code == 43842 | eip$address_zip_code == 43843 |
+                     eip$address_zip_code == 43844 | eip$address_zip_code == 43845 |
+                     eip$address_zip_code == 43901 | eip$address_zip_code == 43902 |
+                     eip$address_zip_code == 43903 | eip$address_zip_code == 43905 |
+                     eip$address_zip_code == 43906 | eip$address_zip_code == 43907 |
+                     eip$address_zip_code == 43908 | eip$address_zip_code == 43909 |
+                     eip$address_zip_code == 43910 | eip$address_zip_code == 43912 |
+                     eip$address_zip_code == 43913 | eip$address_zip_code == 43914 |
+                     eip$address_zip_code == 43915 | eip$address_zip_code == 43916 |
+                     eip$address_zip_code == 43917 | eip$address_zip_code == 43920 |
+                     eip$address_zip_code == 43925 | eip$address_zip_code == 43926 |
+                     eip$address_zip_code == 43927 | eip$address_zip_code == 43928 |
+                     eip$address_zip_code == 43930 | eip$address_zip_code == 43931 |
+                     eip$address_zip_code == 43932 | eip$address_zip_code == 43933 |
+                     eip$address_zip_code == 43934 | eip$address_zip_code == 43935 |
+                     eip$address_zip_code == 43937 | eip$address_zip_code == 43938 |
+                     eip$address_zip_code == 43939 | eip$address_zip_code == 43940 |
+                     eip$address_zip_code == 43941 | eip$address_zip_code == 43942 |
+                     eip$address_zip_code == 43943 | eip$address_zip_code == 43944 |
+                     eip$address_zip_code == 43945 | eip$address_zip_code == 43946 |
+                     eip$address_zip_code == 43947 | eip$address_zip_code == 43948 |
+                     eip$address_zip_code == 43950 | eip$address_zip_code == 43951 |
+                     eip$address_zip_code == 43952 | eip$address_zip_code == 43953 |
+                     eip$address_zip_code == 43961 | eip$address_zip_code == 43962 |
+                     eip$address_zip_code == 43963 | eip$address_zip_code == 43964 |
+                     eip$address_zip_code == 43967 | eip$address_zip_code == 43968 |
+                     eip$address_zip_code == 43970 | eip$address_zip_code == 43971 |
+                     eip$address_zip_code == 43972 | eip$address_zip_code == 43973 |
+                     eip$address_zip_code == 43974 | eip$address_zip_code == 43976 |
+                     eip$address_zip_code == 43977 | eip$address_zip_code == 43981 |
+                     eip$address_zip_code == 43983 | eip$address_zip_code == 43984 |
+                     eip$address_zip_code == 43985 | eip$address_zip_code == 43986 |
+                     eip$address_zip_code == 43988 | eip$address_zip_code == 44003 |
+                     eip$address_zip_code == 44004 | eip$address_zip_code == 44005 |
+                     eip$address_zip_code == 44010 | eip$address_zip_code == 44030 |
+                     eip$address_zip_code == 44032 | eip$address_zip_code == 44041 |
+                     eip$address_zip_code == 44046 | eip$address_zip_code == 44047 |
+                     eip$address_zip_code == 44048 | eip$address_zip_code == 44057 |
+                     eip$address_zip_code == 44062 | eip$address_zip_code == 44064 |
+                     eip$address_zip_code == 44068 | eip$address_zip_code == 44076 |
+                     eip$address_zip_code == 44082 | eip$address_zip_code == 44084 |
+                     eip$address_zip_code == 44085 | eip$address_zip_code == 44086 |
+                     eip$address_zip_code == 44088 | eip$address_zip_code == 44093 |
+                     eip$address_zip_code == 44099 | eip$address_zip_code == 44231 |
+                     eip$address_zip_code == 44288 | eip$address_zip_code == 44401 |
+                     eip$address_zip_code == 44402 | eip$address_zip_code == 44403 |
+                     eip$address_zip_code == 44404 | eip$address_zip_code == 44405 |
+                     eip$address_zip_code == 44406 | eip$address_zip_code == 44408 |
+                     eip$address_zip_code == 44410 | eip$address_zip_code == 44411 |
+                     eip$address_zip_code == 44412 | eip$address_zip_code == 44413 |
+                     eip$address_zip_code == 44415 | eip$address_zip_code == 44416 |
+                     eip$address_zip_code == 44417 | eip$address_zip_code == 44418 |
+                     eip$address_zip_code == 44420 | eip$address_zip_code == 44422 |
+                     eip$address_zip_code == 44423 | eip$address_zip_code == 44424 |
+                     eip$address_zip_code == 44425 | eip$address_zip_code == 44427 |
+                     eip$address_zip_code == 44428 | eip$address_zip_code == 44429 |
+                     eip$address_zip_code == 44430 | eip$address_zip_code == 44431 |
+                     eip$address_zip_code == 44432 | eip$address_zip_code == 44436 |
+                     eip$address_zip_code == 44437 | eip$address_zip_code == 44438 |
+                     eip$address_zip_code == 44439 | eip$address_zip_code == 44440 |
+                     eip$address_zip_code == 44441 | eip$address_zip_code == 44442 |
+                     eip$address_zip_code == 44443 | eip$address_zip_code == 44444 |
+                     eip$address_zip_code == 44445 | eip$address_zip_code == 44446 |
+                     eip$address_zip_code == 44449 | eip$address_zip_code == 44450 |
+                     eip$address_zip_code == 44451 | eip$address_zip_code == 44452 |
+                     eip$address_zip_code == 44453 | eip$address_zip_code == 44454 |
+                     eip$address_zip_code == 44455 | eip$address_zip_code == 44460 |
+                     eip$address_zip_code == 44470 | eip$address_zip_code == 44471 |
+                     eip$address_zip_code == 44473 | eip$address_zip_code == 44481 |
+                     eip$address_zip_code == 44482 | eip$address_zip_code == 44483 |
+                     eip$address_zip_code == 44484 | eip$address_zip_code == 44485 |
+                     eip$address_zip_code == 44486 | eip$address_zip_code == 44490 |
+                     eip$address_zip_code == 44491 | eip$address_zip_code == 44492 |
+                     eip$address_zip_code == 44493 | eip$address_zip_code == 44501 |
+                     eip$address_zip_code == 44502 | eip$address_zip_code == 44503 |
+                     eip$address_zip_code == 44504 | eip$address_zip_code == 44505 |
+                     eip$address_zip_code == 44506 | eip$address_zip_code == 44507 |
+                     eip$address_zip_code == 44509 | eip$address_zip_code == 44510 |
+                     eip$address_zip_code == 44511 | eip$address_zip_code == 44512 |
+                     eip$address_zip_code == 44513 | eip$address_zip_code == 44514 |
+                     eip$address_zip_code == 44515 | eip$address_zip_code == 44555 |
+                     eip$address_zip_code == 44601 | eip$address_zip_code == 44607 |
+                     eip$address_zip_code == 44608 | eip$address_zip_code == 44609 |
+                     eip$address_zip_code == 44610 | eip$address_zip_code == 44611 |
+                     eip$address_zip_code == 44612 | eip$address_zip_code == 44615 |
+                     eip$address_zip_code == 44617 | eip$address_zip_code == 44619 |
+                     eip$address_zip_code == 44620 | eip$address_zip_code == 44621 |
+                     eip$address_zip_code == 44622 | eip$address_zip_code == 44624 |
+                     eip$address_zip_code == 44625 | eip$address_zip_code == 44626 |
+                     eip$address_zip_code == 44627 | eip$address_zip_code == 44628 |
+                     eip$address_zip_code == 44629 | eip$address_zip_code == 44633 |
+                     eip$address_zip_code == 44634 | eip$address_zip_code == 44637 |
+                     eip$address_zip_code == 44638 | eip$address_zip_code == 44639 |
+                     eip$address_zip_code == 44643 | eip$address_zip_code == 44644 |
+                     eip$address_zip_code == 44651 | eip$address_zip_code == 44653 |
+                     eip$address_zip_code == 44654 | eip$address_zip_code == 44656 |
+                     eip$address_zip_code == 44657 | eip$address_zip_code == 44660 |
+                     eip$address_zip_code == 44661 | eip$address_zip_code == 44663 |
+                     eip$address_zip_code == 44665 | eip$address_zip_code == 44671 |
+                     eip$address_zip_code == 44672 | eip$address_zip_code == 44675 |
+                     eip$address_zip_code == 44676 | eip$address_zip_code == 44678 |
+                     eip$address_zip_code == 44679 | eip$address_zip_code == 44680 |
+                     eip$address_zip_code == 44681 | eip$address_zip_code == 44682 |
+                     eip$address_zip_code == 44683 | eip$address_zip_code == 44687 |
+                     eip$address_zip_code == 44688 | eip$address_zip_code == 44689 |
+                     eip$address_zip_code == 44690 | eip$address_zip_code == 44693 |
+                     eip$address_zip_code == 44695 | eip$address_zip_code == 44697 |
+                     eip$address_zip_code == 44699 | eip$address_zip_code == 44730 |
+                     eip$address_zip_code == 44842 | eip$address_zip_code == 45101 |
+                     eip$address_zip_code == 45102 | eip$address_zip_code == 45103 |
+                     eip$address_zip_code == 45105 | eip$address_zip_code == 45106 |
+                     eip$address_zip_code == 45107 | eip$address_zip_code == 45112 |
+                     eip$address_zip_code == 45115 | eip$address_zip_code == 45118 |
+                     eip$address_zip_code == 45119 | eip$address_zip_code == 45120 |
+                     eip$address_zip_code == 45121 | eip$address_zip_code == 45122 |
+                     eip$address_zip_code == 45123 | eip$address_zip_code == 45130 |
+                     eip$address_zip_code == 45131 | eip$address_zip_code == 45132 |
+                     eip$address_zip_code == 45133 | eip$address_zip_code == 45135 |
+                     eip$address_zip_code == 45140 | eip$address_zip_code == 45142 |
+                     eip$address_zip_code == 45144 | eip$address_zip_code == 45147 |
+                     eip$address_zip_code == 45148 | eip$address_zip_code == 45150 |
+                     eip$address_zip_code == 45153 | eip$address_zip_code == 45154 |
+                     eip$address_zip_code == 45155 | eip$address_zip_code == 45156 |
+                     eip$address_zip_code == 45157 | eip$address_zip_code == 45158 |
+                     eip$address_zip_code == 45159 | eip$address_zip_code == 45160 |
+                     eip$address_zip_code == 45162 | eip$address_zip_code == 45167 |
+                     eip$address_zip_code == 45168 | eip$address_zip_code == 45171 |
+                     eip$address_zip_code == 45172 | eip$address_zip_code == 45176 |
+                     eip$address_zip_code == 45244 | eip$address_zip_code == 45245 |
+                     eip$address_zip_code == 45255 | eip$address_zip_code == 45601 |
+                     eip$address_zip_code == 45612 | eip$address_zip_code == 45613 |
+                     eip$address_zip_code == 45614 | eip$address_zip_code == 45616 |
+                     eip$address_zip_code == 45617 | eip$address_zip_code == 45618 |
+                     eip$address_zip_code == 45619 | eip$address_zip_code == 45620 |
+                     eip$address_zip_code == 45621 | eip$address_zip_code == 45622 |
+                     eip$address_zip_code == 45623 | eip$address_zip_code == 45624 |
+                     eip$address_zip_code == 45628 | eip$address_zip_code == 45629 |
+                     eip$address_zip_code == 45630 | eip$address_zip_code == 45631 |
+                     eip$address_zip_code == 45633 | eip$address_zip_code == 45634 |
+                     eip$address_zip_code == 45636 | eip$address_zip_code == 45638 |
+                     eip$address_zip_code == 45640 | eip$address_zip_code == 45642 |
+                     eip$address_zip_code == 45643 | eip$address_zip_code == 45644 |
+                     eip$address_zip_code == 45645 | eip$address_zip_code == 45646 |
+                     eip$address_zip_code == 45647 | eip$address_zip_code == 45648 |
+                     eip$address_zip_code == 45650 | eip$address_zip_code == 45651 |
+                     eip$address_zip_code == 45652 | eip$address_zip_code == 45653 |
+                     eip$address_zip_code == 45654 | eip$address_zip_code == 45656 |
+                     eip$address_zip_code == 45657 | eip$address_zip_code == 45658 |
+                     eip$address_zip_code == 45659 | eip$address_zip_code == 45660 |
+                     eip$address_zip_code == 45661 | eip$address_zip_code == 45662 |
+                     eip$address_zip_code == 45663 | eip$address_zip_code == 45669 |
+                     eip$address_zip_code == 45671 | eip$address_zip_code == 45672 |
+                     eip$address_zip_code == 45673 | eip$address_zip_code == 45674 |
+                     eip$address_zip_code == 45675 | eip$address_zip_code == 45677 |
+                     eip$address_zip_code == 45678 | eip$address_zip_code == 45679 |
+                     eip$address_zip_code == 45680 | eip$address_zip_code == 45681 |
+                     eip$address_zip_code == 45682 | eip$address_zip_code == 45683 |
+                     eip$address_zip_code == 45684 | eip$address_zip_code == 45685 |
+                     eip$address_zip_code == 45686 | eip$address_zip_code == 45687 |
+                     eip$address_zip_code == 45688 | eip$address_zip_code == 45690 |
+                     eip$address_zip_code == 45692 | eip$address_zip_code == 45693 |
+                     eip$address_zip_code == 45694 | eip$address_zip_code == 45695 |
+                     eip$address_zip_code == 45696 | eip$address_zip_code == 45697 |
+                     eip$address_zip_code == 45698 | eip$address_zip_code == 45699 |
+                     eip$address_zip_code == 45701 | eip$address_zip_code == 45710 |
+                     eip$address_zip_code == 45711 | eip$address_zip_code == 45712 |
+                     eip$address_zip_code == 45713 | eip$address_zip_code == 45714 |
+                     eip$address_zip_code == 45715 | eip$address_zip_code == 45716 |
+                     eip$address_zip_code == 45717 | eip$address_zip_code == 45719 |
+                     eip$address_zip_code == 45720 | eip$address_zip_code == 45721 |
+                     eip$address_zip_code == 45723 | eip$address_zip_code == 45724 |
+                     eip$address_zip_code == 45727 | eip$address_zip_code == 45729 |
+                     eip$address_zip_code == 45732 | eip$address_zip_code == 45734 |
+                     eip$address_zip_code == 45735 | eip$address_zip_code == 45739 |
+                     eip$address_zip_code == 45740 | eip$address_zip_code == 45741 |
+                     eip$address_zip_code == 45742 | eip$address_zip_code == 45743 |
+                     eip$address_zip_code == 45744 | eip$address_zip_code == 45745 |
+                     eip$address_zip_code == 45746 | eip$address_zip_code == 45750 |
+                     eip$address_zip_code == 45760 | eip$address_zip_code == 45761 |
+                     eip$address_zip_code == 45764 | eip$address_zip_code == 45766 |
+                     eip$address_zip_code == 45767 | eip$address_zip_code == 45768 |
+                     eip$address_zip_code == 45769 | eip$address_zip_code == 45770 |
+                     eip$address_zip_code == 45771 | eip$address_zip_code == 45772 |
+                     eip$address_zip_code == 45773 | eip$address_zip_code == 45775 |
+                     eip$address_zip_code == 45776 | eip$address_zip_code == 45777 |
+                     eip$address_zip_code == 45778 | eip$address_zip_code == 45779 |
+                     eip$address_zip_code == 45780 | eip$address_zip_code == 45782 |
+                     eip$address_zip_code == 45783 | eip$address_zip_code == 45784 |
+                     eip$address_zip_code == 45786 | eip$address_zip_code == 45787 |
+                     eip$address_zip_code == 45788 | eip$address_zip_code == 45789 |
+                     (eip$appalachian == 1 | eip$appalachian_family == 1)] <- 1
+table(eip$appalachian_pt)
+
+
+
+# EIP unique patients
+dim(eip)
+eip_pts <- select(eip, record_id)
+dim(eip_pts)
+eip_pts <- distinct(eip_pts)
+dim(eip_pts)
+
+eip_patients <- nrow(eip_pts)
+eip_patients
+
+
+
+# PLWHA
+eip$plwha[(eip$history_hiv_test_result == 1 |
+             eip$reason_for_offer_category_hiv_test == 7 |
+             eip$reason_for_offer_category_hiv_test == 8 |
+             eip$offer_outcome_declined_hiv___21 == 1 |
+             eip$offer_outcome_declined_hiv_2___21 == 1 |
+             eip$offer_outcome_declined_hiv_3___21 == 1 |
+             eip$final_test_status_hiv == 1 |
+             eip$diagnosis_hiv == 1 |
+             eip$diagnosis_hiv == 2)] <- 1
+table(eip$plwha)
+
+
+table(eip$plwha)
+plwha <- eip[which(eip$plwha == 1), ]
+dim(plwha)
+plwha <- nrow(plwha)
+plwha
+
+
+
+# Formatting contact note dates
+eip$followup_date1 <- as.Date(eip$followup_date1, format = '%m/%d/%Y')
+eip$followup_date2 <- as.Date(eip$followup_date2, format = '%m/%d/%Y')
+eip$followup_date3 <- as.Date(eip$followup_date3, format = '%m/%d/%Y')
+eip$followup_date4 <- as.Date(eip$followup_date4, format = '%m/%d/%Y')
+eip$followup_date5 <- as.Date(eip$followup_date5, format = '%m/%d/%Y')
+eip$followup_date6 <- as.Date(eip$followup_date6, format = '%m/%d/%Y')
+eip$followup_date7 <- as.Date(eip$followup_date7, format = '%m/%d/%Y')
+eip$followup_date8 <- as.Date(eip$followup_date8, format = '%m/%d/%Y')
+eip$followup_date9 <- as.Date(eip$followup_date9, format = '%m/%d/%Y')
+eip$followup_date10 <- as.Date(eip$followup_date10, format = '%m/%d/%Y')
+eip$followup_date11 <- as.Date(eip$followup_date11, format = '%m/%d/%Y')
+eip$followup_date12 <- as.Date(eip$followup_date12, format = '%m/%d/%Y')
+eip$followup_date13 <- as.Date(eip$followup_date13, format = '%m/%d/%Y')
+eip$followup_date14 <- as.Date(eip$followup_date14, format = '%m/%d/%Y')
+eip$followup_date15 <- as.Date(eip$followup_date15, format = '%m/%d/%Y')
+eip$followup_date16 <- as.Date(eip$followup_date16, format = '%m/%d/%Y')
+eip$followup_date17 <- as.Date(eip$followup_date17, format = '%m/%d/%Y')
+eip$followup_date18 <- as.Date(eip$followup_date18, format = '%m/%d/%Y')
+eip$followup_date19 <- as.Date(eip$followup_date19, format = '%m/%d/%Y')
+eip$followup_date20 <- as.Date(eip$followup_date20, format = '%m/%d/%Y')
+eip$followup_date21 <- as.Date(eip$followup_date21, format = '%m/%d/%Y')
+eip$followup_date22 <- as.Date(eip$followup_date22, format = '%m/%d/%Y')
+eip$followup_date23 <- as.Date(eip$followup_date23, format = '%m/%d/%Y')
+eip$followup_date24 <- as.Date(eip$followup_date24, format = '%m/%d/%Y')
+eip$followup_date25 <- as.Date(eip$followup_date25, format = '%m/%d/%Y')
+eip$followup_date26 <- as.Date(eip$followup_date26, format = '%m/%d/%Y')
+eip$followup_date27 <- as.Date(eip$followup_date27, format = '%m/%d/%Y')
+eip$followup_date28 <- as.Date(eip$followup_date28, format = '%m/%d/%Y')
+eip$followup_date29 <- as.Date(eip$followup_date29, format = '%m/%d/%Y')
+eip$followup_date30 <- as.Date(eip$followup_date30, format = '%m/%d/%Y')
+eip$followup_date31 <- as.Date(eip$followup_date31, format = '%m/%d/%Y')
+eip$followup_date32 <- as.Date(eip$followup_date32, format = '%m/%d/%Y')
+eip$followup_date33 <- as.Date(eip$followup_date33, format = '%m/%d/%Y')
+eip$followup_date34 <- as.Date(eip$followup_date34, format = '%m/%d/%Y')
+eip$followup_date35 <- as.Date(eip$followup_date35, format = '%m/%d/%Y')
+eip$followup_date36 <- as.Date(eip$followup_date36, format = '%m/%d/%Y')
+eip$followup_date37 <- as.Date(eip$followup_date37, format = '%m/%d/%Y')
+eip$followup_date38 <- as.Date(eip$followup_date38, format = '%m/%d/%Y')
+eip$followup_date39 <- as.Date(eip$followup_date39, format = '%m/%d/%Y')
+eip$followup_date40 <- as.Date(eip$followup_date40, format = '%m/%d/%Y')
+eip$followup_date41 <- as.Date(eip$followup_date41, format = '%m/%d/%Y')
+eip$followup_date42 <- as.Date(eip$followup_date42, format = '%m/%d/%Y')
+eip$followup_date43 <- as.Date(eip$followup_date43, format = '%m/%d/%Y')
+eip$followup_date44 <- as.Date(eip$followup_date44, format = '%m/%d/%Y')
+eip$followup_date45 <- as.Date(eip$followup_date45, format = '%m/%d/%Y')
+eip$followup_date46 <- as.Date(eip$followup_date46, format = '%m/%d/%Y')
+eip$followup_date47 <- as.Date(eip$followup_date47, format = '%m/%d/%Y')
+eip$followup_date48 <- as.Date(eip$followup_date48, format = '%m/%d/%Y')
+eip$followup_date49 <- as.Date(eip$followup_date49, format = '%m/%d/%Y')
+eip$followup_date50 <- as.Date(eip$followup_date50, format = '%m/%d/%Y')
+
+
+# Formatting timeframe between encounter date and contact note
+eip$datediff1 <- as.numeric(interval(eip$enc_date, eip$followup_date1)/ddays(1))
+eip$datediff2 <- as.numeric(interval(eip$enc_date, eip$followup_date2)/ddays(1))
+eip$datediff3 <- as.numeric(interval(eip$enc_date, eip$followup_date3)/ddays(1))
+eip$datediff4 <- as.numeric(interval(eip$enc_date, eip$followup_date4)/ddays(1))
+eip$datediff5 <- as.numeric(interval(eip$enc_date, eip$followup_date5)/ddays(1))
+eip$datediff6 <- as.numeric(interval(eip$enc_date, eip$followup_date6)/ddays(1))
+eip$datediff7 <- as.numeric(interval(eip$enc_date, eip$followup_date7)/ddays(1))
+eip$datediff8 <- as.numeric(interval(eip$enc_date, eip$followup_date8)/ddays(1))
+eip$datediff9 <- as.numeric(interval(eip$enc_date, eip$followup_date9)/ddays(1))
+eip$datediff10 <- as.numeric(interval(eip$enc_date, eip$followup_date10)/ddays(1))
+eip$datediff11 <- as.numeric(interval(eip$enc_date, eip$followup_date11)/ddays(1))
+eip$datediff12 <- as.numeric(interval(eip$enc_date, eip$followup_date12)/ddays(1))
+eip$datediff13 <- as.numeric(interval(eip$enc_date, eip$followup_date13)/ddays(1))
+eip$datediff14 <- as.numeric(interval(eip$enc_date, eip$followup_date14)/ddays(1))
+eip$datediff15 <- as.numeric(interval(eip$enc_date, eip$followup_date15)/ddays(1))
+eip$datediff16 <- as.numeric(interval(eip$enc_date, eip$followup_date16)/ddays(1))
+eip$datediff17 <- as.numeric(interval(eip$enc_date, eip$followup_date17)/ddays(1))
+eip$datediff18 <- as.numeric(interval(eip$enc_date, eip$followup_date18)/ddays(1))
+eip$datediff19 <- as.numeric(interval(eip$enc_date, eip$followup_date19)/ddays(1))
+eip$datediff20 <- as.numeric(interval(eip$enc_date, eip$followup_date20)/ddays(1))
+eip$datediff21 <- as.numeric(interval(eip$enc_date, eip$followup_date21)/ddays(1))
+eip$datediff22 <- as.numeric(interval(eip$enc_date, eip$followup_date22)/ddays(1))
+eip$datediff23 <- as.numeric(interval(eip$enc_date, eip$followup_date23)/ddays(1))
+eip$datediff24 <- as.numeric(interval(eip$enc_date, eip$followup_date24)/ddays(1))
+eip$datediff25 <- as.numeric(interval(eip$enc_date, eip$followup_date25)/ddays(1))
+eip$datediff26 <- as.numeric(interval(eip$enc_date, eip$followup_date26)/ddays(1))
+eip$datediff27 <- as.numeric(interval(eip$enc_date, eip$followup_date27)/ddays(1))
+eip$datediff28 <- as.numeric(interval(eip$enc_date, eip$followup_date28)/ddays(1))
+eip$datediff29 <- as.numeric(interval(eip$enc_date, eip$followup_date29)/ddays(1))
+eip$datediff30 <- as.numeric(interval(eip$enc_date, eip$followup_date30)/ddays(1))
+eip$datediff31 <- as.numeric(interval(eip$enc_date, eip$followup_date31)/ddays(1))
+eip$datediff32 <- as.numeric(interval(eip$enc_date, eip$followup_date32)/ddays(1))
+eip$datediff33 <- as.numeric(interval(eip$enc_date, eip$followup_date33)/ddays(1))
+eip$datediff34 <- as.numeric(interval(eip$enc_date, eip$followup_date34)/ddays(1))
+eip$datediff35 <- as.numeric(interval(eip$enc_date, eip$followup_date35)/ddays(1))
+eip$datediff36 <- as.numeric(interval(eip$enc_date, eip$followup_date36)/ddays(1))
+eip$datediff37 <- as.numeric(interval(eip$enc_date, eip$followup_date37)/ddays(1))
+eip$datediff38 <- as.numeric(interval(eip$enc_date, eip$followup_date38)/ddays(1))
+eip$datediff39 <- as.numeric(interval(eip$enc_date, eip$followup_date39)/ddays(1))
+eip$datediff40 <- as.numeric(interval(eip$enc_date, eip$followup_date40)/ddays(1))
+eip$datediff41 <- as.numeric(interval(eip$enc_date, eip$followup_date41)/ddays(1))
+eip$datediff42 <- as.numeric(interval(eip$enc_date, eip$followup_date42)/ddays(1))
+eip$datediff43 <- as.numeric(interval(eip$enc_date, eip$followup_date43)/ddays(1))
+eip$datediff44 <- as.numeric(interval(eip$enc_date, eip$followup_date44)/ddays(1))
+eip$datediff45 <- as.numeric(interval(eip$enc_date, eip$followup_date45)/ddays(1))
+eip$datediff46 <- as.numeric(interval(eip$enc_date, eip$followup_date46)/ddays(1))
+eip$datediff47 <- as.numeric(interval(eip$enc_date, eip$followup_date47)/ddays(1))
+eip$datediff48 <- as.numeric(interval(eip$enc_date, eip$followup_date48)/ddays(1))
+eip$datediff49 <- as.numeric(interval(eip$enc_date, eip$followup_date49)/ddays(1))
+eip$datediff50 <- as.numeric(interval(eip$enc_date, eip$followup_date50)/ddays(1))
+
+```
+
+```{r Street Medicine, include=FALSE}
+
+
+```
+
+
+# On the Map
+
+```{r Street Med Map, echo=FALSE, warning=FALSE, message=FALSE}
+
+leaflet() %>%
+  addTiles() %>%
+  setView(lng = -84.5120, lat = 39.1431, zoom = 11.5) %>%
+  addCircleMarkers(
+    data = street_med_sites,
+    color = 'red',
+    label = ~site) %>%
+  addProviderTiles(providers$Esri.WorldTopoMap) %>%
+  addDrawToolbar()
+
+```
+

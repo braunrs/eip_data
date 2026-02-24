@@ -175,6 +175,8 @@ eip25$ltc_sud_referral_uc_inpt___1 <- ''
 eip25$ltc_sud_referral_uc_inpt___2 <- ''
 eip25$ltc_sud_referral_uc_inpt___3 <- ''
 eip25$ltc_sud_referral_uc_inpt___0 <- ''
+eip25$mgen_sr <- ''
+eip25$mgen_treat <- ''
 
 
 #####  Updating 2026 Dataset  #####

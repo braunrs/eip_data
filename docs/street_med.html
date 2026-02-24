@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-02-24">
+<meta name="description" content="[Description]">
 
-<title>Welcome to the EIP Data Website – EIP Data Website</title>
+<title>Street Medicine – EIP Data Website</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -35,15 +37,16 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-2e781afaaf7e055d9dabd3834f628d82.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-24772959a0e306aba8d7698078628ce7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-2e781afaaf7e055d9dabd3834f628d82.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a1719f152a44c0071ea46cca3991f6d5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-d03ce445b6a51a4ef8a32186c2dd8a61.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-a1719f152a44c0071ea46cca3991f6d5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,11 +74,43 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
+<link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+
+<script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
+
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+
+<script src="site_libs/proj4-2.6.2/proj4.min.js"></script>
+
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+
+<link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+
+<script src="site_libs/leaflet-binding-2.2.3/leaflet.js"></script>
+
+<script src="site_libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+
+<script src="site_libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
+
+<link href="site_libs/lfx-draw-1.0.4/lfx-draw-prod.css" rel="stylesheet">
+
+<script src="site_libs/lfx-draw-1.0.4/lfx-draw-prod.js"></script>
+
+<script src="site_libs/lfx-draw-1.0.4/lfx-draw-bindings.js"></script>
+
+<script src="site_libs/lfx-draw-drag-0.4.8/lfx-draw-drag-prod.js"></script>
+
 
 
 </head>
 
-<body class="nav-fixed fullcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -257,7 +292,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./main.html" aria-current="page"> 
+    <a class="nav-link" href="./main.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -303,31 +338,65 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#on-the-map" id="toc-on-the-map" class="nav-link active" data-scroll-target="#on-the-map">On the Map</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<div class="quarto-about-jolla">
-  <img src="images/eip_logo.jpg" class="about-image
-  round " style="height: 10em; width: 10em;">
- <header id="title-block-header" class="quarto-title-block default">
+<main class="content column-page-left" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Welcome to the EIP Data Website</h1>
+<h1 class="title">Street Medicine</h1>
 </div>
-<div class="quarto-title-meta">
+
+<div>
+  <div class="description">
+    <p>[Description]</p>
   </div>
-</header><main class="content" id="quarto-document-content">
-
-<div id="hero-heading">
-<p>This site shows our ongoing projects and historical data regarding EIP services. As of now, the EIP Data website contains data going back to the beginning of January 1st, 2023 until the most recent refresh date.</p>
 </div>
-<p><br> <br> <br></p>
 
 
-</main>  
+<div class="quarto-title-meta column-page-left">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 24, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="on-the-map" class="level1">
+<h1>On the Map</h1>
+<div class="cell">
+<div class="cell-output-display">
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-83663a2edb0c59097d86" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-83663a2edb0c59097d86">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addCircleMarkers","args":[[39.0978,39.1424,39.10216,39.19687,39.1059,null,39.17008,39.09926,39.16084,39.14653,39.09898,39.11848,39.11392,39.17255,39.1033,39.11595,39.1126,39.11548,39.10446,39.09282,39.11281,39.09886,39.28284,39.09519,39.12754,39.1091,39.14519,null],[-84.52043,-84.53148,-84.53485000000001,-84.47725,-84.51348,null,-84.28531,-84.52722,-84.54044,-84.42796,-84.53006000000001,-84.53596,-84.5172,-84.59041999999999,-84.55303000000001,-84.51554,-84.51432,-84.51793000000001,-84.51527,-84.56264,-84.51679,-84.66401,-84.40176,-84.38856,-84.48815999999999,-84.51727,-84.61996000000001,null],10,null,null,{"interactive":true,"className":"","stroke":true,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.2},null,null,null,null,["Bridge the Gap ","Camp Washington - Rest Inn","Carr Street Camp (Carr St &amp; Dalton)","Carthage - Speedway","Cincinnati Public Library","Encampment (45203)","Garfield park","Gest St (Shelterhouse?)","Northside Hoffner Park","Hyde Park (Plaza?)","Linn Street Train Tracks (Linn St &amp; 5th)","Lord's Gym","Mary Magedalen House","Mt Airy Park","Neave Street","Neighborhub Health","OTR (E Liberty &amp; Walnut)","Our Daily Bread","Piatt Park","Price Hill Shell","Republic Street (Republic &amp; Liberty)","River Rd","Sharonville (E Kemper &amp;42)","Stanbery Park","Walnut Hills Library ","Washington Park","Western Hills (Plaza?)","Westside"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addProviderTiles","args":["Esri.WorldTopoMap",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addDrawToolbar","args":[null,null,{"position":"topleft","draw":{"polyline":{"allowIntersection":true,"drawError":{"color":"#b00b00","timeout":2500},"guidelineDistance":20,"maxGuideLineLength":4000,"showLength":true,"metric":true,"feet":true,"nautic":false,"zIndexOffset":2000,"shapeOptions":{"stroke":true,"color":"#03f","weight":1,"opacity":1,"fill":false,"fillColor":"#03f","fillOpacity":0.4,"clickable":true,"smoothFactor":1,"noClip":true},"repeatMode":false},"polygon":{"showArea":false,"metric":true,"shapeOptions":{"stroke":true,"color":"#03f","weight":1,"opacity":1,"fill":true,"fillColor":"#03f","fillOpacity":0.4,"clickable":true,"smoothFactor":1,"noClip":true},"repeatMode":false},"circle":{"shapeOptions":{"stroke":true,"color":"#03f","weight":1,"opacity":1,"fill":true,"fillColor":"#03f","fillOpacity":0.4,"clickable":true,"smoothFactor":1,"noClip":true},"repeatMode":false,"showRadius":true,"metric":true,"feet":true,"nautic":false},"rectangle":{"showArea":true,"metric":true,"shapeOptions":{"stroke":true,"color":"#03f","weight":1,"opacity":1,"fill":true,"fillColor":"#03f","fillOpacity":0.4,"clickable":true,"smoothFactor":1,"noClip":true},"repeatMode":false},"marker":{"zIndexOffset":2000,"repeatMode":false},"circlemarker":{"stroke":true,"color":"#3388ff","weight":4,"opacity":0.5,"fill":true,"fillOpacity":0.2,"clickable":true,"zIndexOffset":2000,"repeatMode":false},"singleFeature":false},"edit":false,"toolbar":null,"handlers":null,"edittoolbar":null,"edithandlers":null}]}],"setView":[[39.1431,-84.512],11.5,[]],"limits":{"lat":[39.09282,39.28284],"lng":[-84.66401,-84.28531]}},"evals":[],"jsHooks":[]}</script>
 </div>
- <!-- /main -->
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -343,6 +412,13 @@ ul.task-list li input[type="checkbox"] {
       window.document.body.appendChild(a);
     }
     setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
