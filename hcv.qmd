@@ -60,7 +60,7 @@ eip25$record_id <- paste(eip25$record_id, "_25", sep = "")
 summary(eip25$record_id)
 
 # 2026
-eip26 <- read.csv('M:/EIP Data/EIP Database/REDCap 2026/EIP Database Data 20260223_1005.csv')
+eip26 <- read.csv('M:/EIP Data/EIP Database/REDCap 2026/EIP Database Data 20260302_0922.csv')
 dim(eip26)
 summary(eip26$record_id)
 eip26$record_id <- paste(eip26$record_id, "_26", sep = "")
@@ -93,12 +93,13 @@ hcv_nov25 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard
 hcv_dec25 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/Monthly Data/HCV Dashboard Data 2025_12.csv')
 hcv_jan26 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/Monthly Data/HCV Dashboard Data 2026_01.csv')
 hcv_feb26 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/Monthly Data/HCV Dashboard Data 2026_02.csv')
+hcv_mar26 <- read.csv('M:/EIP Data/External Data Sources/Epic Data/HCV Dashboard/Monthly Data/HCV Dashboard Data 2026_03.csv')
 
 hcv <- rbind(hcv_jan24, hcv_feb24, hcv_mar24, hcv_apr24, hcv_may24, hcv_jun24,
              hcv_jul24, hcv_aug24, hcv_sep24, hcv_oct24, hcv_nov24, hcv_dec24,
              hcv_jan25, hcv_feb25, hcv_mar25, hcv_apr25, hcv_may25, hcv_jun25,
              hcv_jul25, hcv_aug25, hcv_sep25, hcv_oct25, hcv_nov25, hcv_dec25,
-             hcv_jan26, hcv_feb26)
+             hcv_jan26, hcv_feb26, hcv_mar26)
 dim(hcv)
 hcv <- distinct(hcv)
 dim(hcv)
