@@ -39,7 +39,7 @@ library(DT)
 
 ### EIP Database Data
 # 2023
-eip23 <- read.csv('M:/EIP Data/EIP Database/REDCap 2023/EIP Database Data 20260202_1153.csv')
+eip23 <- read.csv('M:/EIP Data/EIP Database/REDCap 2023/EIP Database Data 20260210_1403.csv')
 dim(eip23)
 summary(eip23$record_id)
 eip23$record_id <- paste(eip23$record_id, "_23", sep = "")
@@ -3472,34 +3472,27 @@ annual_hiv_tests
 
 ##########  False Positive Tests  ##########
 
-eip$hiv_false_pos[(eip$hiv_result1 == 1 | eip$hiv_result1 == 2 |
-                    eip$hiv_result2 == 1 | eip$hiv_result2 == 2 |
-                    eip$hiv_result3 == 1 | eip$hiv_result3 == 2 |
-                    eip$hiv_result4 == 1 | eip$hiv_result4 == 2 |
-                    eip$hiv_result5 == 1 | eip$hiv_result5 == 2 |
-                    eip$hiv_result6 == 1 | eip$hiv_result6 == 2) &
-                    eip$final_test_status_hiv != 0] <- 1
-table(eip$hiv_false_pos)
-hiv_false_positives <- eip[which(eip$hiv_false_pos == 1), ]
+table(eip$hiv_false_positive_calc)
+hiv_false_positives <- eip[which(eip$hiv_false_positive_calc == 1), ]
 dim(hiv_false_positives)
 hiv_false_positives <- nrow(hiv_false_positives)
 hiv_false_positives
 
 
 # Monthly False Positives
-monthly_hiv_false_pos <- select(eip, enc_date, record_id, hiv_false_pos)
-monthly_hiv_false_pos <- monthly_hiv_false_pos[which(monthly_hiv_false_pos$hiv_false_pos == 1), ]
+monthly_hiv_false_pos <- select(eip, enc_date, record_id, hiv_false_positive_calc)
+monthly_hiv_false_pos <- monthly_hiv_false_pos[which(monthly_hiv_false_pos$hiv_false_positive_calc == 1), ]
 head(monthly_hiv_false_pos)
 monthly_hiv_false_pos <- select(monthly_hiv_false_pos, -record_id)
 head(monthly_hiv_false_pos)
-monthly_hiv_false_pos$hiv_false_pos[is.na(monthly_hiv_false_pos$hiv_false_pos)] <- 0
+monthly_hiv_false_pos$hiv_false_positive_calc[is.na(monthly_hiv_false_pos$hiv_false_positive_calc)] <- 0
 head(monthly_hiv_false_pos)
 
 monthly_hiv_false_pos$Date <- format(as.Date(monthly_hiv_false_pos$enc_date, format="%d/%m/%Y"),"%m/%Y")
 head(monthly_hiv_false_pos)
 
 
-monthly_hiv_false_pos <- aggregate(hiv_false_pos ~ Date,
+monthly_hiv_false_pos <- aggregate(hiv_false_positive_calc ~ Date,
                                    monthly_hiv_false_pos,
                                    FUN = sum)
 head(monthly_hiv_false_pos)
@@ -3507,19 +3500,19 @@ monthly_hiv_false_pos
 
 
 # Annual False Positives
-annual_hiv_false_pos <- select(eip, enc_date, record_id, hiv_false_pos)
-annual_hiv_false_pos <- annual_hiv_false_pos[which(annual_hiv_false_pos$hiv_false_pos == 1), ]
+annual_hiv_false_pos <- select(eip, enc_date, record_id, hiv_false_positive_calc)
+annual_hiv_false_pos <- annual_hiv_false_pos[which(annual_hiv_false_pos$hiv_false_positive_calc == 1), ]
 head(annual_hiv_false_pos)
 annual_hiv_false_pos <- select(annual_hiv_false_pos, -record_id)
 head(annual_hiv_false_pos)
-annual_hiv_false_pos$hiv_false_pos[is.na(annual_hiv_false_pos$hiv_false_pos)] <- 0
+annual_hiv_false_pos$hiv_false_positive_calc[is.na(annual_hiv_false_pos$hiv_false_positive_calc)] <- 0
 head(annual_hiv_false_pos)
 
 annual_hiv_false_pos$Date <- format(as.Date(annual_hiv_false_pos$enc_date, format="%d/%m/%Y"),"%Y")
 head(annual_hiv_false_pos)
 
 
-annual_hiv_false_pos <- aggregate(hiv_false_pos ~ Date,
+annual_hiv_false_pos <- aggregate(hiv_false_positive_calc ~ Date,
                                   annual_hiv_false_pos,
                                   FUN = sum)
 head(annual_hiv_false_pos)
@@ -6369,34 +6362,34 @@ Annual HIV false positive tests for for all HIV tests entered into the EIP datab
 ```{r, echo = FALSE}
 
 months_elapsed <- 3
-current_annual_hiv_false_pos_2026 <- annual_hiv_false_pos$hiv_false_pos[annual_hiv_false_pos$Date == 2026]
+current_annual_hiv_false_pos_2026 <- annual_hiv_false_pos$hiv_false_positive_calc[annual_hiv_false_pos$Date == 2026]
 projected_annual_hiv_false_pos_2026 <- (current_annual_hiv_false_pos_2026 / months_elapsed) * 12
 projection_df <- data.frame(
   Date = c(2025, 2026),
-  hiv_false_pos = c(
-    annual_hiv_false_pos$hiv_false_pos[annual_hiv_false_pos$Date == 2025],
+  hiv_false_positive_calc = c(
+    annual_hiv_false_pos$hiv_false_positive_calc[annual_hiv_false_pos$Date == 2025],
     projected_annual_hiv_false_pos_2026))
 
 
 annual_hiv_false_pos_plot <- plot_ly(data = annual_hiv_false_pos,
-                                   x = ~Date,
-                                   y = ~hiv_false_pos,
-                                   type = 'scatter',
-                                   mode = 'lines+markers',
-                                   name = 'Total False Positive Tests',
-                                   marker = list(color = 'blue'),
-                                   text = ~hiv_false_pos,
-                                   textposition = 'auto') %>%
+                                     x = ~Date,
+                                     y = ~hiv_false_positive_calc,
+                                     type = 'scatter',
+                                     mode = 'lines+markers',
+                                     name = 'Total False Positive Tests',
+                                     marker = list(color = 'blue'),
+                                     text = ~hiv_false_positive_calc,
+                                     textposition = 'auto') %>%
   add_trace(
     data = projection_df,
     x = ~Date,
-    y = ~hiv_false_pos,
+    y = ~hiv_false_positive_calc,
     type = 'scatter',
     mode = 'lines+markers',
     name = 'Projected 2026',
     line = list(dash = 'dash', color = 'lightgrey'),
     marker = list(color = 'lightgrey'),
-    text = ~round(hiv_false_pos, 0),
+    text = ~round(hiv_false_positive_calc, 0),
     textposition = 'top center') %>%
   
   layout(yaxis = list(title = 'Number of False Positive HIV Tests'),
@@ -6415,21 +6408,15 @@ The figure below shows the monthly HIV false positive testing numbers for all HI
 ```{r, echo = FALSE}
 
 monthly_hiv_false_pos <- monthly_hiv_false_pos %>%
-  mutate(Date = as.Date(paste0("01/", Date), format = "%d/%m/%Y")) %>%
-  arrange(Date)
+  mutate(Date = as.Date(paste0("01/", Date), format = "%d/%m/%Y"))
 
-monthly_hiv_false_pos_plot <- plot_ly(
-  data = monthly_hiv_false_pos,
-  x = ~Date,
-  y = ~hiv_false_pos,
-  type = 'scatter',
-  mode = 'lines',
-  name = 'False Positive Tests',
-  text = ~hiv_false_pos,
-  line = list(color = 'lightskyblue')) %>%
-  layout(
-    yaxis = list(title = 'Total HIV False Positive Tests'))
-
+monthly_hiv_false_pos_plot <- plot_ly(data = monthly_hiv_false_pos,
+                                    x = ~Date,
+                                    y = ~hiv_false_positive_calc,
+                                    type = 'bar',
+                                    name = 'False Positive HIV Tests',
+                                    text = ~hiv_false_positive_calc, textposition = 'auto',
+                                    marker = list(color = 'lightskyblue'))
 config(monthly_hiv_false_pos_plot, displayModeBar = FALSE)
 
 ```
