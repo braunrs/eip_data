@@ -6395,6 +6395,7 @@ config(monthly_hiv_testing_plot, displayModeBar = FALSE)
 
 :::
 
+
 ## Positive HIV Tests
 
 The following plots show the annual and monthly breakdown of positive HIV tests entered into the EIP Database. The number of positive tests within each rapid-based testing program is noted above in the table, but it is planned to include the breakdown of CTR vs. EHE vs. Lab testing positives within this breakdown to show the contributon of eahc testing stream within the total of positive tests.
@@ -6439,12 +6440,8 @@ annual_hiv_pos_plot <- plot_ly(data = annual_hiv_pos,
             marker = list(color = 'lightgrey'),
             text = ~round(hiv_positive_test, 0),
             textposition = 'top center') %>%
-  layout(
-    xaxis = list(
-      dtick = "M12",
-      tickformat = "%Y"),
-    yaxis = list(
-      title = 'Number of Positive HIV Tests',
+  layout(xaxis = list(dtick = "M12", tickformat = "%Y"),
+         yaxis = list(title = 'Number of Positive HIV Tests',
       range = c(0,
         max(
           c(annual_hiv_pos$hiv_positive_test,
@@ -6537,7 +6534,13 @@ annual_hiv_false_pos_plot <- plot_ly(data = annual_hiv_false_pos,
     text = ~round(hiv_false_positive_calc, 0),
     textposition = 'top center') %>%
   
-  layout(yaxis = list(title = 'Number of False Positive HIV Tests'),
+  layout(xaxis = list(dtick = "M12", tickformat = "%Y"),
+         yaxis = list(title = 'Number of False Positive HIV Tests',
+      range = c(0,
+        max(
+          c(annual_hiv_false_pos$hiv_false_positive_calc,
+            hiv_false_pos_projection$hiv_false_positive_calc),
+          na.rm = TRUE) * 1.1)),
          barmode = 'overlay')
 
 config(annual_hiv_false_pos_plot, displayModeBar = FALSE)
