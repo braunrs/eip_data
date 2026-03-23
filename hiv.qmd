@@ -3470,6 +3470,61 @@ head(annual_hiv_tests)
 annual_hiv_tests
 
 
+
+
+##########  Positive Tests  ##########
+
+table(eip$final_test_status_hiv)
+eip$hiv_positive_test[eip$final_test_status_hiv == 1] <- 1
+table(eip$hiv_positive_test)
+hiv_positive_tests <- eip[which(eip$hiv_positive_test == 1), ]
+dim(hiv_positive_tests)
+hiv_positive_tests <- nrow(hiv_positive_tests)
+hiv_positive_tests
+
+
+# Monthly False Positives
+monthly_hiv_pos <- select(eip, enc_date, record_id, hiv_positive_test)
+monthly_hiv_pos <- monthly_hiv_pos[which(monthly_hiv_pos$hiv_positive_test == 1), ]
+head(monthly_hiv_pos)
+monthly_hiv_pos <- select(monthly_hiv_pos, -record_id)
+head(monthly_hiv_pos)
+monthly_hiv_pos$hiv_positive_test[is.na(monthly_hiv_pos$hiv_positive_test)] <- 0
+head(monthly_hiv_pos)
+
+monthly_hiv_pos$Date <- format(as.Date(monthly_hiv_pos$enc_date, format="%d/%m/%Y"),"%m/%Y")
+head(monthly_hiv_pos)
+
+
+monthly_hiv_pos <- aggregate(hiv_positive_test ~ Date,
+                             monthly_hiv_pos,
+                             FUN = sum)
+head(monthly_hiv_pos)
+monthly_hiv_pos
+
+
+# Annual False Positives
+annual_hiv_pos <- select(eip, enc_date, record_id, hiv_positive_test)
+annual_hiv_pos <- annual_hiv_pos[which(annual_hiv_pos$hiv_positive_test == 1), ]
+head(annual_hiv_pos)
+annual_hiv_pos <- select(annual_hiv_pos, -record_id)
+head(annual_hiv_pos)
+annual_hiv_pos$hiv_positive_test[is.na(annual_hiv_pos$hiv_positive_test)] <- 0
+head(annual_hiv_pos)
+
+annual_hiv_pos$Date <- format(as.Date(annual_hiv_pos$enc_date, format="%d/%m/%Y"),"%Y")
+head(annual_hiv_pos)
+
+
+annual_hiv_pos <- aggregate(hiv_positive_test ~ Date,
+                            annual_hiv_pos,
+                            FUN = sum)
+head(annual_hiv_pos)
+annual_hiv_pos
+
+
+
+
 ##########  False Positive Tests  ##########
 
 table(eip$hiv_false_positive_calc)
@@ -6252,7 +6307,7 @@ Testing for HIV has been a major focus of the Early Intervention Program (EIP) s
 The following table shows an overview of the total number of HIV tests within each testing program, with the total positives (and those newly diagnosed through these tests). The positivity rate for each program is also provided. The overal positivity rate for individuals newly diagnosed for the combined rapid-based testing methods within the EIP is [**`r eip_positivity_rate`**]{style="color: red;"} (`r eip_total_new_pos_hiv_tests` total new positives out of `r eip_total_hiv_tests` total rapid HIV tests).
 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning = FALSE}
 
 hiv_testing_tbl <- data.frame(matrix(ncol = 4, nrow = 0))
 colnames(hiv_testing_tbl) <- c('', 'CTR', 'EHE', 'Total')
@@ -6275,7 +6330,7 @@ hiv_testing_tbl %>%
 Annual HIV testing for each of the rapid-based testing streams is shown in the graph below.
 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning = FALSE}
 
 annual_hiv_tests$total_tests <- annual_hiv_tests$ctr_tests + annual_hiv_tests$ehe_tests
 
@@ -6315,7 +6370,7 @@ config(annual_hiv_testing_plot, displayModeBar = FALSE)
 The reporting for each of these programs is done on a monthly basis, so it is easier to look at the total number of tests that are conducted for each program within a monthly breakdown. The figure below shows the monthly testing numbers for each of the programs.
 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning = FALSE}
 
 monthly_hiv_tests <- monthly_hiv_tests %>%
   mutate(Date = as.Date(paste0("01/", Date), format = "%d/%m/%Y"))
@@ -6334,6 +6389,97 @@ monthly_hiv_testing_plot <- plot_ly(data = monthly_hiv_tests,
             marker = list(color = 'darkgreen')) %>%
   layout(yaxis = list(title = 'Total HIV Tests'), barmode = 'stack')
 config(monthly_hiv_testing_plot, displayModeBar = FALSE)
+
+```
+
+
+:::
+
+## Positive HIV Tests
+
+The following plots show the annual and monthly breakdown of positive HIV tests entered into the EIP Database. The number of positive tests within each rapid-based testing program is noted above in the table, but it is planned to include the breakdown of CTR vs. EHE vs. Lab testing positives within this breakdown to show the contributon of eahc testing stream within the total of positive tests.
+
+
+::: {.panel-tabset}
+
+### Annual
+
+Annual HIV positive tests for for all HIV tests entered into the EIP database is shown in the graph below.
+
+
+```{r, echo = FALSE, warning = FALSE}
+
+months_elapsed <- 3
+current_annual_hiv_pos_2026 <- annual_hiv_pos$hiv_positive_test[annual_hiv_pos$Date == 2026]
+projected_annual_hiv_pos_2026 <- (current_annual_hiv_pos_2026 / months_elapsed) * 12
+hiv_pos_tests_projection <- data.frame(
+  Date = c(2025, 2026),
+  hiv_positive_test = c(
+    annual_hiv_pos$hiv_positive_test[annual_hiv_pos$Date == 2025],
+    projected_annual_hiv_pos_2026))
+
+
+
+annual_hiv_pos_plot <- plot_ly(data = annual_hiv_pos,
+                               x = ~Date,
+                               y = ~hiv_positive_test,
+                               type = 'scatter',
+                               mode = 'lines+markers',
+                               name = 'Total HIV Positive Tests',
+                               marker = list(color = 'blue'),
+                               text = ~hiv_positive_test,
+                               textposition = 'auto') %>%
+  add_trace(data = hiv_pos_tests_projection,
+            x = ~Date,
+            y = ~hiv_positive_test,
+            type = 'scatter',
+            mode = 'lines+markers',
+            name = 'Projected 2026',
+            line = list(dash = 'dash', color = 'lightgrey'),
+            marker = list(color = 'lightgrey'),
+            text = ~round(hiv_positive_test, 0),
+            textposition = 'top center') %>%
+  layout(
+    xaxis = list(
+      dtick = "M12",
+      tickformat = "%Y"),
+    yaxis = list(
+      title = 'Number of Positive HIV Tests',
+      range = c(0,
+        max(
+          c(annual_hiv_pos$hiv_positive_test,
+            hiv_pos_tests_projection$hiv_positive_test),
+          na.rm = TRUE) * 1.1)))
+
+config(annual_hiv_pos_plot, displayModeBar = FALSE)
+
+```
+
+
+### Monthly
+
+The figure below shows the monthly HIV positive testing numbers for all HIV tests entered into the EIP database.
+
+
+```{r, echo = FALSE, warning = FALSE}
+
+monthly_hiv_pos <- monthly_hiv_pos %>%
+  mutate(Date = as.Date(paste0("01/", Date), format = "%d/%m/%Y")) %>%
+  arrange(Date)
+
+monthly_hiv_pos_plot <- plot_ly(data = monthly_hiv_pos,
+                                x = ~Date,
+                                y = ~hiv_positive_test,
+                                type = 'scatter',
+                                mode = 'lines+markers',
+                                name = 'Positive HIV Tests',
+                                text = ~hiv_positive_test, textposition = 'auto',
+                                marker = list(color = 'darkblue')) %>%
+  
+  layout(xaxis = list(type = "date"), yaxis = list(title = 'Number of Positive HIV Tests'),
+         barmode = 'overlay')
+
+config(monthly_hiv_pos_plot, displayModeBar = FALSE)
 
 ```
 
@@ -6359,12 +6505,11 @@ False positive tests can be captured in the EIP database when either rapid or la
 Annual HIV false positive tests for for all HIV tests entered into the EIP database is shown in the graph below.
 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning = FALSE}
 
-months_elapsed <- 3
 current_annual_hiv_false_pos_2026 <- annual_hiv_false_pos$hiv_false_positive_calc[annual_hiv_false_pos$Date == 2026]
 projected_annual_hiv_false_pos_2026 <- (current_annual_hiv_false_pos_2026 / months_elapsed) * 12
-projection_df <- data.frame(
+hiv_false_pos_projection <- data.frame(
   Date = c(2025, 2026),
   hiv_false_positive_calc = c(
     annual_hiv_false_pos$hiv_false_positive_calc[annual_hiv_false_pos$Date == 2025],
@@ -6381,7 +6526,7 @@ annual_hiv_false_pos_plot <- plot_ly(data = annual_hiv_false_pos,
                                      text = ~hiv_false_positive_calc,
                                      textposition = 'auto') %>%
   add_trace(
-    data = projection_df,
+    data = hiv_false_pos_projection,
     x = ~Date,
     y = ~hiv_false_positive_calc,
     type = 'scatter',
@@ -6405,7 +6550,7 @@ config(annual_hiv_false_pos_plot, displayModeBar = FALSE)
 The figure below shows the monthly HIV false positive testing numbers for all HIV tests entered into the EIP database.
 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning = FALSE}
 
 monthly_hiv_false_pos <- monthly_hiv_false_pos %>%
   mutate(Date = as.Date(paste0("01/", Date), format = "%d/%m/%Y"))
@@ -6416,7 +6561,11 @@ monthly_hiv_false_pos_plot <- plot_ly(data = monthly_hiv_false_pos,
                                     type = 'bar',
                                     name = 'False Positive HIV Tests',
                                     text = ~hiv_false_positive_calc, textposition = 'auto',
-                                    marker = list(color = 'lightskyblue'))
+                                    marker = list(color = 'lightskyblue')) %>%
+  
+  layout(yaxis = list(title = 'Number of False Positive HIV Tests'),
+         barmode = 'overlay')
+
 config(monthly_hiv_false_pos_plot, displayModeBar = FALSE)
 
 ```
