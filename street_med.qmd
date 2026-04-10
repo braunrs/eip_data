@@ -58,5 +58,42 @@ leaflet() %>%
   addProviderTiles(providers$Esri.WorldTopoMap) %>%
   addDrawToolbar()
 
+#leaflet() %>%
+#  addTiles() %>%
+#  setView(lng = -84.5120, lat = 39.1431, zoom = 11.5) %>%
+#  addCircleMarkers(
+#    data = street_med_sites,
+#    radius = ~sqrt(visits) * 5,  # scale size
+#    color = 'red',
+#    stroke = FALSE,
+#    fillOpacity = 0.6,
+#    label = ~paste0(site, " (Visits: ", visits, ")")) %>%
+#  addProviderTiles(providers$Esri.WorldTopoMap) %>%
+#  addDrawToolbar()
+
 ```
+
+<div align="center">
+```{r, echo = FALSE}
+
+# Table of Street Med Sites
+reactable(street_med_sites,
+          columns = list(
+            site = colDef(name = "Location", align = "center", width = 300),
+            address = colDef(name = "Address", align = "center", width = 200),
+            city = colDef(name = "City", align = "center", width = 100),
+            state = colDef(name = "State", align = "center", width = 100),
+            zip = colDef(name = "Zip Code", align = "center", width = 100),
+            lat = colDef(name = "Latitude", align = "center", width = 100),
+            lng = colDef(name = "Longitude", align = "center", width = 120),
+            visits = colDef(name = "# of Visits", align = "center", width = 100)),
+          bordered = TRUE,
+          highlight = TRUE,
+          searchable = TRUE,
+          paginationType = "simple",
+          defaultColDef = colDef(style = list(fontSize = "12px", maxWidth = 1500)),
+          style = list(width = "100%"))
+
+```
+</div>
 
