@@ -16,6 +16,8 @@ website:
             href: hcv.html
           - text: Street Medicine
             href: street_med.html
+          - text: Human Trafficking
+            href: human_trafficking.html
       - text: "Deliverables"
         menu:
           - text: CTR 2025/2026
