@@ -99,3 +99,15 @@ reactable(street_med_sites,
 </div>
 
 
+
+::: {.g-col-4 .text-center}
+
+::: {#fig-eip}
+![](images/eip_img2.jpg){width="50em"}
+
+Cincinnati Street Medicine Team with Early Intervention Program members, Rob Braun, Connor Powers, Kathy Legg, Noah McGorry, Katie Hallinan, and Chloe Striker.
+:::
+
+:::
+
+
